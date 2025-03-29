@@ -7,6 +7,31 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const { exec } = require('child_process');
+const multer = require('multer');
+const { Pool } = require('pg');
+
+// Database Connection
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL
+});
+
+// Create uploads directory if it doesn't exist
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, uploadsDir);
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, uniqueSuffix + '-' + file.originalname);
+    }
+});
+const upload = multer({ storage: storage });
 
 const app = express();
 const PORT = 5000;
@@ -111,6 +136,104 @@ app.get('/api/examples/:type', (req, res) => {
     } catch (error) {
         console.error('Error loading example:', error);
         return res.status(500).json({ error: `Error loading example: ${error.message}` });
+    }
+});
+
+// Upload a dataset file
+app.post('/api/datasets/upload', upload.single('file'), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: 'No file uploaded' });
+        }
+
+        // Get file info
+        const { originalname, mimetype, path: filePath, size } = req.file;
+        const fileType = mimetype.split('/')[1] || 'unknown';
+        const { name, description } = req.body;
+
+        // Insert file record into database
+        const result = await pool.query(
+            'INSERT INTO datasets (name, description, file_path, file_type, file_size) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+            [name || originalname, description || '', filePath, fileType, size]
+        );
+
+        return res.status(201).json({
+            message: 'File uploaded successfully',
+            dataset: result.rows[0]
+        });
+    } catch (error) {
+        console.error('Error uploading file:', error);
+        return res.status(500).json({ error: `Upload failed: ${error.message}` });
+    }
+});
+
+// Get all datasets
+app.get('/api/datasets', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT * FROM datasets ORDER BY created_at DESC');
+        return res.json(result.rows);
+    } catch (error) {
+        console.error('Error fetching datasets:', error);
+        return res.status(500).json({ error: `Database error: ${error.message}` });
+    }
+});
+
+// Create a model
+app.post('/api/models', async (req, res) => {
+    try {
+        const { name, model_type, description, parameters } = req.body;
+
+        if (!name || !model_type) {
+            return res.status(400).json({ error: 'Name and model_type are required' });
+        }
+
+        const result = await pool.query(
+            'INSERT INTO models (name, model_type, description, parameters) VALUES ($1, $2, $3, $4) RETURNING *',
+            [name, model_type, description || '', parameters || {}]
+        );
+
+        return res.status(201).json({
+            message: 'Model created successfully',
+            model: result.rows[0]
+        });
+    } catch (error) {
+        console.error('Error creating model:', error);
+        return res.status(500).json({ error: `Database error: ${error.message}` });
+    }
+});
+
+// Get all models
+app.get('/api/models', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT * FROM models ORDER BY created_at DESC');
+        return res.json(result.rows);
+    } catch (error) {
+        console.error('Error fetching models:', error);
+        return res.status(500).json({ error: `Database error: ${error.message}` });
+    }
+});
+
+// Record training results
+app.post('/api/training-results', async (req, res) => {
+    try {
+        const { model_id, dataset_id, metrics, duration } = req.body;
+
+        if (!model_id || !dataset_id) {
+            return res.status(400).json({ error: 'model_id and dataset_id are required' });
+        }
+
+        const result = await pool.query(
+            'INSERT INTO training_results (model_id, dataset_id, metrics, duration) VALUES ($1, $2, $3, $4) RETURNING *',
+            [model_id, dataset_id, metrics || {}, duration || 0]
+        );
+
+        return res.status(201).json({
+            message: 'Training results recorded successfully',
+            result: result.rows[0]
+        });
+    } catch (error) {
+        console.error('Error recording training results:', error);
+        return res.status(500).json({ error: `Database error: ${error.message}` });
     }
 });
 

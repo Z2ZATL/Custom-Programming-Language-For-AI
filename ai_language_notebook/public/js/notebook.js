@@ -1,4 +1,4 @@
-// AI Language Notebook main JavaScript
+// AI Language Notebook IDE - main JavaScript
 
 document.addEventListener('DOMContentLoaded', function() {
     // Global variables
@@ -9,9 +9,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const loadBtn = document.getElementById('load-btn');
     const exampleSelect = document.getElementById('example-select');
     const cellTemplate = document.getElementById('cell-template');
+    const uploadBtn = document.getElementById('upload-btn');
+    const fileUpload = document.getElementById('file-upload');
+    const fileList = document.getElementById('file-list');
+    const activityBarIcons = document.querySelectorAll('.activity-bar-icon');
     
     let cells = [];
     let cellCounter = 0;
+    let datasets = [];
+    let models = [];
 
     // Function to create a new cell
     function createCell(content = '') {
@@ -441,6 +447,219 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    // File management functions
+    
+    // Function to upload dataset
+    async function uploadDataset(file) {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('name', file.name);
+        formData.append('description', `Uploaded on ${new Date().toLocaleString()}`);
+        
+        try {
+            const response = await fetch('/api/datasets/upload', {
+                method: 'POST',
+                body: formData
+            });
+            
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Upload failed');
+            }
+            
+            const result = await response.json();
+            
+            // Add to datasets list
+            datasets.push(result.dataset);
+            
+            // Update file list display
+            updateFileList();
+            
+            // Show success notification
+            showNotification('Dataset uploaded successfully', 'success');
+            
+            return result.dataset;
+        } catch (error) {
+            showNotification(`Upload failed: ${error.message}`, 'error');
+            throw error;
+        }
+    }
+    
+    // Function to load datasets from API
+    async function loadDatasets() {
+        try {
+            const response = await fetch('/api/datasets');
+            
+            if (!response.ok) {
+                throw new Error('Failed to load datasets');
+            }
+            
+            datasets = await response.json();
+            updateFileList();
+        } catch (error) {
+            console.error('Error loading datasets:', error);
+            showNotification('Failed to load datasets', 'error');
+        }
+    }
+    
+    // Function to update file list display
+    function updateFileList() {
+        fileList.innerHTML = '';
+        
+        if (datasets.length === 0) {
+            const emptyState = document.createElement('div');
+            emptyState.className = 'empty-state';
+            emptyState.textContent = 'อัพโหลดไฟล์ข้อมูลเพื่อเริ่มต้น';
+            fileList.appendChild(emptyState);
+            return;
+        }
+        
+        // Group files by type
+        const fileGroups = {
+            'csv': [],
+            'json': [],
+            'image': [],
+            'text': [],
+            'other': []
+        };
+        
+        datasets.forEach(dataset => {
+            const type = dataset.file_type;
+            if (fileGroups[type]) {
+                fileGroups[type].push(dataset);
+            } else {
+                fileGroups.other.push(dataset);
+            }
+        });
+        
+        // Create group elements
+        for (const [type, files] of Object.entries(fileGroups)) {
+            if (files.length === 0) continue;
+            
+            const groupEl = document.createElement('div');
+            groupEl.className = 'file-group';
+            
+            const groupHeader = document.createElement('div');
+            groupHeader.className = 'file-group-header';
+            groupHeader.textContent = type.toUpperCase();
+            groupEl.appendChild(groupHeader);
+            
+            const filesList = document.createElement('div');
+            filesList.className = 'files-list';
+            
+            files.forEach(file => {
+                const fileEl = document.createElement('div');
+                fileEl.className = 'file-item';
+                fileEl.innerHTML = `
+                    <span class="file-icon">
+                        <i class="fas fa-${getFileIcon(file.file_type)}"></i>
+                    </span>
+                    <span class="file-name">${file.name}</span>
+                `;
+                
+                // Click to insert into cell
+                fileEl.addEventListener('click', () => {
+                    insertDatasetReference(file);
+                });
+                
+                filesList.appendChild(fileEl);
+            });
+            
+            groupEl.appendChild(filesList);
+            fileList.appendChild(groupEl);
+        }
+    }
+    
+    // Get appropriate icon for file type
+    function getFileIcon(fileType) {
+        switch (fileType) {
+            case 'csv':
+                return 'table';
+            case 'json':
+                return 'code';
+            case 'image':
+            case 'png':
+            case 'jpg':
+            case 'jpeg':
+                return 'image';
+            case 'txt':
+                return 'file-alt';
+            default:
+                return 'file';
+        }
+    }
+    
+    // Insert dataset reference into current/new cell
+    function insertDatasetReference(dataset) {
+        const loadCommand = `load dataset "${dataset.name}" type "${dataset.file_type}"`;
+        
+        // If no cells, create one
+        if (cells.length === 0) {
+            createCell(loadCommand);
+        } else {
+            // Try to find an empty cell
+            const emptyCell = cells.find(cell => cell.editor.getValue().trim() === '');
+            
+            if (emptyCell) {
+                emptyCell.editor.setValue(loadCommand);
+            } else {
+                // Create a new cell
+                createCell(loadCommand);
+            }
+        }
+    }
+    
+    // Show notification
+    function showNotification(message, type = 'info') {
+        // If a notification container doesn't exist, create one
+        let notificationContainer = document.querySelector('.notification-container');
+        if (!notificationContainer) {
+            notificationContainer = document.createElement('div');
+            notificationContainer.className = 'notification-container';
+            document.body.appendChild(notificationContainer);
+        }
+        
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        
+        notificationContainer.appendChild(notification);
+        
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            notification.classList.add('fade-out');
+            setTimeout(() => {
+                notificationContainer.removeChild(notification);
+            }, 300);
+        }, 5000);
+    }
+    
+    // Activity bar functionality
+    function handleActivityBarClick(icon) {
+        const view = icon.getAttribute('data-view');
+        
+        // Update active state
+        document.querySelectorAll('.activity-bar-icon').forEach(i => i.classList.remove('active'));
+        icon.classList.add('active');
+        
+        // Handle view switching here
+        // This is a placeholder for future functionality
+        console.log(`Switching to view: ${view}`);
+        
+        // For now, we'll just show/hide relevant panels
+        switch(view) {
+            case 'explorer':
+                // Show explorer panel
+                document.querySelector('.explorer').style.display = 'flex';
+                break;
+            case 'docs':
+                // Show documentation sidebar
+                document.querySelector('.sidebar').style.display = 'block';
+                break;
+            // Add other views as needed
+        }
+    }
+    
     // Add event listeners
     newCellBtn.addEventListener('click', () => createCell());
     runAllBtn.addEventListener('click', runAllCells);
@@ -455,6 +674,28 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // File upload event listeners
+    uploadBtn.addEventListener('click', () => {
+        fileUpload.click();
+    });
+    
+    fileUpload.addEventListener('change', async (event) => {
+        const files = event.target.files;
+        if (files.length > 0) {
+            try {
+                await uploadDataset(files[0]);
+                fileUpload.value = ''; // Reset file input
+            } catch (error) {
+                console.error('Upload error:', error);
+            }
+        }
+    });
+    
+    // Activity bar event listeners
+    activityBarIcons.forEach(icon => {
+        icon.addEventListener('click', () => handleActivityBarClick(icon));
+    });
+    
     // Add event listeners for doc links
     document.querySelectorAll('.doc-link').forEach(link => {
         link.addEventListener('click', handleDocLinkClick);
@@ -462,4 +703,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Create an initial cell
     createCell('# เริ่มต้นเขียนโค้ด AI Language ที่นี่\n\n');
+    
+    // Style tweaks for Codemirror to match VS Code theme
+    document.querySelectorAll('.CodeMirror').forEach(editor => {
+        editor.style.backgroundColor = 'var(--cell-bg)';
+    });
+    
+    // Load existing datasets
+    loadDatasets();
 });
