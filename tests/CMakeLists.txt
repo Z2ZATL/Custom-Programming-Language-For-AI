@@ -2,10 +2,10 @@
 include(FetchContent)
 
 # Download and configure Google Test
+# Use the archive URL instead of git to avoid git-related issues
 FetchContent_Declare(
     googletest
-    GIT_REPOSITORY https://github.com/google/googletest.git
-    GIT_TAG release-1.11.0
+    URL https://github.com/google/googletest/archive/refs/tags/release-1.11.0.zip
 )
 FetchContent_MakeAvailable(googletest)
 

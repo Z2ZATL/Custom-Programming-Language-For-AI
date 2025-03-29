@@ -2,6 +2,6 @@
 # The patch step will be re-executed if anything in this file changes.
 # No other meaning or use of this file is supported.
 
-command (connected)=/nix/store/q1nssraba326p2kp6627hldd2bhg254c-cmake-3.29.2/bin/cmake;-Dcan_fetch=YES;-P;/home/runner/workspace/build/_deps/googletest-subbuild/googletest-populate-prefix/tmp/googletest-populate-gitupdate.cmake
-command (disconnected)=/nix/store/q1nssraba326p2kp6627hldd2bhg254c-cmake-3.29.2/bin/cmake;-Dcan_fetch=NO;-P;/home/runner/workspace/build/_deps/googletest-subbuild/googletest-populate-prefix/tmp/googletest-populate-gitupdate.cmake
-work_dir=/home/runner/workspace/build/_deps/googletest-src
+command (connected)=
+command (disconnected)=
+work_dir=

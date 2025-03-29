@@ -19,8 +19,8 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/nix/store/q1nssraba326p2kp6627hldd2bhg254c-cmake-3.29.2/share/cmake-3.29/Modules/ExternalProject/RepositoryInfo.txt.in"
   "/nix/store/q1nssraba326p2kp6627hldd2bhg254c-cmake-3.29.2/share/cmake-3.29/Modules/ExternalProject/UpdateInfo.txt.in"
   "/nix/store/q1nssraba326p2kp6627hldd2bhg254c-cmake-3.29.2/share/cmake-3.29/Modules/ExternalProject/cfgcmd.txt.in"
-  "/nix/store/q1nssraba326p2kp6627hldd2bhg254c-cmake-3.29.2/share/cmake-3.29/Modules/ExternalProject/gitclone.cmake.in"
-  "/nix/store/q1nssraba326p2kp6627hldd2bhg254c-cmake-3.29.2/share/cmake-3.29/Modules/ExternalProject/gitupdate.cmake.in"
+  "/nix/store/q1nssraba326p2kp6627hldd2bhg254c-cmake-3.29.2/share/cmake-3.29/Modules/ExternalProject/download.cmake.in"
+  "/nix/store/q1nssraba326p2kp6627hldd2bhg254c-cmake-3.29.2/share/cmake-3.29/Modules/ExternalProject/extractfile.cmake.in"
   "/nix/store/q1nssraba326p2kp6627hldd2bhg254c-cmake-3.29.2/share/cmake-3.29/Modules/ExternalProject/mkdirs.cmake.in"
   "/nix/store/q1nssraba326p2kp6627hldd2bhg254c-cmake-3.29.2/share/cmake-3.29/Modules/ExternalProject/shared_internal_commands.cmake"
   "/nix/store/q1nssraba326p2kp6627hldd2bhg254c-cmake-3.29.2/share/cmake-3.29/Modules/Platform/Linux-Initialize.cmake"
@@ -37,9 +37,9 @@ set(CMAKE_MAKEFILE_OUTPUTS
 # Byproducts of CMake generate step:
 set(CMAKE_MAKEFILE_PRODUCTS
   "googletest-populate-prefix/tmp/googletest-populate-mkdirs.cmake"
-  "googletest-populate-prefix/tmp/googletest-populate-gitclone.cmake"
-  "googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-gitinfo.txt"
-  "googletest-populate-prefix/tmp/googletest-populate-gitupdate.cmake"
+  "googletest-populate-prefix/src/googletest-populate-stamp/download-googletest-populate.cmake"
+  "googletest-populate-prefix/src/googletest-populate-stamp/extract-googletest-populate.cmake"
+  "googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-urlinfo.txt"
   "googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-update-info.txt"
   "googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-patch-info.txt"
   "googletest-populate-prefix/tmp/googletest-populate-cfgcmd.txt"

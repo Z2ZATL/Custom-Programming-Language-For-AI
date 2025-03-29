@@ -1,0 +1,53 @@
+PS C:\Project\Custom Syntax> # สรางโฟลเดอรและไฟลใหมทงหมด
+PS C:\Project\Custom Syntax> $projectPath = "C:\Project\Custom Syntax\eigen_project"
+PS C:\Project\Custom Syntax> Remove-Item $projectPath -Recurse -Force -ErrorAction SilentlyContinue
+PS C:\Project\Custom Syntax> mkdir $projectPath
+
+
+    Directory: C:\Project\Custom Syntax
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----         3/29/2025   4:05 PM                eigen_project
+
+
+PS C:\Project\Custom Syntax> cd $projectPath
+PS C:\Project\Custom Syntax\eigen_project> 
+PS C:\Project\Custom Syntax\eigen_project> # สร้างไฟล์หลัก
+PS C:\Project\Custom Syntax\eigen_project> @'
+>> #include <iostream>
+>> #include <Eigen/Dense>
+>>
+>> int main() {
+>>     Eigen::Matrix3d A;
+>>     A << 1, 2, 3,
+>>          4, 5, 6,
+>>          7, 8, 9;
+>>
+>>     Eigen::Vector3d b(1, 2, 3);
+>>     Eigen::Vector3d x = A.colPivHouseholderQr().solve(b);
+>>
+>>     std::cout << "Solution:\n" << x << std::endl;
+>>     return 0;
+>> }
+>> '@ | Out-File "main.cpp" -Encoding utf8NoBOM
+Out-File : Cannot validate argument on parameter 'Encoding'. The argument "utf8NoBOM" does not belong to the set 
+"unknown,string,unicode,bigendianunicode,utf8,utf7,utf32,ascii,default,oem" specified by the ValidateSet attribute. Supply an
+argument that is in the set and then try the command again.
+At line:17 char:36
++ '@ | Out-File "main.cpp" -Encoding utf8NoBOM
++                                    ~~~~~~~~~
+    + CategoryInfo          : InvalidData: (:) [Out-File], ParameterBindingValidationException
+    + FullyQualifiedErrorId : ParameterArgumentValidationError,Microsoft.PowerShell.Commands.OutFileCommand
+
+PS C:\Project\Custom Syntax\eigen_project>
+PS C:\Project\Custom Syntax\eigen_project> # สร้าง CMakeLists.txt
+PS C:\Project\Custom Syntax\eigen_project> @'
+>> cmake_minimum_required(VERSION 3.10)
+>> project(EigenExample)
+>>
+>> find_package(Eigen3 REQUIRED)
+>> add_executable(main main.cpp)
+>> target_link_libraries(main PRIVATE Eigen3::Eigen)
+>> '@ | Out-File "CMakeLists.txt" -Encoding utf8NoBOM

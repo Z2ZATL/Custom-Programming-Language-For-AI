@@ -1,8 +1,6 @@
-test_data_manager 1 0.00587082
-test_data_processor 0 0
-test_model 0 0
+test_data_manager 3 0.00623076
+test_data_processor 2 0.0052014
+test_model 1 0.00990444
 test_utils 0 0
 ---
-test_data_processor
-test_model
 test_utils
