@@ -65,6 +65,16 @@ CMAKE_BINARY_DIR = /home/runner/workspace/build
 #=============================================================================
 # Targets provided globally by CMake.
 
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running tests..."
+	/nix/store/q1nssraba326p2kp6627hldd2bhg254c-cmake-3.29.2/bin/ctest --force-new-ctest-process $(ARGS)
+.PHONY : test
+
+# Special rule for the target test
+test/fast: test
+.PHONY : test/fast
+
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "No interactive CMake dialog available..."
@@ -87,7 +97,7 @@ rebuild_cache/fast: rebuild_cache
 
 # Special rule for the target list_install_components
 list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Available install components are: \"Unspecified\""
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Available install components are: \"Unspecified\" \"gmock\" \"gtest\""
 .PHONY : list_install_components
 
 # Special rule for the target list_install_components
@@ -173,6 +183,136 @@ data_analyzer: cmake_check_build_system
 data_analyzer/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/data_analyzer.dir/build.make CMakeFiles/data_analyzer.dir/build
 .PHONY : data_analyzer/fast
+
+#=============================================================================
+# Target rules for targets named test_data_manager
+
+# Build rule for target.
+test_data_manager: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_data_manager
+.PHONY : test_data_manager
+
+# fast build rule for target.
+test_data_manager/fast:
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test_data_manager.dir/build.make tests/CMakeFiles/test_data_manager.dir/build
+.PHONY : test_data_manager/fast
+
+#=============================================================================
+# Target rules for targets named test_data_processor
+
+# Build rule for target.
+test_data_processor: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_data_processor
+.PHONY : test_data_processor
+
+# fast build rule for target.
+test_data_processor/fast:
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test_data_processor.dir/build.make tests/CMakeFiles/test_data_processor.dir/build
+.PHONY : test_data_processor/fast
+
+#=============================================================================
+# Target rules for targets named test_model
+
+# Build rule for target.
+test_model: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_model
+.PHONY : test_model
+
+# fast build rule for target.
+test_model/fast:
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test_model.dir/build.make tests/CMakeFiles/test_model.dir/build
+.PHONY : test_model/fast
+
+#=============================================================================
+# Target rules for targets named test_utils
+
+# Build rule for target.
+test_utils: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_utils
+.PHONY : test_utils
+
+# fast build rule for target.
+test_utils/fast:
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/test_utils.dir/build.make tests/CMakeFiles/test_utils.dir/build
+.PHONY : test_utils/fast
+
+#=============================================================================
+# Target rules for targets named run_tests
+
+# Build rule for target.
+run_tests: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 run_tests
+.PHONY : run_tests
+
+# fast build rule for target.
+run_tests/fast:
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/run_tests.dir/build.make tests/CMakeFiles/run_tests.dir/build
+.PHONY : run_tests/fast
+
+#=============================================================================
+# Target rules for targets named data_analyzer_lib
+
+# Build rule for target.
+data_analyzer_lib: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 data_analyzer_lib
+.PHONY : data_analyzer_lib
+
+# fast build rule for target.
+data_analyzer_lib/fast:
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/data_analyzer_lib.dir/build.make tests/CMakeFiles/data_analyzer_lib.dir/build
+.PHONY : data_analyzer_lib/fast
+
+#=============================================================================
+# Target rules for targets named gmock
+
+# Build rule for target.
+gmock: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gmock
+.PHONY : gmock
+
+# fast build rule for target.
+gmock/fast:
+	$(MAKE) $(MAKESILENT) -f _deps/googletest-build/googlemock/CMakeFiles/gmock.dir/build.make _deps/googletest-build/googlemock/CMakeFiles/gmock.dir/build
+.PHONY : gmock/fast
+
+#=============================================================================
+# Target rules for targets named gmock_main
+
+# Build rule for target.
+gmock_main: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gmock_main
+.PHONY : gmock_main
+
+# fast build rule for target.
+gmock_main/fast:
+	$(MAKE) $(MAKESILENT) -f _deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/build.make _deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/build
+.PHONY : gmock_main/fast
+
+#=============================================================================
+# Target rules for targets named gtest
+
+# Build rule for target.
+gtest: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gtest
+.PHONY : gtest
+
+# fast build rule for target.
+gtest/fast:
+	$(MAKE) $(MAKESILENT) -f _deps/googletest-build/googletest/CMakeFiles/gtest.dir/build.make _deps/googletest-build/googletest/CMakeFiles/gtest.dir/build
+.PHONY : gtest/fast
+
+#=============================================================================
+# Target rules for targets named gtest_main
+
+# Build rule for target.
+gtest_main: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 gtest_main
+.PHONY : gtest_main
+
+# fast build rule for target.
+gtest_main/fast:
+	$(MAKE) $(MAKESILENT) -f _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/build.make _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/build
+.PHONY : gtest_main/fast
 
 src/DataManager.o: src/DataManager.cpp.o
 .PHONY : src/DataManager.o
@@ -354,7 +494,18 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
+	@echo "... test"
+	@echo "... run_tests"
 	@echo "... data_analyzer"
+	@echo "... data_analyzer_lib"
+	@echo "... gmock"
+	@echo "... gmock_main"
+	@echo "... gtest"
+	@echo "... gtest_main"
+	@echo "... test_data_manager"
+	@echo "... test_data_processor"
+	@echo "... test_model"
+	@echo "... test_utils"
 	@echo "... src/DataManager.o"
 	@echo "... src/DataManager.i"
 	@echo "... src/DataManager.s"

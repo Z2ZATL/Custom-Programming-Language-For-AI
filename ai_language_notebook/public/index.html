@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Language Notebook</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>AI Language Notebook</h1>
+        </div>
+        <div class="menu">
+            <button id="new-cell-btn">+ เซลล์ใหม่</button>
+            <button id="run-all-btn">▶️ รันทั้งหมด</button>
+            <button id="save-btn">💾 บันทึก</button>
+            <button id="load-btn">📂 โหลด</button>
+            <select id="example-select">
+                <option value="">เลือกตัวอย่าง</option>
+                <option value="ml">Machine Learning</option>
+                <option value="dl">Deep Learning</option>
+                <option value="rl">Reinforcement Learning</option>
+            </select>
+        </div>
+    </header>
+
+    <main>
+        <div class="sidebar">
+            <h3>เอกสาร</h3>
+            <div class="sidebar-section">
+                <h4>คำสั่งพื้นฐาน</h4>
+                <ul>
+                    <li><a href="#" class="doc-link" data-command="start create ML">เริ่มต้น ML</a></li>
+                    <li><a href="#" class="doc-link" data-command="start create DL">เริ่มต้น DL</a></li>
+                    <li><a href="#" class="doc-link" data-command="start create RL">เริ่มต้น RL</a></li>
+                    <li><a href="#" class="doc-link" data-command='load dataset "data.csv" type "csv"'>โหลดข้อมูล</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <h4>Machine Learning</h4>
+                <ul>
+                    <li><a href="#" class="doc-link" data-command="create model LinearRegression">สร้างโมเดล Linear</a></li>
+                    <li><a href="#" class="doc-link" data-command="train model on train_data">ฝึกโมเดล</a></li>
+                    <li><a href="#" class="doc-link" data-command="evaluate model on test_data">ประเมินโมเดล</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <h4>Deep Learning</h4>
+                <ul>
+                    <li><a href="#" class="doc-link" data-command="create neural_network CNN">สร้าง CNN</a></li>
+                    <li><a href="#" class="doc-link" data-command='add layer convolutional filters 32 kernel_size 3x3 activation "relu"'>เพิ่ม Conv Layer</a></li>
+                    <li><a href="#" class="doc-link" data-command="add layer flatten">เพิ่ม Flatten Layer</a></li>
+                </ul>
+            </div>
+            <div class="sidebar-section">
+                <h4>Reinforcement Learning</h4>
+                <ul>
+                    <li><a href="#" class="doc-link" data-command='create environment "CartPole-v1"'>สร้างสภาพแวดล้อม</a></li>
+                    <li><a href="#" class="doc-link" data-command="create agent DQN">สร้าง Agent</a></li>
+                    <li><a href="#" class="doc-link" data-command="train agent for episodes 1000">ฝึก Agent</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="notebook-container">
+            <!-- Cells will be added here dynamically -->
+        </div>
+    </main>
+
+    <footer>
+        <p>AI Language Notebook v1.0 | พัฒนาโดย <a href="#" target="_blank">AI Language Team</a></p>
+    </footer>
+
+    <!-- Cell Template (hidden) -->
+    <template id="cell-template">
+        <div class="cell">
+            <div class="cell-toolbar">
+                <span class="cell-number"></span>
+                <div class="toolbar-buttons">
+                    <button class="run-btn">▶️ รัน</button>
+                    <button class="delete-btn">🗑️ ลบ</button>
+                </div>
+            </div>
+            <div class="code-area"></div>
+            <div class="output-area">
+                <div class="output-text"></div>
+                <div class="output-visuals"></div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="js/ailang-mode.js"></script>
+    <script src="js/notebook.js"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "workspace",
+  "version": "1.0.0",
+  "description": "A comprehensive C++ project for data processing and analysis, with optional AI/ML capabilities.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2",
+    "nodemon": "^3.1.9"
+  }
+}

@@ -1,4 +1,4 @@
-modules = ["cpp"]
+modules = ["cpp", "nodejs-20"]
 
 [nix]
 channel = "stable-24_05"
@@ -22,6 +22,10 @@ args = "Build C++ Project"
 [[workflows.workflow.tasks]]
 task = "workflow.run"
 args = "Build and Run Tests"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "AI Language Notebook Server"
 
 [[workflows.workflow]]
 name = "Build and Run C++ Project"
@@ -65,5 +69,24 @@ task = "packager.installForAll"
 task = "shell.exec"
 args = "mkdir -p build && cd build && cmake -DBUILD_TESTS=ON .. && make && make test"
 
+[[workflows.workflow]]
+name = "AI Language Notebook Server"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node ai_language_notebook/server.js"
+waitForPort = 5000
+
 [deployment]
 run = ["sh", "-c", "mkdir -p build && cd build && cmake .. && make && ./bin/data_analyzer"]
+
+[[ports]]
+localPort = 5000
+externalPort = 80
