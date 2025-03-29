@@ -1,5 +1,8 @@
-cmake_minimum_required(VERSION 3.29)
+cmake_minimum_required(VERSION 3.29...4.0)
 project(DataAnalyzer VERSION 1.0.0 LANGUAGES CXX)
+
+# The current CMake version is: ${CMAKE_VERSION}
+# We support version range 3.29 to 4.0
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 17)

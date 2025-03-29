@@ -5,7 +5,7 @@ include(FetchContent)
 # Use the archive URL instead of git to avoid git-related issues
 FetchContent_Declare(
     googletest
-    URL https://github.com/google/googletest/archive/refs/tags/release-1.11.0.zip
+    URL https://github.com/google/googletest/archive/refs/tags/v1.16.0.zip
 )
 FetchContent_MakeAvailable(googletest)
 
@@ -63,5 +63,5 @@ target_link_libraries(data_analyzer_lib PRIVATE Threads::Threads)
 
 # Output summary
 message(STATUS "Test configuration:")
-message(STATUS "  Google Test version: 1.11.0")
+message(STATUS "  Google Test version: 1.16.0")
 message(STATUS "  Test targets: ${TEST_TARGETS}")

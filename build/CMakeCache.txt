@@ -313,6 +313,10 @@ FETCHCONTENT_UPDATES_DISCONNECTED:BOOL=OFF
 //Enables UPDATE_DISCONNECTED behavior just for population of googletest
 FETCHCONTENT_UPDATES_DISCONNECTED_GOOGLETEST:BOOL=OFF
 
+//Use Abseil and RE2. Requires Abseil and RE2 to be separately
+// added to the build.
+GTEST_HAS_ABSL:BOOL=OFF
+
 //Enable installation of googletest. (Projects embedding googletest
 // may want to turn this OFF.)
 INSTALL_GTEST:BOOL=ON
@@ -326,17 +330,11 @@ gmock_BINARY_DIR:STATIC=/home/runner/workspace/build/_deps/googletest-build/goog
 //Value Computed by CMake
 gmock_IS_TOP_LEVEL:STATIC=OFF
 
-//Dependencies for the target
-gmock_LIB_DEPENDS:STATIC=general;gtest;
-
 //Value Computed by CMake
 gmock_SOURCE_DIR:STATIC=/home/runner/workspace/build/_deps/googletest-src/googlemock
 
 //Build all of Google Mock's own tests.
 gmock_build_tests:BOOL=OFF
-
-//Dependencies for the target
-gmock_main_LIB_DEPENDS:STATIC=general;gmock;
 
 //Value Computed by CMake
 googletest-distribution_BINARY_DIR:STATIC=/home/runner/workspace/build/_deps/googletest-build
@@ -371,9 +369,6 @@ gtest_force_shared_crt:BOOL=OFF
 
 //Build gtest with internal symbols hidden in shared libraries.
 gtest_hide_internal_symbols:BOOL=OFF
-
-//Dependencies for the target
-gtest_main_LIB_DEPENDS:STATIC=general;gtest;
 
 
 ########################

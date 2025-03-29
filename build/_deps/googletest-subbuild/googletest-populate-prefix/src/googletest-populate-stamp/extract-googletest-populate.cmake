@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.5)
 
 # Make file names absolute:
 #
-get_filename_component(filename "/home/runner/workspace/build/_deps/googletest-subbuild/googletest-populate-prefix/src/release-1.11.0.zip" ABSOLUTE)
+get_filename_component(filename "/home/runner/workspace/build/_deps/googletest-subbuild/googletest-populate-prefix/src/v1.16.0.zip" ABSOLUTE)
 get_filename_component(directory "/home/runner/workspace/build/_deps/googletest-src" ABSOLUTE)
 
 message(STATUS "extracting...

@@ -4,7 +4,7 @@
 # compile CXX with /nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/runner/workspace/include -isystem /home/runner/workspace/build/_deps/googletest-src/googlemock/include -isystem /home/runner/workspace/build/_deps/googletest-src/googlemock -isystem /home/runner/workspace/build/_deps/googletest-src/googletest/include -isystem /home/runner/workspace/build/_deps/googletest-src/googletest
+CXX_INCLUDES = -isystem /home/runner/workspace/include -isystem /home/runner/workspace/build/_deps/googletest-src/googlemock/include -isystem /home/runner/workspace/build/_deps/googletest-src/googlemock -isystem /home/runner/workspace/build/_deps/googletest-src/googletest/include -isystem /home/runner/workspace/build/_deps/googletest-src/googletest
 
-CXX_FLAGS = -std=c++17 -Wall -Wshadow -Werror -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers
+CXX_FLAGS = -std=c++17 -Wall -Wshadow -Wundef -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers
 

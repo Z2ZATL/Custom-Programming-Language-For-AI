@@ -22,14 +22,14 @@ function(check_file_hash has_hash hash_is_good)
   set("${has_hash}" TRUE PARENT_SCOPE)
 
   message(STATUS "verifying file...
-       file='/home/runner/workspace/build/_deps/googletest-subbuild/googletest-populate-prefix/src/release-1.11.0.zip'")
+       file='/home/runner/workspace/build/_deps/googletest-subbuild/googletest-populate-prefix/src/v1.16.0.zip'")
 
-  file("" "/home/runner/workspace/build/_deps/googletest-subbuild/googletest-populate-prefix/src/release-1.11.0.zip" actual_value)
+  file("" "/home/runner/workspace/build/_deps/googletest-subbuild/googletest-populate-prefix/src/v1.16.0.zip" actual_value)
 
   if(NOT "${actual_value}" STREQUAL "")
     set("${hash_is_good}" FALSE PARENT_SCOPE)
     message(STATUS " hash of
-    /home/runner/workspace/build/_deps/googletest-subbuild/googletest-populate-prefix/src/release-1.11.0.zip
+    /home/runner/workspace/build/_deps/googletest-subbuild/googletest-populate-prefix/src/v1.16.0.zip
   does not match expected value
     expected: ''
       actual: '${actual_value}'")
@@ -71,32 +71,32 @@ function(sleep_before_download attempt)
   execute_process(COMMAND "${CMAKE_COMMAND}" -E sleep "${sleep_seconds}")
 endfunction()
 
-if(EXISTS "/home/runner/workspace/build/_deps/googletest-subbuild/googletest-populate-prefix/src/release-1.11.0.zip")
+if(EXISTS "/home/runner/workspace/build/_deps/googletest-subbuild/googletest-populate-prefix/src/v1.16.0.zip")
   check_file_hash(has_hash hash_is_good)
   if(has_hash)
     if(hash_is_good)
       message(STATUS "File already exists and hash match (skip download):
-  file='/home/runner/workspace/build/_deps/googletest-subbuild/googletest-populate-prefix/src/release-1.11.0.zip'
+  file='/home/runner/workspace/build/_deps/googletest-subbuild/googletest-populate-prefix/src/v1.16.0.zip'
   =''"
       )
       return()
     else()
       message(STATUS "File already exists but hash mismatch. Removing...")
-      file(REMOVE "/home/runner/workspace/build/_deps/googletest-subbuild/googletest-populate-prefix/src/release-1.11.0.zip")
+      file(REMOVE "/home/runner/workspace/build/_deps/googletest-subbuild/googletest-populate-prefix/src/v1.16.0.zip")
     endif()
   else()
     message(STATUS "File already exists but no hash specified (use URL_HASH):
-  file='/home/runner/workspace/build/_deps/googletest-subbuild/googletest-populate-prefix/src/release-1.11.0.zip'
+  file='/home/runner/workspace/build/_deps/googletest-subbuild/googletest-populate-prefix/src/v1.16.0.zip'
 Old file will be removed and new file downloaded from URL."
     )
-    file(REMOVE "/home/runner/workspace/build/_deps/googletest-subbuild/googletest-populate-prefix/src/release-1.11.0.zip")
+    file(REMOVE "/home/runner/workspace/build/_deps/googletest-subbuild/googletest-populate-prefix/src/v1.16.0.zip")
   endif()
 endif()
 
 set(retry_number 5)
 
 message(STATUS "Downloading...
-   dst='/home/runner/workspace/build/_deps/googletest-subbuild/googletest-populate-prefix/src/release-1.11.0.zip'
+   dst='/home/runner/workspace/build/_deps/googletest-subbuild/googletest-populate-prefix/src/v1.16.0.zip'
    timeout='none'
    inactivity timeout='none'"
 )
@@ -107,7 +107,7 @@ foreach(i RANGE ${retry_number})
   if(status_code IN_LIST download_retry_codes)
     sleep_before_download(${i})
   endif()
-  foreach(url IN ITEMS [====[https://github.com/google/googletest/archive/refs/tags/release-1.11.0.zip]====])
+  foreach(url IN ITEMS [====[https://github.com/google/googletest/archive/refs/tags/v1.16.0.zip]====])
     if(NOT url IN_LIST skip_url_list)
       message(STATUS "Using src='${url}'")
 
@@ -118,7 +118,7 @@ foreach(i RANGE ${retry_number})
 
       file(
         DOWNLOAD
-        "${url}" "/home/runner/workspace/build/_deps/googletest-subbuild/googletest-populate-prefix/src/release-1.11.0.zip"
+        "${url}" "/home/runner/workspace/build/_deps/googletest-subbuild/googletest-populate-prefix/src/v1.16.0.zip"
         SHOW_PROGRESS
         # no TIMEOUT
         # no INACTIVITY_TIMEOUT
@@ -135,7 +135,7 @@ foreach(i RANGE ${retry_number})
         check_file_hash(has_hash hash_is_good)
         if(has_hash AND NOT hash_is_good)
           message(STATUS "Hash mismatch, removing...")
-          file(REMOVE "/home/runner/workspace/build/_deps/googletest-subbuild/googletest-populate-prefix/src/release-1.11.0.zip")
+          file(REMOVE "/home/runner/workspace/build/_deps/googletest-subbuild/googletest-populate-prefix/src/v1.16.0.zip")
         else()
           message(STATUS "Downloading... done")
           return()
