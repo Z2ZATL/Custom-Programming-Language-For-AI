@@ -424,26 +424,35 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Function to handle doc link clicks (insert code example)
-    function handleDocLinkClick(event) {
-        event.preventDefault();
-        const command = event.target.getAttribute('data-command');
+    // Removed documentation functions
+    // Now we implement proper activity bar functionality
+    function handleActivityBarClick(icon) {
+        const view = icon.getAttribute('data-view');
         
-        if (!command) return;
+        // Update active state
+        document.querySelectorAll('.activity-bar-icon').forEach(i => i.classList.remove('active'));
+        icon.classList.add('active');
         
-        // If no cells, create one
-        if (cells.length === 0) {
-            createCell(command);
-        } else {
-            // Otherwise insert into the active cell or create a new one
-            const activeCell = cells.find(cell => cell.editor.hasFocus());
-            
-            if (activeCell) {
-                const cursor = activeCell.editor.getCursor();
-                activeCell.editor.replaceRange(command, cursor);
-            } else {
-                createCell(command);
-            }
+        console.log(`Switching to view: ${view}`);
+        
+        // For now, we'll just show/hide relevant panels based on selected view
+        switch(view) {
+            case 'explorer':
+                // Show explorer panel
+                document.querySelector('.explorer').style.display = 'flex';
+                break;
+                
+            case 'search':
+                // Search functionality to be implemented
+                break;
+                
+            case 'models':
+                // AI Models view to be implemented
+                break;
+                
+            case 'settings':
+                // Settings view to be implemented
+                break;
         }
     }
     
@@ -652,10 +661,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Show explorer panel
                 document.querySelector('.explorer').style.display = 'flex';
                 break;
-            case 'docs':
-                // Show documentation sidebar
-                document.querySelector('.sidebar').style.display = 'block';
-                break;
+            // Documentation view removed
             // Add other views as needed
         }
     }
@@ -696,10 +702,11 @@ document.addEventListener('DOMContentLoaded', function() {
         icon.addEventListener('click', () => handleActivityBarClick(icon));
     });
     
-    // Add event listeners for doc links
-    document.querySelectorAll('.doc-link').forEach(link => {
-        link.addEventListener('click', handleDocLinkClick);
-    });
+    // Initialize notification system
+    // Create notification container
+    const notificationContainer = document.createElement('div');
+    notificationContainer.className = 'notification-container';
+    document.body.appendChild(notificationContainer);
     
     // Create an initial cell
     createCell('# เริ่มต้นเขียนโค้ด AI Language ที่นี่\n\n');

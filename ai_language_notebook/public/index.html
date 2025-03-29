@@ -17,25 +17,34 @@
             <div class="logo">
                 <h1>AI Language Notebook IDE</h1>
             </div>
-            <div class="menu">
-                <button id="new-cell-btn" title="เพิ่มเซลล์ใหม่">
-                    <i class="fas fa-plus"></i> เซลล์ใหม่
-                </button>
-                <button id="run-all-btn" title="รันทั้งหมด">
-                    <i class="fas fa-play"></i> รันทั้งหมด
-                </button>
-                <button id="save-btn" title="บันทึก">
-                    <i class="fas fa-save"></i> บันทึก
-                </button>
-                <button id="load-btn" title="โหลด">
-                    <i class="fas fa-folder-open"></i> โหลด
-                </button>
-                <select id="example-select">
-                    <option value="">เลือกตัวอย่าง</option>
-                    <option value="ml">Machine Learning</option>
-                    <option value="dl">Deep Learning</option>
-                    <option value="rl">Reinforcement Learning</option>
-                </select>
+            <div class="actions-container">
+                <div class="main-actions">
+                    <button id="new-cell-btn" class="action-btn" title="เพิ่มเซลล์ใหม่">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <button id="run-all-btn" class="action-btn" title="รันทั้งหมด">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button id="save-btn" class="action-btn" title="บันทึก">
+                        <i class="fas fa-save"></i>
+                    </button>
+                    <button id="load-btn" class="action-btn" title="โหลด">
+                        <i class="fas fa-folder-open"></i>
+                    </button>
+                </div>
+                <div class="examples-container">
+                    <select id="example-select" class="action-select">
+                        <option value="">เลือกตัวอย่าง</option>
+                        <option value="ml">Machine Learning</option>
+                        <option value="dl">Deep Learning</option>
+                        <option value="rl">Reinforcement Learning</option>
+                    </select>
+                </div>
+                <div class="command-palette">
+                    <button class="action-btn" id="command-btn" title="Command Palette">
+                        <i class="fas fa-terminal"></i>
+                    </button>
+                </div>
             </div>
         </header>
 
@@ -49,9 +58,7 @@
                 <div class="activity-bar-icon" data-view="search" title="Search">
                     <i class="fas fa-search"></i>
                 </div>
-                <div class="activity-bar-icon" data-view="docs" title="Documentation">
-                    <i class="fas fa-book"></i>
-                </div>
+
                 <div class="activity-bar-icon" data-view="models" title="AI Models">
                     <i class="fas fa-brain"></i>
                 </div>
@@ -89,50 +96,9 @@
                     </div>
                 </div>
 
-                <!-- Document area with help sidebar -->
-                <div style="display: flex; flex: 1; overflow: hidden;">
-                    <!-- Main notebook container -->
-                    <div id="notebook-container">
-                        <!-- Cells will be added here dynamically -->
-                    </div>
-
-                    <!-- Help sidebar similar to the old sidebar but with VS Code styling -->
-                    <div class="sidebar" style="width: 220px; margin: 0; border-left: 1px solid var(--border-color); border-radius: 0; box-shadow: none;">
-                        <h3>เอกสาร</h3>
-                        <div class="sidebar-section">
-                            <h4>คำสั่งพื้นฐาน</h4>
-                            <ul>
-                                <li><a href="#" class="doc-link" data-command="start create ML">เริ่มต้น ML</a></li>
-                                <li><a href="#" class="doc-link" data-command="start create DL">เริ่มต้น DL</a></li>
-                                <li><a href="#" class="doc-link" data-command="start create RL">เริ่มต้น RL</a></li>
-                                <li><a href="#" class="doc-link" data-command='load dataset "data.csv" type "csv"'>โหลดข้อมูล</a></li>
-                            </ul>
-                        </div>
-                        <div class="sidebar-section">
-                            <h4>Machine Learning</h4>
-                            <ul>
-                                <li><a href="#" class="doc-link" data-command="create model LinearRegression">สร้างโมเดล Linear</a></li>
-                                <li><a href="#" class="doc-link" data-command="train model on train_data">ฝึกโมเดล</a></li>
-                                <li><a href="#" class="doc-link" data-command="evaluate model on test_data">ประเมินโมเดล</a></li>
-                            </ul>
-                        </div>
-                        <div class="sidebar-section">
-                            <h4>Deep Learning</h4>
-                            <ul>
-                                <li><a href="#" class="doc-link" data-command="create neural_network CNN">สร้าง CNN</a></li>
-                                <li><a href="#" class="doc-link" data-command='add layer convolutional filters 32 kernel_size 3x3 activation "relu"'>เพิ่ม Conv Layer</a></li>
-                                <li><a href="#" class="doc-link" data-command="add layer flatten">เพิ่ม Flatten Layer</a></li>
-                            </ul>
-                        </div>
-                        <div class="sidebar-section">
-                            <h4>Reinforcement Learning</h4>
-                            <ul>
-                                <li><a href="#" class="doc-link" data-command='create environment "CartPole-v1"'>สร้างสภาพแวดล้อม</a></li>
-                                <li><a href="#" class="doc-link" data-command="create agent DQN">สร้าง Agent</a></li>
-                                <li><a href="#" class="doc-link" data-command="train agent for episodes 1000">ฝึก Agent</a></li>
-                            </ul>
-                        </div>
-                    </div>
+                <!-- Main notebook container -->
+                <div id="notebook-container" style="flex: 1; overflow: auto;">
+                    <!-- Cells will be added here dynamically -->
                 </div>
             </div>
         </div>
