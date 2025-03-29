@@ -270,6 +270,50 @@ private:
     int m_maxIterations;
     bool m_useGradientDescent;
 };
+
+class LogisticRegressionModel : public Model {
+public:
+    LogisticRegressionModel(double learningRate = 0.01, 
+                          int maxIterations = 1000);
+    
+    bool train(const DataSet& dataset) override;
+    DataSet predict(const DataSet& features) const override;
+    ModelMetrics evaluate(const DataSet& testFeatures, 
+                         const DataSet& testLabels) const override;
+    bool saveToFile(const std::string& filename) const override;
+    bool loadFromFile(const std::string& filename) override;
+    ModelType getType() const override { return ModelType::LOGISTIC_REGRESSION; }
+    std::string getParameters() const override;
+    
+private:
+    std::vector<double> m_weights;
+    double m_bias;
+    double m_learningRate;
+    int m_maxIterations;
+    
+    double sigmoid(double x) const;
+};
+
+class KMeansModel : public Model {
+public:
+    KMeansModel(int k = 3, int maxIterations = 100);
+    
+    bool train(const DataSet& dataset) override;
+    DataSet predict(const DataSet& features) const override;
+    ModelMetrics evaluate(const DataSet& testFeatures, 
+                         const DataSet& testLabels) const override;
+    bool saveToFile(const std::string& filename) const override;
+    bool loadFromFile(const std::string& filename) override;
+    ModelType getType() const override { return ModelType::K_MEANS; }
+    std::string getParameters() const override;
+    
+    DataSet getCentroids() const;
+    
+private:
+    int m_k;
+    int m_maxIterations;
+    std::vector<std::vector<double>> m_centroids;
+};
 #endif
 
 /**

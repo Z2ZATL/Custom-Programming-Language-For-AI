@@ -30,7 +30,7 @@ foreach(target ${TEST_TARGETS})
         gtest 
         gtest_main 
         Threads::Threads
-        data_analyzer
+        data_analyzer_lib
     )
     
     add_test(NAME ${target} COMMAND ${target})
@@ -45,9 +45,8 @@ add_custom_target(run_tests
     DEPENDS ${TEST_TARGETS}
 )
 
-# In the main CMakeLists.txt, create a static library target for the main code
-# so that it can be linked against by the tests
-add_library(data_analyzer STATIC
+# Create a static library for the test code to use
+add_library(data_analyzer_lib STATIC
     ${CMAKE_SOURCE_DIR}/src/DataManager.cpp
     ${CMAKE_SOURCE_DIR}/src/DataProcessor.cpp
     ${CMAKE_SOURCE_DIR}/src/ErrorHandler.cpp
@@ -56,11 +55,11 @@ add_library(data_analyzer STATIC
     ${CMAKE_SOURCE_DIR}/src/Utils.cpp
 )
 
-target_include_directories(data_analyzer PUBLIC
+target_include_directories(data_analyzer_lib PUBLIC
     ${CMAKE_SOURCE_DIR}/include
 )
 
-target_link_libraries(data_analyzer PRIVATE Threads::Threads)
+target_link_libraries(data_analyzer_lib PRIVATE Threads::Threads)
 
 # Output summary
 message(STATUS "Test configuration:")

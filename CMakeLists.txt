@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.29)
 project(DataAnalyzer VERSION 1.0.0 LANGUAGES CXX)
 
 # Set C++ standard
@@ -8,7 +8,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Options
 option(BUILD_TESTS "Build the test suite" ON)
-option(USE_EIGEN "Use Eigen library for linear algebra" ON)
+option(USE_EIGEN "Use Eigen library for linear algebra" OFF)
 
 # Set output directories
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)

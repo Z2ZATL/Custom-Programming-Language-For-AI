@@ -157,4 +157,7 @@ private:
     bool saveCSV(const DataSet& dataset, std::ofstream& file, bool includeHeader, char delimiter);
     bool saveJSON(const DataSet& dataset, std::ofstream& file);
     bool saveTXT(const DataSet& dataset, std::ofstream& file, char delimiter);
+    
+    // JSON parsing helper function
+    size_t findMatchingBracket(const std::string& str, size_t openPos);
 };

@@ -10,6 +10,8 @@
 #include <numeric>
 #include <unordered_set>
 #include <unordered_map>
+#include <sstream>
+#include <iomanip>
 
 DataSet& DataProcessor::normalize(DataSet& dataset, 
                                  NormalizationType type,
@@ -228,8 +230,21 @@ DataSet DataProcessor::oneHotEncode(const DataSet& dataset,
     const auto& labels = dataset.getLabels();
     const auto& featureNames = dataset.getFeatureNames();
     
+    // Return original dataset if data is empty or no categorical features specified
     if (data.empty() || categoricalFeatureIndices.empty()) {
         return dataset;
+    }
+    
+    // Verify data consistency - check if all rows have the same number of features
+    size_t numFeatures = 0;
+    for (const auto& row : data) {
+        if (numFeatures == 0) {
+            numFeatures = row.size();
+        } else if (row.size() != numFeatures) {
+            // Inconsistent data - rows have different feature counts
+            // In this case, we'll use the maximum size found
+            numFeatures = std::max(numFeatures, row.size());
+        }
     }
     
     // Find unique values for each categorical feature
@@ -242,15 +257,23 @@ DataSet DataProcessor::oneHotEncode(const DataSet& dataset,
         size_t featureIdx = categoricalFeatureIndices[i];
         std::unordered_set<double> uniqueSet;
         
+        // Collect all unique values for this feature
         for (const auto& row : data) {
             if (featureIdx < row.size()) {
                 uniqueSet.insert(row[featureIdx]);
             }
         }
         
+        // Special case: If no values were found, add a default value of 0
+        if (uniqueSet.empty()) {
+            uniqueSet.insert(0.0);
+        }
+        
+        // Convert set to vector and sort for consistent ordering
         uniqueValues[i].insert(uniqueValues[i].end(), uniqueSet.begin(), uniqueSet.end());
         std::sort(uniqueValues[i].begin(), uniqueValues[i].end());
         
+        // Create mapping from value to index for one-hot encoding
         for (size_t j = 0; j < uniqueValues[i].size(); ++j) {
             valueToIndexMaps[i][uniqueValues[i][j]] = j;
         }
@@ -267,7 +290,7 @@ DataSet DataProcessor::oneHotEncode(const DataSet& dataset,
     std::vector<size_t> nonCategoricalIndices;
     
     // Collect non-categorical feature indices
-    for (size_t i = 0; i < (data.empty() ? 0 : data[0].size()); ++i) {
+    for (size_t i = 0; i < numFeatures; ++i) {
         if (std::find(categoricalFeatureIndices.begin(), categoricalFeatureIndices.end(), i) 
             == categoricalFeatureIndices.end()) {
             nonCategoricalIndices.push_back(i);
@@ -290,7 +313,15 @@ DataSet DataProcessor::oneHotEncode(const DataSet& dataset,
                               featureNames[featureIdx] : "Feature_" + std::to_string(featureIdx);
         
         for (double value : uniqueValues[i]) {
-            newFeatureNames.push_back(baseName + "_" + std::to_string(static_cast<int>(value)));
+            // Use integer conversion for the value if it represents a whole number
+            if (std::fabs(value - std::round(value)) < 1e-10) {
+                newFeatureNames.push_back(baseName + "_" + std::to_string(static_cast<int>(value)));
+            } else {
+                // Use stringstream to control precision for floating point values
+                std::stringstream ss;
+                ss << std::fixed << std::setprecision(2) << value;
+                newFeatureNames.push_back(baseName + "_" + ss.str());
+            }
         }
     }
     
@@ -307,6 +338,7 @@ DataSet DataProcessor::oneHotEncode(const DataSet& dataset,
             if (idx < row.size()) {
                 newRow.push_back(row[idx]);
             } else {
+                // Feature is missing for this row, use default value
                 newRow.push_back(0.0);
             }
         }
@@ -319,6 +351,11 @@ DataSet DataProcessor::oneHotEncode(const DataSet& dataset,
             std::vector<double> oneHotValues(uniqueValues[i].size(), 0.0);
             if (valueToIndexMaps[i].count(value) > 0) {
                 oneHotValues[valueToIndexMaps[i][value]] = 1.0;
+            } else {
+                // If value not found in map (shouldn't happen normally), use first category
+                if (!oneHotValues.empty()) {
+                    oneHotValues[0] = 1.0;
+                }
             }
             
             newRow.insert(newRow.end(), oneHotValues.begin(), oneHotValues.end());
@@ -450,6 +487,7 @@ std::unordered_map<std::string, double> DataProcessor::calculateStatistics(
 // Private helper methods
 
 void DataProcessor::minMaxNormalize(DataSet& dataset, const std::vector<size_t>& featureIndices) {
+    // We need direct access to modify the data
     auto& data = const_cast<DataSet::DataMatrix&>(dataset.getData());
     
     if (data.empty()) return;
@@ -468,6 +506,7 @@ void DataProcessor::minMaxNormalize(DataSet& dataset, const std::vector<size_t>&
     std::vector<double> minValues(indices.size(), std::numeric_limits<double>::max());
     std::vector<double> maxValues(indices.size(), std::numeric_limits<double>::lowest());
     
+    // First pass: find min and max values
     for (const auto& row : data) {
         for (size_t i = 0; i < indices.size(); ++i) {
             size_t featureIdx = indices[i];
@@ -478,16 +517,17 @@ void DataProcessor::minMaxNormalize(DataSet& dataset, const std::vector<size_t>&
         }
     }
     
-    // Normalize each feature
+    // Second pass: normalize each feature
     for (auto& row : data) {
         for (size_t i = 0; i < indices.size(); ++i) {
             size_t featureIdx = indices[i];
             if (featureIdx < row.size()) {
                 double range = maxValues[i] - minValues[i];
-                if (range > 0) {
+                if (std::abs(range) > 1e-10) { // Check for near-zero range to avoid division by zero
                     row[featureIdx] = (row[featureIdx] - minValues[i]) / range;
                 } else {
-                    row[featureIdx] = 0.5; // All values are the same
+                    // All values are the same - set to 0.5 as a middle value
+                    row[featureIdx] = 0.5;
                 }
             }
         }
@@ -512,6 +552,7 @@ void DataProcessor::zScoreNormalize(DataSet& dataset, const std::vector<size_t>&
     // Calculate mean and standard deviation for each feature
     std::vector<double> means(indices.size(), 0.0);
     std::vector<double> stdDevs(indices.size(), 0.0);
+    std::vector<int> counts(indices.size(), 0); // Track valid values for each feature
     
     // Calculate means
     for (const auto& row : data) {
@@ -519,13 +560,20 @@ void DataProcessor::zScoreNormalize(DataSet& dataset, const std::vector<size_t>&
             size_t featureIdx = indices[i];
             if (featureIdx < row.size()) {
                 means[i] += row[featureIdx];
+                counts[i]++;
             }
         }
     }
     
-    for (auto& mean : means) {
-        mean /= data.size();
+    // Divide by actual number of elements for each feature
+    for (size_t i = 0; i < means.size(); ++i) {
+        if (counts[i] > 0) {
+            means[i] /= counts[i];
+        }
     }
+    
+    // Reset counts for standard deviation calculation
+    std::fill(counts.begin(), counts.end(), 0);
     
     // Calculate standard deviations
     for (const auto& row : data) {
@@ -534,12 +582,16 @@ void DataProcessor::zScoreNormalize(DataSet& dataset, const std::vector<size_t>&
             if (featureIdx < row.size()) {
                 double diff = row[featureIdx] - means[i];
                 stdDevs[i] += diff * diff;
+                counts[i]++;
             }
         }
     }
     
-    for (auto& stdDev : stdDevs) {
-        stdDev = std::sqrt(stdDev / data.size());
+    // Divide by actual number of elements for each feature
+    for (size_t i = 0; i < stdDevs.size(); ++i) {
+        if (counts[i] > 0) {
+            stdDevs[i] = std::sqrt(stdDevs[i] / counts[i]);
+        }
     }
     
     // Normalize each feature
@@ -547,10 +599,12 @@ void DataProcessor::zScoreNormalize(DataSet& dataset, const std::vector<size_t>&
         for (size_t i = 0; i < indices.size(); ++i) {
             size_t featureIdx = indices[i];
             if (featureIdx < row.size()) {
-                if (stdDevs[i] > 0) {
+                // Use a small epsilon to avoid division by zero
+                if (std::abs(stdDevs[i]) > 1e-10) {
                     row[featureIdx] = (row[featureIdx] - means[i]) / stdDevs[i];
                 } else {
-                    row[featureIdx] = 0.0; // All values are the same
+                    // All values are the same or very close
+                    row[featureIdx] = 0.0;
                 }
             }
         }
@@ -573,18 +627,23 @@ void DataProcessor::robustNormalize(DataSet& dataset, const std::vector<size_t>&
     }
     
     // Calculate median and IQR for each feature
-    std::vector<double> medians(indices.size());
-    std::vector<double> iqrs(indices.size());
+    std::vector<double> medians(indices.size(), 0.0);
+    std::vector<double> iqrs(indices.size(), 0.0);
     
     for (size_t i = 0; i < indices.size(); ++i) {
         size_t featureIdx = indices[i];
         std::vector<double> values;
         values.reserve(data.size());
         
+        // Collect all valid values for this feature
         for (const auto& row : data) {
             if (featureIdx < row.size()) {
                 values.push_back(row[featureIdx]);
             }
+        }
+        
+        if (values.empty()) {
+            continue; // Skip this feature if no valid values
         }
         
         // Sort values to calculate median and quartiles
@@ -597,12 +656,20 @@ void DataProcessor::robustNormalize(DataSet& dataset, const std::vector<size_t>&
             medians[i] = values[values.size() / 2];
         }
         
-        // Calculate IQR (Q3 - Q1)
-        size_t q1Idx = values.size() / 4;
-        size_t q3Idx = values.size() * 3 / 4;
-        double q1 = values[q1Idx];
-        double q3 = values[q3Idx];
-        iqrs[i] = q3 - q1;
+        // Calculate IQR (Q3 - Q1) with proper index calculation
+        // Make sure we have enough values to calculate quartiles
+        if (values.size() >= 4) {
+            // Calculate correct quartile indices based on actual data size
+            size_t q1Idx = std::max(0UL, (values.size() - 1) / 4);
+            size_t q3Idx = std::min(values.size() - 1, (values.size() - 1) * 3 / 4);
+            
+            double q1 = values[q1Idx];
+            double q3 = values[q3Idx];
+            iqrs[i] = q3 - q1;
+        } else {
+            // Not enough data for quartiles, use range as a fallback
+            iqrs[i] = values.back() - values.front();
+        }
     }
     
     // Normalize each feature
@@ -610,10 +677,12 @@ void DataProcessor::robustNormalize(DataSet& dataset, const std::vector<size_t>&
         for (size_t i = 0; i < indices.size(); ++i) {
             size_t featureIdx = indices[i];
             if (featureIdx < row.size()) {
-                if (iqrs[i] > 0) {
+                // Use small epsilon to avoid division by near-zero IQR
+                if (std::abs(iqrs[i]) > 1e-10) {
                     row[featureIdx] = (row[featureIdx] - medians[i]) / iqrs[i];
                 } else {
-                    row[featureIdx] = 0.0; // All values are the same or insufficient variation
+                    // All values are the same or insufficient variation
+                    row[featureIdx] = 0.0;
                 }
             }
         }

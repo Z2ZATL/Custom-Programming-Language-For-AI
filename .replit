@@ -19,6 +19,14 @@ args = "Build and Run C++ Project"
 task = "workflow.run"
 args = "build_and_run"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Build C++ Project"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Build and Run Tests"
+
 [[workflows.workflow]]
 name = "Build and Run C++ Project"
 author = "agent"
@@ -46,6 +54,34 @@ task = "packager.installForAll"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "mkdir -p build && cd build && cmake .. && make && ./bin/data_analyzer"
+
+[[workflows.workflow]]
+name = "Build C++ Project"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "mkdir -p build && cd build && cmake -DBUILD_TESTS=OFF .. && make -j2"
+
+[[workflows.workflow]]
+name = "Build and Run Tests"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "mkdir -p build && cd build && cmake -DBUILD_TESTS=ON .. && make && make test"
 
 [deployment]
 run = ["sh", "-c", "mkdir -p build && cd build && cmake .. && make && ./bin/data_analyzer"]

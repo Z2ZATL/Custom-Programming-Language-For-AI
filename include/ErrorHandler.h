@@ -8,6 +8,8 @@
 #include <string>
 #include <stdexcept>
 #include <functional>
+#include <typeindex>
+#include <unordered_map>
 #include "Logger.h"
 
 /**

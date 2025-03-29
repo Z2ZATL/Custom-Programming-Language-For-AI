@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <limits>
 #include <iostream>
+#include <set>
 
 // ModelMetrics implementation
 std::string ModelMetrics::toString() const {
@@ -1277,5 +1278,576 @@ std::string LinearRegressionModel::getParameters() const {
     ss << "]" << std::endl;
     
     return ss.str();
+}
+
+// LogisticRegressionModel implementation without Eigen
+LogisticRegressionModel::LogisticRegressionModel(double learningRate, int maxIterations)
+    : m_weights(), 
+      m_bias(0.0),
+      m_learningRate(learningRate),
+      m_maxIterations(maxIterations) {}
+
+bool LogisticRegressionModel::train(const DataSet& dataset) {
+    const auto& data = dataset.getData();
+    const auto& labels = dataset.getLabels();
+    
+    if (data.empty() || labels.empty() || data.size() != labels.size()) {
+        return false;
+    }
+    
+    // Initialize weights (one per feature)
+    size_t numFeatures = data[0].size();
+    m_weights.resize(numFeatures, 0.0);
+    m_bias = 0.0;
+    
+    // Gradient descent for logistic regression
+    for (int iter = 0; iter < m_maxIterations; ++iter) {
+        std::vector<double> gradients(numFeatures, 0.0);
+        double biasGradient = 0.0;
+        double cost = 0.0;
+        
+        for (size_t i = 0; i < data.size(); ++i) {
+            const auto& x = data[i];
+            double y = labels[i];
+            
+            // Calculate linear combination
+            double z = m_bias;
+            for (size_t j = 0; j < numFeatures; ++j) {
+                z += m_weights[j] * x[j];
+            }
+            
+            // Apply sigmoid activation
+            double pred = sigmoid(z);
+            
+            // Calculate error
+            double error = pred - y;
+            
+            // Binary cross-entropy loss
+            double epsilon = 1e-15; // To avoid log(0)
+            cost -= (y * std::log(pred + epsilon) + (1.0 - y) * std::log(1.0 - pred + epsilon));
+            
+            // Update gradients
+            for (size_t j = 0; j < numFeatures; ++j) {
+                gradients[j] += error * x[j];
+            }
+            biasGradient += error;
+        }
+        
+        // Average gradients and cost
+        for (auto& grad : gradients) {
+            grad /= data.size();
+        }
+        biasGradient /= data.size();
+        cost /= data.size();
+        
+        // Update weights and bias
+        for (size_t j = 0; j < numFeatures; ++j) {
+            m_weights[j] -= m_learningRate * gradients[j];
+        }
+        m_bias -= m_learningRate * biasGradient;
+        
+        // Check convergence
+        if (iter > 0 && std::abs(cost) < 1e-6) {
+            break;
+        }
+    }
+    
+    return true;
+}
+
+DataSet LogisticRegressionModel::predict(const DataSet& features) const {
+    const auto& data = features.getData();
+    
+    if (data.empty() || m_weights.empty()) {
+        return DataSet();
+    }
+    
+    DataSet::DataMatrix predictions;
+    predictions.reserve(data.size());
+    
+    for (const auto& x : data) {
+        double z = m_bias;
+        for (size_t j = 0; j < m_weights.size() && j < x.size(); ++j) {
+            z += m_weights[j] * x[j];
+        }
+        double pred = sigmoid(z);
+        predictions.push_back({pred});
+    }
+    
+    return DataSet(predictions);
+}
+
+ModelMetrics LogisticRegressionModel::evaluate(const DataSet& testFeatures, 
+                                             const DataSet& testLabels) const {
+    ModelMetrics metrics;
+    
+    DataSet probDS = predict(testFeatures);
+    
+    const auto& probabilities = probDS.getData();
+    const auto& trueLabels = testLabels.getData();
+    
+    if (probabilities.empty() || trueLabels.empty() || probabilities.size() != trueLabels.size()) {
+        return metrics;
+    }
+    
+    // Convert probabilities to binary predictions (threshold = 0.5)
+    std::vector<int> predictions;
+    predictions.reserve(probabilities.size());
+    
+    for (const auto& row : probabilities) {
+        if (!row.empty()) {
+            predictions.push_back(row[0] >= 0.5 ? 1 : 0);
+        }
+    }
+    
+    // Calculate metrics
+    int tp = 0; // True positive
+    int fp = 0; // False positive
+    int tn = 0; // True negative
+    int fn = 0; // False negative
+    
+    for (size_t i = 0; i < predictions.size(); ++i) {
+        int pred = predictions[i];
+        int actual = (trueLabels[i][0] >= 0.5) ? 1 : 0;
+        
+        if (pred == 1 && actual == 1) tp++;
+        else if (pred == 1 && actual == 0) fp++;
+        else if (pred == 0 && actual == 0) tn++;
+        else if (pred == 0 && actual == 1) fn++;
+    }
+    
+    // Calculate metrics
+    int total = tp + tn + fp + fn;
+    if (total > 0) {
+        metrics.accuracy = (tp + tn) / static_cast<double>(total);
+    }
+    
+    if (tp + fp > 0) {
+        metrics.precision = tp / static_cast<double>(tp + fp);
+    }
+    
+    if (tp + fn > 0) {
+        metrics.recall = tp / static_cast<double>(tp + fn);
+    }
+    
+    if (metrics.precision + metrics.recall > 0) {
+        metrics.f1Score = 2 * metrics.precision * metrics.recall / (metrics.precision + metrics.recall);
+    }
+    
+    return metrics;
+}
+
+bool LogisticRegressionModel::saveToFile(const std::string& filename) const {
+    std::ofstream file(filename);
+    if (!file.is_open()) {
+        return false;
+    }
+    
+    file << "MODEL_TYPE=LOGISTIC_REGRESSION\n";
+    file << "LEARNING_RATE=" << m_learningRate << "\n";
+    file << "MAX_ITERATIONS=" << m_maxIterations << "\n";
+    file << "BIAS=" << m_bias << "\n";
+    file << "WEIGHTS_COUNT=" << m_weights.size() << "\n";
+    file << "WEIGHTS=";
+    
+    for (size_t i = 0; i < m_weights.size(); ++i) {
+        file << m_weights[i];
+        if (i < m_weights.size() - 1) {
+            file << ",";
+        }
+    }
+    file << "\n";
+    
+    return file.good();
+}
+
+bool LogisticRegressionModel::loadFromFile(const std::string& filename) {
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        return false;
+    }
+    
+    std::string line;
+    std::string modelType;
+    size_t weightsCount = 0;
+    
+    while (std::getline(file, line)) {
+        auto pos = line.find('=');
+        if (pos == std::string::npos) continue;
+        
+        std::string key = line.substr(0, pos);
+        std::string value = line.substr(pos + 1);
+        
+        if (key == "MODEL_TYPE") {
+            modelType = value;
+            if (modelType != "LOGISTIC_REGRESSION") {
+                return false;
+            }
+        } else if (key == "LEARNING_RATE") {
+            m_learningRate = std::stod(value);
+        } else if (key == "MAX_ITERATIONS") {
+            m_maxIterations = std::stoi(value);
+        } else if (key == "BIAS") {
+            m_bias = std::stod(value);
+        } else if (key == "WEIGHTS_COUNT") {
+            weightsCount = std::stoul(value);
+            m_weights.resize(weightsCount);
+        } else if (key == "WEIGHTS") {
+            std::vector<std::string> weightStrs = Utils::splitString(value, ',');
+            if (weightStrs.size() != weightsCount) {
+                return false;
+            }
+            
+            for (size_t i = 0; i < weightsCount; ++i) {
+                m_weights[i] = std::stod(weightStrs[i]);
+            }
+        }
+    }
+    
+    return true;
+}
+
+std::string LogisticRegressionModel::getParameters() const {
+    std::stringstream ss;
+    ss << "LogisticRegressionModel Parameters:" << std::endl;
+    ss << "  Learning Rate: " << m_learningRate << std::endl;
+    ss << "  Max Iterations: " << m_maxIterations << std::endl;
+    ss << "  Bias: " << m_bias << std::endl;
+    ss << "  Weights: [";
+    
+    for (size_t i = 0; i < m_weights.size(); ++i) {
+        ss << m_weights[i];
+        if (i < m_weights.size() - 1) {
+            ss << ", ";
+        }
+    }
+    ss << "]" << std::endl;
+    
+    return ss.str();
+}
+
+double LogisticRegressionModel::sigmoid(double x) const {
+    return 1.0 / (1.0 + std::exp(-x));
+}
+
+// KMeansModel implementation without Eigen
+KMeansModel::KMeansModel(int k, int maxIterations)
+    : m_k(k),
+      m_maxIterations(maxIterations),
+      m_centroids() {}
+
+bool KMeansModel::train(const DataSet& dataset) {
+    const auto& data = dataset.getData();
+    
+    if (data.empty() || data[0].empty() || static_cast<size_t>(m_k) > data.size()) {
+        return false;
+    }
+    
+    size_t numFeatures = data[0].size();
+    size_t numSamples = data.size();
+    
+    // Initialize centroids randomly
+    m_centroids.clear();
+    
+    // Use a set to track which samples are used as initial centroids
+    std::set<size_t> usedIndices;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<size_t> dist(0, numSamples - 1);
+    
+    while (m_centroids.size() < static_cast<size_t>(m_k)) {
+        size_t idx = dist(gen);
+        if (usedIndices.find(idx) == usedIndices.end()) {
+            usedIndices.insert(idx);
+            m_centroids.push_back(data[idx]);
+        }
+    }
+    
+    // Main K-means algorithm
+    for (int iter = 0; iter < m_maxIterations; ++iter) {
+        // Assign each point to the nearest centroid
+        std::vector<std::vector<size_t>> clusters(m_k);
+        
+        for (size_t i = 0; i < numSamples; ++i) {
+            const auto& point = data[i];
+            int bestCluster = 0;
+            double minDistance = std::numeric_limits<double>::max();
+            
+            for (int j = 0; j < m_k; ++j) {
+                const auto& centroid = m_centroids[j];
+                
+                // Calculate Euclidean distance
+                double distance = 0.0;
+                for (size_t f = 0; f < numFeatures; ++f) {
+                    double diff = point[f] - centroid[f];
+                    distance += diff * diff;
+                }
+                
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    bestCluster = j;
+                }
+            }
+            
+            clusters[bestCluster].push_back(i);
+        }
+        
+        // Store old centroids for convergence check
+        auto oldCentroids = m_centroids;
+        
+        // Update centroids
+        for (int j = 0; j < m_k; ++j) {
+            const auto& cluster = clusters[j];
+            
+            if (cluster.empty()) {
+                continue; // Skip empty clusters
+            }
+            
+            // Calculate new centroid as mean of all points in the cluster
+            std::vector<double> newCentroid(numFeatures, 0.0);
+            
+            for (const auto& idx : cluster) {
+                const auto& point = data[idx];
+                for (size_t f = 0; f < numFeatures; ++f) {
+                    newCentroid[f] += point[f];
+                }
+            }
+            
+            for (auto& val : newCentroid) {
+                val /= cluster.size();
+            }
+            
+            m_centroids[j] = newCentroid;
+        }
+        
+        // Check convergence
+        bool converged = true;
+        for (int j = 0; j < m_k; ++j) {
+            double distance = 0.0;
+            for (size_t f = 0; f < numFeatures; ++f) {
+                double diff = m_centroids[j][f] - oldCentroids[j][f];
+                distance += diff * diff;
+            }
+            
+            if (distance > 1e-6) {
+                converged = false;
+                break;
+            }
+        }
+        
+        if (converged) {
+            break;
+        }
+    }
+    
+    return true;
+}
+
+DataSet KMeansModel::predict(const DataSet& features) const {
+    const auto& data = features.getData();
+    
+    if (data.empty() || m_centroids.empty()) {
+        return DataSet();
+    }
+    
+    size_t numSamples = data.size();
+    size_t numFeatures = data[0].size();
+    
+    // Assign each point to the nearest centroid
+    DataSet::DataMatrix clusterLabels;
+    clusterLabels.reserve(numSamples);
+    
+    for (const auto& point : data) {
+        int bestCluster = 0;
+        double minDistance = std::numeric_limits<double>::max();
+        
+        for (int j = 0; j < m_k; ++j) {
+            const auto& centroid = m_centroids[j];
+            
+            // Calculate Euclidean distance
+            double distance = 0.0;
+            for (size_t f = 0; f < numFeatures; ++f) {
+                double diff = point[f] - centroid[f];
+                distance += diff * diff;
+            }
+            
+            if (distance < minDistance) {
+                minDistance = distance;
+                bestCluster = j;
+            }
+        }
+        
+        clusterLabels.push_back({static_cast<double>(bestCluster)});
+    }
+    
+    return DataSet(clusterLabels);
+}
+
+ModelMetrics KMeansModel::evaluate(const DataSet& testFeatures, 
+                                 const DataSet& testLabels) const {
+    ModelMetrics metrics;
+    
+    // For K-means, common evaluation metrics include:
+    // - Inertia (sum of distances from points to their centroids)
+    // - Silhouette score
+    // - Adjusted Rand Index if true labels are available
+    
+    // Here we implement a simplified evaluation that just measures 
+    // the average distance of each point to its assigned centroid
+    
+    const auto& data = testFeatures.getData();
+    
+    if (data.empty() || m_centroids.empty()) {
+        return metrics;
+    }
+    
+    // Predict cluster assignments
+    DataSet predictions = predict(testFeatures);
+    const auto& clusterLabels = predictions.getData();
+    
+    // Calculate inertia (sum of squared distances to centroids)
+    double inertia = 0.0;
+    size_t numFeatures = data[0].size();
+    
+    for (size_t i = 0; i < data.size(); ++i) {
+        const auto& point = data[i];
+        int cluster = static_cast<int>(clusterLabels[i][0]);
+        const auto& centroid = m_centroids[cluster];
+        
+        double distance = 0.0;
+        for (size_t f = 0; f < numFeatures; ++f) {
+            double diff = point[f] - centroid[f];
+            distance += diff * diff;
+        }
+        
+        inertia += distance;
+    }
+    
+    // Store inertia as a custom metric
+    metrics.addMetric("inertia", inertia);
+    
+    // If true labels are provided, we could calculate clustering accuracy
+    // but this would require implementing additional metrics like ARI
+    
+    return metrics;
+}
+
+bool KMeansModel::saveToFile(const std::string& filename) const {
+    std::ofstream file(filename);
+    if (!file.is_open()) {
+        return false;
+    }
+    
+    file << "MODEL_TYPE=K_MEANS\n";
+    file << "K=" << m_k << "\n";
+    file << "MAX_ITERATIONS=" << m_maxIterations << "\n";
+    
+    if (!m_centroids.empty()) {
+        size_t numFeatures = m_centroids[0].size();
+        file << "NUM_FEATURES=" << numFeatures << "\n";
+        file << "CENTROIDS=\n";
+        
+        for (const auto& centroid : m_centroids) {
+            for (size_t i = 0; i < centroid.size(); ++i) {
+                file << centroid[i];
+                if (i < centroid.size() - 1) {
+                    file << ",";
+                }
+            }
+            file << "\n";
+        }
+    }
+    
+    return file.good();
+}
+
+bool KMeansModel::loadFromFile(const std::string& filename) {
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        return false;
+    }
+    
+    std::string line;
+    std::string modelType;
+    size_t numFeatures = 0;
+    
+    // Read header information
+    while (std::getline(file, line)) {
+        auto pos = line.find('=');
+        if (pos == std::string::npos) continue;
+        
+        std::string key = line.substr(0, pos);
+        std::string value = line.substr(pos + 1);
+        
+        if (key == "MODEL_TYPE") {
+            modelType = value;
+            if (modelType != "K_MEANS") {
+                return false;
+            }
+        } else if (key == "K") {
+            m_k = std::stoi(value);
+        } else if (key == "MAX_ITERATIONS") {
+            m_maxIterations = std::stoi(value);
+        } else if (key == "NUM_FEATURES") {
+            numFeatures = std::stoul(value);
+        } else if (key == "CENTROIDS") {
+            // Next lines contain centroid data
+            break;
+        }
+    }
+    
+    // Read centroid data
+    m_centroids.clear();
+    
+    for (int i = 0; i < m_k; ++i) {
+        if (!std::getline(file, line)) {
+            return false;
+        }
+        
+        std::vector<std::string> valueStrs = Utils::splitString(line, ',');
+        if (valueStrs.size() != numFeatures) {
+            return false;
+        }
+        
+        std::vector<double> centroid;
+        centroid.reserve(numFeatures);
+        
+        for (const auto& str : valueStrs) {
+            centroid.push_back(std::stod(str));
+        }
+        
+        m_centroids.push_back(centroid);
+    }
+    
+    return m_centroids.size() == static_cast<size_t>(m_k);
+}
+
+std::string KMeansModel::getParameters() const {
+    std::stringstream ss;
+    ss << "KMeansModel Parameters:" << std::endl;
+    ss << "  K (number of clusters): " << m_k << std::endl;
+    ss << "  Max Iterations: " << m_maxIterations << std::endl;
+    ss << "  Number of centroids: " << m_centroids.size() << std::endl;
+    
+    if (!m_centroids.empty()) {
+        ss << "  Centroids:" << std::endl;
+        for (size_t i = 0; i < m_centroids.size(); ++i) {
+            ss << "    Cluster " << i << ": [";
+            const auto& centroid = m_centroids[i];
+            for (size_t j = 0; j < centroid.size(); ++j) {
+                ss << centroid[j];
+                if (j < centroid.size() - 1) {
+                    ss << ", ";
+                }
+            }
+            ss << "]" << std::endl;
+        }
+    }
+    
+    return ss.str();
+}
+
+DataSet KMeansModel::getCentroids() const {
+    return DataSet(m_centroids);
 }
 #endif

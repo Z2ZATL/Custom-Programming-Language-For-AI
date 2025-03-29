@@ -179,39 +179,57 @@ DataSet DataManager::loadJSON(std::ifstream& file) {
     size_t featuresStart = content.find("\"features\":");
     if (featuresStart != std::string::npos) {
         size_t arrayStart = content.find('[', featuresStart);
-        size_t arrayEnd = content.find(']', arrayStart);
+        size_t arrayEnd = findMatchingBracket(content, arrayStart);
         if (arrayStart != std::string::npos && arrayEnd != std::string::npos) {
             std::string featuresStr = content.substr(arrayStart + 1, arrayEnd - arrayStart - 1);
-            std::vector<std::string> features = Utils::splitString(featuresStr, ',');
-            for (auto& f : features) {
-                f = Utils::trim(f);
-                // Remove quotes
-                if (f.size() >= 2 && f.front() == '"' && f.back() == '"') {
-                    f = f.substr(1, f.size() - 2);
-                }
-                featureNames.push_back(f);
+            // Parse feature names, handling commas correctly
+            std::vector<std::string> features;
+            bool inQuotes = false;
+            std::string currentFeature;
+            
+            for (size_t i = 0; i < featuresStr.length(); ++i) {
+                char c = featuresStr[i];
+                if (c == '"') {
+                    inQuotes = !inQuotes;
+                    if (!inQuotes && !currentFeature.empty()) { // End of a quoted string
+                        features.push_back(currentFeature);
+                        currentFeature.clear();
+                    }
+                } else if (inQuotes) {
+                    currentFeature += c;
+                } // Skip commas and whitespace outside quotes
             }
+            
+            featureNames = features;
         }
     }
     
-    // Find data array
+    // Find data array (outer array)
     size_t dataStart = content.find("\"data\":");
     if (dataStart != std::string::npos) {
-        size_t arrayStart = content.find('[', dataStart);
-        size_t arrayEnd = content.find(']', arrayStart);
-        if (arrayStart != std::string::npos && arrayEnd != std::string::npos) {
-            std::string dataStr = content.substr(arrayStart + 1, arrayEnd - arrayStart - 1);
+        size_t outerArrayStart = content.find('[', dataStart);
+        size_t outerArrayEnd = findMatchingBracket(content, outerArrayStart);
+        if (outerArrayStart != std::string::npos && outerArrayEnd != std::string::npos) {
+            std::string dataSection = content.substr(outerArrayStart + 1, outerArrayEnd - outerArrayStart - 1);
             
-            // Parse individual rows
+            // Debug output
+            std::cout << "Data section: " << dataSection << std::endl;
+            
+            // Parse individual rows by finding each inner array
             size_t pos = 0;
-            while (pos < dataStr.length()) {
-                size_t rowStart = dataStr.find('[', pos);
-                if (rowStart == std::string::npos) break;
+            while (pos < dataSection.length()) {
+                // Skip whitespace and commas
+                while (pos < dataSection.length() && (std::isspace(dataSection[pos]) || dataSection[pos] == ',')) pos++;
+                if (pos >= dataSection.length() || dataSection[pos] != '[') break;
                 
-                size_t rowEnd = dataStr.find(']', rowStart);
+                size_t rowStart = pos;
+                size_t rowEnd = findMatchingBracket(dataSection, rowStart);
                 if (rowEnd == std::string::npos) break;
                 
-                std::string rowStr = dataStr.substr(rowStart + 1, rowEnd - rowStart - 1);
+                // Parse the values in this row
+                std::string rowStr = dataSection.substr(rowStart + 1, rowEnd - rowStart - 1);
+                std::cout << "Row string: " << rowStr << std::endl;
+                
                 std::vector<std::string> valueStrs = Utils::splitString(rowStr, ',');
                 std::vector<double> row;
                 
@@ -221,12 +239,41 @@ DataSet DataManager::loadJSON(std::ifstream& file) {
                 }
                 
                 data.push_back(row);
+                
+                // Move past this row
                 pos = rowEnd + 1;
             }
+            
+            // Debug output
+            std::cout << "Parsed " << data.size() << " rows of data" << std::endl;
         }
     }
     
     return DataSet(data, {}, featureNames);
+}
+
+// Helper function to find matching closing bracket for a given opening bracket position
+size_t DataManager::findMatchingBracket(const std::string& str, size_t openPos) {
+    if (openPos >= str.length() || (str[openPos] != '[' && str[openPos] != '{')) {
+        return std::string::npos;
+    }
+    
+    char openBracket = str[openPos];
+    char closeBracket = (openBracket == '[') ? ']' : '}';
+    
+    int depth = 1;
+    for (size_t i = openPos + 1; i < str.length(); ++i) {
+        if (str[i] == openBracket) {
+            depth++;
+        } else if (str[i] == closeBracket) {
+            depth--;
+            if (depth == 0) {
+                return i;
+            }
+        }
+    }
+    
+    return std::string::npos;
 }
 
 DataSet DataManager::loadTXT(std::ifstream& file, char delimiter) {
