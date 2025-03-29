@@ -463,14 +463,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 
             case 'search':
                 // Search functionality to be implemented
+                document.querySelector('.explorer').style.display = 'none';
+                showNotification('Search functionality coming soon', 'info');
+                break;
+                
+            case 'code':
+                // Code editor view - just show the editor area
+                document.querySelector('.explorer').style.display = 'none';
                 break;
                 
             case 'models':
                 // AI Models view to be implemented
+                document.querySelector('.explorer').style.display = 'none';
+                showNotification('AI Models library coming soon', 'info');
                 break;
                 
             case 'settings':
                 // Settings view to be implemented
+                document.querySelector('.explorer').style.display = 'none';
+                showNotification('Settings panel coming soon', 'info');
                 break;
         }
     }
@@ -726,6 +737,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const notificationContainer = document.createElement('div');
     notificationContainer.className = 'notification-container';
     document.body.appendChild(notificationContainer);
+    
+    // Gemini AI assistant button functionality
+    const geminiBtn = document.getElementById('gemini-btn');
+    if (geminiBtn) {
+        geminiBtn.addEventListener('click', () => {
+            showNotification('Gemini AI Assistant is coming soon!', 'info');
+        });
+    }
     
     // Create an initial cell
     createCell('# เริ่มต้นเขียนโค้ด AI Language ที่นี่\n\n');

@@ -17,6 +17,10 @@
     --tab-inactive-bg: #2d2d2d;
     --status-bar-bg: #007acc;
     --panel-bg: #252526;
+    --dark-gray: #333333;
+    --medium-gray: #555555; 
+    --light-gray: #777777;
+    --hover-bg: rgba(255, 255, 255, 0.05);
 }
 
 /* Reset & Base Styles */
@@ -353,17 +357,19 @@ main {
 /* Cell Styles */
 .cell {
     background-color: var(--cell-bg);
-    border-radius: 5px;
+    border-radius: 3px;
     overflow: hidden;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 10px;
+    border: 1px solid var(--border-color);
 }
 
 .cell-toolbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #f5f5f5;
-    padding: 8px 15px;
+    background-color: var(--dark-gray);
+    padding: 6px 12px;
     border-bottom: 1px solid var(--border-color);
 }
 
