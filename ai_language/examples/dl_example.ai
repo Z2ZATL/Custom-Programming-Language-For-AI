@@ -1,0 +1,67 @@
+# ตัวอย่างภาษา AI สำหรับงาน Deep Learning
+
+# เริ่มต้นโปรเจกต์แบบ Deep Learning
+start create DL
+
+# โหลดข้อมูลรูปภาพ
+load dataset "images/flowers/" type "image"
+
+# แสดงข้อมูลตัวอย่าง
+visualize data samples 5
+
+# แบ่งข้อมูล
+split data into train, validation, test with ratio 0.7, 0.15, 0.15
+
+# ปรับแต่งข้อมูลรูปภาพ
+preprocess images with resize 224x224 normalize true
+
+# สร้างโครงข่ายประสาทเทียมแบบ CNN
+create neural_network CNN
+
+# เพิ่ม layer ตามสถาปัตยกรรม
+add layer convolutional filters 32 kernel_size 3x3 activation "relu"
+
+add layer max_pooling size 2x2
+
+add layer convolutional filters 64 kernel_size 3x3 activation "relu"
+
+add layer max_pooling size 2x2
+
+add layer convolutional filters 128 kernel_size 3x3 activation "relu"
+
+add layer max_pooling size 2x2
+
+add layer flatten
+
+add layer dense nodes 512 activation "relu"
+
+add layer dropout rate 0.5
+
+add layer dense nodes 5 activation "softmax"
+
+# คอมไพล์โมเดล
+compile model with optimizer "adam" loss "categorical_crossentropy" metrics "accuracy"
+
+# ฝึกโมเดล
+train model with epochs 50 batch_size 32 validation_data true early_stopping patience 5
+
+# ประเมินประสิทธิภาพโมเดล
+evaluate model on test_data
+
+# แสดงเมทริกซ์ความสับสน
+show confusion_matrix
+
+# แสดงรายงานการจำแนกประเภท
+show classification_report
+
+# บันทึกโมเดล
+save model to "flower_classifier.h5"
+
+# ทดสอบทำนาย
+predict using model on "test_flower.jpg"
+
+# แสดงผลการทำนาย
+show prediction
+
+# แสดงภาพผลการทำนาย
+visualize prediction
