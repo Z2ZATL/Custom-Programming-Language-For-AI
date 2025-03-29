@@ -397,6 +397,12 @@ main {
     font-size: 15px;
 }
 
+/* Custom AI Language highlighting */
+.ai-lang-keyword {
+    color: #4285F4;
+    font-weight: bold;
+}
+
 /* Output Area */
 .output-area {
     padding: 10px 15px;

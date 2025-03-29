@@ -42,14 +42,33 @@ document.addEventListener('DOMContentLoaded', function() {
             lineWrapping: true
         });
         
-        // Try to set the mode to ailang
-        setTimeout(() => {
-            try {
-                editor.setOption('mode', 'ailang');
-            } catch (e) {
-                console.warn('ailang mode not available yet, using JavaScript mode as fallback');
-            }
-        }, 100);
+        // Set to JavaScript mode only - removing ailang mode attempt to avoid errors
+        editor.setOption('mode', 'javascript');
+        
+        // Style for special AI Language keywords - basic syntax highlighting
+        const keywords = [
+            "start", "create", "load", "train", "evaluate", "ML", "DL", "RL",
+            "model", "dataset", "neural_network", "agent", "environment"
+        ];
+        
+        editor.on("change", function() {
+            const doc = editor.getDoc();
+            const text = doc.getValue();
+            
+            // Simple highlighting for known keywords
+            keywords.forEach(keyword => {
+                const regex = new RegExp("\\b" + keyword + "\\b", "g");
+                let match;
+                
+                while ((match = regex.exec(text)) !== null) {
+                    const start = {line: doc.posFromIndex(match.index).line, ch: doc.posFromIndex(match.index).ch};
+                    const end = {line: start.line, ch: start.ch + keyword.length};
+                    
+                    // Mark keywords with special class
+                    doc.markText(start, end, {className: 'ai-lang-keyword'});
+                }
+            });
+        });
         
         // Store cell data
         const cellData = {
