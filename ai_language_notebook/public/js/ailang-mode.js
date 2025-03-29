@@ -1,113 +1,127 @@
-// Custom CodeMirror mode for AI Language
+/**
+ * CodeMirror syntax highlighting mode for AI Language
+ */
 
 (function(mod) {
-    if (typeof exports == "object" && typeof module == "object") // CommonJS
+    if (typeof exports == "object" && typeof module == "object")
         mod(require("../../lib/codemirror"));
-    else if (typeof define == "function" && define.amd) // AMD
+    else if (typeof define == "function" && define.amd)
         define(["../../lib/codemirror"], mod);
-    else // Plain browser env
+    else
         mod(CodeMirror);
 })(function(CodeMirror) {
     "use strict";
 
     CodeMirror.defineMode("ailang", function() {
-        // Keywords for AI Language
-        const keywords = [
-            "start", "create", "load", "clean", "split", "visualize", "plot",
-            "train", "evaluate", "show", "save", "add", "layer", "compile",
-            "predict", "using", "test", "configure", "set", "compare"
-        ];
+        function words(str) {
+            var obj = {}, words = str.split(" ");
+            for (var i = 0; i < words.length; ++i) obj[words[i]] = true;
+            return obj;
+        }
 
-        // AI model types and special terms
-        const modelTypes = [
-            "ML", "DL", "RL", "LinearRegression", "LogisticRegression", 
-            "RandomForest", "SVM", "KNN", "DecisionTree", "GradientBoosting", 
-            "XGBoost", "CNN", "RNN", "LSTM", "GRU", "Transformer", "DQN", 
-            "DDQN", "A2C", "PPO", "TRPO", "SAC"
-        ];
+        // Keywords for the AI language
+        var keywords = words(
+            "start create model train evaluate visualize load clean split merge " +
+            "with on for into using by when if else import export save show " + 
+            "configure add from to where import export optimize tune analyze " +
+            "predict deploy batch normalize"
+        );
 
-        // Layer types for neural networks
-        const layerTypes = [
-            "convolutional", "max_pooling", "flatten", "dense", "dropout", 
-            "batch_norm", "lstm", "gru", "embedding", "attention"
-        ];
+        // AI models and types
+        var builtin = words(
+            "ML DL RL LinearRegression LogisticRegression DecisionTree RandomForest " +
+            "SVM KNN NaiveBayes GradientBoosting CNN RNN LSTM GAN GRU Transformer " +
+            "BERT GPT DQN A3C PPO DDPG"
+        );
 
-        // Parameters commonly used
-        const parameters = [
-            "with", "for", "into", "on", "to", "ratio", "type", "dataset", 
-            "data", "model", "agent", "environment", "epochs", "batch_size", 
-            "learning_rate", "filters", "kernel_size", "activation", "optimizer", 
-            "loss", "metrics", "patience", "validation_data", "episodes", "gamma", 
-            "epsilon", "drop_na", "fill_mean", "handle_outliers"
-        ];
+        // Operators and symbols
+        var atoms = words("true false null");
+
+        // Types and special parameters
+        var specials = words(
+            "epochs learning_rate batch_size optimizer loss metrics activation " +
+            "layers units kernel_size dropout ratio test_size random_state verbose " +
+            "shuffle validation_split momentum weight_decay steps gamma epsilon " +
+            "filters kernel_size stride padding embed_dim heads feed_forward"
+        );
+
+        var isOperatorChar = /[+\-*&%=<>!?|\/]/;
+
+        function tokenBase(stream, state) {
+            var ch = stream.next();
+            
+            // Handle comments
+            if (ch === "#") {
+                stream.skipToEnd();
+                return "comment";
+            }
+            
+            // Handle strings
+            if (ch === '"' || ch === "'") {
+                state.tokenize = tokenString(ch);
+                return state.tokenize(stream, state);
+            }
+            
+            // Handle numbers
+            if (/\d/.test(ch)) {
+                stream.eatWhile(/[\d\.]/);
+                return "number";
+            }
+            
+            // Handle operators
+            if (isOperatorChar.test(ch)) {
+                stream.eatWhile(isOperatorChar);
+                return "operator";
+            }
+            
+            // Handle identifiers and keywords
+            if (/[a-zA-Z_]/.test(ch)) {
+                stream.eatWhile(/[\w_]/);
+                var word = stream.current();
+                
+                if (keywords.hasOwnProperty(word)) return "keyword";
+                if (builtin.hasOwnProperty(word)) return "builtin";
+                if (atoms.hasOwnProperty(word)) return "atom";
+                if (specials.hasOwnProperty(word)) return "special";
+                
+                return "variable";
+            }
+            
+            // Default style for other characters
+            return null;
+        }
+
+        function tokenString(quote) {
+            return function(stream, state) {
+                var escaped = false, next, end = false;
+                
+                while ((next = stream.next()) != null) {
+                    if (next === quote && !escaped) {
+                        end = true;
+                        break;
+                    }
+                    escaped = !escaped && next === "\\";
+                }
+                
+                if (end || !escaped) state.tokenize = tokenBase;
+                return "string";
+            };
+        }
 
         return {
             startState: function() {
                 return {
-                    inString: false,
-                    stringType: null,
-                    inComment: false
+                    tokenize: tokenBase,
+                    context: null
                 };
             },
-
+            
             token: function(stream, state) {
-                // Handle comments
-                if (stream.match("#")) {
-                    stream.skipToEnd();
-                    return "comment";
-                }
-
-                // Handle strings
-                if (state.inString) {
-                    if (stream.eat('\\')) {
-                        stream.next();  // Skip the escaped character
-                        return "string";
-                    }
-                    if (stream.eat(state.stringType)) {
-                        state.inString = false;
-                        state.stringType = null;
-                    } else {
-                        stream.next();
-                    }
-                    return "string";
-                }
-
-                if (stream.eat('"') || stream.eat("'")) {
-                    state.inString = true;
-                    state.stringType = stream.backUp(1) && stream.next();
-                    return "string";
-                }
-
-                // Handle numbers
-                if (stream.match(/^-?\d+(\.\d+)?/)) {
-                    return "number";
-                }
-
-                // Handle keywords, model types, etc.
-                if (stream.match(/^\w+/)) {
-                    const word = stream.current();
-                    
-                    if (keywords.includes(word)) {
-                        return "keyword";
-                    }
-                    
-                    if (modelTypes.includes(word)) {
-                        return "def";  // Model types
-                    }
-                    
-                    if (layerTypes.includes(word)) {
-                        return "variable-3";  // Layer types
-                    }
-                    
-                    if (parameters.includes(word)) {
-                        return "variable-2";  // Parameters
-                    }
-                }
-
-                // Skip other characters
-                stream.next();
-                return null;
-            }
+                if (stream.eatSpace()) return null;
+                return state.tokenize(stream, state);
+            },
+            
+            lineComment: "#"
         };
     });
 

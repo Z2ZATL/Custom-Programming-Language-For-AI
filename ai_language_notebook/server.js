@@ -111,14 +111,23 @@ app.get('/api/examples/:type', (req, res) => {
         return res.status(400).json({ error: 'Invalid example type' });
     }
     
-    // Get example file path
-    const exampleFile = path.join(
-        __dirname, 
-        '..', 
-        'ai_language', 
-        'examples', 
+    // Try first in local examples directory, then in ai_language directory
+    let exampleFile = path.join(
+        __dirname,
+        'examples',
         `${type.toLowerCase()}_example.ai`
     );
+    
+    // If not found in local directory, try in ai_language directory
+    if (!fs.existsSync(exampleFile)) {
+        exampleFile = path.join(
+            __dirname, 
+            '..', 
+            'ai_language', 
+            'examples', 
+            `${type.toLowerCase()}_example.ai`
+        );
+    }
     
     try {
         // Check if file exists

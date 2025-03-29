@@ -3,155 +3,649 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Language Notebook IDE</title>
+    <title>AI Notebook - Google Colab Style</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
     <link rel="stylesheet" href="css/styles.css">
+    <!-- CodeMirror library for code editing -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/markdown/markdown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
+    <script src="js/ailang-mode.js"></script>
 </head>
 <body>
-    <div class="vscode-layout">
-        <!-- Title Bar (Header) -->
-        <header>
-            <div class="logo">
-                <h1>AI Language Notebook IDE</h1>
+    <div class="app-container">
+        <!-- Top Navigation Bar -->
+        <header class="top-navbar">
+            <div class="logo-container">
+                <div class="logo">
+                    <img src="img/logo.svg" alt="AI Notebook Logo" onerror="this.src='img/logo-fallback.png'">
+                </div>
+                <div class="notebook-title-container">
+                    <span id="notebook-title" class="notebook-title">Untitled.ipynb</span>
+                    <button id="rename-button" class="rename-button">
+                        <i class="fas fa-pencil-alt"></i>
+                    </button>
+                </div>
+                <div class="star-container">
+                    <button class="star-button">
+                        <i class="far fa-star"></i>
+                    </button>
+                </div>
+                <div class="drive-indicator">
+                    <i class="fab fa-google-drive"></i>
+                </div>
             </div>
-            <div class="actions-container">
-                <div class="main-actions">
-                    <button id="new-cell-btn" class="action-btn" title="เพิ่มเซลล์ใหม่">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                    <button id="run-all-btn" class="action-btn" title="รันทั้งหมด">
-                        <i class="fas fa-play"></i>
-                    </button>
-                    <button id="save-btn" class="action-btn" title="บันทึก">
-                        <i class="fas fa-save"></i>
-                    </button>
-                    <button id="load-btn" class="action-btn" title="โหลด">
-                        <i class="fas fa-folder-open"></i>
-                    </button>
-                </div>
-                <div class="examples-container">
-                    <select id="example-select" class="action-select">
-                        <option value="">เลือกตัวอย่าง</option>
-                        <option value="ml">Machine Learning</option>
-                        <option value="dl">Deep Learning</option>
-                        <option value="rl">Reinforcement Learning</option>
-                    </select>
-                </div>
-                <div class="command-palette">
-                    <button class="action-btn" id="command-btn" title="Command Palette">
-                        <i class="fas fa-terminal"></i>
-                    </button>
-                </div>
-                <div class="ai-assistant">
-                    <button class="action-btn" id="gemini-btn" title="Gemini AI Assistant">
-                        <i class="fas fa-robot"></i>
-                    </button>
+            
+            <div class="top-buttons">
+                <button class="top-button comments-button">
+                    <i class="far fa-comment-alt"></i>
+                </button>
+                <button class="top-button share-button">
+                    <i class="fas fa-user-friends"></i>
+                    <span>แชร์</span>
+                </button>
+                <div class="user-profile">
+                    <img src="img/profile.png" alt="User Profile" onerror="this.src='img/profile-fallback.png'">
                 </div>
             </div>
         </header>
 
+        <!-- Main Menu Bar -->
+        <nav class="main-menu">
+            <ul class="menu-list">
+                <li class="menu-item">
+                    <span>ไฟล์</span>
+                    <div class="submenu file-menu">
+                        <div class="submenu-item" id="searchInDrive">
+                            <span>ค้นหาในไดรฟ์</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-item" id="openInPlayground">
+                            <span>เปิดในโหมด Playground</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-item" id="newNotebookInDrive">
+                            <span>สมุดบันทึกใหม่ในไดรฟ์</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-divider"></div>
+                        <div class="submenu-item" id="openNotebook">
+                            <span>เปิดสมุดบันทึก</span>
+                            <span class="shortcut">Ctrl+O</span>
+                        </div>
+                        <div class="submenu-item" id="uploadNotebook">
+                            <span>อัปโหลดสมุดบันทึก</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-divider"></div>
+                        <div class="submenu-item" id="renameNotebook">
+                            <span>เปลี่ยนชื่อ</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-item" id="moveNotebook">
+                            <span>ย้าย</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-item" id="moveToTrash">
+                            <span>ย้ายลงถังขยะ</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-divider"></div>
+                        <div class="submenu-item" id="saveCopyInDrive">
+                            <span>บันทึกสำเนาในไดรฟ์</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-item" id="saveCopyAsGist">
+                            <span>บันทึกสำเนาเป็น GitHub Gist</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-item" id="saveCopyInGitHub">
+                            <span>บันทึกสำเนาใน GitHub</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-divider"></div>
+                        <div class="submenu-item" id="saveNotebook">
+                            <span>บันทึก</span>
+                            <span class="shortcut">Ctrl+S</span>
+                        </div>
+                        <div class="submenu-item" id="saveAndPinVersion">
+                            <span>บันทึกและปักหมุดเวอร์ชันที่มีการแก้ไขนี้</span>
+                            <span class="shortcut">Ctrl+M S</span>
+                        </div>
+                        <div class="submenu-item" id="revisionHistory">
+                            <span>ประวัติการแก้ไข</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-divider"></div>
+                        <div class="submenu-item submenu-parent" id="downloadMenu">
+                            <span>ดาวน์โหลด</span>
+                            <span class="shortcut">▶</span>
+                            <div class="nested-submenu">
+                                <div class="submenu-item" id="downloadNotebook">
+                                    <span>.ipynb</span>
+                                </div>
+                                <div class="submenu-item" id="downloadPython">
+                                    <span>.py</span>
+                                </div>
+                                <div class="submenu-item" id="downloadHTML">
+                                    <span>.html</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="submenu-item" id="printNotebook">
+                            <span>พิมพ์</span>
+                            <span class="shortcut">Ctrl+P</span>
+                        </div>
+                    </div>
+                </li>
+                <li class="menu-item">
+                    <span>แก้ไข</span>
+                    <div class="submenu edit-menu">
+                        <div class="submenu-item" id="undo">
+                            <span>เลิกทำ</span>
+                            <span class="shortcut">Ctrl+Z</span>
+                        </div>
+                        <div class="submenu-item" id="redo">
+                            <span>ทำการลบเซลล์ซ้ำ</span>
+                            <span class="shortcut">Ctrl+Shift+Y</span>
+                        </div>
+                        <div class="submenu-divider"></div>
+                        <div class="submenu-item" id="selectAllCells">
+                            <span>เลือกเซลล์ทั้งหมด</span>
+                            <span class="shortcut">Ctrl+Shift+A</span>
+                        </div>
+                        <div class="submenu-item" id="cutCellsOrSelection">
+                            <span>ตัดเซลล์หรือส่วนที่เลือก</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-item" id="copyCellsOrSelection">
+                            <span>คัดลอกเซลล์หรือส่วนที่เลือก</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-item" id="paste">
+                            <span>วาง</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-item" id="deleteSelectedCells">
+                            <span>ลบเซลล์ที่เลือก</span>
+                            <span class="shortcut">Ctrl+M D</span>
+                        </div>
+                        <div class="submenu-divider"></div>
+                        <div class="submenu-item" id="findAndReplace">
+                            <span>ค้นหาและแทนที่</span>
+                            <span class="shortcut">Ctrl+H</span>
+                        </div>
+                        <div class="submenu-item" id="findNext">
+                            <span>ค้นหาถัดไป</span>
+                            <span class="shortcut">Ctrl+G</span>
+                        </div>
+                        <div class="submenu-item" id="findPrevious">
+                            <span>ค้นหาก่อนหน้า</span>
+                            <span class="shortcut">Ctrl+Shift+G</span>
+                        </div>
+                        <div class="submenu-divider"></div>
+                        <div class="submenu-item" id="notebookSettings">
+                            <span>การตั้งค่าสมุดบันทึก</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-item" id="clearAllOutputs">
+                            <span>ล้างเอาต์พุตทั้งหมด</span>
+                            <span class="shortcut"></span>
+                        </div>
+                    </div>
+                </li>
+                <li class="menu-item">
+                    <span>มุมมอง</span>
+                    <div class="submenu view-menu">
+                        <div class="submenu-item" id="tableOfContents">
+                            <span>สารบัญ</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-item" id="notebookInfo">
+                            <span>ข้อมูลสมุดบันทึก</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-item" id="executeHistory">
+                            <span>ประวัติการเรียกใช้โค้ด</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-item submenu-parent" id="commentsMenu">
+                            <span>ความคิดเห็น</span>
+                            <span class="shortcut">▶</span>
+                            <div class="nested-submenu">
+                                <div class="submenu-item" id="showComments">
+                                    <span>แสดงความคิดเห็น</span>
+                                </div>
+                                <div class="submenu-item" id="hideComments">
+                                    <span>ซ่อนความคิดเห็น</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="submenu-divider"></div>
+                        <div class="submenu-item" id="collapseSection">
+                            <span>ยุบส่วน</span>
+                            <span class="shortcut">Ctrl+]</span>
+                        </div>
+                        <div class="submenu-item" id="expandSection">
+                            <span>ขยายส่วน</span>
+                            <span class="shortcut">Ctrl+[</span>
+                        </div>
+                        <div class="submenu-divider"></div>
+                        <div class="submenu-item" id="toggleCode">
+                            <span>แสดง/ซ่อนโค้ด</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-item" id="toggleOutput">
+                            <span>แสดง/ซ่อนเอาต์พุต</span>
+                            <span class="shortcut">Ctrl+M O</span>
+                        </div>
+                        <div class="submenu-divider"></div>
+                        <div class="submenu-item" id="focusNextTab">
+                            <span>โฟกัสแท็บถัดไป</span>
+                            <span class="shortcut">Ctrl+Shift+]</span>
+                        </div>
+                        <div class="submenu-item" id="focusPreviousTab">
+                            <span>โฟกัสแท็บก่อนหน้า</span>
+                            <span class="shortcut">Ctrl+Shift+[</span>
+                        </div>
+                        <div class="submenu-item" id="moveTabToNextPanel">
+                            <span>ย้ายแท็บไปยังแผงถัดไป</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-item" id="moveTabToPreviousPanel">
+                            <span>ย้ายแท็บไปยังแผงก่อนหน้า</span>
+                            <span class="shortcut"></span>
+                        </div>
+                    </div>
+                </li>
+                <li class="menu-item">
+                    <span>แทรก</span>
+                    <div class="submenu insert-menu">
+                        <div class="submenu-item" id="insertCodeCell">
+                            <span>เซลล์โค้ด</span>
+                            <span class="shortcut">Ctrl+M B</span>
+                        </div>
+                        <div class="submenu-item" id="insertTextCell">
+                            <span>เซลล์ข้อความ</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-item" id="insertSectionHeader">
+                            <span>เซลล์ส่วนหัวของส่วน</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-divider"></div>
+                        <div class="submenu-item" id="insertCodeCellForCoding">
+                            <span>เซลล์โค้ดสำหรับเขียนโค้ด</span>
+                            <span class="shortcut">Ctrl+Alt+N</span>
+                        </div>
+                        <div class="submenu-item" id="insertCodeInfo">
+                            <span>ข้อมูลโค้ด</span>
+                            <span class="shortcut">Ctrl+Alt+P</span>
+                        </div>
+                        <div class="submenu-divider"></div>
+                        <div class="submenu-item" id="insertFormField">
+                            <span>เพิ่มช่องในฟอร์ม</span>
+                            <span class="shortcut"></span>
+                        </div>
+                    </div>
+                </li>
+                <li class="menu-item">
+                    <span>รันไทม์</span>
+                    <div class="submenu runtime-menu">
+                        <div class="submenu-item" id="runAllCells">
+                            <span>เรียกใช้ทุกเซลล์</span>
+                            <span class="shortcut">Ctrl+F9</span>
+                        </div>
+                        <div class="submenu-item" id="runCellsAbove">
+                            <span>เรียกใช้เซลล์ด้านบน</span>
+                            <span class="shortcut">Ctrl+F8</span>
+                        </div>
+                        <div class="submenu-item" id="runFocusedCell">
+                            <span>เรียกใช้เซลล์ที่โฟกัส</span>
+                            <span class="shortcut">Ctrl+Enter</span>
+                        </div>
+                        <div class="submenu-item" id="runSelectedCells">
+                            <span>เรียกใช้เซลล์ที่เลือก</span>
+                            <span class="shortcut">Ctrl+Shift+Enter</span>
+                        </div>
+                        <div class="submenu-item" id="runCellsBelow">
+                            <span>เรียกใช้เซลล์และด้านล่าง</span>
+                            <span class="shortcut">Ctrl+F10</span>
+                        </div>
+                        <div class="submenu-divider"></div>
+                        <div class="submenu-item" id="interruptExecution">
+                            <span>รบกวนการเรียกใช้</span>
+                            <span class="shortcut">Ctrl+M I</span>
+                        </div>
+                        <div class="submenu-item" id="restartSession">
+                            <span>เริ่มเซสชันใหม่</span>
+                            <span class="shortcut">Ctrl+M .</span>
+                        </div>
+                        <div class="submenu-item" id="restartSessionAndRunAll">
+                            <span>เริ่มเซสชันใหม่และเรียกใช้ทั้งหมด</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-item" id="disconnectAndDeleteRuntime">
+                            <span>ยกเลิกการเชื่อมต่อและลบรันไทม์</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-divider"></div>
+                        <div class="submenu-item" id="changeRuntimeType">
+                            <span>เปลี่ยนประเภทรันไทม์</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-item" id="manageSessions">
+                            <span>จัดการเซสชัน</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-item" id="viewResources">
+                            <span>ดูทรัพยากร</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-item" id="viewRuntimeLogs">
+                            <span>ดูบันทึกรันไทม์</span>
+                            <span class="shortcut"></span>
+                        </div>
+                    </div>
+                </li>
+                <li class="menu-item">
+                    <span>เครื่องมือ</span>
+                    <div class="submenu tools-menu">
+                        <div class="submenu-item" id="commandPalette">
+                            <span>พาเล็ตคำสั่ง</span>
+                            <span class="shortcut">Ctrl+Shift+P</span>
+                        </div>
+                        <div class="submenu-item" id="settings">
+                            <span>การตั้งค่า</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-item" id="keyboard-shortcuts">
+                            <span>แป้นพิมพ์ลัด</span>
+                            <span class="shortcut">Ctrl+M H</span>
+                        </div>
+                        <div class="submenu-item" id="showNotebookDiff">
+                            <span>แสดงความแตกต่างของสมุดบันทึก</span>
+                            <span class="shortcut"></span>
+                        </div>
+                    </div>
+                </li>
+                <li class="menu-item">
+                    <span>ความช่วยเหลือ</span>
+                    <div class="submenu help-menu">
+                        <div class="submenu-item" id="welcome">
+                            <span>ยินดีต้อนรับ</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-item" id="faq">
+                            <span>คำถามที่พบบ่อย</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-item" id="releaseNotes">
+                            <span>ดูบันทึกประจำรุ่น</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-divider"></div>
+                        <div class="submenu-item" id="searchCodeInfo">
+                            <span>ค้นหาข้อมูลโค้ด</span>
+                            <span class="shortcut">Ctrl+Alt+P</span>
+                        </div>
+                        <div class="submenu-divider"></div>
+                        <div class="submenu-item" id="reportBug">
+                            <span>รายงานข้อบกพร่อง</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-item" id="sendFeedback">
+                            <span>ส่งความคิดเห็น</span>
+                            <span class="shortcut"></span>
+                        </div>
+                        <div class="submenu-divider"></div>
+                        <div class="submenu-item" id="termsOfService">
+                            <span>ดูข้อกำหนดในการให้บริการ</span>
+                            <span class="shortcut"></span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+
         <!-- Main Content Area -->
-        <div class="vs-main">
-            <!-- Activity Bar (leftmost narrow panel) -->
-            <div class="activity-bar">
-                <div class="activity-bar-icon active" data-view="explorer" title="Explorer">
+        <main class="main-content">
+            <div class="toolbar">
+                <div class="toolbar-button-group">
+                    <button id="add-code-cell" class="toolbar-button">
+                        <i class="fas fa-plus"></i> Code
+                    </button>
+                    <button id="add-text-cell" class="toolbar-button">
+                        <i class="fas fa-plus"></i> Text
+                    </button>
+                </div>
+                <div class="toolbar-button-group">
+                    <button id="run-cell" class="toolbar-button">
+                        <i class="fas fa-play"></i> Run
+                    </button>
+                    <button id="run-all" class="toolbar-button">
+                        <i class="fas fa-forward"></i> Run All
+                    </button>
+                </div>
+                <div class="toolbar-button-group">
+                    <button id="save-notebook" class="toolbar-button">
+                        <i class="fas fa-save"></i> Save
+                    </button>
+                </div>
+            </div>
+            
+            <div id="notebook-container" class="notebook-container">
+                <!-- Cells will be added here dynamically -->
+            </div>
+        </main>
+
+        <!-- Side Panel for file explorer, search, etc. -->
+        <aside class="side-panel" id="side-panel">
+            <div class="panel-tabs">
+                <div class="panel-tab active" data-panel="explorer">
                     <i class="fas fa-folder"></i>
                 </div>
-                <div class="activity-bar-icon" data-view="search" title="Search">
+                <div class="panel-tab" data-panel="search">
                     <i class="fas fa-search"></i>
                 </div>
-                <div class="activity-bar-icon" data-view="code" title="Editor">
-                    <i class="fas fa-code"></i>
+                <div class="panel-tab" data-panel="datasets">
+                    <i class="fas fa-database"></i>
                 </div>
-                <div class="activity-bar-icon" data-view="models" title="AI Models">
+                <div class="panel-tab" data-panel="models">
                     <i class="fas fa-brain"></i>
                 </div>
-                <div class="activity-bar-icon" data-view="settings" title="Settings">
+                <div class="panel-tab" data-panel="settings">
                     <i class="fas fa-cog"></i>
                 </div>
             </div>
-
-            <!-- Explorer Sidebar -->
-            <div class="explorer">
-                <div class="explorer-header">EXPLORER</div>
-                <div class="explorer-files" id="file-list">
-                    <!-- Files will be listed here -->
-                    <div class="empty-state">อัพโหลดไฟล์ข้อมูลเพื่อเริ่มต้น</div>
-                </div>
-                <div class="file-uploader">
-                    <button class="upload-button" id="upload-btn">
-                        <i class="fas fa-upload"></i> อัพโหลดไฟล์ข้อมูล
-                    </button>
-                    <input type="file" id="file-upload" style="display: none;">
-                </div>
-            </div>
-
-            <!-- Editor Container -->
-            <div class="editor-area">
-                <!-- Tab bar -->
-                <div class="tabs-bar">
-                    <div class="tab active">
-                        <span>notebook.ai</span>
-                        <span class="tab-close">×</span>
-                    </div>
-                    <div class="tab">
-                        <span>welcome.md</span>
-                        <span class="tab-close">×</span>
+            <div class="panel-content">
+                <div id="explorer-panel" class="panel-section active">
+                    <h3>File Explorer</h3>
+                    <div id="file-tree" class="file-tree">
+                        <div class="file-tree-item folder">
+                            <i class="fas fa-folder"></i>
+                            <span>My Drive</span>
+                        </div>
+                        <div class="file-tree-item folder">
+                            <i class="fas fa-folder"></i>
+                            <span>Shared with me</span>
+                        </div>
+                        <div class="file-tree-item folder">
+                            <i class="fas fa-folder"></i>
+                            <span>Recent</span>
+                        </div>
+                        <div class="file-tree-item folder">
+                            <i class="fas fa-folder"></i>
+                            <span>Starred</span>
+                        </div>
+                        <div class="file-tree-item folder">
+                            <i class="fas fa-folder"></i>
+                            <span>Trash</span>
+                        </div>
                     </div>
                 </div>
-
-                <!-- Main notebook container -->
-                <div id="notebook-container" style="flex: 1; overflow: auto;">
-                    <!-- Cells will be added here dynamically -->
+                <div id="search-panel" class="panel-section">
+                    <h3>Search Files</h3>
+                    <div class="search-container">
+                        <input type="text" placeholder="Search in Drive...">
+                        <button><i class="fas fa-search"></i></button>
+                    </div>
+                    <div class="search-results">
+                        <!-- Search results will appear here -->
+                    </div>
+                </div>
+                <div id="datasets-panel" class="panel-section">
+                    <h3>Datasets</h3>
+                    <div class="datasets-list">
+                        <div class="dataset-item">
+                            <i class="fas fa-table"></i>
+                            <span>housing.csv</span>
+                        </div>
+                        <div class="dataset-item">
+                            <i class="fas fa-table"></i>
+                            <span>mnist.pkl</span>
+                        </div>
+                        <div class="dataset-upload">
+                            <button id="upload-dataset">
+                                <i class="fas fa-upload"></i> Upload Dataset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="models-panel" class="panel-section">
+                    <h3>Models</h3>
+                    <div class="models-list">
+                        <div class="model-item">
+                            <i class="fas fa-brain"></i>
+                            <span>LinearRegression</span>
+                        </div>
+                        <div class="model-item">
+                            <i class="fas fa-brain"></i>
+                            <span>NeuralNetwork</span>
+                        </div>
+                        <div class="model-create">
+                            <button id="create-model">
+                                <i class="fas fa-plus"></i> Create Model
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="settings-panel" class="panel-section">
+                    <h3>Settings</h3>
+                    <div class="settings-list">
+                        <div class="setting-item">
+                            <span>Theme:</span>
+                            <select id="theme-selector">
+                                <option value="light">Light</option>
+                                <option value="dark">Dark</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <span>Font Size:</span>
+                            <select id="font-size-selector">
+                                <option value="small">Small</option>
+                                <option value="medium">Medium</option>
+                                <option value="large">Large</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <span>Indent Size:</span>
+                            <select id="indent-size-selector">
+                                <option value="2">2 spaces</option>
+                                <option value="4">4 spaces</option>
+                                <option value="tab">Tab</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Status Bar -->
-        <div class="status-bar">
-            <div class="status-item">
-                <span class="status-indicator green"></span>
-                <span>AI Language Interpreter</span>
-            </div>
-            <div class="status-item">
-                <span>Ln 1, Col 1</span>
-            </div>
-            <div class="status-item">
-                <span>UTF-8</span>
-            </div>
-        </div>
-
-        <!-- Footer -->
-        <footer>
-            <p>AI Language Notebook IDE v1.0 | พัฒนาโดย AI Language Team</p>
-        </footer>
+        </aside>
     </div>
 
-    <!-- Cell Template (hidden) -->
-    <template id="cell-template">
-        <div class="cell">
-            <div class="cell-toolbar">
-                <span class="cell-number"></span>
-                <div class="toolbar-buttons">
-                    <button class="run-btn">▶️ รัน</button>
-                    <button class="delete-btn">🗑️ ลบ</button>
-                </div>
-            </div>
-            <div class="code-area"></div>
-            <div class="output-area">
-                <div class="output-text"></div>
-                <div class="output-visuals"></div>
+    <!-- Modals -->
+    <div id="rename-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Rename Notebook</h2>
+            <input type="text" id="new-notebook-name" placeholder="Enter new name">
+            <div class="modal-buttons">
+                <button id="cancel-rename">Cancel</button>
+                <button id="confirm-rename">Rename</button>
             </div>
         </div>
-    </template>
+    </div>
+
+    <div id="keyboard-shortcuts-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Keyboard Shortcuts</h2>
+            <div class="shortcuts-container">
+                <div class="shortcut-category">
+                    <h3>Cell Operations</h3>
+                    <table>
+                        <tr>
+                            <td>Run Cell</td>
+                            <td>Ctrl+Enter</td>
+                        </tr>
+                        <tr>
+                            <td>Add Code Cell</td>
+                            <td>Ctrl+M B</td>
+                        </tr>
+                        <tr>
+                            <td>Delete Cell</td>
+                            <td>Ctrl+M D</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="shortcut-category">
+                    <h3>File Operations</h3>
+                    <table>
+                        <tr>
+                            <td>Save Notebook</td>
+                            <td>Ctrl+S</td>
+                        </tr>
+                        <tr>
+                            <td>Save & Pin Version</td>
+                            <td>Ctrl+M S</td>
+                        </tr>
+                        <tr>
+                            <td>Open Notebook</td>
+                            <td>Ctrl+O</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="shortcut-category">
+                    <h3>Editing</h3>
+                    <table>
+                        <tr>
+                            <td>Undo</td>
+                            <td>Ctrl+Z</td>
+                        </tr>
+                        <tr>
+                            <td>Redo</td>
+                            <td>Ctrl+Shift+Y</td>
+                        </tr>
+                        <tr>
+                            <td>Find & Replace</td>
+                            <td>Ctrl+H</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="notification" class="notification">
+        <span id="notification-message"></span>
+        <button id="close-notification"><i class="fas fa-times"></i></button>
+    </div>
 
     <!-- Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
-    <script src="js/ailang-mode.js"></script>
     <script src="js/notebook.js"></script>
 </body>
 </html>

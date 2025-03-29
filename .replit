@@ -27,6 +27,10 @@ args = "Build and Run Tests"
 task = "workflow.run"
 args = "AI Language Notebook Server"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "AI Notebook Server"
+
 [[workflows.workflow]]
 name = "Build and Run C++ Project"
 author = "agent"
@@ -82,6 +86,21 @@ task = "packager.installForAll"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "node ai_language_notebook/server.js"
+waitForPort = 5000
+
+[[workflows.workflow]]
+name = "AI Notebook Server"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd ai_language_notebook && node server.js"
 waitForPort = 5000
 
 [deployment]

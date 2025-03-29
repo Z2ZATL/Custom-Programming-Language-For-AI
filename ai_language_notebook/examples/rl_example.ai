@@ -1,0 +1,70 @@
+# ตัวอย่างภาษา AI สำหรับงาน Reinforcement Learning
+
+# เริ่มต้นโปรเจกต์แบบ Reinforcement Learning
+start create RL
+
+# สร้างสภาพแวดล้อม
+create environment "CartPole-v1"
+
+# แสดงข้อมูลสภาพแวดล้อม
+show environment info
+
+# สร้าง agent แบบ DQN
+create agent DQN
+
+# กำหนดขนาดของ state และ action
+set state_size from environment
+
+set action_size from environment
+
+# เพิ่ม layer ของโครงข่ายประสาทเทียม
+add layer dense nodes 24 activation "relu"
+
+add layer dense nodes 24 activation "relu"
+
+add layer dense nodes from action_size activation "linear"
+
+# ตั้งค่าพารามิเตอร์ของ agent
+configure agent with gamma 0.99 epsilon 1.0 epsilon_decay 0.995 epsilon_min 0.01 learning_rate 0.001
+
+# ฝึก agent
+train agent for episodes 1000 max_steps 500 batch_size 32
+
+# บันทึก agent
+save agent to "cartpole_dqn_agent.h5"
+
+# ทดสอบ agent
+test agent on environment for episodes 10 render true
+
+# แสดงกราฟของรางวัล
+plot rewards
+
+# แสดงกราฟของ epsilon decay
+plot epsilon_decay
+
+# แสดงกราฟของค่า Q เฉลี่ย
+plot average_q_values
+
+# สร้าง agent แบบ Double DQN
+create agent DDQN
+
+# ตั้งค่าพารามิเตอร์
+configure agent with gamma 0.99 learning_rate 0.001
+
+# ฝึก agent
+train agent for episodes 1000 max_steps 500
+
+# สร้าง agent แบบ Advantage Actor-Critic
+create agent A2C
+
+# ตั้งค่าพารามิเตอร์
+configure agent with gamma 0.99 learning_rate 0.001
+
+# ฝึก agent
+train agent for episodes 1000 max_steps 500
+
+# เปรียบเทียบประสิทธิภาพของ agent ต่างๆ
+compare agents DQN, DDQN, A2C
+
+# แสดงผลการเปรียบเทียบ
+show comparison
