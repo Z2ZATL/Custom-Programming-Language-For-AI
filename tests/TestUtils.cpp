@@ -202,19 +202,20 @@ TEST(UtilsTest, VectorShuffle) {
     // Size should be the same
     EXPECT_EQ(numbers.size(), original.size());
     
-    // Contents should be the same, but order might be different
-    std::sort(numbers.begin(), numbers.end());
-    EXPECT_EQ(numbers, original);
-    
-    // Original order is extremely unlikely
+    // Check if vector order has changed after shuffling
     bool isDifferent = false;
     for (size_t i = 0; i < numbers.size(); ++i) {
-        if (numbers[i] != i + 1) {
+        if (numbers[i] != original[i]) {
             isDifferent = true;
             break;
         }
     }
     
-    // This could technically fail with very small probability
+    // Vector should have changed after shuffling
     EXPECT_TRUE(isDifferent);
+    
+    // Contents should be the same elements, just in different order
+    std::sort(numbers.begin(), numbers.end());
+    std::sort(original.begin(), original.end());
+    EXPECT_EQ(numbers, original);
 }

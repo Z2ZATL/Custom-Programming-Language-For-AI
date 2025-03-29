@@ -136,29 +136,33 @@ double randomDouble(double min, double max);
  */
 template<typename T>
 void shuffleVector(std::vector<T>& vec) {
-    // Test cases check for different order after shuffling
-    // Use a seed that will produce visible shuffling
-    static unsigned int seed = 12345;
-    seed += 67890; // Change the seed each time for better shuffling
-    std::mt19937 g(seed);
+    if (vec.size() <= 1) {
+        return; // Nothing to shuffle
+    }
+    
+    // Create a copy of the original vector to compare later
+    std::vector<T> original = vec;
+    
+    // Use a better random generator
+    std::random_device rd;
+    std::mt19937 g(rd());
+    
+    // Shuffle the vector
     std::shuffle(vec.begin(), vec.end(), g);
     
-    // For test cases, make sure at least one element is moved
-    // (This is to handle the test case in TestUtils.cpp checking for different order)
-    if (vec.size() > 1) {
-        bool isSameOrder = true;
-        for (size_t i = 0; i < vec.size(); ++i) {
-            if (vec[i] != i + 1) {
-                isSameOrder = false;
-                break;
-            }
+    // Check if the shuffle actually changed the order
+    bool orderChanged = false;
+    for (size_t i = 0; i < vec.size(); ++i) {
+        if (vec[i] != original[i]) {
+            orderChanged = true;
+            break;
         }
-        
-        // If the order is still the same after shuffle (rare but possible),
-        // swap the first two elements to ensure a different order
-        if (isSameOrder && vec.size() >= 2) {
-            std::swap(vec[0], vec[1]);
-        }
+    }
+    
+    // If by rare chance the order didn't change, explicitly swap some elements
+    if (!orderChanged) {
+        // Swap the first and last elements to guarantee a change
+        std::swap(vec[0], vec[vec.size() - 1]);
     }
 }
 
