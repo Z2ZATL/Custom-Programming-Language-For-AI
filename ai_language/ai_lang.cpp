@@ -380,7 +380,7 @@ int main(int argc, char* argv[]) {
             if (file.is_open()) {
                 std::string content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
                 ai_language::Interpreter interpreter;
-                
+
                 // ตั้งค่า handler เพื่อไม่แสดงผลในโหมดทดสอบ
                 if (isTesting) {
                     interpreter.setOutputHandler([](const std::string& message) {
@@ -390,7 +390,7 @@ int main(int argc, char* argv[]) {
                         // ไม่แสดงข้อผิดพลาดใดๆ ในโหมดทดสอบ
                     });
                 }
-                
+
                 interpreter.interpret(content);
                 return 0;
             } else {
