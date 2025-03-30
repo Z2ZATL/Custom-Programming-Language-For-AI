@@ -8,7 +8,7 @@ channel = "stable-24_05"
 run = ["sh", "-c", "cd ai_language && mkdir -p build && cd build && cmake .. && make && cd .. && ./ai_lang -i"]
 
 [workflows]
-runButton = "Build and Run C++"
+runButton = "Build Only"
 
 [[workflows.workflow]]
 name = "Build and Run C++"
@@ -44,4 +44,4 @@ mode = "sequential"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd ai_language && mkdir -p build && cd build && export AI_LANG_TESTING=1 && cmake .. && make && cd .. && true"
+args = "cd ai_language && mkdir -p build && cd build && export AI_LANG_TESTING=1 && cmake .. && make"
