@@ -90,6 +90,15 @@ int main(int argc, char* argv[]) {
     if (arg == "-i" || arg == "--interactive") {
         runInteractiveMode();
     } else {
+        // ตรวจสอบว่าไฟล์มีอยู่จริงก่อนพยายามเปิด
+        std::ifstream fileCheck(arg);
+        if (!fileCheck.is_open()) {
+            std::cerr << "Error: ไม่สามารถเปิดไฟล์ " << arg << std::endl;
+            showUsage(argv[0]);
+            return 1;
+        }
+        fileCheck.close();
+        
         // สันนิษฐานว่าเป็นชื่อไฟล์
         runFile(arg);
     }
