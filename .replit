@@ -1,0 +1,32 @@
+modules = ["cpp-clang14", "nodejs-20", "bash", "nix"]
+run = "node index.js"
+
+[nix]
+channel = "stable-24_05"
+
+[deployment]
+run = ["sh", "-c", "node index.js"]
+
+[workflows]
+runButton = "Build and Run C++"
+
+[[workflows.workflow]]
+name = "Build and Run C++"
+author = 40997290
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd build"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cmake .."
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "make"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "./ai_lang"
