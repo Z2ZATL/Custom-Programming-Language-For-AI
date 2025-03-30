@@ -17,4 +17,4 @@ mode = "sequential"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd ai_language && mkdir -p build && cd build && cmake .. && make && ./ai_lang ../../example.ai"
+args = "cd ai_language && mkdir -p build && cd build && cmake .. && make && ./ai_lang ../examples/ml_example.ai"
