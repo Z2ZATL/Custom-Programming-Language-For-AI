@@ -339,6 +339,7 @@ body {
     margin-top: 24px;
     overflow: hidden;
     position: relative;
+    /* Removed border-bottom: 1px solid var(--cell-border); */
 }
 
 .cell-toolbar {
@@ -346,7 +347,7 @@ body {
     justify-content: space-between;
     padding: 4px 8px;
     background-color: var(--panel-background);
-    border-bottom: 1px solid var(--cell-border);
+    /* Removed border-bottom: 1px solid var(--cell-border); */
 }
 
 .cell-type {
@@ -381,7 +382,7 @@ body {
 .cell-output {
     padding: 8px 16px;
     background-color: var(--output-background);
-    border-top: 1px solid var(--cell-border);
+    /* Removed border-top: 1px solid var(--cell-border); */
     font-family: var(--code-font-family);
     white-space: pre-wrap;
 }
@@ -773,4 +774,11 @@ body.dark-mode {
     --code-background: #2d2e30;
     --divider-color: #5f6368;
     --shadow-color: rgba(0, 0, 0, 0.5);
+}
+
+.add-buttons-top,
+.add-buttons-bottom,
+.notebook-header .add-buttons,
+.mini-button {
+    display: none !important;
 }

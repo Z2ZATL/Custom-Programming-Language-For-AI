@@ -254,15 +254,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const cellActions = document.createElement('div');
         cellActions.className = 'cell-actions';
         
-        // Add cell buttons above cell
-        const addButtonsTop = document.createElement('div');
-        addButtonsTop.className = 'add-buttons-top';
-        
-        // Add + Code button
-        const addCodeButton = document.createElement('button');
-        addCodeButton.className = 'mini-button add-code-mini';
-        addCodeButton.innerHTML = '+ โค้ด';
-        addCodeButton.title = 'Add code cell';
+        // Cell buttons removed
         // Button functionality will be reimplemented
         addTextButton.addEventListener('click', (e) => {
             e.stopPropagation();
