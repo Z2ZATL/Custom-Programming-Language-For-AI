@@ -71,15 +71,11 @@ void runFile(const std::string& filename) {
         std::cerr << "\033[31m" << message << "\033[0m" << std::endl;
     });
     
-    std::cout << "=== ทดสอบภาษาโปรแกรมสำหรับ AI ===" << std::endl << std::endl;
-    
     // ประมวลผลโค้ด
     interpreter.interpret(buffer.str());
 }
 
 int main(int argc, char* argv[]) {
-    std::cout << "=== ทดสอบภาษาโปรแกรมสำหรับ AI ===" << std::endl << std::endl;
-    
     // ถ้าไม่มีพารามิเตอร์ แสดงวิธีใช้
     if (argc < 2) {
         showUsage(argv[0]);
