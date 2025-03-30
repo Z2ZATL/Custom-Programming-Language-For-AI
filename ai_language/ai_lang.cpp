@@ -251,16 +251,22 @@ void runInteractiveMode() {
                                 if (path[0] != '/') {  // ถ้าไม่ใช่พาธสัมบูรณ์
                                     char cwd[1024];
                                     if (getcwd(cwd, sizeof(cwd)) != NULL) {
-                                        // คำนวณความยาวที่ต้องการก่อนใช้ snprintf เพื่อป้องกัน buffer overflow
-                                size_t needed_size = strlen(cwd) + 1 + path.length() + 1; // +1 สำหรับ '/' และ '\0'
-                                if (needed_size <= sizeof(abs_path)) {
-                                    snprintf(abs_path, sizeof(abs_path), "%s/%s", cwd, path.c_str());
-                                } else {
-                                    // กรณีที่พาธยาวเกินไป ใช้เพียงพาธสัมพัทธ์
-                                    strncpy(abs_path, path.c_str(), sizeof(abs_path) - 1);
-                                    abs_path[sizeof(abs_path) - 1] = '\0';
-                                    std::cerr << "\033[33mคำเตือน: พาธไฟล์ยาวเกินไป ใช้พาธสัมพัทธ์แทน\033[0m" << std::endl;
-                                }
+                                        // ตรวจสอบความยาวของ cwd และ path เพื่อป้องกัน buffer overflow
+                                        size_t cwd_len = strlen(cwd);
+                                        size_t path_len = path.length();
+                                        
+                                        // ต้องการพื้นที่สำหรับ cwd + '/' + path + '\0'
+                                        if (cwd_len + 1 + path_len + 1 <= sizeof(abs_path)) {
+                                            // สร้างพาธที่ปลอดภัย
+                                            strcpy(abs_path, cwd);
+                                            abs_path[cwd_len] = '/';
+                                            strcpy(abs_path + cwd_len + 1, path.c_str());
+                                        } else {
+                                            // กรณีที่พาธยาวเกินไป ใช้เพียงพาธสัมพัทธ์
+                                            strncpy(abs_path, path.c_str(), sizeof(abs_path) - 1);
+                                            abs_path[sizeof(abs_path) - 1] = '\0';
+                                            std::cerr << "\033[33mคำเตือน: พาธไฟล์ยาวเกินไป ใช้พาธสัมพัทธ์แทน\033[0m" << std::endl;
+                                        }
                                     } else {
                                         strncpy(abs_path, path.c_str(), sizeof(abs_path));
                                     }
