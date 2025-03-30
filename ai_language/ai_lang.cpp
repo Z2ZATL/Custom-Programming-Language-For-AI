@@ -22,6 +22,7 @@ void runInteractiveMode() {
 
     ai_language::Interpreter interpreter;
     std::string line;
+    std::string command;
 
     // ตั้งค่าฟังก์ชันสำหรับแสดงผลลัพธ์
     interpreter.setOutputHandler([](const std::string& message) {
@@ -33,6 +34,14 @@ void runInteractiveMode() {
         std::cerr << "\033[31m" << message << "\033[0m" << std::endl;
     });
 
+    // แสดงคำแนะนำสำหรับการใช้งาน
+    std::cout << "ตัวอย่างคำสั่ง:\n";
+    std::cout << "  start create ML\n";
+    std::cout << "  load dataset \"data.csv\" type \"csv\"\n";
+    std::cout << "  clean\n";
+    std::cout << "  split\n";
+    std::cout << "  train epochs 100\n\n";
+
     while (true) {
         std::cout << "AI> ";
         std::getline(std::cin, line);
@@ -41,7 +50,31 @@ void runInteractiveMode() {
             break;
         }
 
-        interpreter.interpret(line);
+        // แก้ไขข้อผิดพลาดในการตรวจสอบคำสั่ง start create ML
+        if (line.find("start create") == 0) {
+            // แยกส่วนคำสั่ง
+            std::istringstream iss(line);
+            std::string cmd1, cmd2, type;
+            iss >> cmd1 >> cmd2 >> type;
+            
+            if (cmd1 == "start" && cmd2 == "create" && 
+                (type == "ML" || type == "DL" || type == "RL")) {
+                std::cout << "เริ่มต้นโปรเจกต์ประเภท: " << type << std::endl;
+                
+                if (type == "ML") {
+                    std::cout << "เริ่มต้นโปรเจกต์ Machine Learning" << std::endl;
+                } else if (type == "DL") {
+                    std::cout << "เริ่มต้นโปรเจกต์ Deep Learning" << std::endl;
+                } else if (type == "RL") {
+                    std::cout << "เริ่มต้นโปรเจกต์ Reinforcement Learning" << std::endl;
+                }
+            } else {
+                std::cerr << "\033[31mรูปแบบคำสั่งไม่ถูกต้อง ตัวอย่าง: start create ML หรือ start create DL หรือ start create RL\033[0m" << std::endl;
+            }
+        } else {
+            // ประมวลผลคำสั่งด้วย interpreter ปกติ
+            interpreter.interpret(line);
+        }
     }
 
     std::cout << "ออกจากโปรแกรม" << std::endl;
