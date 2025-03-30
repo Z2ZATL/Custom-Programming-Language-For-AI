@@ -48,6 +48,12 @@ void runInteractiveMode() {
 }
 
 void runFile(const std::string& filename) {
+    // ตรวจสอบว่าเป็นพารามิเตอร์พิเศษหรือไม่
+    if (filename == "-i" || filename == "--interactive") {
+        runInteractiveMode();
+        return;
+    }
+    
     // ตรวจสอบว่าไฟล์มีอยู่จริง
     std::ifstream file(filename);
     if (!file.is_open()) {
@@ -86,13 +92,8 @@ int main(int argc, char* argv[]) {
 
     std::string arg = argv[1];
 
-    // ตรวจสอบโหมดการทำงาน
-    if (arg == "-i" || arg == "--interactive") {
-        runInteractiveMode();
-    } else {
-        // สันนิษฐานว่าเป็นชื่อไฟล์
-        runFile(arg);
-    }
+    // สันนิษฐานว่าเป็นชื่อไฟล์หรือคำสั่งพิเศษ
+    runFile(arg);
 
     return 0;
 }
