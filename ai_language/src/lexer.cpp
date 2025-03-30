@@ -1,152 +1,314 @@
+
+/**
+ * @file lexer.cpp
+ * @brief การดำเนินการของ Lexer สำหรับแยกโค้ดเป็น token
+ */
+
 #include "../include/lexer.h"
 #include <iostream>
-#include <map>
+#include <sstream>
 
 namespace ai_language {
 
-// คำสั่งสำหรับ Keyword mapping
-static const std::map<std::string, TokenType> keywords = {
-    {"start", TokenType::START},
-    {"load", TokenType::LOAD},
-    {"clean", TokenType::CLEAN},
-    {"split", TokenType::SPLIT},
-    {"create", TokenType::CREATE},
-    {"train", TokenType::TRAIN},
-    {"evaluate", TokenType::EVALUATE},
-    {"show", TokenType::SHOW},
-    {"save", TokenType::SAVE},
-    {"visualize", TokenType::VISUALIZE},
-    {"plot", TokenType::PLOT},
-    {"with", TokenType::WITH},
-    {"for", TokenType::FOR},
-    {"into", TokenType::INTO},
-    {"and", TokenType::AND},
-    {"to", TokenType::TO},
-    {"on", TokenType::ON},
-    {"ratio", TokenType::RATIO},
-    {"add", TokenType::ADD},
-    {"layer", TokenType::LAYER},
-    {"compile", TokenType::COMPILE},
-    {"predict", TokenType::PREDICT},
-    {"test", TokenType::TEST},
-    {"configure", TokenType::CONFIGURE},
-    {"compare", TokenType::COMPARE}
-};
-
-Lexer::Lexer(const std::string& input) : input(input), pos(0) {}
-
-std::vector<Token> Lexer::tokenize() {
-    std::vector<Token> tokens;
+// สำหรับแสดงผลใน debug
+std::string Token::toString() const {
+    std::stringstream ss;
+    ss << "Token(type=";
     
-    while (pos < input.size()) {
-        char c = input[pos];
+    switch (type) {
+        case TokenType::START: ss << "START"; break;
+        case TokenType::LOAD: ss << "LOAD"; break;
+        case TokenType::CLEAN: ss << "CLEAN"; break;
+        case TokenType::SPLIT: ss << "SPLIT"; break;
+        case TokenType::TRAIN: ss << "TRAIN"; break;
+        case TokenType::EVALUATE: ss << "EVALUATE"; break;
+        case TokenType::PREDICT: ss << "PREDICT"; break;
+        case TokenType::SAVE: ss << "SAVE"; break;
+        case TokenType::SHOW: ss << "SHOW"; break;
+        case TokenType::VISUALIZE: ss << "VISUALIZE"; break;
+        case TokenType::PLOT: ss << "PLOT"; break;
         
-        // ข้าม whitespace
-        if (std::isspace(c)) {
-            pos++;
-            continue;
-        }
+        case TokenType::ML: ss << "ML"; break;
+        case TokenType::DL: ss << "DL"; break;
+        case TokenType::RL: ss << "RL"; break;
         
-        // ตรวจสอบ string literals
-        if (c == '"' || c == '\'') {
-            tokens.push_back(parseString());
-            continue;
-        }
+        case TokenType::DATASET: ss << "DATASET"; break;
+        case TokenType::MODEL: ss << "MODEL"; break;
+        case TokenType::METRIC: ss << "METRIC"; break;
+        case TokenType::PATH: ss << "PATH"; break;
+        case TokenType::TYPE: ss << "TYPE"; break;
+        case TokenType::WITH: ss << "WITH"; break;
+        case TokenType::EPOCHS: ss << "EPOCHS"; break;
+        case TokenType::LAYERS: ss << "LAYERS"; break;
         
-        // ตรวจสอบตัวเลข
-        if (std::isdigit(c) || (c == '.' && pos + 1 < input.size() && std::isdigit(input[pos + 1]))) {
-            tokens.push_back(parseNumber());
-            continue;
-        }
+        case TokenType::EQUAL: ss << "EQUAL"; break;
+        case TokenType::COMMA: ss << "COMMA"; break;
+        case TokenType::COLON: ss << "COLON"; break;
         
-        // ตรวจสอบคำที่เป็น identifier หรือ keyword
-        if (std::isalpha(c) || c == '_') {
-            tokens.push_back(parseWord());
-            continue;
-        }
+        case TokenType::IDENTIFIER: ss << "IDENTIFIER"; break;
+        case TokenType::STRING: ss << "STRING"; break;
+        case TokenType::NUMBER: ss << "NUMBER"; break;
         
-        // ไม่รู้จักตัวอักษร
-        tokens.push_back(Token(TokenType::UNKNOWN, std::string(1, c)));
-        pos++;
+        case TokenType::COMMENT: ss << "COMMENT"; break;
+        case TokenType::WHITESPACE: ss << "WHITESPACE"; break;
+        case TokenType::NEWLINE: ss << "NEWLINE"; break;
+        case TokenType::UNKNOWN: ss << "UNKNOWN"; break;
+        case TokenType::END_OF_FILE: ss << "END_OF_FILE"; break;
     }
     
-    tokens.push_back(Token(TokenType::END));
-    return tokens;
+    ss << ", value=\"" << value << "\", line=" << line << ", column=" << column << ")";
+    return ss.str();
 }
 
-Token Lexer::parseString() {
-    char quote = input[pos++]; // เก็บเครื่องหมายคำพูดเริ่มต้น (' หรือ ")
-    std::string value;
+Lexer::Lexer() 
+    : m_start(0), m_current(0), m_line(1), m_column(1), m_hasError(false) {
+    // กำหนดคำสำคัญที่จะถูกแปลงเป็น TokenType เฉพาะ
+    m_keywords["start"] = TokenType::START;
+    m_keywords["load"] = TokenType::LOAD;
+    m_keywords["clean"] = TokenType::CLEAN;
+    m_keywords["split"] = TokenType::SPLIT;
+    m_keywords["train"] = TokenType::TRAIN;
+    m_keywords["evaluate"] = TokenType::EVALUATE;
+    m_keywords["predict"] = TokenType::PREDICT;
+    m_keywords["save"] = TokenType::SAVE;
+    m_keywords["show"] = TokenType::SHOW;
+    m_keywords["visualize"] = TokenType::VISUALIZE;
+    m_keywords["plot"] = TokenType::PLOT;
     
-    while (pos < input.size() && input[pos] != quote) {
-        // จัดการกรณี escape sequence
-        if (input[pos] == '\\' && pos + 1 < input.size()) {
-            pos++; // ข้าม backslash
+    m_keywords["ML"] = TokenType::ML;
+    m_keywords["ml"] = TokenType::ML;
+    m_keywords["DL"] = TokenType::DL;
+    m_keywords["dl"] = TokenType::DL;
+    m_keywords["RL"] = TokenType::RL;
+    m_keywords["rl"] = TokenType::RL;
+    
+    m_keywords["dataset"] = TokenType::DATASET;
+    m_keywords["model"] = TokenType::MODEL;
+    m_keywords["metric"] = TokenType::METRIC;
+    m_keywords["path"] = TokenType::PATH;
+    m_keywords["type"] = TokenType::TYPE;
+    m_keywords["with"] = TokenType::WITH;
+    m_keywords["epochs"] = TokenType::EPOCHS;
+    m_keywords["layers"] = TokenType::LAYERS;
+    
+    // ตั้งค่าฟังก์ชันสำหรับแสดงข้อผิดพลาดเริ่มต้น
+    m_errorHandler = [](const std::string& message) {
+        std::cerr << "Lexer Error: " << message << std::endl;
+    };
+}
+
+void Lexer::setErrorHandler(std::function<void(const std::string&)> handler) {
+    m_errorHandler = handler;
+}
+
+std::vector<Token> Lexer::tokenize(const std::string& source) {
+    // รีเซ็ตสถานะ
+    m_source = source;
+    m_start = 0;
+    m_current = 0;
+    m_line = 1;
+    m_column = 1;
+    m_hasError = false;
+    m_tokens.clear();
+    
+    // วนลูปแยก token จนกว่าจะถึงจุดสิ้นสุดของโค้ด
+    while (!isAtEnd()) {
+        m_start = m_current;
+        scanToken();
+    }
+    
+    // เพิ่ม token END_OF_FILE ปิดท้าย
+    m_tokens.push_back(Token(TokenType::END_OF_FILE, "", m_line, m_column));
+    
+    return m_tokens;
+}
+
+bool Lexer::hasError() const {
+    return m_hasError;
+}
+
+void Lexer::resetError() {
+    m_hasError = false;
+}
+
+bool Lexer::isAtEnd() const {
+    return m_current >= static_cast<int>(m_source.length());
+}
+
+char Lexer::advance() {
+    m_current++;
+    m_column++;
+    return m_source[m_current - 1];
+}
+
+char Lexer::peek() const {
+    if (isAtEnd()) return '\0';
+    return m_source[m_current];
+}
+
+char Lexer::peekNext() const {
+    if (m_current + 1 >= static_cast<int>(m_source.length())) return '\0';
+    return m_source[m_current + 1];
+}
+
+bool Lexer::match(char expected) {
+    if (isAtEnd()) return false;
+    if (m_source[m_current] != expected) return false;
+    
+    m_current++;
+    m_column++;
+    return true;
+}
+
+void Lexer::addToken(TokenType type) {
+    std::string text = m_source.substr(m_start, m_current - m_start);
+    m_tokens.push_back(Token(type, text, m_line, m_column - (m_current - m_start)));
+}
+
+void Lexer::addToken(TokenType type, const std::string& value) {
+    m_tokens.push_back(Token(type, value, m_line, m_column - (m_current - m_start)));
+}
+
+bool Lexer::isDigit(char c) const {
+    return c >= '0' && c <= '9';
+}
+
+bool Lexer::isAlpha(char c) const {
+    return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_';
+}
+
+bool Lexer::isAlphaNumeric(char c) const {
+    return isAlpha(c) || isDigit(c);
+}
+
+void Lexer::scanToken() {
+    char c = advance();
+    
+    switch (c) {
+        // ข้ามช่องว่างและตัวขึ้นบรรทัดใหม่
+        case ' ':
+        case '\r':
+        case '\t':
+            // ข้ามช่องว่างไป
+            break;
             
-            // จัดการ escape sequence ต่างๆ
-            switch (input[pos]) {
-                case 'n': value += '\n'; break;
-                case 't': value += '\t'; break;
-                case 'r': value += '\r'; break;
-                case '\\': value += '\\'; break;
-                case '\'': value += '\''; break;
-                case '"': value += '"'; break;
-                default: value += input[pos]; break;
+        case '\n':
+            // เพิ่มบรรทัดเมื่อเจอตัวขึ้นบรรทัดใหม่
+            m_line++;
+            m_column = 1;
+            addToken(TokenType::NEWLINE);
+            break;
+            
+        // ตัวดำเนินการและตัวแบ่ง
+        case '=':
+            addToken(TokenType::EQUAL);
+            break;
+        case ',':
+            addToken(TokenType::COMMA);
+            break;
+        case ':':
+            addToken(TokenType::COLON);
+            break;
+            
+        // สตริง
+        case '"':
+            scanString();
+            break;
+            
+        // คอมเมนต์
+        case '#':
+            scanComment();
+            break;
+            
+        default:
+            if (isDigit(c)) {
+                scanNumber();
+            } else if (isAlpha(c)) {
+                scanIdentifier();
+            } else {
+                error("ไม่รู้จักตัวอักษร: " + std::string(1, c));
             }
-        } else {
-            value += input[pos];
+            break;
+    }
+}
+
+void Lexer::scanString() {
+    // ไล่จนกว่าจะเจอเครื่องหมาย " ปิด หรือจบโค้ด
+    while (peek() != '"' && !isAtEnd()) {
+        if (peek() == '\n') {
+            m_line++;
+            m_column = 1;
         }
-        pos++;
+        advance();
     }
     
-    if (pos < input.size()) {
-        pos++; // ข้ามเครื่องหมายคำพูดปิด
+    // ถ้าจบโค้ดแล้วแต่ไม่เจอ " ปิด
+    if (isAtEnd()) {
+        error("สตริงไม่ได้ปิด");
+        return;
     }
     
-    return Token(TokenType::STRING, value);
+    // ข้าม " ปิด
+    advance();
+    
+    // ดึงค่าสตริง ตัด " หัวท้ายออก
+    std::string value = m_source.substr(m_start + 1, m_current - m_start - 2);
+    addToken(TokenType::STRING, value);
 }
 
-Token Lexer::parseNumber() {
-    size_t start = pos;
-    bool hasDecimal = false;
+void Lexer::scanNumber() {
+    // ไล่จนกว่าจะไม่ใช่ตัวเลข
+    while (isDigit(peek())) advance();
     
-    // จัดการกับเลขจำนวนเต็มหรือทศนิยม
-    while (pos < input.size() &&
-           (std::isdigit(input[pos]) ||
-            (input[pos] == '.' && !hasDecimal && pos + 1 < input.size() && std::isdigit(input[pos + 1])))) {
-        if (input[pos] == '.') {
-            hasDecimal = true;
-        }
-        pos++;
+    // ตรวจสอบจุดทศนิยม
+    if (peek() == '.' && isDigit(peekNext())) {
+        // ข้ามจุด
+        advance();
+        
+        // ไล่ตัวเลขหลังจุดทศนิยม
+        while (isDigit(peek())) advance();
     }
     
-    return Token(TokenType::NUMBER, input.substr(start, pos - start));
+    // ดึงค่าตัวเลข
+    std::string number = m_source.substr(m_start, m_current - m_start);
+    addToken(TokenType::NUMBER, number);
 }
 
-Token Lexer::parseWord() {
-    size_t start = pos;
+void Lexer::scanIdentifier() {
+    // ไล่จนกว่าจะไม่ใช่ตัวอักษรหรือตัวเลข
+    while (isAlphaNumeric(peek())) advance();
     
-    while (pos < input.size() && (std::isalnum(input[pos]) || input[pos] == '_')) {
-        pos++;
+    // ดึงค่าตัวระบุ
+    std::string identifier = m_source.substr(m_start, m_current - m_start);
+    
+    // ตรวจสอบว่าเป็นคำสำคัญหรือไม่
+    if (m_keywords.find(identifier) != m_keywords.end()) {
+        addToken(m_keywords[identifier], identifier);
+    } else {
+        addToken(TokenType::IDENTIFIER, identifier);
     }
-    
-    std::string word = input.substr(start, pos - start);
-    TokenType type;
-    
-    if (isKeyword(word, type)) {
-        return Token(type, word);
-    }
-    
-    return Token(TokenType::IDENTIFIER, word);
 }
 
-bool Lexer::isKeyword(const std::string& word, TokenType& type) {
-    auto it = keywords.find(word);
-    if (it != keywords.end()) {
-        type = it->second;
-        return true;
+void Lexer::scanComment() {
+    // ไล่จนกว่าจะเจอตัวขึ้นบรรทัดใหม่หรือจบโค้ด
+    while (peek() != '\n' && !isAtEnd()) {
+        advance();
     }
-    return false;
+    
+    // ดึงค่าคอมเมนต์
+    std::string comment = m_source.substr(m_start + 1, m_current - m_start - 1);
+    addToken(TokenType::COMMENT, comment);
+}
+
+void Lexer::error(const std::string& message) {
+    std::stringstream ss;
+    ss << "บรรทัดที่ " << m_line << " ตำแหน่ง " << m_column << ": " << message;
+    
+    if (m_errorHandler) {
+        m_errorHandler(ss.str());
+    }
+    
+    m_hasError = true;
 }
 
 } // namespace ai_language

@@ -1,6 +1,7 @@
+
 /**
  * @file ai_lang.cpp
- * @brief Main program for AI Language interpreter
+ * @brief โปรแกรมหลักสำหรับแปลภาษา AI
  */
 
 #include "include/interpreter.h"
@@ -21,6 +22,16 @@ void runInteractiveMode() {
 
     ai_language::Interpreter interpreter;
     std::string line;
+
+    // ตั้งค่าฟังก์ชันสำหรับแสดงผลลัพธ์
+    interpreter.setOutputHandler([](const std::string& message) {
+        std::cout << message << std::endl;
+    });
+    
+    // ตั้งค่าฟังก์ชันสำหรับแสดงข้อผิดพลาด
+    interpreter.setErrorHandler([](const std::string& message) {
+        std::cerr << "\033[31m" << message << "\033[0m" << std::endl;
+    });
 
     while (true) {
         std::cout << "AI> ";
@@ -49,9 +60,20 @@ void runFile(const std::string& filename) {
     buffer << file.rdbuf();
     file.close();
 
-    // สร้าง interpreter และประมวลผลโค้ด
+    // สร้าง interpreter และตั้งค่าฟังก์ชันสำหรับแสดงผลลัพธ์และข้อผิดพลาด
     ai_language::Interpreter interpreter;
+    
+    interpreter.setOutputHandler([](const std::string& message) {
+        std::cout << message << std::endl;
+    });
+    
+    interpreter.setErrorHandler([](const std::string& message) {
+        std::cerr << "\033[31m" << message << "\033[0m" << std::endl;
+    });
+    
     std::cout << "=== ทดสอบภาษาโปรแกรมสำหรับ AI ===" << std::endl << std::endl;
+    
+    // ประมวลผลโค้ด
     interpreter.interpret(buffer.str());
 }
 

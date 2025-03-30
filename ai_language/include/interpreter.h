@@ -1,108 +1,167 @@
 
 /**
  * @file interpreter.h
- * @brief Header file for the AI Language interpreter
+ * @brief คลาสสำหรับแปลและทำงานตามคำสั่งในภาษา AI
  */
 
-#pragma once
+#ifndef AI_LANGUAGE_INTERPRETER_H
+#define AI_LANGUAGE_INTERPRETER_H
 
+#include "lexer.h"
+#include "parser.h"
+#include <map>
 #include <string>
 #include <functional>
-#include <map>
+#include <memory>
 #include <vector>
 
 namespace ai_language {
 
 /**
+ * @struct Environment
+ * @brief โครงสร้างข้อมูลสำหรับเก็บสภาพแวดล้อมการทำงาน
+ */
+struct Environment {
+    std::string projectType;  ///< ประเภทโปรเจกต์ (ML, DL, RL)
+    bool dataLoaded;  ///< ตัวแปรบอกว่าได้โหลดข้อมูลแล้วหรือไม่
+    bool dataCleaned;  ///< ตัวแปรบอกว่าได้ทำความสะอาดข้อมูลแล้วหรือไม่
+    bool dataSplit;  ///< ตัวแปรบอกว่าได้แบ่งข้อมูลแล้วหรือไม่
+    bool modelTrained;  ///< ตัวแปรบอกว่าได้ฝึกโมเดลแล้วหรือไม่
+    bool modelEvaluated;  ///< ตัวแปรบอกว่าได้ประเมินผลโมเดลแล้วหรือไม่
+    bool modelSaved;  ///< ตัวแปรบอกว่าได้บันทึกโมเดลแล้วหรือไม่
+    std::string datasetPath;  ///< ที่อยู่ของไฟล์ข้อมูล
+    std::string datasetType;  ///< ประเภทของไฟล์ข้อมูล
+    std::string modelPath;  ///< ที่อยู่ของไฟล์โมเดล
+    std::map<std::string, double> metrics;  ///< เมทริกซ์ต่างๆ ของโมเดล
+    std::map<std::string, std::string> variables;  ///< ตัวแปรที่ผู้ใช้กำหนด
+    
+    Environment()
+        : dataLoaded(false), dataCleaned(false), dataSplit(false),
+          modelTrained(false), modelEvaluated(false), modelSaved(false) {}
+};
+
+/**
  * @class Interpreter
- * @brief Class for interpreting AI Language source code
+ * @brief คลาสสำหรับแปลและทำงานตามคำสั่งในภาษา AI
  */
 class Interpreter {
 public:
-    using OutputHandler = std::function<void(const std::string&)>;
-    using ErrorHandler = std::function<void(const std::string&)>;
-    
     /**
-     * @brief Structure to store environment variables during execution
-     */
-    struct Environment {
-        std::string projectType;
-        bool dataLoaded = false;
-        bool dataCleaned = false;
-        bool dataSplit = false;
-        bool modelTrained = false;
-        bool modelEvaluated = false;
-        std::string datasetPath;
-        std::string datasetType;
-        double trainRatio = 0.8;
-        int epochs = 10;
-        std::map<std::string, double> metrics;
-    };
-    
-    /**
-     * @brief Default constructor
+     * @brief คอนสตรักเตอร์
      */
     Interpreter();
     
     /**
-     * @brief Set output handler function
-     * @param handler Function to handle output messages
+     * @brief ตั้งค่าฟังก์ชันสำหรับแสดงผลลัพธ์
+     * @param handler ฟังก์ชันสำหรับแสดงผลลัพธ์
      */
-    void setOutputHandler(OutputHandler handler);
+    void setOutputHandler(std::function<void(const std::string&)> handler);
     
     /**
-     * @brief Set error handler function
-     * @param handler Function to handle error messages
+     * @brief ตั้งค่าฟังก์ชันสำหรับแสดงข้อผิดพลาด
+     * @param handler ฟังก์ชันสำหรับแสดงข้อผิดพลาด
      */
-    void setErrorHandler(ErrorHandler handler);
+    void setErrorHandler(std::function<void(const std::string&)> handler);
     
     /**
-     * @brief Interpret AI Language source code
-     * @param source Source code to interpret
+     * @brief แปลและทำงานตามโค้ด
+     * @param source โค้ดที่ต้องการแปล
      */
     void interpret(const std::string& source);
     
     /**
-     * @brief Check if interpreter has encountered an error
-     * @return True if an error has occurred
+     * @brief ตรวจสอบว่ามีข้อผิดพลาดหรือไม่
+     * @return bool true ถ้ามีข้อผิดพลาด, false ถ้าไม่มี
      */
     bool hasError() const;
     
     /**
-     * @brief Get the last error message
-     * @return Last error message
+     * @brief รีเซ็ตสถานะข้อผิดพลาด
      */
-    std::string getLastError() const;
+    void resetError();
+    
+    /**
+     * @brief ดำเนินการตามคำสั่ง
+     * @param command คำสั่งที่ต้องการดำเนินการ
+     * @param params พารามิเตอร์ของคำสั่ง
+     */
+    void executeCommand(const std::string& command, const std::map<std::string, std::string>& params = {});
     
 private:
-    bool m_hasError;
-    std::string m_lastError;
-    OutputHandler m_outputHandler;
-    ErrorHandler m_errorHandler;
+    Lexer m_lexer;  ///< ตัวแยกคำสำหรับแปลงโค้ดเป็น token
+    Parser m_parser;  ///< ตัวแยกวิเคราะห์สำหรับแปลง token เป็น AST
+    bool m_hasError;  ///< ตัวแปรบอกว่ามีข้อผิดพลาดหรือไม่
+    Environment m_environment;  ///< สภาพแวดล้อมการทำงาน
+    std::function<void(const std::string&)> m_outputHandler;  ///< ฟังก์ชันสำหรับแสดงผลลัพธ์
+    std::function<void(const std::string&)> m_errorHandler;  ///< ฟังก์ชันสำหรับแสดงข้อผิดพลาด
     
     /**
-     * @brief Trim whitespace from start and end of string
-     * @param str String to trim
-     * @return Trimmed string
+     * @brief ดำเนินการเมื่อต้องการเริ่มโปรเจกต์ใหม่
+     * @param params พารามิเตอร์ของคำสั่ง
      */
-    std::string trim(const std::string& str);
+    void handleStartCommand(const std::map<std::string, std::string>& params);
     
     /**
-     * @brief Parse a command line into command and parameters
-     * @param line Command line to parse
-     * @return Pair of command string and parameter map
+     * @brief ดำเนินการเมื่อต้องการโหลดข้อมูล
+     * @param params พารามิเตอร์ของคำสั่ง
      */
-    std::pair<std::string, std::map<std::string, std::string>> parseCommand(const std::string& line);
+    void handleLoadCommand(const std::map<std::string, std::string>& params);
     
     /**
-     * @brief Execute a parsed command
-     * @param command Command to execute
-     * @param params Parameters for the command
-     * @param env Execution environment
+     * @brief ดำเนินการเมื่อต้องการทำความสะอาดข้อมูล
+     * @param params พารามิเตอร์ของคำสั่ง
      */
-    void executeCommand(const std::string& command, 
-                      const std::map<std::string, std::string>& params,
-                      Environment& env);
+    void handleCleanCommand(const std::map<std::string, std::string>& params);
+    
+    /**
+     * @brief ดำเนินการเมื่อต้องการแบ่งข้อมูล
+     * @param params พารามิเตอร์ของคำสั่ง
+     */
+    void handleSplitCommand(const std::map<std::string, std::string>& params);
+    
+    /**
+     * @brief ดำเนินการเมื่อต้องการฝึกโมเดล
+     * @param params พารามิเตอร์ของคำสั่ง
+     */
+    void handleTrainCommand(const std::map<std::string, std::string>& params);
+    
+    /**
+     * @brief ดำเนินการเมื่อต้องการประเมินผลโมเดล
+     * @param params พารามิเตอร์ของคำสั่ง
+     */
+    void handleEvaluateCommand(const std::map<std::string, std::string>& params);
+    
+    /**
+     * @brief ดำเนินการเมื่อต้องการทำนายผลลัพธ์
+     * @param params พารามิเตอร์ของคำสั่ง
+     */
+    void handlePredictCommand(const std::map<std::string, std::string>& params);
+    
+    /**
+     * @brief ดำเนินการเมื่อต้องการบันทึกโมเดล
+     * @param params พารามิเตอร์ของคำสั่ง
+     */
+    void handleSaveCommand(const std::map<std::string, std::string>& params);
+    
+    /**
+     * @brief ดำเนินการเมื่อต้องการแสดงข้อมูล
+     * @param params พารามิเตอร์ของคำสั่ง
+     */
+    void handleShowCommand(const std::map<std::string, std::string>& params);
+    
+    /**
+     * @brief ดำเนินการเมื่อต้องการแสดงภาพ
+     * @param params พารามิเตอร์ของคำสั่ง
+     */
+    void handleVisualizeCommand(const std::map<std::string, std::string>& params);
+    
+    /**
+     * @brief ดำเนินการเมื่อต้องการพล็อตกราฟ
+     * @param params พารามิเตอร์ของคำสั่ง
+     */
+    void handlePlotCommand(const std::map<std::string, std::string>& params);
 };
 
 } // namespace ai_language
+
+#endif // AI_LANGUAGE_INTERPRETER_H
