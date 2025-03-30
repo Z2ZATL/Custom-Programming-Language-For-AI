@@ -76,6 +76,8 @@ void runFile(const std::string& filename) {
 }
 
 int main(int argc, char* argv[]) {
+    std::cout << "=== ทดสอบภาษาโปรแกรมสำหรับ AI ===" << std::endl << std::endl;
+    
     // ถ้าไม่มีพารามิเตอร์ แสดงวิธีใช้
     if (argc < 2) {
         showUsage(argv[0]);
