@@ -82,11 +82,20 @@ body {
 .notebook-title {
     font-size: 16px;
     font-weight: 500;
-    cursor: pointer;
+    cursor: text;
+    padding: 2px 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    outline: none;
 }
 
 .notebook-title:hover {
-    text-decoration: underline;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.notebook-title:focus {
+    background-color: rgba(0, 0, 0, 0.1);
+    outline: none;
 }
 
 .rename-button {

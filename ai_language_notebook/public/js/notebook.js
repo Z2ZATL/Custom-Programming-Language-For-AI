@@ -539,7 +539,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to initialize menu interaction
     function initializeMenu() {
         // File menu actions
-        document.getElementById('renameNotebook').addEventListener('click', renameNotebook);
+        document.getElementById('renameNotebook').addEventListener('click', function() {
+            notebookTitle.focus();
+        });
         document.getElementById('saveNotebook').addEventListener('click', saveNotebook);
         document.getElementById('openNotebook').addEventListener('click', loadNotebook);
         
@@ -609,11 +611,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // === Event Listeners ===
 
-    // Rename notebook event listeners
-    renameButton.addEventListener('click', renameNotebook);
-    notebookTitle.addEventListener('dblclick', renameNotebook);
-    confirmRenameButton.addEventListener('click', confirmRename);
-    cancelRenameButton.addEventListener('click', () => hideModal(renameModal));
+    // Rename notebook event listeners - direct editing
+    notebookTitle.addEventListener('blur', function() {
+        const newName = notebookTitle.textContent.trim();
+        if (newName && newName !== notebookFileName) {
+            notebookFileName = newName.endsWith('.ipynb') ? newName : `${newName}.ipynb`;
+            notebookTitle.textContent = notebookFileName;
+            showNotification(`ชื่อสมุดบันทึกถูกเปลี่ยนเป็น "${notebookFileName}"`, 'success');
+        }
+    });
+    
+    notebookTitle.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            notebookTitle.blur();
+        }
+    });
     
     // Close modal buttons
     closeModalButtons.forEach(button => {
