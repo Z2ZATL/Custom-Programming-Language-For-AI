@@ -38,6 +38,14 @@ const PORT = 5000;
 
 // Middleware
 app.use(express.json());
+app.use((req, res, next) => {
+    res.setHeader(
+        'Content-Security-Policy',
+        "script-src 'self' 'unsafe-eval' 'unsafe-inline'"
+    );
+    next();
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // APIs
