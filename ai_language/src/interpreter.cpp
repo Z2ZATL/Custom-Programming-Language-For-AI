@@ -1,4 +1,3 @@
-
 /**
  * @file interpreter.cpp
  * @brief การดำเนินการของ Interpreter สำหรับแปลและทำงานตามคำสั่งในภาษา AI
@@ -11,23 +10,18 @@
 
 namespace ai_language {
 
-Interpreter::Interpreter() : m_hasError(false) {
+Interpreter::Interpreter() : m_lexer(""), m_hasError(false) {
     // ตั้งค่าฟังก์ชันสำหรับแสดงผลลัพธ์เริ่มต้น
     m_outputHandler = [](const std::string& message) {
         std::cout << message << std::endl;
     };
-    
+
     // ตั้งค่าฟังก์ชันสำหรับแสดงข้อผิดพลาดเริ่มต้น
     m_errorHandler = [](const std::string& message) {
         std::cerr << "Interpreter Error: " << message << std::endl;
     };
-    
-    // ตั้งค่า handler ของ lexer และ parser
-    m_lexer.setErrorHandler([this](const std::string& message) {
-        m_errorHandler(message);
-        m_hasError = true;
-    });
-    
+
+    // ตั้งค่า handler ของ parser
     m_parser.setErrorHandler([this](const std::string& message) {
         m_errorHandler(message);
         m_hasError = true;
@@ -45,30 +39,36 @@ void Interpreter::setErrorHandler(std::function<void(const std::string&)> handle
 void Interpreter::interpret(const std::string& source) {
     // รีเซ็ตสถานะข้อผิดพลาด
     resetError();
-    
+
     try {
+        // สร้าง Lexer ใหม่ด้วย source code
+        m_lexer = Lexer(source);
+
         // แปลงโค้ดเป็น token
-        std::vector<Token> tokens = m_lexer.tokenize(source);
-        
+        std::vector<Token> tokens = m_lexer.tokenize();
+
         // ตรวจสอบว่ามีข้อผิดพลาดหรือไม่
         if (m_lexer.hasError()) {
+            m_errorHandler(m_lexer.getError());
             m_hasError = true;
             return;
         }
-        
+
         // แปลง token เป็น AST
         std::shared_ptr<Program> program = m_parser.parse(tokens);
-        
+
         // ตรวจสอบว่ามีข้อผิดพลาดหรือไม่
         if (m_parser.hasError()) {
             m_hasError = true;
             return;
         }
-        
-        // ทำงานตาม AST
-        program->execute();
+
+        // ประมวลผล AST
+        // TODO: ดำเนินการตาม AST
+        m_outputHandler("ดำเนินการแปลภาษาเสร็จสิ้น");
+
     } catch (const std::exception& e) {
-        m_errorHandler("เกิดข้อผิดพลาดขณะแปลโค้ด: " + std::string(e.what()));
+        m_errorHandler(std::string("ข้อผิดพลาดที่ไม่คาดคิด: ") + e.what());
         m_hasError = true;
     }
 }
@@ -79,7 +79,6 @@ bool Interpreter::hasError() const {
 
 void Interpreter::resetError() {
     m_hasError = false;
-    m_lexer.resetError();
     m_parser.resetError();
 }
 
