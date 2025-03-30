@@ -1,0 +1,6 @@
+# AI Language ML Model
+MODEL_TYPE=ML
+CREATED_TIME=1743341145
+PARAMETERS=learning_rate:0.01,epochs:100
+WEIGHTS=1.5,2.3,-0.8
+BIAS=0.5
