@@ -183,6 +183,11 @@ void runInteractiveMode() {
                             std::cerr << "\033[33mคำเตือน: คุณควรฝึกโมเดลด้วยคำสั่ง 'train' ก่อนที่จะบันทึก\033[0m" << std::endl;
                             valid = false;
                         }
+                    } else if (lowerCmd.find("show") != std::string::npos) {
+                        if (!hasEvaluatedModel) {
+                            std::cerr << "\033[33mคำเตือน: คุณควรประเมินโมเดลด้วยคำสั่ง 'evaluate' ก่อน\033[0m" << std::endl;
+                            valid = false;
+                        }
                     }
 
                     // ประมวลผลคำสั่งถ้าลำดับขั้นตอนถูกต้อง
@@ -254,7 +259,7 @@ void runInteractiveMode() {
                                         // ตรวจสอบความยาวของ cwd และ path เพื่อป้องกัน buffer overflow
                                         size_t cwd_len = strlen(cwd);
                                         size_t path_len = path.length();
-                                        
+
                                         // ต้องการพื้นที่สำหรับ cwd + '/' + path + '\0'
                                         if (cwd_len + 1 + path_len + 1 <= sizeof(abs_path)) {
                                             // สร้างพาธที่ปลอดภัย
@@ -301,13 +306,15 @@ void runInteractiveMode() {
                         } else {
                             interpreter.interpret(command);
                         }
+                    } else {
+                        // คำสั่งที่ไม่รู้จัก
+                        std::cerr << "\033[31mError: Unknown command '" << command << "'\033[0m" << std::endl;
+                        std::cerr << "\033[31mExpected commands in order: start, create [type], load dataset, create model, train model, show accuracy\033[0m" << std::endl;
                     }
 
-                    // รีเซ็ตคำสั่งหลังจากประมวลผลแล้ว
-                    command = "";
+                    // ไม่ต้องสะสมคำสั่ง
                 } catch (const std::exception& e) {
-                    std::cerr << "เกิดข้อผิดพลาด: " << e.what() << std::endl;
-                    command = "";
+                    std::cerr << "\033[31mเกิดข้อผิดพลาด: " << e.what() << "\033[0m" << std::endl;
                 }
             }
         }

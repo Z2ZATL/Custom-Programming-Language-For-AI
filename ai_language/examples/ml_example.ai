@@ -25,3 +25,9 @@ show metric "accuracy"
 
 # บันทึกโมเดลลงไฟล์
 save path "ml_model.pkl"
+start
+create ML
+load dataset "data.csv"
+create model LinearRegression
+train model
+show accuracy
