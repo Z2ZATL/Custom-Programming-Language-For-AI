@@ -293,3 +293,14 @@ std::map<std::string, std::string> parseParams(const std::string& paramString);
 } // namespace ai_language
 
 #endif // AI_LANGUAGE_PARSER_H
+#ifndef AI_LANGUAGE_PARSER_H
+#define AI_LANGUAGE_PARSER_H
+
+#include "lexer.h"
+
+namespace ai_language {
+    // placeholder
+    // Full implementation will be added later
+} // namespace ai_language
+
+#endif // AI_LANGUAGE_PARSER_H

@@ -415,3 +415,9 @@ bool ai_language::Environment::isCompleteStatement(const std::string& statement)
 }
 
 } // namespace ai_language
+#include "../include/interpreter.h"
+
+namespace ai_language {
+    // placeholder
+    // Implementation will be added later
+}

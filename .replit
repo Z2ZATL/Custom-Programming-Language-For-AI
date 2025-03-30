@@ -8,7 +8,7 @@ channel = "stable-24_05"
 run = ["sh", "-c", "node index.js"]
 
 [workflows]
-runButton = "Build and Run C++"
+runButton = "Build and Run AI Lang"
 
 [[workflows.workflow]]
 name = "Build and Run C++"
@@ -18,3 +18,12 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "cd ai_language && mkdir -p build && cd build && cmake .. && make && ./ai_lang ../examples/ml_example.ai"
+
+[[workflows.workflow]]
+name = "Build and Run AI Lang"
+author = 40997290
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd ai_language && g++ -std=c++17 -o ai_lang ai_lang.cpp && ./ai_lang examples/new_syntax_example.ai"

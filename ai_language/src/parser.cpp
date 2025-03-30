@@ -748,3 +748,9 @@ std::map<std::string, std::string> parseParams(const std::string& paramString) {
 }
 
 } // namespace ai_language
+#include "../include/parser.h"
+
+namespace ai_language {
+    // placeholder 
+    // Implementation will be added later
+}

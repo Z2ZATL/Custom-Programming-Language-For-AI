@@ -19,3 +19,26 @@ train model
 
 # แสดงความแม่นยำของโมเดล
 show accuracy
+# ตัวอย่างสคริปต์ AI Language
+
+start create ML
+
+load dataset "data.csv"
+
+clean data
+
+split data into train and test with ratio 0.8
+
+create model LinearRegression
+
+train model for epochs 100
+
+evaluate model on test_data
+
+show accuracy
+
+save model to "ml_model.pkl"
+
+visualize data
+
+plot learning_curve
