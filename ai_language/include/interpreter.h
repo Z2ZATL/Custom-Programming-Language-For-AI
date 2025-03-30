@@ -1,6 +1,7 @@
 #pragma once
 
 #include "parser.h"
+#include <functional>
 #include <string>
 
 namespace ai_language {
