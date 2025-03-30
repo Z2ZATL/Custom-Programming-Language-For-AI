@@ -1,0 +1,21 @@
+
+# ตัวอย่างสคริปต์ AI Language แบบใหม่
+# โปรดใช้คำสั่ง: ./ai_lang examples/new_syntax_example.ai
+
+# เริ่มต้นโปรแกรม
+start
+
+# กำหนดประเภทของโปรเจกต์
+create ML
+
+# โหลดข้อมูลจากไฟล์ CSV
+load dataset "data.csv"
+
+# สร้างโมเดล Linear Regression
+create model LinearRegression
+
+# ฝึกโมเดล
+train model
+
+# แสดงความแม่นยำของโมเดล
+show accuracy
