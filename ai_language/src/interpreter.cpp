@@ -385,8 +385,7 @@ void Interpreter::handlePlotCommand(const std::map<std::string, std::string>& pa
     }
 }
 
-} // namespace ai_language
-bool ai_language::Interpreter::isCompleteStatement(const std::string& statement) const {
+bool ai_language::Environment::isCompleteStatement(const std::string& statement) const {
     // Basic implementation:
     // Check if the statement is empty or just whitespace
     if (statement.empty() || std::all_of(statement.begin(), statement.end(), [](char c) { return std::isspace(c); })) {

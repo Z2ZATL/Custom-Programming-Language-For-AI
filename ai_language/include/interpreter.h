@@ -35,16 +35,15 @@ struct Environment {
     std::map<std::string, double> metrics;  ///< เมทริกซ์ต่างๆ ของโมเดล
     std::map<std::string, std::string> variables;  ///< ตัวแปรที่ผู้ใช้กำหนด
     
-    Environment()
-        : dataLoaded(false), dataCleaned(false), dataSplit(false),
-
     /**
      * @brief Check if a statement is complete (for interactive mode)
      * @param statement The statement to check
      * @return True if the statement is complete, false if it needs more input
      */
     bool isCompleteStatement(const std::string& statement) const;
-
+    
+    Environment()
+        : dataLoaded(false), dataCleaned(false), dataSplit(false),
           modelTrained(false), modelEvaluated(false), modelSaved(false) {}
 };
 
