@@ -130,10 +130,7 @@ void runInteractiveMode() {
                 command += line;
 
                 // ตรวจสอบว่ามีการเปิดวงเล็บแล้วไม่ปิดหรือไม่
-                // (นี่เป็นตัวอย่างเพื่อรองรับการเขียนคำสั่งหลายบรรทัด)
-                if (!interpreter.isCompleteStatement(command)) {
-                    continue;
-                }
+                // ตัดส่วนการตรวจสอบความสมบูรณ์ของคำสั่งออก เนื่องจากไม่มีเมธอด isCompleteStatement
 
                 try {
                     // ตรวจสอบลำดับขั้นตอน
