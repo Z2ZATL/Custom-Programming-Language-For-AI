@@ -1,7 +1,7 @@
 
 /**
  * @file lexer.h
- * @brief คลาสสำหรับแปลงโค้ดเป็น token
+ * @brief ตัวแยกคำสำหรับภาษา AI
  */
 
 #ifndef AI_LANGUAGE_LEXER_H
@@ -9,145 +9,201 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include <unordered_map>
-#include <functional>
 
 namespace ai_language {
 
 /**
- * @enum TokenType
- * @brief ประเภทของ token ต่างๆ
+ * @brief ประเภทของ token
  */
 enum class TokenType {
-    // คำสั่งพื้นฐาน
-    START,
-    LOAD,
-    CLEAN,
-    SPLIT,
-    TRAIN,
-    EVALUATE,
-    PREDICT,
-    SAVE,
-    SHOW,
-    VISUALIZE,
-    PLOT,
+    // คำสำคัญ
+    START,      ///< start
+    LOAD,       ///< load
+    CLEAN,      ///< clean
+    SPLIT,      ///< split
+    TRAIN,      ///< train
+    EVALUATE,   ///< evaluate
+    SHOW,       ///< show
+    SAVE,       ///< save
+    CREATE,     ///< create
+    WITH,       ///< with
+    INTO,       ///< into
+    RATIO,      ///< ratio
+    PATH,       ///< path
+    METRIC,     ///< metric
+    EPOCHS,     ///< epochs
+    TYPE,       ///< type
+    MODEL,      ///< model
+    DATA,       ///< data
+    VISUALIZE,  ///< visualize
+    PLOT,       ///< plot
     
-    // ประเภทการเรียนรู้
-    ML,
-    DL,
-    RL,
+    // ตัวดำเนินการ
+    EQUAL,      ///< =
+    COMMA,      ///< ,
+    DOT,        ///< .
+    PLUS,       ///< +
+    MINUS,      ///< -
+    MULTIPLY,   ///< *
+    DIVIDE,     ///< /
+    MODULO,     ///< %
     
-    // คำสำคัญอื่นๆ
-    DATASET,
-    MODEL,
-    METRIC,
-    PATH,
-    TYPE,
-    WITH,
-    EPOCHS,
-    LAYERS,
-    
-    // ตัวดำเนินการและตัวแบ่ง
-    EQUAL,
-    COMMA,
-    COLON,
-    
-    // ข้อมูล
-    IDENTIFIER,
-    STRING,
-    NUMBER,
+    // ค่าและตัวแปร
+    IDENTIFIER, ///< ชื่อตัวแปร
+    STRING,     ///< ข้อความ
+    NUMBER,     ///< ตัวเลข
     
     // อื่นๆ
-    COMMENT,
-    WHITESPACE,
-    NEWLINE,
-    UNKNOWN,
-    END_OF_FILE
+    COMMENT,    ///< ความคิดเห็น
+    END,        ///< สิ้นสุดข้อความ
+    ERROR       ///< ข้อผิดพลาด
 };
 
 /**
- * @struct Token
- * @brief โครงสร้างข้อมูลที่เก็บ token
+ * @brief โครงสร้างของ token
  */
 struct Token {
-    TokenType type;  ///< ประเภทของ token
-    std::string value;  ///< ค่าของ token
-    int line;  ///< บรรทัดที่พบ token
-    int column;  ///< ตำแหน่งในบรรทัดที่พบ token
+    TokenType type;       ///< ประเภทของ token
+    std::string value;    ///< ค่าของ token
+    int line;             ///< บรรทัดที่พบ token
+    int column;           ///< ตำแหน่งในบรรทัดที่พบ token
     
-    Token(TokenType type, const std::string& value, int line, int column)
+    Token(TokenType type, const std::string& value, int line, int column) 
         : type(type), value(value), line(line), column(column) {}
-        
-    // สำหรับแสดงผลใน debug
-    std::string toString() const;
 };
 
 /**
- * @class Lexer
- * @brief คลาสสำหรับแปลงโค้ดเป็น token
+ * @brief คลาสสำหรับแยกข้อความเป็น token
  */
 class Lexer {
 public:
     /**
-     * @brief คอนสตรักเตอร์
+     * @brief สร้าง Lexer จากข้อความ
+     * @param source ข้อความที่ต้องการแยก
      */
-    Lexer();
+    explicit Lexer(const std::string& source);
     
     /**
-     * @brief ตั้งค่าฟังก์ชันสำหรับแสดงข้อผิดพลาด
-     * @param handler ฟังก์ชันสำหรับแสดงข้อผิดพลาด
+     * @brief แยกข้อความเป็น token
+     * @return รายการของ token
      */
-    void setErrorHandler(std::function<void(const std::string&)> handler);
-    
-    /**
-     * @brief แปลงโค้ดเป็น token
-     * @param source โค้ดที่ต้องการแปลง
-     * @return std::vector<Token> รายการของ token
-     */
-    std::vector<Token> tokenize(const std::string& source);
+    std::vector<Token> tokenize();
     
     /**
      * @brief ตรวจสอบว่ามีข้อผิดพลาดหรือไม่
-     * @return bool true ถ้ามีข้อผิดพลาด, false ถ้าไม่มี
+     * @return true ถ้ามีข้อผิดพลาด
      */
-    bool hasError() const;
+    bool hasError() const { return _hasError; }
     
     /**
-     * @brief รีเซ็ตสถานะข้อผิดพลาด
+     * @brief ส่งคืนข้อความผิดพลาดล่าสุด
+     * @return ข้อความผิดพลาด
      */
-    void resetError();
+    std::string getError() const { return _errorMsg; }
     
 private:
-    // ตัวแปรสถานะ
-    std::string m_source;  ///< โค้ดที่กำลังแปลง
-    int m_start;  ///< ตำแหน่งเริ่มต้นของ token ปัจจุบัน
-    int m_current;  ///< ตำแหน่งปัจจุบัน
-    int m_line;  ///< บรรทัดปัจจุบัน
-    int m_column;  ///< ตำแหน่งในบรรทัดปัจจุบัน
-    bool m_hasError;  ///< ตัวแปรบอกว่ามีข้อผิดพลาดหรือไม่
-    std::vector<Token> m_tokens;  ///< รายการของ token ที่แยกได้
-    std::function<void(const std::string&)> m_errorHandler;  ///< ฟังก์ชันสำหรับแสดงข้อผิดพลาด
+    std::string _source;             ///< ข้อความที่ต้องการแยก
+    int _start = 0;                  ///< ตำแหน่งเริ่มต้นของ token ปัจจุบัน
+    int _current = 0;                ///< ตำแหน่งปัจจุบันที่กำลังอ่าน
+    int _line = 1;                   ///< บรรทัดปัจจุบัน
+    int _column = 1;                 ///< ตำแหน่งในบรรทัดปัจจุบัน
+    bool _hasError = false;          ///< สถานะข้อผิดพลาด
+    std::string _errorMsg;           ///< ข้อความผิดพลาด
     
-    // แม็ปสำหรับแปลงคำสำคัญเป็น TokenType
-    std::unordered_map<std::string, TokenType> m_keywords;
+    std::vector<Token> _tokens;      ///< รายการของ token ที่แยกได้
+    static std::unordered_map<std::string, TokenType> _keywords; ///< คำสำคัญของภาษา
     
-    // เมธอดช่วยเหลือ
-    bool isAtEnd() const;
+    /**
+     * @brief อ่านตัวอักษรถัดไป
+     * @return ตัวอักษรถัดไป
+     */
     char advance();
+    
+    /**
+     * @brief ดูตัวอักษรถัดไปโดยไม่เลื่อนตำแหน่ง
+     * @return ตัวอักษรถัดไป
+     */
     char peek() const;
+    
+    /**
+     * @brief ดูตัวอักษรถัดไป 2 ตำแหน่งโดยไม่เลื่อนตำแหน่ง
+     * @return ตัวอักษรถัดไป 2 ตำแหน่ง
+     */
     char peekNext() const;
+    
+    /**
+     * @brief ตรวจสอบว่าถึงจุดสิ้นสุดข้อความหรือไม่
+     * @return true ถ้าถึงจุดสิ้นสุดข้อความ
+     */
+    bool isAtEnd() const;
+    
+    /**
+     * @brief สร้าง token
+     * @param type ประเภทของ token
+     * @param value ค่าของ token (ถ้ามี)
+     */
+    void addToken(TokenType type, const std::string& value = "");
+    
+    /**
+     * @brief ตรวจสอบว่าตัวอักษรตรงกับที่คาดหวังหรือไม่
+     * @param expected ตัวอักษรที่คาดหวัง
+     * @return true ถ้าตรงกัน
+     */
     bool match(char expected);
-    void addToken(TokenType type);
-    void addToken(TokenType type, const std::string& value);
-    bool isDigit(char c) const;
-    bool isAlpha(char c) const;
-    bool isAlphaNumeric(char c) const;
+    
+    /**
+     * @brief แยก token ถัดไป
+     */
     void scanToken();
+    
+    /**
+     * @brief แยกข้อความ (string)
+     */
     void scanString();
+    
+    /**
+     * @brief แยกตัวเลข (number)
+     */
     void scanNumber();
+    
+    /**
+     * @brief แยกตัวแปรหรือคำสำคัญ
+     */
     void scanIdentifier();
+    
+    /**
+     * @brief แยกความคิดเห็น (comment)
+     */
     void scanComment();
+    
+    /**
+     * @brief บันทึกข้อผิดพลาด
+     * @param message ข้อความผิดพลาด
+     */
     void error(const std::string& message);
+    
+    /**
+     * @brief ตรวจสอบว่าตัวอักษรเป็นตัวเลขหรือไม่
+     * @param c ตัวอักษรที่ต้องการตรวจสอบ
+     * @return true ถ้าเป็นตัวเลข
+     */
+    static bool isDigit(char c);
+    
+    /**
+     * @brief ตรวจสอบว่าตัวอักษรเป็นตัวอักษรหรือไม่
+     * @param c ตัวอักษรที่ต้องการตรวจสอบ
+     * @return true ถ้าเป็นตัวอักษร
+     */
+    static bool isAlpha(char c);
+    
+    /**
+     * @brief ตรวจสอบว่าตัวอักษรเป็นตัวอักษรหรือตัวเลขหรือไม่
+     * @param c ตัวอักษรที่ต้องการตรวจสอบ
+     * @return true ถ้าเป็นตัวอักษรหรือตัวเลข
+     */
+    static bool isAlphaNumeric(char c);
 };
 
 } // namespace ai_language
