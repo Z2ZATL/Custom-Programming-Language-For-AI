@@ -1,0 +1,62 @@
+~/workspace$ cd ai_language && mkdir -p build && cd build && cmake .. && make && ./ai_lang -i
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/runner/workspace/ai_language/build
+[ 16%] Building CXX object CMakeFiles/ai_language_lib.dir/src/parser.cpp.o
+/home/runner/workspace/ai_language/src/parser.cpp: In member function ‘bool ai_language::Parser::isAtEnd() const’:
+/home/runner/workspace/ai_language/src/parser.cpp:349:38: error: ‘END_OF_FILE’ is not a member of ‘ai_language::TokenType’
+  349 |     return peek().type == TokenType::END_OF_FILE;
+      |                                      ^~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: In member function ‘void ai_language::Parser::consumeNewlines()’:
+/home/runner/workspace/ai_language/src/parser.cpp:389:29: error: ‘NEWLINE’ is not a member of ‘ai_language::TokenType’
+  389 |     while (match(TokenType::NEWLINE)) {
+      |                             ^~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: In member function ‘std::shared_ptr<ai_language::Statement> ai_language::Parser::statement()’:
+/home/runner/workspace/ai_language/src/parser.cpp:418:33: error: ‘PREDICT’ is not a member of ‘ai_language::TokenType’
+  418 |     } else if (match(TokenType::PREDICT)) {
+      |                                 ^~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: In member function ‘std::shared_ptr<ai_language::Statement> ai_language::Parser::startStatement()’:
+/home/runner/workspace/ai_language/src/parser.cpp:437:31: error: ‘ML’ is not a member of ‘ai_language::TokenType’
+  437 |         if (match({TokenType::ML, TokenType::DL, TokenType::RL})) {
+      |                               ^~
+/home/runner/workspace/ai_language/src/parser.cpp:437:46: error: ‘DL’ is not a member of ‘ai_language::TokenType’
+  437 |         if (match({TokenType::ML, TokenType::DL, TokenType::RL})) {
+      |                                              ^~
+/home/runner/workspace/ai_language/src/parser.cpp:437:61: error: ‘RL’ is not a member of ‘ai_language::TokenType’
+  437 |        if (match({TokenType::ML, TokenType::DL, TokenType::RL})) {
+      |                                                            ^~
+
+/home/runner/workspace/ai_language/src/parser.cpp:437:18: error: no matching function for call to ‘ai_language::Parser::match(<brace-enclosed initializer list>)’
+  437 |         if (match({TokenType::ML, TokenType::DL, TokenType::RL})) {
+      |             ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:370:6: note: candidate: ‘bool ai_language::Parser::match(ai_language::TokenType)’
+  370 | bool Parser::match(TokenType type) {
+      |      ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:370:30: note:   no known conversion for argument 1 from ‘<brace-enclosed initializer list>’ to ‘ai_language::TokenType’
+  370 | bool Parser::match(TokenType type) {
+      |                    ~~~~~~~~~~^~~~
+/home/runner/workspace/ai_language/src/parser.cpp:378:6: note: candidate: ‘bool ai_language::Parser::match(const std::vector<ai_language::TokenType>&)’
+  378 | bool Parser::match(const std::vector<TokenType>& types) {
+      |      ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:378:50: note:   no known conversion for argument 1 from ‘<brace-enclosed initializer list>’ to ‘const std::vector<ai_language::TokenType>&’
+  378 | bool Parser::match(const std::vector<TokenType>& types) {
+      |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: In member function ‘std::shared_ptr<ai_language::Statement> ai_language::Parser::loadStatement()’:
+/home/runner/workspace/ai_language/src/parser.cpp:450:26: error: ‘DATASET’ is not a member of ‘ai_language::TokenType’; did you mean ‘DATA’?
+  450 |     if (match(TokenType::DATASET)) {
+      |                          ^~~~~~~
+      |                          DATA
+/home/runner/workspace/ai_language/src/parser.cpp: In member function ‘void ai_language::Parser::error(const ai_language::Token&, const std::string&)’:
+/home/runner/workspace/ai_language/src/parser.cpp:676:34: error: ‘END_OF_FILE’ is not a member of ‘ai_language::TokenType’
+  676 |     if (token.type == TokenType::END_OF_FILE) {
+      |                                  ^~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: In member function ‘void ai_language::Parser::synchronize()’:
+/home/runner/workspace/ai_language/src/parser.cpp:694:43: error: ‘NEWLINE’ is not a member of ‘ai_language::TokenType’
+  694 |         if (previous().type == TokenType::NEWLINE) return;
+      |                                           ^~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:703:29: error: ‘PREDICT’ is not a member of ‘ai_language::TokenType’
+  703 |             case TokenType::PREDICT:
+      |                             ^~~~~~~
+make[2]: *** [CMakeFiles/ai_language_lib.dir/build.make:90: CMakeFiles/ai_language_lib.dir/src/parser.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:86: CMakeFiles/ai_language_lib.dir/all] Error 2
+make: *** [Makefile:91: all] Error 2
