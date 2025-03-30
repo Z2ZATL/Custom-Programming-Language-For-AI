@@ -134,7 +134,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=AILanguage
+CMAKE_PROJECT_NAME:STATIC=ai_language
 
 //Value Computed by CMake
 CMAKE_PROJECT_VERSION:STATIC=0.1.0
@@ -215,6 +215,15 @@ CMAKE_TAPI:FILEPATH=CMAKE_TAPI-NOTFOUND
 // during the make.  This is useful for debugging only. With Visual
 // Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
+
+//Value Computed by CMake
+ai_language_BINARY_DIR:STATIC=/home/runner/workspace/ai_language/build
+
+//Value Computed by CMake
+ai_language_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+ai_language_SOURCE_DIR:STATIC=/home/runner/workspace/ai_language
 
 
 ########################

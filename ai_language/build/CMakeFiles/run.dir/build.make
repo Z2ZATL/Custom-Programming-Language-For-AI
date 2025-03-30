@@ -66,8 +66,8 @@ include CMakeFiles/run.dir/compiler_depend.make
 # Include the progress variables for this target.
 include CMakeFiles/run.dir/progress.make
 
-CMakeFiles/run: ai_lang
-	cd /home/runner/workspace/ai_language && /home/runner/workspace/ai_language/build/ai_lang
+CMakeFiles/run: /home/runner/workspace/ai_language/ai_lang
+	cd /home/runner/workspace/ai_language && /home/runner/workspace/ai_language/ai_lang
 
 run: CMakeFiles/run
 run: CMakeFiles/run.dir/build.make
