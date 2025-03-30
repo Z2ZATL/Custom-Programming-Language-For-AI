@@ -1,0 +1,794 @@
+~/workspace$ cd ai_language && mkdir -p build && cd build && cmake .. && make && ./ai_lang -i
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/runner/workspace/ai_language/build
+[ 16%] Building CXX object CMakeFiles/ai_language_lib.dir/src/parser.cpp.o
+/home/runner/workspace/ai_language/src/parser.cpp:447:10: error: expected constructor, destructor, or type conversion before ‘(’ token
+  447 |     error(peek(), "คาดหวัง 'create' ตามด้วยประเภทการเรียนรู้ (ML, DL, RL)");
+      |          ^
+/home/runner/workspace/ai_language/src/parser.cpp:448:5: error: expected unqualified-id before ‘throw’
+  448 |     throw std::runtime_error("คาดหวัง 'create' ตามด้วยประเภทการเรียนรู้");
+      |     ^~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:451:17: error: ‘Statement’ was not declared in this scope; did you mean ‘ai_language::Statement’?
+  451 | std::shared_ptr<Statement> Parser::loadStatement() {
+      |                 ^~~~~~~~~
+      |                 ai_language::Statement
+In file included from /home/runner/workspace/ai_language/src/parser.cpp:7:
+/home/runner/workspace/ai_language/src/../include/parser.h:33:7: note: ‘ai_language::Statement’ declared here
+   33 | class Statement {
+      |       ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:451:26: error: template argument 1 is invalid
+  451 | std::shared_ptr<Statement> Parser::loadStatement() {
+      |                          ^
+/home/runner/workspace/ai_language/src/parser.cpp:451:28: error: ‘Parser’ has not been declared
+  451 | std::shared_ptr<Statement> Parser::loadStatement() {
+      |                            ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: In function ‘int loadStatement()’:
+/home/runner/workspace/ai_language/src/parser.cpp:453:15: error: ‘TokenType’ has not been declared
+  453 |     if (match(TokenType::DATA)) {
+      |               ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:453:9: error: ‘match’ was not declared in this scope; did you mean ‘rpmatch’?
+  453 |     if (match(TokenType::DATA)) {
+      |         ^~~~~
+      |         rpmatch
+/home/runner/workspace/ai_language/src/parser.cpp:457:19: error: ‘TokenType’ has not been declared
+  457 |         if (match(TokenType::IDENTIFIER) && previous().value == "filename") {
+      |                   ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:457:45: error: ‘previous’ was not declared in this scope
+  457 |         if (match(TokenType::IDENTIFIER) && previous().value == "filename") {
+      |                                             ^~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:458:23: error: ‘TokenType’ has not been declared
+  458 |             if (match(TokenType::STRING) || match(TokenType::IDENTIFIER)) {
+      |                       ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:458:51: error: ‘TokenType’ has not been declared
+  458 |             if (match(TokenType::STRING) || match(TokenType::IDENTIFIER)) {
+      |                                                   ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:461:23: error: ‘peek’ was not declared in this scope
+  461 |                 error(peek(), "คาดหวังชื่อไฟล์");
+      |                       ^~~~
+/home/runner/workspace/ai_language/src/parser.cpp:461:17: error: ‘error’ was not declared in this scope; did you mean ‘perror’?
+  461 |                 error(peek(), "คาดหวังชื่อไฟล์");
+      |                 ^~~~~
+      |                 perror
+/home/runner/workspace/ai_language/src/parser.cpp:465:19: error: ‘peek’ was not declared in this scope
+  465 |             error(peek(), "คาดหวัง 'filename'");
+      |                   ^~~~
+/home/runner/workspace/ai_language/src/parser.cpp:465:13: error: ‘error’ was not declared in this scope; did you mean ‘perror’?
+  465 |             error(peek(), "คาดหวัง 'filename'");
+      |             ^~~~~
+      |             perror
+/home/runner/workspace/ai_language/src/parser.cpp:469:19: error: ‘TokenType’ has not been declared
+  469 |         if (match(TokenType::TYPE)) {
+      |                   ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:470:23: error: ‘TokenType’ has not been declared
+  470 |             if (match(TokenType::STRING) || match(TokenType::IDENTIFIER)) {
+      |                       ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:470:51: error: ‘TokenType’ has not been declared
+  470 |             if (match(TokenType::STRING) || match(TokenType::IDENTIFIER)) {
+      |                                                   ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:471:28: error: ‘previous’ was not declared in this scope
+  471 |                 fileType = previous().value;
+      |                            ^~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:473:23: error: ‘peek’ was not declared in this scope
+  473 |                 error(peek(), "คาดหวังประเภทไฟล์");
+      |                       ^~~~
+/home/runner/workspace/ai_language/src/parser.cpp:473:17: error: ‘error’ was not declared in this scope; did you mean ‘perror’?
+  473 |                 error(peek(), "คาดหวังประเภทไฟล์");
+      |                 ^~~~~
+      |                 perror
+/home/runner/workspace/ai_language/src/parser.cpp:477:19: error: ‘peek’ was not declared in this scope
+  477 |             error(peek(), "คาดหวัง 'type'");
+      |                   ^~~~
+/home/runner/workspace/ai_language/src/parser.cpp:477:13: error: ‘error’ was not declared in this scope; did you mean ‘perror’?
+  477 |             error(peek(), "คาดหวัง 'type'");
+      |             ^~~~~
+      |             perror
+/home/runner/workspace/ai_language/src/parser.cpp:481:33: error: ‘LoadStatement’ was not declared in this scope; did you mean ‘ai_language::LoadStatement’?
+  481 |         return std::make_shared<LoadStatement>(filename, fileType);
+      |                                 ^~~~~~~~~~~~~
+      |                                 ai_language::LoadStatement
+/home/runner/workspace/ai_language/src/../include/parser.h:58:7: note: ‘ai_language::LoadStatement’ declared here
+   58 | class LoadStatement : public Statement {
+      |       ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:481:47: error: no matching function for call to ‘make_shared<<expression error> >(std::string&, std::string&)’
+  481 |         return std::make_shared<LoadStatement>(filename, fileType);
+      |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~
+In file included from /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/memory:80,
+                 from /home/runner/workspace/ai_language/src/../include/parser.h:11:
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:1005:5: note: candidate: ‘template<class _Tp, class ... _Args> std::shared_ptr<typename std::enable_if<(! std::is_array< <template-parameter-1-1> >::value), _Tp>::type> std::make_shared(_Args&& ...)’
+ 1005 |     make_shared(_Args&&... __args)
+      |     ^~~~~~~~~~~
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:1005:5: note:   template argument deduction/substitution failed:
+/home/runner/workspace/ai_language/src/parser.cpp:481:47: error: template argument 1 is invalid
+  481 |         return std::make_shared<LoadStatement>(filename, fileType);
+      |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:484:11: error: ‘peek’ was not declared in this scope
+  484 |     error(peek(), "คาดหวัง 'dataset'");
+      |           ^~~~
+/home/runner/workspace/ai_language/src/parser.cpp:484:5: error: ‘error’ was not declared in this scope; did you mean ‘perror’?
+  484 |     error(peek(), "คาดหวัง 'dataset'");
+      |     ^~~~~
+      |     perror
+/home/runner/workspace/ai_language/src/parser.cpp: At global scope:
+/home/runner/workspace/ai_language/src/parser.cpp:488:17: error: ‘Statement’ was not declared in this scope; did you mean ‘ai_language::Statement’?
+  488 | std::shared_ptr<Statement> Parser::cleanStatement() {
+      |                 ^~~~~~~~~
+      |                 ai_language::Statement
+/home/runner/workspace/ai_language/src/../include/parser.h:33:7: note: ‘ai_language::Statement’ declared here
+   33 | class Statement {
+      |       ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:488:26: error: template argument 1 is invalid
+  488 | std::shared_ptr<Statement> Parser::cleanStatement() {
+      |                          ^
+/home/runner/workspace/ai_language/src/parser.cpp:488:28: error: ‘Parser’ has not been declared
+  488 | std::shared_ptr<Statement> Parser::cleanStatement() {
+      |                            ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: In function ‘int cleanStatement()’:
+/home/runner/workspace/ai_language/src/parser.cpp:492:15: error: ‘TokenType’ has not been declared
+  492 |     if (match(TokenType::WITH)) {
+      |               ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:492:9: error: ‘match’ was not declared in this scope; did you mean ‘rpmatch’?
+  492 |     if (match(TokenType::WITH)) {
+      |         ^~~~~
+      |         rpmatch
+/home/runner/workspace/ai_language/src/parser.cpp:493:18: error: ‘parseParameters’ was not declared in this scope
+  493 |         params = parseParameters();
+      |                  ^~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:496:29: error: ‘CleanStatement’ was not declared in this scope; did you mean ‘ai_language::CleanStatement’?
+  496 |     return std::make_shared<CleanStatement>(params);
+      |                             ^~~~~~~~~~~~~~
+      |                             ai_language::CleanStatement
+/home/runner/workspace/ai_language/src/../include/parser.h:73:7: note: ‘ai_language::CleanStatement’ declared here
+   73 | class CleanStatement : public Statement {
+      |       ^~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:496:44: error: no matching function for call to ‘make_shared<<expression error> >(std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >&)’
+  496 |     return std::make_shared<CleanStatement>(params);
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:1005:5: note: candidate: ‘template<class _Tp, class ... _Args> std::shared_ptr<typename std::enable_if<(! std::is_array< <template-parameter-1-1> >::value), _Tp>::type> std::make_shared(_Args&& ...)’
+ 1005 |     make_shared(_Args&&... __args)
+      |     ^~~~~~~~~~~
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:1005:5: note:   template argument deduction/substitution failed:
+/home/runner/workspace/ai_language/src/parser.cpp:496:44: error: template argument 1 is invalid
+  496 |     return std::make_shared<CleanStatement>(params);
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: At global scope:
+/home/runner/workspace/ai_language/src/parser.cpp:499:17: error: ‘Statement’ was not declared in this scope; did you mean ‘ai_language::Statement’?
+  499 | std::shared_ptr<Statement> Parser::splitStatement() {
+      |                 ^~~~~~~~~
+      |                 ai_language::Statement
+/home/runner/workspace/ai_language/src/../include/parser.h:33:7: note: ‘ai_language::Statement’ declared here
+   33 | class Statement {
+      |       ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:499:26: error: template argument 1 is invalid
+  499 | std::shared_ptr<Statement> Parser::splitStatement() {
+      |                          ^
+/home/runner/workspace/ai_language/src/parser.cpp:499:28: error: ‘Parser’ has not been declared
+  499 | std::shared_ptr<Statement> Parser::splitStatement() {
+      |                            ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: In function ‘int splitStatement()’:
+/home/runner/workspace/ai_language/src/parser.cpp:503:15: error: ‘TokenType’ has not been declared
+  503 |     if (match(TokenType::WITH)) {
+      |               ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:503:9: error: ‘match’ was not declared in this scope; did you mean ‘rpmatch’?
+  503 |     if (match(TokenType::WITH)) {
+      |         ^~~~~
+      |         rpmatch
+/home/runner/workspace/ai_language/src/parser.cpp:504:18: error: ‘parseParameters’ was not declared in this scope
+  504 |         params = parseParameters();
+      |                  ^~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:507:29: error: ‘SplitStatement’ was not declared in this scope; did you mean ‘ai_language::SplitStatement’?
+  507 |     return std::make_shared<SplitStatement>(params);
+      |                             ^~~~~~~~~~~~~~
+      |                             ai_language::SplitStatement
+/home/runner/workspace/ai_language/src/../include/parser.h:87:7: note: ‘ai_language::SplitStatement’ declared here
+   87 | class SplitStatement : public Statement {
+      |       ^~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:507:44: error: no matching function for call to ‘make_shared<<expression error> >(std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >&)’
+  507 |     return std::make_shared<SplitStatement>(params);
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:1005:5: note: candidate: ‘template<class _Tp, class ... _Args> std::shared_ptr<typename std::enable_if<(! std::is_array< <template-parameter-1-1> >::value), _Tp>::type> std::make_shared(_Args&& ...)’
+ 1005 |     make_shared(_Args&&... __args)
+      |     ^~~~~~~~~~~
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:1005:5: note:   template argument deduction/substitution failed:
+/home/runner/workspace/ai_language/src/parser.cpp:507:44: error: template argument 1 is invalid
+  507 |     return std::make_shared<SplitStatement>(params);
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: At global scope:
+/home/runner/workspace/ai_language/src/parser.cpp:510:17: error: ‘Statement’ was not declared in this scope; did you mean ‘ai_language::Statement’?
+  510 | std::shared_ptr<Statement> Parser::trainStatement() {
+      |                 ^~~~~~~~~
+      |                 ai_language::Statement
+/home/runner/workspace/ai_language/src/../include/parser.h:33:7: note: ‘ai_language::Statement’ declared here
+   33 | class Statement {
+      |       ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:510:26: error: template argument 1 is invalid
+  510 | std::shared_ptr<Statement> Parser::trainStatement() {
+      |                          ^
+/home/runner/workspace/ai_language/src/parser.cpp:510:28: error: ‘Parser’ has not been declared
+  510 | std::shared_ptr<Statement> Parser::trainStatement() {
+      |                            ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: In function ‘int trainStatement()’:
+/home/runner/workspace/ai_language/src/parser.cpp:514:15: error: ‘TokenType’ has not been declared
+  514 |     if (match(TokenType::EPOCHS)) {
+      |               ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:514:9: error: ‘match’ was not declared in this scope; did you mean ‘rpmatch’?
+  514 |     if (match(TokenType::EPOCHS)) {
+      |         ^~~~~
+      |         rpmatch
+/home/runner/workspace/ai_language/src/parser.cpp:515:19: error: ‘TokenType’ has not been declared
+  515 |         if (match(TokenType::NUMBER)) {
+      |                   ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:516:32: error: ‘previous’ was not declared in this scope
+  516 |             params["epochs"] = previous().value;
+      |                                ^~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:518:19: error: ‘peek’ was not declared in this scope
+  518 |             error(peek(), "คาดหวังจำนวน epochs");
+      |                   ^~~~
+/home/runner/workspace/ai_language/src/parser.cpp:518:13: error: ‘error’ was not declared in this scope; did you mean ‘perror’?
+  518 |             error(peek(), "คาดหวังจำนวน epochs");
+      |             ^~~~~
+      |             perror
+/home/runner/workspace/ai_language/src/parser.cpp:523:15: error: ‘TokenType’ has not been declared
+  523 |     if (match(TokenType::WITH)) {
+      |               ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:523:9: error: ‘match’ was not declared in this scope; did you mean ‘rpmatch’?
+  523 |     if (match(TokenType::WITH)) {
+      |         ^~~~~
+      |         rpmatch
+/home/runner/workspace/ai_language/src/parser.cpp:524:57: error: ‘parseParameters’ was not declared in this scope
+  524 |        std::map<std::string, std::string> withParams = parseParameters();
+      |                                                        ^~~~~~~~~~~~~~~
+
+/home/runner/workspace/ai_language/src/parser.cpp:528:29: error: ‘TrainStatement’ was not declared in this scope; did you mean ‘ai_language::TrainStatement’?
+  528 |     return std::make_shared<TrainStatement>(params);
+      |                             ^~~~~~~~~~~~~~
+      |                             ai_language::TrainStatement
+/home/runner/workspace/ai_language/src/../include/parser.h:101:7: note: ‘ai_language::TrainStatement’ declared here
+  101 | class TrainStatement : public Statement {
+      |       ^~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:528:44: error: no matching function for call to ‘make_shared<<expression error> >(std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >&)’
+  528 |     return std::make_shared<TrainStatement>(params);
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:1005:5: note: candidate: ‘template<class _Tp, class ... _Args> std::shared_ptr<typename std::enable_if<(! std::is_array< <template-parameter-1-1> >::value), _Tp>::type> std::make_shared(_Args&& ...)’
+ 1005 |     make_shared(_Args&&... __args)
+      |     ^~~~~~~~~~~
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:1005:5: note:   template argument deduction/substitution failed:
+/home/runner/workspace/ai_language/src/parser.cpp:528:44: error: template argument 1 is invalid
+  528 |     return std::make_shared<TrainStatement>(params);
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: At global scope:
+/home/runner/workspace/ai_language/src/parser.cpp:531:17: error: ‘Statement’ was not declared in this scope; did you mean ‘ai_language::Statement’?
+  531 | std::shared_ptr<Statement> Parser::evaluateStatement() {
+      |                 ^~~~~~~~~
+      |                 ai_language::Statement
+/home/runner/workspace/ai_language/src/../include/parser.h:33:7: note: ‘ai_language::Statement’ declared here
+   33 | class Statement {
+      |       ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:531:26: error: template argument 1 is invalid
+  531 | std::shared_ptr<Statement> Parser::evaluateStatement() {
+      |                          ^
+/home/runner/workspace/ai_language/src/parser.cpp:531:28: error: ‘Parser’ has not been declared
+  531 | std::shared_ptr<Statement> Parser::evaluateStatement() {
+      |                            ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: In function ‘int evaluateStatement()’:
+/home/runner/workspace/ai_language/src/parser.cpp:535:15: error: ‘TokenType’ has not been declared
+  535 |     if (match(TokenType::WITH)) {
+      |               ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:535:9: error: ‘match’ was not declared in this scope; did you mean ‘rpmatch’?
+  535 |     if (match(TokenType::WITH)) {
+      |         ^~~~~
+      |         rpmatch
+/home/runner/workspace/ai_language/src/parser.cpp:536:18: error: ‘parseParameters’ was not declared in this scope
+  536 |         params = parseParameters();
+      |                  ^~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:539:29: error: ‘EvaluateStatement’ was not declared in this scope; did you mean ‘ai_language::EvaluateStatement’?
+  539 |     return std::make_shared<EvaluateStatement>(params);
+      |                             ^~~~~~~~~~~~~~~~~
+      |                             ai_language::EvaluateStatement
+/home/runner/workspace/ai_language/src/../include/parser.h:115:7: note: ‘ai_language::EvaluateStatement’ declared here
+  115 | class EvaluateStatement : public Statement {
+      |       ^~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:539:47: error: no matching function for call to ‘make_shared<<expression error> >(std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >&)’
+  539 |     return std::make_shared<EvaluateStatement>(params);
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:1005:5: note: candidate: ‘template<class _Tp, class ... _Args> std::shared_ptr<typename std::enable_if<(! std::is_array< <template-parameter-1-1> >::value), _Tp>::type> std::make_shared(_Args&& ...)’
+ 1005 |     make_shared(_Args&&... __args)
+      |     ^~~~~~~~~~~
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:1005:5: note:   template argument deduction/substitution failed:
+/home/runner/workspace/ai_language/src/parser.cpp:539:47: error: template argument 1 is invalid
+  539 |     return std::make_shared<EvaluateStatement>(params);
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: At global scope:
+/home/runner/workspace/ai_language/src/parser.cpp:542:17: error: ‘Statement’ was not declared in this scope; did you mean ‘ai_language::Statement’?
+  542 | std::shared_ptr<Statement> Parser::predictStatement() {
+      |                 ^~~~~~~~~
+      |                 ai_language::Statement
+/home/runner/workspace/ai_language/src/../include/parser.h:33:7: note: ‘ai_language::Statement’ declared here
+   33 | class Statement {
+      |       ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:542:26: error: template argument 1 is invalid
+  542 | std::shared_ptr<Statement> Parser::predictStatement() {
+      |                          ^
+/home/runner/workspace/ai_language/src/parser.cpp:542:28: error: ‘Parser’ has not been declared
+  542 | std::shared_ptr<Statement> Parser::predictStatement() {
+      |                            ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: In function ‘int predictStatement()’:
+/home/runner/workspace/ai_language/src/parser.cpp:546:15: error: ‘TokenType’ has not been declared
+  546 |     if (match(TokenType::WITH)) {
+      |               ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:546:9: error: ‘match’ was not declared in this scope; did you mean ‘rpmatch’?
+  546 |     if (match(TokenType::WITH)) {
+      |         ^~~~~
+      |         rpmatch
+/home/runner/workspace/ai_language/src/parser.cpp:547:18: error: ‘parseParameters’ was not declared in this scope
+  547 |         params = parseParameters();
+      |                  ^~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:550:29: error: ‘PredictStatement’ was not declared in this scope; did you mean ‘ai_language::PredictStatement’?
+  550 |     return std::make_shared<PredictStatement>(params);
+      |                             ^~~~~~~~~~~~~~~~
+      |                             ai_language::PredictStatement
+/home/runner/workspace/ai_language/src/../include/parser.h:129:7: note: ‘ai_language::PredictStatement’ declared here
+  129 | class PredictStatement : public Statement {
+      |       ^~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:550:46: error: no matching function for call to ‘make_shared<<expression error> >(std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >&)’
+  550 |     return std::make_shared<PredictStatement>(params);
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:1005:5: note: candidate: ‘template<class _Tp, class ... _Args> std::shared_ptr<typename std::enable_if<(! std::is_array< <template-parameter-1-1> >::value), _Tp>::type> std::make_shared(_Args&& ...)’
+ 1005 |     make_shared(_Args&&... __args)
+      |     ^~~~~~~~~~~
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:1005:5: note:   template argument deduction/substitution failed:
+/home/runner/workspace/ai_language/src/parser.cpp:550:46: error: template argument 1 is invalid
+  550 |     return std::make_shared<PredictStatement>(params);
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: At global scope:
+/home/runner/workspace/ai_language/src/parser.cpp:553:17: error: ‘Statement’ was not declared in this scope; did you mean ‘ai_language::Statement’?
+  553 | std::shared_ptr<Statement> Parser::saveStatement() {
+      |                 ^~~~~~~~~
+      |                 ai_language::Statement
+/home/runner/workspace/ai_language/src/../include/parser.h:33:7: note: ‘ai_language::Statement’ declared here
+   33 | class Statement {
+      |       ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:553:26: error: template argument 1 is invalid
+  553 | std::shared_ptr<Statement> Parser::saveStatement() {
+      |                          ^
+/home/runner/workspace/ai_language/src/parser.cpp:553:28: error: ‘Parser’ has not been declared
+  553 | std::shared_ptr<Statement> Parser::saveStatement() {
+      |                            ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: In function ‘int saveStatement()’:
+/home/runner/workspace/ai_language/src/parser.cpp:557:15: error: ‘TokenType’ has not been declared
+  557 |     if (match(TokenType::PATH)) {
+      |               ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:557:9: error: ‘match’ was not declared in this scope; did you mean ‘rpmatch’?
+  557 |     if (match(TokenType::PATH)) {
+      |         ^~~~~
+      |         rpmatch
+/home/runner/workspace/ai_language/src/parser.cpp:558:19: error: ‘TokenType’ has not been declared
+  558 |         if (match(TokenType::STRING) || match(TokenType::IDENTIFIER)) {
+      |                   ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:558:47: error: ‘TokenType’ has not been declared
+  558 |         if (match(TokenType::STRING) || match(TokenType::IDENTIFIER)) {
+      |                                               ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:559:30: error: ‘previous’ was not declared in this scope
+  559 |             params["path"] = previous().value;
+      |                              ^~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:561:19: error: ‘peek’ was not declared in this scope
+  561 |             error(peek(), "คาดหวังชื่อไฟล์");
+      |                   ^~~~
+/home/runner/workspace/ai_language/src/parser.cpp:561:13: error: ‘error’ was not declared in this scope; did you mean ‘perror’?
+  561 |             error(peek(), "คาดหวังชื่อไฟล์");
+      |             ^~~~~
+      |             perror
+/home/runner/workspace/ai_language/src/parser.cpp:566:15: error: ‘TokenType’ has not been declared
+  566 |     if (match(TokenType::WITH)) {
+      |               ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:566:9: error: ‘match’ was not declared in this scope; did you mean ‘rpmatch’?
+  566 |     if (match(TokenType::WITH)) {
+      |         ^~~~~
+      |         rpmatch
+/home/runner/workspace/ai_language/src/parser.cpp:567:57: error: ‘parseParameters’ was not declared in this scope
+  567 |        std::map<std::string, std::string> withParams = parseParameters();
+      |                                                        ^~~~~~~~~~~~~~~
+
+/home/runner/workspace/ai_language/src/parser.cpp:571:29: error: ‘SaveStatement’ was not declared in this scope; did you mean ‘ai_language::SaveStatement’?
+  571 |     return std::make_shared<SaveStatement>(params);
+      |                             ^~~~~~~~~~~~~
+      |                             ai_language::SaveStatement
+/home/runner/workspace/ai_language/src/../include/parser.h:143:7: note: ‘ai_language::SaveStatement’ declared here
+  143 | class SaveStatement : public Statement {
+      |       ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:571:43: error: no matching function for call to ‘make_shared<<expression error> >(std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >&)’
+  571 |     return std::make_shared<SaveStatement>(params);
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:1005:5: note: candidate: ‘template<class _Tp, class ... _Args> std::shared_ptr<typename std::enable_if<(! std::is_array< <template-parameter-1-1> >::value), _Tp>::type> std::make_shared(_Args&& ...)’
+ 1005 |     make_shared(_Args&&... __args)
+      |     ^~~~~~~~~~~
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:1005:5: note:   template argument deduction/substitution failed:
+/home/runner/workspace/ai_language/src/parser.cpp:571:43: error: template argument 1 is invalid
+  571 |     return std::make_shared<SaveStatement>(params);
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: At global scope:
+/home/runner/workspace/ai_language/src/parser.cpp:574:17: error: ‘Statement’ was not declared in this scope; did you mean ‘ai_language::Statement’?
+  574 | std::shared_ptr<Statement> Parser::showStatement() {
+      |                 ^~~~~~~~~
+      |                 ai_language::Statement
+/home/runner/workspace/ai_language/src/../include/parser.h:33:7: note: ‘ai_language::Statement’ declared here
+   33 | class Statement {
+      |       ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:574:26: error: template argument 1 is invalid
+  574 | std::shared_ptr<Statement> Parser::showStatement() {
+      |                          ^
+/home/runner/workspace/ai_language/src/parser.cpp:574:28: error: ‘Parser’ has not been declared
+  574 | std::shared_ptr<Statement> Parser::showStatement() {
+      |                            ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: In function ‘int showStatement()’:
+/home/runner/workspace/ai_language/src/parser.cpp:576:15: error: ‘TokenType’ has not been declared
+  576 |     if (match(TokenType::METRIC)) {
+      |               ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:576:9: error: ‘match’ was not declared in this scope; did you mean ‘rpmatch’?
+  576 |     if (match(TokenType::METRIC)) {
+      |         ^~~~~
+      |         rpmatch
+/home/runner/workspace/ai_language/src/parser.cpp:579:19: error: ‘TokenType’ has not been declared
+  579 |         if (match(TokenType::IDENTIFIER)) {
+      |                   ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:580:32: error: ‘previous’ was not declared in this scope
+  580 |             params["metric"] = previous().value;
+      |                                ^~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:582:19: error: ‘peek’ was not declared in this scope
+  582 |             error(peek(), "คาดหวังชื่อเมทริก");
+      |                   ^~~~
+/home/runner/workspace/ai_language/src/parser.cpp:582:13: error: ‘error’ was not declared in this scope; did you mean ‘perror’?
+  582 |             error(peek(), "คาดหวังชื่อเมทริก");
+      |             ^~~~~
+      |             perror
+/home/runner/workspace/ai_language/src/parser.cpp:586:19: error: ‘TokenType’ has not been declared
+  586 |         if (match(TokenType::WITH)) {
+      |                   ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:587:61: error: ‘parseParameters’ was not declared in this scope
+  587 |        std::map<std::string, std::string> withParams = parseParameters();
+      |                                                        ^~~~~~~~~~~~~~~
+
+/home/runner/workspace/ai_language/src/parser.cpp:591:33: error: ‘ShowStatement’ was not declared in this scope; did you mean ‘ai_language::ShowStatement’?
+  591 |         return std::make_shared<ShowStatement>("metric", params);
+      |                                 ^~~~~~~~~~~~~
+      |                                 ai_language::ShowStatement
+/home/runner/workspace/ai_language/src/../include/parser.h:157:7: note: ‘ai_language::ShowStatement’ declared here
+  157 | class ShowStatement : public Statement {
+      |       ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:591:47: error: no matching function for call to ‘make_shared<<expression error> >(const char [7], std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >&)’
+  591 |         return std::make_shared<ShowStatement>("metric", params);
+      |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:1005:5: note: candidate: ‘template<class _Tp, class ... _Args> std::shared_ptr<typename std::enable_if<(! std::is_array< <template-parameter-1-1> >::value), _Tp>::type> std::make_shared(_Args&& ...)’
+ 1005 |     make_shared(_Args&&... __args)
+      |     ^~~~~~~~~~~
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:1005:5: note:   template argument deduction/substitution failed:
+/home/runner/workspace/ai_language/src/parser.cpp:591:47: error: template argument 1 is invalid
+  591 |         return std::make_shared<ShowStatement>("metric", params);
+      |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:592:22: error: ‘TokenType’ has not been declared
+  592 |     } else if (match(TokenType::MODEL)) {
+      |                      ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:595:19: error: ‘TokenType’ has not been declared
+  595 |         if (match(TokenType::WITH)) {
+      |                   ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:596:22: error: ‘parseParameters’ was not declared in this scope
+  596 |             params = parseParameters();
+      |                      ^~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:599:33: error: ‘ShowStatement’ was not declared in this scope; did you mean ‘ai_language::ShowStatement’?
+  599 |         return std::make_shared<ShowStatement>("model", params);
+      |                                 ^~~~~~~~~~~~~
+      |                                 ai_language::ShowStatement
+/home/runner/workspace/ai_language/src/../include/parser.h:157:7: note: ‘ai_language::ShowStatement’ declared here
+  157 | class ShowStatement : public Statement {
+      |       ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:599:47: error: no matching function for call to ‘make_shared<<expression error> >(const char [6], std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >&)’
+  599 |         return std::make_shared<ShowStatement>("model", params);
+      |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:1005:5: note: candidate: ‘template<class _Tp, class ... _Args> std::shared_ptr<typename std::enable_if<(! std::is_array< <template-parameter-1-1> >::value), _Tp>::type> std::make_shared(_Args&& ...)’
+ 1005 |     make_shared(_Args&&... __args)
+      |     ^~~~~~~~~~~
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:1005:5: note:   template argument deduction/substitution failed:
+/home/runner/workspace/ai_language/src/parser.cpp:599:47: error: template argument 1 is invalid
+  599 |         return std::make_shared<ShowStatement>("model", params);
+      |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:600:22: error: ‘TokenType’ has not been declared
+  600 |     } else if (match(TokenType::IDENTIFIER)) {
+      |                      ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:601:30: error: ‘previous’ was not declared in this scope
+  601 |         std::string target = previous().value;
+      |                              ^~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:604:19: error: ‘TokenType’ has not been declared
+  604 |         if (match(TokenType::WITH)) {
+      |                   ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:605:22: error: ‘parseParameters’ was not declared in this scope
+  605 |             params = parseParameters();
+      |                      ^~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:608:33: error: ‘ShowStatement’ was not declared in this scope; did you mean ‘ai_language::ShowStatement’?
+  608 |         return std::make_shared<ShowStatement>(target, params);
+      |                                 ^~~~~~~~~~~~~
+      |                                 ai_language::ShowStatement
+/home/runner/workspace/ai_language/src/../include/parser.h:157:7: note: ‘ai_language::ShowStatement’ declared here
+  157 | class ShowStatement : public Statement {
+      |       ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:608:47: error: no matching function for call to ‘make_shared<<expression error> >(std::string&, std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >&)’
+  608 |         return std::make_shared<ShowStatement>(target, params);
+      |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:1005:5: note: candidate: ‘template<class _Tp, class ... _Args> std::shared_ptr<typename std::enable_if<(! std::is_array< <template-parameter-1-1> >::value), _Tp>::type> std::make_shared(_Args&& ...)’
+ 1005 |     make_shared(_Args&&... __args)
+      |     ^~~~~~~~~~~
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:1005:5: note:   template argument deduction/substitution failed:
+/home/runner/workspace/ai_language/src/parser.cpp:608:47: error: template argument 1 is invalid
+  608 |         return std::make_shared<ShowStatement>(target, params);
+      |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:611:11: error: ‘peek’ was not declared in this scope
+  611 |     error(peek(), "คาดหวังเป้าหมายที่ต้องการแสดง (metric, model)");
+      |           ^~~~
+/home/runner/workspace/ai_language/src/parser.cpp:611:5: error: ‘error’ was not declared in this scope; did you mean ‘perror’?
+  611 |     error(peek(), "คาดหวังเป้าหมายที่ต้องการแสดง (metric, model)");
+      |     ^~~~~
+      |     perror
+/home/runner/workspace/ai_language/src/parser.cpp: At global scope:
+/home/runner/workspace/ai_language/src/parser.cpp:615:17: error: ‘Statement’ was not declared in this scope; did you mean ‘ai_language::Statement’?
+  615 | std::shared_ptr<Statement> Parser::visualizeStatement() {
+      |                 ^~~~~~~~~
+      |                 ai_language::Statement
+/home/runner/workspace/ai_language/src/../include/parser.h:33:7: note: ‘ai_language::Statement’ declared here
+   33 | class Statement {
+      |       ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:615:26: error: template argument 1 is invalid
+  615 | std::shared_ptr<Statement> Parser::visualizeStatement() {
+      |                          ^
+/home/runner/workspace/ai_language/src/parser.cpp:615:28: error: ‘Parser’ has not been declared
+  615 | std::shared_ptr<Statement> Parser::visualizeStatement() {
+      |                            ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: In function ‘int visualizeStatement()’:
+/home/runner/workspace/ai_language/src/parser.cpp:617:15: error: ‘TokenType’ has not been declared
+  617 |     if (match(TokenType::IDENTIFIER)) {
+      |               ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:617:9: error: ‘match’ was not declared in this scope; did you mean ‘rpmatch’?
+  617 |     if (match(TokenType::IDENTIFIER)) {
+      |         ^~~~~
+      |         rpmatch
+/home/runner/workspace/ai_language/src/parser.cpp:618:30: error: ‘previous’ was not declared in this scope
+  618 |         std::string target = previous().value;
+      |                              ^~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:621:19: error: ‘TokenType’ has not been declared
+  621 |         if (match(TokenType::WITH)) {
+      |                   ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:622:22: error: ‘parseParameters’ was not declared in this scope
+  622 |             params = parseParameters();
+      |                      ^~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:625:33: error: ‘VisualizeStatement’ was not declared in this scope; did you mean ‘ai_language::VisualizeStatement’?
+  625 |         return std::make_shared<VisualizeStatement>(target, params);
+      |                                 ^~~~~~~~~~~~~~~~~~
+      |                                 ai_language::VisualizeStatement
+/home/runner/workspace/ai_language/src/../include/parser.h:172:7: note: ‘ai_language::VisualizeStatement’ declared here
+  172 | class VisualizeStatement : public Statement {
+      |       ^~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:625:52: error: no matching function for call to ‘make_shared<<expression error> >(std::string&, std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >&)’
+  625 |         return std::make_shared<VisualizeStatement>(target, params);
+      |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:1005:5: note: candidate: ‘template<class _Tp, class ... _Args> std::shared_ptr<typename std::enable_if<(! std::is_array< <template-parameter-1-1> >::value), _Tp>::type> std::make_shared(_Args&& ...)’
+ 1005 |     make_shared(_Args&&... __args)
+      |     ^~~~~~~~~~~
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:1005:5: note:   template argument deduction/substitution failed:
+/home/runner/workspace/ai_language/src/parser.cpp:625:52: error: template argument 1 is invalid
+  625 |         return std::make_shared<VisualizeStatement>(target, params);
+      |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:628:11: error: ‘peek’ was not declared in this scope
+  628 |     error(peek(), "คาดหวังเป้าหมายที่ต้องการแสดงภาพ");
+      |           ^~~~
+/home/runner/workspace/ai_language/src/parser.cpp:628:5: error: ‘error’ was not declared in this scope; did you mean ‘perror’?
+  628 |     error(peek(), "คาดหวังเป้าหมายที่ต้องการแสดงภาพ");
+      |     ^~~~~
+      |     perror
+/home/runner/workspace/ai_language/src/parser.cpp: At global scope:
+/home/runner/workspace/ai_language/src/parser.cpp:632:17: error: ‘Statement’ was not declared in this scope; did you mean ‘ai_language::Statement’?
+  632 | std::shared_ptr<Statement> Parser::plotStatement() {
+      |                 ^~~~~~~~~
+      |                 ai_language::Statement
+/home/runner/workspace/ai_language/src/../include/parser.h:33:7: note: ‘ai_language::Statement’ declared here
+   33 | class Statement {
+      |       ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:632:26: error: template argument 1 is invalid
+  632 | std::shared_ptr<Statement> Parser::plotStatement() {
+      |                          ^
+/home/runner/workspace/ai_language/src/parser.cpp:632:28: error: ‘Parser’ has not been declared
+  632 | std::shared_ptr<Statement> Parser::plotStatement() {
+      |                            ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: In function ‘int plotStatement()’:
+/home/runner/workspace/ai_language/src/parser.cpp:634:15: error: ‘TokenType’ has not been declared
+  634 |     if (match(TokenType::IDENTIFIER)) {
+      |               ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:634:9: error: ‘match’ was not declared in this scope; did you mean ‘rpmatch’?
+  634 |     if (match(TokenType::IDENTIFIER)) {
+      |         ^~~~~
+      |         rpmatch
+/home/runner/workspace/ai_language/src/parser.cpp:635:30: error: ‘previous’ was not declared in this scope
+  635 |         std::string target = previous().value;
+      |                              ^~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:638:19: error: ‘TokenType’ has not been declared
+  638 |         if (match(TokenType::WITH)) {
+      |                   ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:639:22: error: ‘parseParameters’ was not declared in this scope
+  639 |             params = parseParameters();
+      |                      ^~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:642:33: error: ‘PlotStatement’ was not declared in this scope; did you mean ‘ai_language::PlotStatement’?
+  642 |         return std::make_shared<PlotStatement>(target, params);
+      |                                 ^~~~~~~~~~~~~
+      |                                 ai_language::PlotStatement
+/home/runner/workspace/ai_language/src/../include/parser.h:187:7: note: ‘ai_language::PlotStatement’ declared here
+  187 | class PlotStatement : public Statement {
+      |       ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:642:47: error: no matching function for call to ‘make_shared<<expression error> >(std::string&, std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >&)’
+  642 |         return std::make_shared<PlotStatement>(target, params);
+      |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:1005:5: note: candidate: ‘template<class _Tp, class ... _Args> std::shared_ptr<typename std::enable_if<(! std::is_array< <template-parameter-1-1> >::value), _Tp>::type> std::make_shared(_Args&& ...)’
+ 1005 |     make_shared(_Args&&... __args)
+      |     ^~~~~~~~~~~
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:1005:5: note:   template argument deduction/substitution failed:
+/home/runner/workspace/ai_language/src/parser.cpp:642:47: error: template argument 1 is invalid
+  642 |         return std::make_shared<PlotStatement>(target, params);
+      |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:645:11: error: ‘peek’ was not declared in this scope
+  645 |     error(peek(), "คาดหวังเป้าหมายที่ต้องการพล็อต");
+      |           ^~~~
+/home/runner/workspace/ai_language/src/parser.cpp:645:5: error: ‘error’ was not declared in this scope; did you mean ‘perror’?
+  645 |     error(peek(), "คาดหวังเป้าหมายที่ต้องการพล็อต");
+      |     ^~~~~
+      |     perror
+/home/runner/workspace/ai_language/src/parser.cpp: At global scope:
+/home/runner/workspace/ai_language/src/parser.cpp:649:36: error: ‘Parser’ has not been declared
+  649 | std::map<std::string, std::string> Parser::parseParameters() {
+      |                                    ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: In function ‘std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > parseParameters()’:
+/home/runner/workspace/ai_language/src/parser.cpp:652:18: error: ‘TokenType’ has not been declared
+  652 |     while (match(TokenType::IDENTIFIER)) {
+      |                  ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:652:12: error: ‘match’ was not declared in this scope; did you mean ‘rpmatch’?
+  652 |     while (match(TokenType::IDENTIFIER)) {
+      |            ^~~~~
+      |            rpmatch
+/home/runner/workspace/ai_language/src/parser.cpp:653:33: error: ‘previous’ was not declared in this scope
+  653 |         std::string paramName = previous().value;
+      |                                 ^~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:655:19: error: ‘TokenType’ has not been declared
+  655 |         if (match(TokenType::EQUAL)) {
+      |                   ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:657:23: error: ‘TokenType’ has not been declared
+  657 |             if (match(TokenType::NUMBER) || match(TokenType::STRING) || match(TokenType::IDENTIFIER)) {
+      |                       ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:657:51: error: ‘TokenType’ has not been declared
+  657 |             if (match(TokenType::NUMBER) || match(TokenType::STRING) || match(TokenType::IDENTIFIER)) {
+      |                                                   ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:657:79: error: ‘TokenType’ has not been declared
+  657 | okenType::NUMBER) || match(TokenType::STRING) || match(TokenType::IDENTIFIER)) {
+      |                                                        ^~~~~~~~~
+
+/home/runner/workspace/ai_language/src/parser.cpp:660:23: error: ‘peek’ was not declared in this scope
+  660 |                 error(peek(), "คาดหวังค่าพารามิเตอร์");
+      |                       ^~~~
+/home/runner/workspace/ai_language/src/parser.cpp:660:17: error: ‘error’ was not declared in this scope; did you mean ‘perror’?
+  660 |                 error(peek(), "คาดหวังค่าพารามิเตอร์");
+      |                 ^~~~~
+      |                 perror
+/home/runner/workspace/ai_language/src/parser.cpp: At global scope:
+/home/runner/workspace/ai_language/src/parser.cpp:672:6: error: ‘Parser’ has not been declared
+  672 | void Parser::error(const std::string& message) {
+      |      ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: In function ‘void error(const std::string&)’:
+/home/runner/workspace/ai_language/src/parser.cpp:673:11: error: ‘peek’ was not declared in this scope
+  673 |     error(peek(), message);
+      |           ^~~~
+/home/runner/workspace/ai_language/src/parser.cpp: At global scope:
+/home/runner/workspace/ai_language/src/parser.cpp:676:6: error: ‘Parser’ has not been declared
+  676 | void Parser::error(const Token& token, const std::string& message) {
+      |      ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:676:26: error: ‘Token’ does not name a type
+  676 | void Parser::error(const Token& token, const std::string& message) {
+      |                          ^~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: In function ‘void error(const int&, const std::string&)’:
+/home/runner/workspace/ai_language/src/parser.cpp:679:15: error: request for member ‘type’ in ‘token’, which is of non-class type ‘const int’
+  679 |     if (token.type == TokenType::END) {
+      |               ^~~~
+/home/runner/workspace/ai_language/src/parser.cpp:679:23: error: ‘TokenType’ has not been declared
+  679 |     if (token.type == TokenType::END) {
+      |                       ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:680:34: error: request for member ‘line’ in ‘token’, which is of non-class type ‘const int’
+  680 |         ss << "บรรทัดที่ " << token.line << ": ข้อผิดพลาดที่จุดสิ้นสุดโค้ด: " << message;
+      |                                  ^~~~
+/home/runner/workspace/ai_language/src/parser.cpp:682:34: error: request for member ‘line’ in ‘token’, which is of non-class type ‘const int’
+  682 |         ss << "บรรทัดที่ " << token.line << " ตำแหน่ง " << token.column << ": ";
+      |                                  ^~~~
+/home/runner/workspace/ai_language/src/parser.cpp:682:62: error: request for member ‘column’ in ‘token’, which is of non-class type ‘const int’
+  682 |   ss << "บรรทัดที่ " << token.line << " ตำแหน่ง " << token.column << ": ";
+      |                                                        ^~~~~~
+
+/home/runner/workspace/ai_language/src/parser.cpp:683:38: error: request for member ‘value’ in ‘token’, which is of non-class type ‘const int’
+  683 |         ss << "ข้อผิดพลาดที่ '" << token.value << "': " << message;
+      |                                      ^~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:686:9: error: ‘m_errorHandler’ was not declared in this scope
+  686 |     if (m_errorHandler) {
+      |         ^~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:690:5: error: ‘m_hasError’ was not declared in this scope
+  690 |     m_hasError = true;
+      |     ^~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: At global scope:
+/home/runner/workspace/ai_language/src/parser.cpp:693:6: error: ‘Parser’ has not been declared
+  693 | void Parser::synchronize() {
+      |      ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: In function ‘void synchronize()’:
+/home/runner/workspace/ai_language/src/parser.cpp:694:5: error: ‘advance’ was not declared in this scope; did you mean ‘std::advance’?
+  694 |     advance();
+      |     ^~~~~~~
+      |     std::advance
+In file included from /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/locale_facets.h:48,
+                 from /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/basic_ios.h:37,
+                 from /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/ios:46,
+                 from /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/ostream:40,
+                 from /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/iostream:41,
+                 from /home/runner/workspace/ai_language/src/parser.cpp:8:
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/streambuf_iterator.h:475:5: note: ‘std::advance’ declared here
+  475 |     advance(istreambuf_iterator<_CharT>& __i, _Distance __n)
+      |     ^~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:696:13: error: ‘isAtEnd’ was not declared in this scope
+  696 |     while (!isAtEnd()) {
+      |             ^~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:697:13: error: ‘previous’ was not declared in this scope
+  697 |         if (previous().type == TokenType::END || previous().type == TokenType::COMMENT) return;
+      |             ^~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:697:32: error: ‘TokenType’ has not been declared
+  697 |         if (previous().type == TokenType::END || previous().type == TokenType::COMMENT) return;
+      |                                ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:697:69: error: ‘TokenType’ has not been declared
+  697 | revious().type == TokenType::END || previous().type == TokenType::COMMENT) return;
+      |                                                        ^~~~~~~~~
+
+/home/runner/workspace/ai_language/src/parser.cpp:699:17: error: ‘peek’ was not declared in this scope
+  699 |         switch (peek().type) {
+      |                 ^~~~
+/home/runner/workspace/ai_language/src/parser.cpp:700:18: error: ‘TokenType’ has not been declared
+  700 |             case TokenType::START:
+      |                  ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:701:18: error: ‘TokenType’ has not been declared
+  701 |             case TokenType::LOAD:
+      |                  ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:702:18: error: ‘TokenType’ has not been declared
+  702 |             case TokenType::CLEAN:
+      |                  ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:703:18: error: ‘TokenType’ has not been declared
+  703 |             case TokenType::SPLIT:
+      |                  ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:704:18: error: ‘TokenType’ has not been declared
+  704 |             case TokenType::TRAIN:
+      |                  ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:705:18: error: ‘TokenType’ has not been declared
+  705 |             case TokenType::EVALUATE:
+      |                  ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:706:18: error: ‘TokenType’ has not been declared
+  706 |             case TokenType::EVALUATE: // Using EVALUATE instead of PREDICT
+      |                  ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:707:18: error: ‘TokenType’ has not been declared
+  707 |             case TokenType::SAVE:
+      |                  ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:708:18: error: ‘TokenType’ has not been declared
+  708 |             case TokenType::SHOW:
+      |                  ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:709:18: error: ‘TokenType’ has not been declared
+  709 |             case TokenType::VISUALIZE:
+      |                  ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:710:18: error: ‘TokenType’ has not been declared
+  710 |             case TokenType::PLOT:
+      |                  ^~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: At global scope:
+/home/runner/workspace/ai_language/src/parser.cpp:746:1: error: expected declaration before ‘}’ token
+  746 | } // namespace ai_language
+      | ^
+/home/runner/workspace/ai_language/src/parser.cpp: In member function ‘std::shared_ptr<ai_language::Statement> ai_language::Parser::startStatement()’:
+/home/runner/workspace/ai_language/src/parser.cpp:445:5: warning: control reaches end of non-void function [-Wreturn-type]
+  445 |     }
+      |     ^
+make[2]: *** [CMakeFiles/ai_language_lib.dir/build.make:90: CMakeFiles/ai_language_lib.dir/src/parser.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:86: CMakeFiles/ai_language_lib.dir/all] Error 2
+make: *** [Makefile:91: all] Error 2
+~/.../ai_language/build$ 
