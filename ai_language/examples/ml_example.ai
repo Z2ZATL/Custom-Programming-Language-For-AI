@@ -1,20 +1,8 @@
-# ตัวอย่างโค้ดภาษา AI สำหรับ Machine Learning
-# ตามลำดับขั้นตอนที่กำหนดอย่างเคร่งครัด
 
-# เริ่มต้นด้วยคำสั่ง start
+# ตัวอย่างสคริปต์ AI Language
 start
-
-# กำหนดประเภทของโปรเจกต์
 create ML
-
-# โหลดข้อมูลจากไฟล์
 load dataset "data.csv"
-
-# สร้างโมเดล
 create model LinearRegression
-
-# เทรนโมเดล
 train model
-
-# แสดงความแม่นยำ
 show accuracy

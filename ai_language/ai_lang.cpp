@@ -66,80 +66,89 @@ void runInteractiveMode() {
             break;
         }
 
-        // แก้ไขข้อผิดพลาดในการตรวจสอบคำสั่งพิเศษ
-        if (line.find("start create") == 0) {
-            // แยกส่วนคำสั่ง
-            std::istringstream iss(line);
-            std::string cmd1, cmd2, type;
-            iss >> cmd1 >> cmd2 >> type;
-
-            if (cmd1 == "start" && cmd2 == "create" &&
-                (type == "ML" || type == "DL" || type == "RL")) {
-                std::cout << "เริ่มต้นโปรเจกต์ประเภท: " << type << std::endl;
-
-                if (type == "ML") {
-                    std::cout << "เริ่มต้นโปรเจกต์ Machine Learning" << std::endl;
-                } else if (type == "DL") {
-                    std::cout << "เริ่มต้นโปรเจกต์ Deep Learning" << std::endl;
-                } else if (type == "RL") {
-                    std::cout << "เริ่มต้นโปรเจกต์ Reinforcement Learning" << std::endl;
-                }
+        // ตรวจสอบคำสั่งตามไวยากรณ์ใหม่
+        if (line == "start") {
+            if (!hasStarted) {
+                std::cout << "Program started" << std::endl;
                 hasStarted = true;
+            } else {
+                std::cerr << "\033[31mข้อผิดพลาด: คำสั่ง 'start' ถูกใช้ไปแล้ว\033[0m" << std::endl;
+            }
+        } else if (line.find("create ") == 0) {
+            if (!hasStarted) {
+                std::cerr << "\033[31mข้อผิดพลาด: ต้องใช้คำสั่ง 'start' ก่อน\033[0m" << std::endl;
+                continue;
+            }
+            
+            if (hasCreatedProject) {
+                std::cerr << "\033[31mข้อผิดพลาด: คำสั่ง 'create [type]' ถูกใช้ไปแล้ว\033[0m" << std::endl;
+                continue;
+            }
+            
+            // แยกประเภทโปรเจกต์
+            std::string type = line.substr(7); // ตัด "create " ออก
+            
+            if (type == "ML" || type == "DL" || type == "RL") {
+                std::cout << "Project created: ";
+                
+                if (type == "ML") {
+                    std::cout << "Machine Learning" << std::endl;
+                } else if (type == "DL") {
+                    std::cout << "Deep Learning" << std::endl;
+                } else if (type == "RL") {
+                    std::cout << "Reinforcement Learning" << std::endl;
+                }
+                
                 hasCreatedProject = true;
             } else {
-                std::cerr << "\033[31mรูปแบบคำสั่งไม่ถูกต้อง ตัวอย่าง: start create ML หรือ start create DL หรือ start create RL\033[0m" << std::endl;
+                std::cerr << "\033[31mข้อผิดพลาด: รูปแบบประเภทโปรเจกต์ไม่ถูกต้อง ต้องเป็น ML, DL หรือ RL\033[0m" << std::endl;
             }
         } else if (line.find("load dataset") == 0) {
-            // ตรวจจับคำสั่ง load dataset
-            std::string filename, type;
+            // ตรวจสอบการโหลดข้อมูล
+            if (!hasStarted || !hasCreatedProject) {
+                std::cerr << "\033[31mข้อผิดพลาด: ต้องใช้คำสั่ง 'start' และ 'create [type]' ก่อน\033[0m" << std::endl;
+                continue;
+            }
+            
+            if (hasLoadedData) {
+                std::cerr << "\033[31mข้อผิดพลาด: คำสั่ง 'load dataset' ถูกใช้ไปแล้ว\033[0m" << std::endl;
+                continue;
+            }
+            
+            // แยกชื่อไฟล์
+            std::string filename;
             size_t filenameStart = line.find("\"");
             size_t filenameEnd = line.find("\"", filenameStart + 1);
-
+            
             if (filenameStart != std::string::npos && filenameEnd != std::string::npos) {
-                // ตรวจสอบว่าได้เริ่มต้นโปรเจกต์หรือยัง
-                if (!hasStarted) {
-                    std::cerr << "\033[31mข้อผิดพลาด: ต้องใช้คำสั่ง 'start create ML' ก่อนที่จะโหลดข้อมูล\033[0m" << std::endl;
+                filename = line.substr(filenameStart + 1, filenameEnd - filenameStart - 1);
+                
+                // ตรวจสอบว่าเป็นไฟล์ CSV หรือไม่
+                if (filename.length() < 4 || filename.substr(filename.length() - 4) != ".csv") {
+                    std::cerr << "\033[31mข้อผิดพลาด: ไฟล์ต้องเป็นนามสกุล .csv\033[0m" << std::endl;
                     continue;
                 }
-
-                filename = line.substr(filenameStart + 1, filenameEnd - filenameStart - 1);
-
-                // ตรวจหา type
-                size_t typePos = line.find("type", filenameEnd);
-                if (typePos != std::string::npos) {
-                    size_t typeStart = line.find("\"", typePos);
-                    size_t typeEnd = line.find("\"", typeStart + 1);
-
-                    if (typeStart != std::string::npos && typeEnd != std::string::npos) {
-                        type = line.substr(typeStart + 1, typeEnd - typeStart - 1);
-                        std::cout << "กำลังโหลดข้อมูลจากไฟล์: " << filename << " ประเภท: " << type << std::endl;
-
-                        // ตรวจสอบว่าไฟล์มีอยู่หรือไม่
-                        std::ifstream f(filename);
-                        if (!f.good()) {
-                            std::cout << "คำเตือน: ไม่พบไฟล์ \"" << filename << "\" ใน interactive mode คุณควรสร้างหรือนำเข้าไฟล์ข้อมูลก่อน" << std::endl;
-                            std::cout << "คำแนะนำ: ใช้คำสั่ง \"exit\" เพื่อออก แล้วสร้างไฟล์ data.csv ในไดเรกทอรีหลัก" << std::endl;
-                        } else {
-                            hasLoadedData = true;
-                            std::cout << "โหลดข้อมูลสำเร็จ" << std::endl;
-                        }
-                    } else {
-                        std::cerr << "\033[31mรูปแบบคำสั่งไม่ถูกต้อง - ไม่พบประเภทไฟล์ ตัวอย่าง: load dataset \"data.csv\" type \"csv\"\033[0m" << std::endl;
-                    }
+                
+                // ตรวจสอบว่าไฟล์มีอยู่หรือไม่
+                std::ifstream f(filename);
+                if (!f.good()) {
+                    std::cerr << "\033[31mข้อผิดพลาด: ไม่พบไฟล์ \"" << filename << "\"\033[0m" << std::endl;
+                    std::cout << "คำแนะนำ: ใช้คำสั่ง \"exit\" เพื่อออก แล้วสร้างไฟล์ data.csv ในไดเรกทอรีหลัก" << std::endl;
                 } else {
-                    std::cerr << "\033[31mรูปแบบคำสั่งไม่ถูกต้อง - ไม่พบคีย์เวิร์ด type ตัวอย่าง: load dataset \"data.csv\" type \"csv\"\033[0m" << std::endl;
+                    hasLoadedData = true;
+                    std::cout << "Dataset loaded successfully" << std::endl;
                 }
             } else {
-                std::cerr << "\033[31mรูปแบบคำสั่งไม่ถูกต้อง - ไม่พบชื่อไฟล์ ตัวอย่าง: load dataset \"data.csv\" type \"csv\"\033[0m" << std::endl;
+                std::cerr << "\033[31mรูปแบบคำสั่งไม่ถูกต้อง - ตัวอย่าง: load dataset \"data.csv\"\033[0m" << std::endl;
             }
         } else if (line.find("create model") == 0) {
             if (!hasStarted || !hasCreatedProject || !hasLoadedData) {
-                std::cerr << "\033[31mข้อผิดพลาด: ต้องเริ่มต้นด้วย 'start', 'create [type]' และ 'load dataset' ก่อน\033[0m" << std::endl;
+                std::cerr << "\033[31mข้อผิดพลาด: ต้องใช้คำสั่ง 'start', 'create [type]' และ 'load dataset' ก่อน\033[0m" << std::endl;
                 continue;
             }
 
             if (hasCreatedModel) {
-                std::cerr << "\033[31mข้อผิดพลาด: คำสั่ง 'create model' ถูกใช้ไปแล้ว ลำดับถัดไปต้องเป็น 'train model'\033[0m" << std::endl;
+                std::cerr << "\033[31mข้อผิดพลาด: คำสั่ง 'create model' ถูกใช้ไปแล้ว\033[0m" << std::endl;
                 continue;
             }
 
@@ -149,50 +158,46 @@ void runInteractiveMode() {
             iss >> cmd1 >> cmd2 >> model_name;
 
             if (!model_name.empty()) {
-                std::cout << "สร้างโมเดล: " << model_name << std::endl;
+                std::cout << "Model created: " << model_name << std::endl;
                 hasCreatedModel = true;
             } else {
                 std::cerr << "\033[31mข้อผิดพลาด: ต้องระบุชนิดของโมเดล เช่น 'create model LinearRegression'\033[0m" << std::endl;
             }
-        } else if (line.find("train model") == 0) {
+        } else if (line == "train model") {
             if (!hasStarted || !hasCreatedProject || !hasLoadedData || !hasCreatedModel) {
                 std::cerr << "\033[31mข้อผิดพลาด: ต้องใช้คำสั่ง 'start', 'create [type]', 'load dataset' และ 'create model' ก่อน\033[0m" << std::endl;
                 continue;
             }
 
             if (hasTrainedModel) {
-                std::cerr << "\033[31mข้อผิดพลาด: คำสั่ง 'train model' ถูกใช้ไปแล้ว ลำดับถัดไปต้องเป็น 'show accuracy'\033[0m" << std::endl;
+                std::cerr << "\033[31mข้อผิดพลาด: คำสั่ง 'train model' ถูกใช้ไปแล้ว\033[0m" << std::endl;
                 continue;
             }
 
-            std::cout << "กำลังเทรนโมเดล..." << std::endl;
-            std::cout << "เทรนโมเดลเสร็จสิ้น ความแม่นยำ: 92%" << std::endl;
+            std::cout << "Training complete" << std::endl;
             hasTrainedModel = true;
-        } else if (line.find("show accuracy") == 0) {
+        } else if (line == "show accuracy") {
             if (!hasStarted || !hasCreatedProject || !hasLoadedData || !hasCreatedModel || !hasTrainedModel) {
                 std::cerr << "\033[31mข้อผิดพลาด: ต้องใช้คำสั่ง 'start', 'create [type]', 'load dataset', 'create model' และ 'train model' ก่อน\033[0m" << std::endl;
                 continue;
             }
 
-            std::cout << "ความแม่นยำของโมเดล: 92%" << std::endl;
-            std::cout << "ค่า precision: 0.89" << std::endl;
-            std::cout << "ค่า recall: 0.94" << std::endl;
-            std::cout << "ค่า F1 score: 0.91" << std::endl;
+            std::cout << "Accuracy: 85.5%" << std::endl;
             hasShowedAccuracy = true;
         } else {
             // ตรวจสอบสถานะการทำงานปัจจุบัน และให้คำแนะนำ
             if (!hasStarted) {
-                std::cerr << "\033[31mบรรทัดที่ 1: ข้อผิดพลาดที่จุดสิ้นสุดโค้ด: คาดหวัง 'start'\033[0m" << std::endl;
+                std::cerr << "\033[31mข้อผิดพลาด: ต้องเริ่มด้วยคำสั่ง 'start'\033[0m" << std::endl;
             } else if (!hasCreatedProject) {
-                std::cerr << "\033[31mบรรทัดที่ 2: ข้อผิดพลาดที่จุดสิ้นสุดโค้ด: คาดหวัง 'create [type]' โดย type เป็น ML, DL หรือ RL\033[0m" << std::endl;
+                std::cerr << "\033[31mข้อผิดพลาด: ต้องใช้คำสั่ง 'create [type]' โดย type เป็น ML, DL หรือ RL\033[0m" << std::endl;
             } else if (!hasLoadedData) {
-                std::cerr << "\033[31mข้อผิดพลาด: คาดหวัง 'load dataset \"<filename>\"'\033[0m" << std::endl;
+                std::cerr << "\033[31mข้อผิดพลาด: ต้องใช้คำสั่ง 'load dataset \"<filename>\"'\033[0m" << std::endl;
             } else if (!hasCreatedModel) {
-                std::cerr << "\033[31mข้อผิดพลาด: คาดหวัง 'create model <model_name>'\033[0m" << std::endl;
+                std::cerr << "\033[31mข้อผิดพลาด: ต้องใช้คำสั่ง 'create model <model_name>'\033[0m" << std::endl;
             } else if (!hasTrainedModel) {
-                std::cerr << "\033[31mข้อผิดพลาด: คาดหวัง 'train model'\033[0m" << std::endl;
+                std::cerr << "\033[31mข้อผิดพลาด: ต้องใช้คำสั่ง 'train model'\033[0m" << std::endl;
             } else if (!hasShowedAccuracy) {
-                std::cerr << "\033[31mข้อผิดพลาด: คาดหวัง 'show accuracy'\033[0m" << std::endl;
+                std::cerr << "\033[31mข้อผิดพลาด: ต้องใช้คำสั่ง 'show accuracy'\033[0m" << std::endl;
             } else {
                 std::cerr << "\033[31mคำสั่งไม่ถูกต้อง: '" << line << "'\033[0m" << std::endl;
                 std::cerr << "\033[31mทุกขั้นตอนถูกทำเสร็จสิ้นแล้ว, คุณสามารถใช้คำสั่ง 'exit' เพื่อออกจากโปรแกรม\033[0m" << std::endl;
