@@ -122,7 +122,7 @@ void Interpreter::handleStartCommand(const std::map<std::string, std::string>& p
     } else {
         m_environment.projectType = "ML";  // ค่าเริ่มต้น
     }
-    
+
     // รีเซ็ตสถานะทั้งหมด
     m_environment.dataLoaded = false;
     m_environment.dataCleaned = false;
@@ -135,7 +135,7 @@ void Interpreter::handleStartCommand(const std::map<std::string, std::string>& p
     m_environment.modelPath = "";
     m_environment.metrics.clear();
     m_environment.variables.clear();
-    
+
     m_outputHandler("เริ่มต้นโปรเจกต์ประเภท: " + m_environment.projectType);
 }
 
@@ -145,17 +145,17 @@ void Interpreter::handleLoadCommand(const std::map<std::string, std::string>& pa
         m_errorHandler("ต้องระบุชื่อไฟล์");
         return;
     }
-    
+
     if (params.find("type") == params.end()) {
         m_errorHandler("ต้องระบุประเภทไฟล์");
         return;
     }
-    
+
     // ตั้งค่าข้อมูล
     m_environment.datasetPath = params.at("filename");
     m_environment.datasetType = params.at("type");
     m_environment.dataLoaded = true;
-    
+
     m_outputHandler("กำลังโหลดข้อมูลจากไฟล์: " + m_environment.datasetPath);
 }
 
@@ -165,10 +165,10 @@ void Interpreter::handleCleanCommand(const std::map<std::string, std::string>& p
         m_errorHandler("ต้องโหลดข้อมูลก่อนที่จะทำความสะอาด");
         return;
     }
-    
+
     m_environment.dataCleaned = true;
     m_outputHandler("กำลังทำความสะอาดข้อมูล");
-    
+
     // แสดงพารามิเตอร์ที่ใช้
     for (const auto& pair : params) {
         m_outputHandler("  พารามิเตอร์: " + pair.first + " = " + pair.second);
@@ -181,10 +181,10 @@ void Interpreter::handleSplitCommand(const std::map<std::string, std::string>& p
         m_errorHandler("ต้องทำความสะอาดข้อมูลก่อนที่จะแบ่ง");
         return;
     }
-    
+
     m_environment.dataSplit = true;
     m_outputHandler("กำลังแบ่งข้อมูล");
-    
+
     // แสดงพารามิเตอร์ที่ใช้
     for (const auto& pair : params) {
         m_outputHandler("  พารามิเตอร์: " + pair.first + " = " + pair.second);
@@ -197,10 +197,10 @@ void Interpreter::handleTrainCommand(const std::map<std::string, std::string>& p
         m_errorHandler("ต้องแบ่งข้อมูลก่อนที่จะฝึกโมเดล");
         return;
     }
-    
+
     m_environment.modelTrained = true;
     m_outputHandler("กำลังฝึกโมเดล");
-    
+
     // แสดงพารามิเตอร์ที่ใช้
     for (const auto& pair : params) {
         m_outputHandler("  พารามิเตอร์: " + pair.first + " = " + pair.second);
@@ -213,20 +213,20 @@ void Interpreter::handleEvaluateCommand(const std::map<std::string, std::string>
         m_errorHandler("ต้องฝึกโมเดลก่อนที่จะประเมินผล");
         return;
     }
-    
+
     m_outputHandler("กำลังประเมินผลโมเดล");
     m_environment.modelEvaluated = true;
-    
+
     // สร้างเมทริกซ์การประเมินผลแบบสุ่ม
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<> dist(0.7, 0.99);
-    
+
     m_environment.metrics["accuracy"] = dist(gen);
     m_environment.metrics["precision"] = dist(gen);
     m_environment.metrics["recall"] = dist(gen);
     m_environment.metrics["f1"] = dist(gen);
-    
+
     // แสดงพารามิเตอร์ที่ใช้
     for (const auto& pair : params) {
         m_outputHandler("  พารามิเตอร์: " + pair.first + " = " + pair.second);
@@ -239,16 +239,16 @@ void Interpreter::handlePredictCommand(const std::map<std::string, std::string>&
         m_errorHandler("ต้องฝึกโมเดลก่อนที่จะทำนาย");
         return;
     }
-    
+
     m_outputHandler("กำลังทำนายผลลัพธ์");
-    
+
     // สร้างผลลัพธ์แบบสุ่ม
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<> dist(0.0, 1.0);
-    
+
     m_outputHandler("ผลลัพธ์การทำนาย: " + std::to_string(dist(gen)));
-    
+
     // แสดงพารามิเตอร์ที่ใช้
     for (const auto& pair : params) {
         m_outputHandler("  พารามิเตอร์: " + pair.first + " = " + pair.second);
@@ -261,16 +261,16 @@ void Interpreter::handleSaveCommand(const std::map<std::string, std::string>& pa
         m_errorHandler("ต้องฝึกโมเดลก่อนที่จะบันทึก");
         return;
     }
-    
+
     // ตรวจสอบว่ามีพารามิเตอร์ที่จำเป็นหรือไม่
     if (params.find("path") == params.end()) {
         m_errorHandler("ต้องระบุที่อยู่ไฟล์");
         return;
     }
-    
+
     m_environment.modelPath = params.at("path");
     m_environment.modelSaved = true;
-    
+
     m_outputHandler("กำลังบันทึกโมเดลไปยัง: " + m_environment.modelPath);
 }
 
@@ -280,25 +280,25 @@ void Interpreter::handleShowCommand(const std::map<std::string, std::string>& pa
         m_errorHandler("ต้องระบุเป้าหมายที่ต้องการแสดง");
         return;
     }
-    
+
     std::string target = params.at("target");
-    
+
     if (target == "metric") {
         // ตรวจสอบว่าได้ประเมินผลโมเดลแล้วหรือไม่
         if (!m_environment.modelEvaluated) {
             m_errorHandler("ต้องประเมินผลโมเดลก่อนที่จะแสดงเมทริกซ์");
             return;
         }
-        
+
         // ตรวจสอบว่ามีพารามิเตอร์ที่จำเป็นหรือไม่
         if (params.find("metric") == params.end()) {
             m_errorHandler("ต้องระบุชื่อเมทริก");
             return;
         }
-        
+
         std::string metricName = params.at("metric");
         m_outputHandler("กำลังแสดงเมตริก: " + metricName);
-        
+
         if (m_environment.metrics.find(metricName) != m_environment.metrics.end()) {
             m_outputHandler(metricName + " = " + std::to_string(m_environment.metrics[metricName]));
         } else {
@@ -310,10 +310,10 @@ void Interpreter::handleShowCommand(const std::map<std::string, std::string>& pa
             m_errorHandler("ต้องฝึกโมเดลก่อนที่จะแสดง");
             return;
         }
-        
+
         m_outputHandler("กำลังแสดงข้อมูลโมเดล");
         m_outputHandler("  ประเภท: " + m_environment.projectType);
-        
+
         if (m_environment.modelEvaluated) {
             m_outputHandler("  ประสิทธิภาพ:");
             for (const auto& pair : m_environment.metrics) {
@@ -331,16 +331,16 @@ void Interpreter::handleVisualizeCommand(const std::map<std::string, std::string
         m_errorHandler("ต้องระบุเป้าหมายที่ต้องการแสดงภาพ");
         return;
     }
-    
+
     std::string target = params.at("target");
-    
+
     if (target == "data") {
         // ตรวจสอบว่าได้โหลดข้อมูลแล้วหรือไม่
         if (!m_environment.dataLoaded) {
             m_errorHandler("ต้องโหลดข้อมูลก่อนที่จะแสดงภาพ");
             return;
         }
-        
+
         m_outputHandler("กำลังแสดงภาพข้อมูล");
     } else if (target == "model") {
         // ตรวจสอบว่าได้ฝึกโมเดลแล้วหรือไม่
@@ -348,7 +348,7 @@ void Interpreter::handleVisualizeCommand(const std::map<std::string, std::string
             m_errorHandler("ต้องฝึกโมเดลก่อนที่จะแสดงภาพ");
             return;
         }
-        
+
         m_outputHandler("กำลังแสดงภาพโมเดล");
     } else {
         m_errorHandler("ไม่รู้จักเป้าหมาย: " + target);
@@ -361,16 +361,16 @@ void Interpreter::handlePlotCommand(const std::map<std::string, std::string>& pa
         m_errorHandler("ต้องระบุเป้าหมายที่ต้องการพล็อต");
         return;
     }
-    
+
     std::string target = params.at("target");
-    
+
     if (target == "data") {
         // ตรวจสอบว่าได้โหลดข้อมูลแล้วหรือไม่
         if (!m_environment.dataLoaded) {
             m_errorHandler("ต้องโหลดข้อมูลก่อนที่จะพล็อต");
             return;
         }
-        
+
         m_outputHandler("กำลังพล็อตข้อมูล");
     } else if (target == "result") {
         // ตรวจสอบว่าได้ฝึกโมเดลแล้วหรือไม่
@@ -378,7 +378,7 @@ void Interpreter::handlePlotCommand(const std::map<std::string, std::string>& pa
             m_errorHandler("ต้องฝึกโมเดลก่อนที่จะพล็อตผลลัพธ์");
             return;
         }
-        
+
         m_outputHandler("กำลังพล็อตผลลัพธ์");
     } else {
         m_errorHandler("ไม่รู้จักเป้าหมาย: " + target);
@@ -391,7 +391,7 @@ bool ai_language::Environment::isCompleteStatement(const std::string& statement)
     if (statement.empty() || std::all_of(statement.begin(), statement.end(), [](char c) { return std::isspace(c); })) {
         return false;
     }
-    
+
     // Count quotes to make sure they're paired
     int quotes = 0;
     for (char c : statement) {
@@ -399,14 +399,16 @@ bool ai_language::Environment::isCompleteStatement(const std::string& statement)
             quotes++;
         }
     }
-    
+
     // If odd number of quotes, statement is incomplete
     if (quotes % 2 != 0) {
         return false;
     }
-    
+
     // Add more complex checks as needed
     // For multi-line statements, block structures, etc.
-    
+
     return true;
 }
+
+} // namespace ai_language
