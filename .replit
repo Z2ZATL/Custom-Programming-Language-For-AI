@@ -27,3 +27,12 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "cd ai_language && mkdir -p build && cd build && export AI_LANG_TESTING=1 && cmake .. && make && cd .. && AI_LANG_TESTING=1 ./ai_lang ../examples/ml_example.ai"
+
+[[workflows.workflow]]
+name = "Test Build and Run Silent"
+author = 41000523
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd ai_language && mkdir -p build && cd build && export AI_LANG_TESTING=1 && cmake .. && make && cd .. && AI_LANG_TESTING=1 ./build/ai_lang examples/ml_example.ai"

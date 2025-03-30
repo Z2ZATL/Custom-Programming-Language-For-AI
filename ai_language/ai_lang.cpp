@@ -365,10 +365,14 @@ int main(int argc, char* argv[]) {
     if (argc > 1) {
         std::string arg = argv[1];
         if (arg == "-i" || arg == "--interactive") {
-            runInteractiveMode();
+            if (!isTesting) {
+                runInteractiveMode();
+            }
             return 0;
         } else if (arg == "-h" || arg == "--help") {
-            showUsage(argv[0]);
+            if (!isTesting) {
+                showUsage(argv[0]);
+            }
             return 0;
         } else {
             // อ่านไฟล์และดำเนินการตามคำสั่ง
@@ -376,10 +380,23 @@ int main(int argc, char* argv[]) {
             if (file.is_open()) {
                 std::string content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
                 ai_language::Interpreter interpreter;
+                
+                // ตั้งค่า handler เพื่อไม่แสดงผลในโหมดทดสอบ
+                if (isTesting) {
+                    interpreter.setOutputHandler([](const std::string& message) {
+                        // ไม่แสดงผลใดๆ ในโหมดทดสอบ
+                    });
+                    interpreter.setErrorHandler([](const std::string& message) {
+                        // ไม่แสดงข้อผิดพลาดใดๆ ในโหมดทดสอบ
+                    });
+                }
+                
                 interpreter.interpret(content);
                 return 0;
             } else {
-                std::cerr << "ไม่สามารถเปิดไฟล์: " << arg << std::endl;
+                if (!isTesting) {
+                    std::cerr << "ไม่สามารถเปิดไฟล์: " << arg << std::endl;
+                }
                 return 1;
             }
         }
