@@ -51,7 +51,7 @@ void runFile(const std::string& filename) {
     // ตรวจสอบว่าไฟล์มีอยู่จริง
     std::ifstream file(filename);
     if (!file.is_open()) {
-        std::cerr << "ไม่สามารถเปิดไฟล์: " << filename << std::endl;
+        std::cerr << "Error: ไม่สามารถเปิดไฟล์ " << filename << std::endl;
         return;
     }
 
@@ -78,6 +78,8 @@ void runFile(const std::string& filename) {
 }
 
 int main(int argc, char* argv[]) {
+    std::cout << "=== ทดสอบภาษาโปรแกรมสำหรับ AI ===" << std::endl << std::endl;
+    
     // ถ้าไม่มีพารามิเตอร์ แสดงวิธีใช้
     if (argc < 2) {
         showUsage(argv[0]);
