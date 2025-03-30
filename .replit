@@ -4,7 +4,7 @@ modules = ["cpp", "nodejs-20"]
 channel = "stable-24_05"
 
 [workflows]
-runButton = "Project"
+runButton = "Start Website"
 
 [[workflows.workflow]]
 name = "Project"
@@ -102,6 +102,15 @@ task = "packager.installForAll"
 task = "shell.exec"
 args = "cd ai_language_notebook && node server.js"
 waitForPort = 5000
+
+[[workflows.workflow]]
+name = "Start Website"
+author = 14355119
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd ai_language_notebook && node server.js"
 
 [deployment]
 run = ["sh", "-c", "mkdir -p build && cd build && cmake .. && make && ./bin/data_analyzer"]
