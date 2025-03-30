@@ -37,6 +37,14 @@ struct Environment {
     
     Environment()
         : dataLoaded(false), dataCleaned(false), dataSplit(false),
+
+    /**
+     * @brief Check if a statement is complete (for interactive mode)
+     * @param statement The statement to check
+     * @return True if the statement is complete, false if it needs more input
+     */
+    bool isCompleteStatement(const std::string& statement) const;
+
           modelTrained(false), modelEvaluated(false), modelSaved(false) {}
 };
 

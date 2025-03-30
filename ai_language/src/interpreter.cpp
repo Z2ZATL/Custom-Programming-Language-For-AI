@@ -386,3 +386,28 @@ void Interpreter::handlePlotCommand(const std::map<std::string, std::string>& pa
 }
 
 } // namespace ai_language
+bool ai_language::Interpreter::isCompleteStatement(const std::string& statement) const {
+    // Basic implementation:
+    // Check if the statement is empty or just whitespace
+    if (statement.empty() || std::all_of(statement.begin(), statement.end(), [](char c) { return std::isspace(c); })) {
+        return false;
+    }
+    
+    // Count quotes to make sure they're paired
+    int quotes = 0;
+    for (char c : statement) {
+        if (c == '"') {
+            quotes++;
+        }
+    }
+    
+    // If odd number of quotes, statement is incomplete
+    if (quotes % 2 != 0) {
+        return false;
+    }
+    
+    // Add more complex checks as needed
+    // For multi-line statements, block structures, etc.
+    
+    return true;
+}
