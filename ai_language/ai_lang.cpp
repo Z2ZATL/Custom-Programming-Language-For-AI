@@ -11,6 +11,7 @@
 #include <ctime>
 #include <unistd.h>  // สำหรับ getcwd
 #include <cstring>   // สำหรับ strncpy
+#include <algorithm> // for std::transform
 
 void showUsage(const std::string& programName) {
     std::cout << "วิธีใช้งาน: " << programName << " [ไฟล์.ai | -i]" << std::endl;
@@ -44,6 +45,14 @@ void runInteractiveMode() {
     std::cout << "  split\n";
     std::cout << "  train epochs 100\n\n";
 
+    bool hasStarted = false;
+    bool hasLoadedData = false;
+    bool hasCleanedData = false;
+    bool hasSplitData = false;
+    bool hasTrainedModel = false;
+    bool hasEvaluatedModel = false;
+
+
     while (true) {
         std::cout << "AI> ";
         std::getline(std::cin, line);
@@ -59,7 +68,7 @@ void runInteractiveMode() {
             std::string cmd1, cmd2, type;
             iss >> cmd1 >> cmd2 >> type;
 
-            if (cmd1 == "start" && cmd2 == "create" && 
+            if (cmd1 == "start" && cmd2 == "create" &&
                 (type == "ML" || type == "DL" || type == "RL")) {
                 std::cout << "เริ่มต้นโปรเจกต์ประเภท: " << type << std::endl;
 
@@ -110,107 +119,177 @@ void runInteractiveMode() {
                 std::cerr << "\033[31mรูปแบบคำสั่งไม่ถูกต้อง - ไม่พบชื่อไฟล์ ตัวอย่าง: load dataset \"data.csv\" type \"csv\"\033[0m" << std::endl;
             }
         } else {
-            // ประมวลผลคำสั่งด้วย interpreter ปกติ
-            command = line;
-            if (command == "clean") {
-                    std::cout << "> clean" << std::endl;
-                    std::cout << "กำลังทำความสะอาดข้อมูล..." << std::endl;
-                    std::cout << "ลบค่า null และแทนที่ด้วยค่าเฉลี่ย" << std::endl;
-                    std::cout << "กำจัดค่า outlier" << std::endl;
-                    std::cout << "ทำความสะอาดข้อมูลเสร็จสิ้น" << std::endl;
-                } else if (command == "split") {
-                    std::cout << "> split" << std::endl;
-                    std::cout << "กำลังแบ่งข้อมูลเป็นชุดฝึกและชุดทดสอบ..." << std::endl;
-                    std::cout << "แบ่งข้อมูล 80% สำหรับชุดฝึก และ 20% สำหรับชุดทดสอบ" << std::endl;
-                } else if (command.substr(0, 5) == "train") {
-                    std::cout << "> train";
-                    std::string epochsStr = "100"; // ค่าเริ่มต้น
-                    if (command.substr(0, 12) == "train epochs") {
-                        epochsStr = command.substr(13);
-                        std::cout << " epochs " << epochsStr;
-                    }
-                    std::cout << std::endl;
-                    std::cout << "กำลังฝึกโมเดล Machine Learning..." << std::endl;
-                    std::cout << "จำนวน epochs: " << epochsStr << std::endl;
-                    std::cout << "โมเดลฝึกเสร็จสิ้น" << std::endl;
-                } else if (command == "evaluate") {
-                    std::cout << "> evaluate" << std::endl;
-                    std::cout << "กำลังประเมินผลโมเดล..." << std::endl;
-                    std::cout << "ความแม่นยำ (accuracy): 0.92" << std::endl;
-                    std::cout << "ความแม่นยำเชิงลึก (precision): 0.89" << std::endl;
-                    std::cout << "ความไว (recall): 0.94" << std::endl;
-                } else if (command.substr(0, 4) == "show") {
-                    std::cout << "> show";
-                    if (command.substr(0, 11) == "show metric") {
-                        std::string metric = command.substr(12);
-                        if (metric.front() == '"' && metric.back() == '"') {
-                            metric = metric.substr(1, metric.length() - 2);
-                        }
-                        std::cout << " metric " << metric << std::endl;
-                        std::cout << "กำลังแสดงเมตริก: " << metric << std::endl;
+            // ประมวลผลคำสั่ง
+            if (line == "exit") {
+                std::cout << "ออกจากโปรแกรม" << std::endl;
+                break;
+            } else {
+                if (!command.empty()) {
+                    command += "\n";
+                }
+                command += line;
 
-                        if (metric == "accuracy") {
-                            std::cout << "ความแม่นยำ (accuracy): 0.92" << std::endl;
-                        } else if (metric == "precision") {
-                            std::cout << "ความแม่นยำเชิงลึก (precision): 0.89" << std::endl;
-                        } else if (metric == "recall") {
-                            std::cout << "ความไว (recall): 0.94" << std::endl;
-                        } else if (metric == "f1") {
-                            std::cout << "F1 score: 0.91" << std::endl;
-                        } else {
-                            std::cout << "ไม่พบเมตริก: " << metric << std::endl;
+                // ตรวจสอบว่ามีการเปิดวงเล็บแล้วไม่ปิดหรือไม่
+                // (นี่เป็นตัวอย่างเพื่อรองรับการเขียนคำสั่งหลายบรรทัด)
+                if (!interpreter.isCompleteStatement(command)) {
+                    continue;
+                }
+
+                try {
+                    // ตรวจสอบลำดับขั้นตอน
+                    bool valid = true;
+                    std::string lowerCmd = command;
+                    std::transform(lowerCmd.begin(), lowerCmd.end(), lowerCmd.begin(), ::tolower);
+
+                    if (lowerCmd.find("start") != std::string::npos) {
+                        hasStarted = true;
+                    } else if (lowerCmd.find("load") != std::string::npos) {
+                        if (!hasStarted) {
+                            std::cerr << "\033[33mคำเตือน: คุณควรเริ่มด้วยคำสั่ง 'start create ML' ก่อน\033[0m" << std::endl;
+                            valid = false;
                         }
-                    } else {
-                        std::cout << std::endl;
+                        hasLoadedData = true;
+                    } else if (lowerCmd.find("clean") != std::string::npos) {
+                        if (!hasLoadedData) {
+                            std::cerr << "\033[33mคำเตือน: คุณควรโหลดข้อมูลด้วยคำสั่ง 'load dataset' ก่อน\033[0m" << std::endl;
+                            valid = false;
+                        }
+                        hasCleanedData = true;
+                    } else if (lowerCmd.find("split") != std::string::npos) {
+                        if (!hasCleanedData) {
+                            std::cerr << "\033[33mคำเตือน: คุณควรทำความสะอาดข้อมูลด้วยคำสั่ง 'clean' ก่อน\033[0m" << std::endl;
+                            valid = false;
+                        }
+                        hasSplitData = true;
+                    } else if (lowerCmd.find("train") != std::string::npos) {
+                        if (!hasSplitData) {
+                            std::cerr << "\033[33mคำเตือน: คุณควรแบ่งข้อมูลด้วยคำสั่ง 'split' ก่อน\033[0m" << std::endl;
+                            valid = false;
+                        }
+                        hasTrainedModel = true;
+                    } else if (lowerCmd.find("evaluate") != std::string::npos) {
+                        if (!hasTrainedModel) {
+                            std::cerr << "\033[33mคำเตือน: คุณควรฝึกโมเดลด้วยคำสั่ง 'train' ก่อน\033[0m" << std::endl;
+                            valid = false;
+                        }
+                        hasEvaluatedModel = true;
+                    } else if (lowerCmd.find("save") != std::string::npos) {
+                        if (!hasTrainedModel) {
+                            std::cerr << "\033[33mคำเตือน: คุณควรฝึกโมเดลด้วยคำสั่ง 'train' ก่อนที่จะบันทึก\033[0m" << std::endl;
+                            valid = false;
+                        }
                     }
-                } else if (command.substr(0, 4) == "save") {
-                    std::cout << "> save";
-                    if (command.substr(0, 9) == "save path") {
-                        std::string path = command.substr(10);
-                        if (path.front() == '"' && path.back() == '"') {
-                            path = path.substr(1, path.length() - 2);
-                        }
-                        std::cout << " path " << path << std::endl;
-                        // แสดงพาธเต็มของไฟล์ที่กำลังบันทึก
-                        char abs_path[1024];
-                        if (path[0] != '/') {  // ถ้าไม่ใช่พาธสัมบูรณ์
-                            char cwd[1024];
-                            if (getcwd(cwd, sizeof(cwd)) != NULL) {
-                                snprintf(abs_path, sizeof(abs_path), "%s/%s", cwd, path.c_str());
+
+                    // ประมวลผลคำสั่งถ้าลำดับขั้นตอนถูกต้อง
+                    if (valid) {
+                        if (command == "clean") {
+                            std::cout << "> clean" << std::endl;
+                            std::cout << "กำลังทำความสะอาดข้อมูล..." << std::endl;
+                            std::cout << "ลบค่า null และแทนที่ด้วยค่าเฉลี่ย" << std::endl;
+                            std::cout << "กำจัดค่า outlier" << std::endl;
+                            std::cout << "ทำความสะอาดข้อมูลเสร็จสิ้น" << std::endl;
+                        } else if (command == "split") {
+                            std::cout << "> split" << std::endl;
+                            std::cout << "กำลังแบ่งข้อมูลเป็นชุดฝึกและชุดทดสอบ..." << std::endl;
+                            std::cout << "แบ่งข้อมูล 80% สำหรับชุดฝึก และ 20% สำหรับชุดทดสอบ" << std::endl;
+                        } else if (command.substr(0, 5) == "train") {
+                            std::cout << "> train";
+                            std::string epochsStr = "100"; // ค่าเริ่มต้น
+                            if (command.substr(0, 12) == "train epochs") {
+                                epochsStr = command.substr(13);
+                                std::cout << " epochs " << epochsStr;
+                            }
+                            std::cout << std::endl;
+                            std::cout << "กำลังฝึกโมเดล Machine Learning..." << std::endl;
+                            std::cout << "จำนวน epochs: " << epochsStr << std::endl;
+                            std::cout << "โมเดลฝึกเสร็จสิ้น" << std::endl;
+                        } else if (command == "evaluate") {
+                            std::cout << "> evaluate" << std::endl;
+                            std::cout << "กำลังประเมินผลโมเดล..." << std::endl;
+                            std::cout << "ความแม่นยำ (accuracy): 0.92" << std::endl;
+                            std::cout << "ความแม่นยำเชิงลึก (precision): 0.89" << std::endl;
+                            std::cout << "ความไว (recall): 0.94" << std::endl;
+                        } else if (command.substr(0, 4) == "show") {
+                            std::cout << "> show";
+                            if (command.substr(0, 11) == "show metric") {
+                                std::string metric = command.substr(12);
+                                if (metric.front() == '"' && metric.back() == '"') {
+                                    metric = metric.substr(1, metric.length() - 2);
+                                }
+                                std::cout << " metric " << metric << std::endl;
+                                std::cout << "กำลังแสดงเมตริก: " << metric << std::endl;
+
+                                if (metric == "accuracy") {
+                                    std::cout << "ความแม่นยำ (accuracy): 0.92" << std::endl;
+                                } else if (metric == "precision") {
+                                    std::cout << "ความแม่นยำเชิงลึก (precision): 0.89" << std::endl;
+                                } else if (metric == "recall") {
+                                    std::cout << "ความไว (recall): 0.94" << std::endl;
+                                } else if (metric == "f1") {
+                                    std::cout << "F1 score: 0.91" << std::endl;
+                                } else {
+                                    std::cout << "ไม่พบเมตริก: " << metric << std::endl;
+                                }
                             } else {
-                                strncpy(abs_path, path.c_str(), sizeof(abs_path));
+                                std::cout << std::endl;
+                            }
+                        } else if (command.substr(0, 4) == "save") {
+                            std::cout << "> save";
+                            if (command.substr(0, 9) == "save path") {
+                                std::string path = command.substr(10);
+                                if (path.front() == '"' && path.back() == '"') {
+                                    path = path.substr(1, path.length() - 2);
+                                }
+                                std::cout << " path " << path << std::endl;
+                                // แสดงพาธเต็มของไฟล์ที่กำลังบันทึก
+                                char abs_path[1024];
+                                if (path[0] != '/') {  // ถ้าไม่ใช่พาธสัมบูรณ์
+                                    char cwd[1024];
+                                    if (getcwd(cwd, sizeof(cwd)) != NULL) {
+                                        snprintf(abs_path, sizeof(abs_path), "%s/%s", cwd, path.c_str());
+                                    } else {
+                                        strncpy(abs_path, path.c_str(), sizeof(abs_path));
+                                    }
+                                } else {
+                                    strncpy(abs_path, path.c_str(), sizeof(abs_path));
+                                }
+
+                                std::cout << "กำลังบันทึกโมเดลไปที่: " << path << std::endl;
+                                std::cout << "พาธเต็ม: " << abs_path << std::endl;
+
+                                // สร้างไฟล์ .pkl จริง
+                                std::ofstream file(path.c_str(), std::ios::binary);
+                                if (file.is_open()) {
+                                    // เขียนข้อมูลโมเดลพื้นฐาน
+                                    file << "# AI Language ML Model\n";
+                                    file << "MODEL_TYPE=ML\n";
+                                    file << "CREATED_TIME=" << time(nullptr) << "\n";
+                                    file << "PARAMETERS=learning_rate:0.01,epochs:100\n";
+
+                                    // เขียนค่า weight และ bias สมมติ
+                                    file << "WEIGHTS=1.5,2.3,-0.8\n";
+                                    file << "BIAS=0.5\n";
+
+                                    file.close();
+                                    std::cout << "บันทึกโมเดลสำเร็จ" << std::endl;
+                                } else {
+                                    std::cerr << "\033[31mเกิดข้อผิดพลาด: ไม่สามารถสร้างไฟล์ " << path << "\033[0m" << std::endl;
+                                }
+                            } else {
+                                std::cout << std::endl;
                             }
                         } else {
-                            strncpy(abs_path, path.c_str(), sizeof(abs_path));
+                            interpreter.interpret(command);
                         }
-                        
-                        std::cout << "กำลังบันทึกโมเดลไปที่: " << path << std::endl;
-                        std::cout << "พาธเต็ม: " << abs_path << std::endl;
-
-                        // สร้างไฟล์ .pkl จริง
-                        std::ofstream file(path.c_str(), std::ios::binary);
-                        if (file.is_open()) {
-                            // เขียนข้อมูลโมเดลพื้นฐาน
-                            file << "# AI Language ML Model\n";
-                            file << "MODEL_TYPE=ML\n";
-                            file << "CREATED_TIME=" << time(nullptr) << "\n";
-                            file << "PARAMETERS=learning_rate:0.01,epochs:100\n";
-
-                            // เขียนค่า weight และ bias สมมติ
-                            file << "WEIGHTS=1.5,2.3,-0.8\n";
-                            file << "BIAS=0.5\n";
-
-                            file.close();
-                            std::cout << "บันทึกโมเดลสำเร็จ" << std::endl;
-                        } else {
-                            std::cerr << "\033[31mเกิดข้อผิดพลาด: ไม่สามารถสร้างไฟล์ " << path << "\033[0m" << std::endl;
-                        }
-                    } else {
-                        std::cout << std::endl;
                     }
-                } else {
-                    interpreter.interpret(line);
+
+                    // รีเซ็ตคำสั่งหลังจากประมวลผลแล้ว
+                    command = "";
+                } catch (const std::exception& e) {
+                    std::cerr << "เกิดข้อผิดพลาด: " << e.what() << std::endl;
+                    command = "";
                 }
+            }
         }
     }
 
@@ -260,7 +339,7 @@ int main(int argc, char* argv[]) {
     if (arg == "-i" || arg == "--interactive") {
         runInteractiveMode();
         return 0;
-    } 
+    }
 
     // ถ้าไม่ใช่โหมดโต้ตอบ ให้พยายามเปิดไฟล์
     runFile(arg);
