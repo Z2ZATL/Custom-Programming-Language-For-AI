@@ -9,6 +9,8 @@
 #include <string>
 #include <sstream>
 #include <ctime>
+#include <unistd.h>  // สำหรับ getcwd
+#include <cstring>   // สำหรับ strncpy
 
 void showUsage(const std::string& programName) {
     std::cout << "วิธีใช้งาน: " << programName << " [ไฟล์.ai | -i]" << std::endl;
@@ -169,7 +171,21 @@ void runInteractiveMode() {
                             path = path.substr(1, path.length() - 2);
                         }
                         std::cout << " path " << path << std::endl;
+                        // แสดงพาธเต็มของไฟล์ที่กำลังบันทึก
+                        char abs_path[1024];
+                        if (path[0] != '/') {  // ถ้าไม่ใช่พาธสัมบูรณ์
+                            char cwd[1024];
+                            if (getcwd(cwd, sizeof(cwd)) != NULL) {
+                                snprintf(abs_path, sizeof(abs_path), "%s/%s", cwd, path.c_str());
+                            } else {
+                                strncpy(abs_path, path.c_str(), sizeof(abs_path));
+                            }
+                        } else {
+                            strncpy(abs_path, path.c_str(), sizeof(abs_path));
+                        }
+                        
                         std::cout << "กำลังบันทึกโมเดลไปที่: " << path << std::endl;
+                        std::cout << "พาธเต็ม: " << abs_path << std::endl;
 
                         // สร้างไฟล์ .pkl จริง
                         std::ofstream file(path.c_str(), std::ios::binary);
