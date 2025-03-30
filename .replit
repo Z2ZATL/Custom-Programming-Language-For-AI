@@ -17,7 +17,7 @@ mode = "sequential"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd build"
+args = "cd ai_language/build"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
