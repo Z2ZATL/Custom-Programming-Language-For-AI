@@ -169,7 +169,19 @@ void runInteractiveMode() {
                         }
                         std::cout << " path " << path << std::endl;
                         std::cout << "กำลังบันทึกโมเดลไปที่: " << path << std::endl;
-                        std::cout << "บันทึกโมเดลสำเร็จ" << std::endl;
+                        
+                        // สร้างไฟล์เปล่าเพื่อทดสอบ
+                        std::ofstream file(path);
+                        if (file.is_open()) {
+                            file << "# AI Language Model Saved File\n";
+                            file << "MODEL_TYPE=ML\n";
+                            file << "CREATED_TIME=" << time(nullptr) << "\n";
+                            file << "PARAMETERS=learning_rate:0.01,epochs:100\n";
+                            file.close();
+                            std::cout << "บันทึกโมเดลสำเร็จ" << std::endl;
+                        } else {
+                            std::cerr << "\033[31mไม่สามารถบันทึกไฟล์: " << path << "\033[0m" << std::endl;
+                        }
                     } else {
                         std::cout << std::endl;
                     }
