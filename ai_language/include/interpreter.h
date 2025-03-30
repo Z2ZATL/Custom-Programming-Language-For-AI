@@ -172,15 +172,3 @@ private:
 } // namespace ai_language
 
 #endif // AI_LANGUAGE_INTERPRETER_H
-#ifndef AI_LANGUAGE_INTERPRETER_H
-#define AI_LANGUAGE_INTERPRETER_H
-
-#include "parser.h"
-#include <functional>
-
-namespace ai_language {
-    // placeholder
-    // Full implementation will be added later
-} // namespace ai_language
-
-#endif // AI_LANGUAGE_INTERPRETER_H

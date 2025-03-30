@@ -49,32 +49,3 @@ add_custom_target(run
     DEPENDS ai_lang
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
-cmake_minimum_required(VERSION 3.10)
-project(ai_language)
-
-# Set C++ standard
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# Include directories
-include_directories(include)
-
-# Library source files
-set(LIB_SOURCES
-    src/lexer.cpp
-    src/parser.cpp
-    src/interpreter.cpp
-)
-
-# Create library
-add_library(ai_language_lib STATIC ${LIB_SOURCES})
-
-# Main executable
-add_executable(ai_lang ai_lang.cpp)
-target_link_libraries(ai_lang ai_language_lib)
-
-# Enable testing
-if(BUILD_TESTS)
-    enable_testing()
-    add_subdirectory(tests)
-endif()

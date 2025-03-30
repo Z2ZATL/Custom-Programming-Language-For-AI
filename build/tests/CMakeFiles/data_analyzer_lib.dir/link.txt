@@ -1,2 +1,0 @@
-/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/ar qc ../lib/libdata_analyzer_lib.a CMakeFiles/data_analyzer_lib.dir/__/src/DataManager.cpp.o CMakeFiles/data_analyzer_lib.dir/__/src/DataProcessor.cpp.o CMakeFiles/data_analyzer_lib.dir/__/src/ErrorHandler.cpp.o CMakeFiles/data_analyzer_lib.dir/__/src/Logger.cpp.o CMakeFiles/data_analyzer_lib.dir/__/src/Model.cpp.o CMakeFiles/data_analyzer_lib.dir/__/src/Utils.cpp.o
-/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/ranlib ../lib/libdata_analyzer_lib.a

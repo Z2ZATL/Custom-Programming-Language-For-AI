@@ -1,2 +1,0 @@
-/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/ar qc ../../../lib/libgtest.a "CMakeFiles/gtest.dir/src/gtest-all.cc.o"
-/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/ranlib ../../../lib/libgtest.a
