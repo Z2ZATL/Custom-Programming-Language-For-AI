@@ -346,7 +346,7 @@ void Parser::resetError() {
 }
 
 bool Parser::isAtEnd() const {
-    return peek().type == TokenType::END_OF_FILE;
+    return peek().type == TokenType::END;
 }
 
 Token Parser::peek() const {
@@ -386,7 +386,8 @@ bool Parser::match(const std::vector<TokenType>& types) {
 }
 
 void Parser::consumeNewlines() {
-    while (match(TokenType::NEWLINE)) {
+    // Using line breaks instead of NEWLINE token
+    while (peek().type == TokenType::END || peek().type == TokenType::COMMENT) {
         // เพียงแค่ข้ามไป
     }
 }
@@ -415,7 +416,7 @@ std::shared_ptr<Statement> Parser::statement() {
         return trainStatement();
     } else if (match(TokenType::EVALUATE)) {
         return evaluateStatement();
-    } else if (match(TokenType::PREDICT)) {
+    } else if (match(TokenType::EVALUATE)) { // Using EVALUATE instead of PREDICT
         return predictStatement();
     } else if (match(TokenType::SAVE)) {
         return saveStatement();
@@ -434,7 +435,9 @@ std::shared_ptr<Statement> Parser::statement() {
 std::shared_ptr<Statement> Parser::startStatement() {
     // start create <ประเภท>
     if (match(TokenType::IDENTIFIER) && previous().value == "create") {
-        if (match({TokenType::ML, TokenType::DL, TokenType::RL})) {
+        // ML, DL, RL would be identifiers in our lexer
+        Token modelType = consume(TokenType::IDENTIFIER, "คาดหวังประเภทโมเดล (ML, DL, RL)");
+        std::string modelTypeStr = modelType.value;
             return std::make_shared<StartStatement>(previous().value);
         } else if (match(TokenType::IDENTIFIER)) {
             return std::make_shared<StartStatement>(previous().value);
@@ -447,7 +450,7 @@ std::shared_ptr<Statement> Parser::startStatement() {
 
 std::shared_ptr<Statement> Parser::loadStatement() {
     // load dataset "<ที่อยู่ไฟล์>" type "<ประเภทไฟล์>"
-    if (match(TokenType::DATASET)) {
+    if (match(TokenType::DATA)) {
         std::string filename;
         std::string fileType;
         
@@ -673,7 +676,7 @@ void Parser::error(const std::string& message) {
 void Parser::error(const Token& token, const std::string& message) {
     std::stringstream ss;
     
-    if (token.type == TokenType::END_OF_FILE) {
+    if (token.type == TokenType::END) {
         ss << "บรรทัดที่ " << token.line << ": ข้อผิดพลาดที่จุดสิ้นสุดโค้ด: " << message;
     } else {
         ss << "บรรทัดที่ " << token.line << " ตำแหน่ง " << token.column << ": ";
@@ -691,7 +694,7 @@ void Parser::synchronize() {
     advance();
     
     while (!isAtEnd()) {
-        if (previous().type == TokenType::NEWLINE) return;
+        if (previous().type == TokenType::END || previous().type == TokenType::COMMENT) return;
         
         switch (peek().type) {
             case TokenType::START:
@@ -700,7 +703,7 @@ void Parser::synchronize() {
             case TokenType::SPLIT:
             case TokenType::TRAIN:
             case TokenType::EVALUATE:
-            case TokenType::PREDICT:
+            case TokenType::EVALUATE: // Using EVALUATE instead of PREDICT
             case TokenType::SAVE:
             case TokenType::SHOW:
             case TokenType::VISUALIZE:
