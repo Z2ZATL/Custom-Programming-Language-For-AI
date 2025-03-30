@@ -1,10 +1,11 @@
 # ตัวอย่างสคริปต์ AI Language สำหรับ Machine Learning
 # โปรดใช้คำสั่ง: ./ai_lang examples/ml_example.ai
 
-# เริ่มต้นโปรเจกต์ประเภท Machine Learning
+# *** หมายเหตุสำคัญ: ทุกโปรเจกต์ต้องเริ่มต้นด้วยคำสั่ง start ก่อนเสมอ ***
+# เริ่มต้นโปรเจกต์ประเภท Machine Learning - ต้องรันคำสั่งนี้ก่อนเสมอ
 start create ML
 
-# โหลดข้อมูลจากไฟล์ CSV
+# โหลดข้อมูลจากไฟล์ CSV - ทำได้เฉพาะหลังจาก start เท่านั้น
 load dataset "data.csv" type "csv"
 
 # ทำความสะอาดข้อมูล

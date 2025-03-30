@@ -89,6 +89,12 @@ void runInteractiveMode() {
             size_t filenameEnd = line.find("\"", filenameStart + 1);
 
             if (filenameStart != std::string::npos && filenameEnd != std::string::npos) {
+                // ตรวจสอบว่าได้เริ่มต้นโปรเจกต์หรือยัง
+                if (!hasStarted) {
+                    std::cerr << "\033[31mข้อผิดพลาด: ต้องใช้คำสั่ง 'start create ML' ก่อนที่จะโหลดข้อมูล\033[0m" << std::endl;
+                    continue;
+                }
+                
                 filename = line.substr(filenameStart + 1, filenameEnd - filenameStart - 1);
 
                 // ตรวจหา type
