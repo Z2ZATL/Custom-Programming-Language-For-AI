@@ -17,7 +17,15 @@ mode = "sequential"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd ai_language/build"
+args = "cd ai_language "
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "mkdir -p build"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd build"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
@@ -29,4 +37,4 @@ args = "make"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "./ai_lang"
+args = "./ai_lang < ../test_syntax.txt"
