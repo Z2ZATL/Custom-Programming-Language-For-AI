@@ -1,33 +1,20 @@
-# ตัวอย่างสคริปต์ AI Language สำหรับ Machine Learning
-# โปรดใช้คำสั่ง: ./ai_lang examples/ml_example.ai
+# ตัวอย่างโค้ดภาษา AI สำหรับ Machine Learning
+# ตามลำดับขั้นตอนที่กำหนดอย่างเคร่งครัด
 
-# *** หมายเหตุสำคัญ: ทุกโปรเจกต์ต้องเริ่มต้นด้วยคำสั่ง start ก่อนเสมอ ***
-# เริ่มต้นโปรเจกต์ประเภท Machine Learning - ต้องรันคำสั่งนี้ก่อนเสมอ
-start create ML
-
-# โหลดข้อมูลจากไฟล์ CSV - ทำได้เฉพาะหลังจาก start เท่านั้น
-load dataset "data.csv" type "csv"
-
-# ทำความสะอาดข้อมูล
-clean
-
-# แบ่งข้อมูลเป็นชุดฝึกและชุดทดสอบ
-split
-
-# ฝึกโมเดลด้วย 100 epochs
-train epochs 100
-
-# ประเมินผลโมเดล
-evaluate
-
-# แสดงเมทริกซ์ความแม่นยำ
-show metric "accuracy"
-
-# บันทึกโมเดลลงไฟล์
-save path "ml_model.pkl"
+# เริ่มต้นด้วยคำสั่ง start
 start
+
+# กำหนดประเภทของโปรเจกต์
 create ML
+
+# โหลดข้อมูลจากไฟล์
 load dataset "data.csv"
+
+# สร้างโมเดล
 create model LinearRegression
+
+# เทรนโมเดล
 train model
+
+# แสดงความแม่นยำ
 show accuracy

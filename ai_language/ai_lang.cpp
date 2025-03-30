@@ -53,6 +53,9 @@ void runInteractiveMode() {
     bool hasSplitData = false;
     bool hasTrainedModel = false;
     bool hasEvaluatedModel = false;
+    bool hasCreatedProject = false;
+    bool hasCreatedModel = false;
+    bool hasShowedAccuracy = false;
 
 
     while (true) {
@@ -81,6 +84,8 @@ void runInteractiveMode() {
                 } else if (type == "RL") {
                     std::cout << "เริ่มต้นโปรเจกต์ Reinforcement Learning" << std::endl;
                 }
+                hasStarted = true;
+                hasCreatedProject = true;
             } else {
                 std::cerr << "\033[31mรูปแบบคำสั่งไม่ถูกต้อง ตัวอย่าง: start create ML หรือ start create DL หรือ start create RL\033[0m" << std::endl;
             }
@@ -127,195 +132,70 @@ void runInteractiveMode() {
             } else {
                 std::cerr << "\033[31mรูปแบบคำสั่งไม่ถูกต้อง - ไม่พบชื่อไฟล์ ตัวอย่าง: load dataset \"data.csv\" type \"csv\"\033[0m" << std::endl;
             }
-        } else {
-            // ประมวลผลคำสั่ง
-            if (line == "exit") {
-                std::cout << "ออกจากโปรแกรม" << std::endl;
-                break;
+        } else if (line.find("create model") == 0) {
+            if (!hasStarted || !hasCreatedProject || !hasLoadedData) {
+                std::cerr << "\033[31mข้อผิดพลาด: ต้องเริ่มต้นด้วย 'start', 'create [type]' และ 'load dataset' ก่อน\033[0m" << std::endl;
+                continue;
+            }
+
+            if (hasCreatedModel) {
+                std::cerr << "\033[31mข้อผิดพลาด: คำสั่ง 'create model' ถูกใช้ไปแล้ว ลำดับถัดไปต้องเป็น 'train model'\033[0m" << std::endl;
+                continue;
+            }
+
+            // แยกชื่อโมเดล
+            std::istringstream iss(line);
+            std::string cmd1, cmd2, model_name;
+            iss >> cmd1 >> cmd2 >> model_name;
+
+            if (!model_name.empty()) {
+                std::cout << "สร้างโมเดล: " << model_name << std::endl;
+                hasCreatedModel = true;
             } else {
-                if (!command.empty()) {
-                    command += "\n";
-                }
-                command += line;
+                std::cerr << "\033[31mข้อผิดพลาด: ต้องระบุชนิดของโมเดล เช่น 'create model LinearRegression'\033[0m" << std::endl;
+            }
+        } else if (line.find("train model") == 0) {
+            if (!hasStarted || !hasCreatedProject || !hasLoadedData || !hasCreatedModel) {
+                std::cerr << "\033[31mข้อผิดพลาด: ต้องใช้คำสั่ง 'start', 'create [type]', 'load dataset' และ 'create model' ก่อน\033[0m" << std::endl;
+                continue;
+            }
 
-                // ตรวจสอบว่ามีการเปิดวงเล็บแล้วไม่ปิดหรือไม่
-                // ตัดส่วนการตรวจสอบความสมบูรณ์ของคำสั่งออก เนื่องจากไม่มีเมธอด isCompleteStatement
+            if (hasTrainedModel) {
+                std::cerr << "\033[31mข้อผิดพลาด: คำสั่ง 'train model' ถูกใช้ไปแล้ว ลำดับถัดไปต้องเป็น 'show accuracy'\033[0m" << std::endl;
+                continue;
+            }
 
-                try {
-                    // ตรวจสอบลำดับขั้นตอน
-                    bool valid = true;
-                    std::string lowerCmd = command;
-                    std::transform(lowerCmd.begin(), lowerCmd.end(), lowerCmd.begin(), ::tolower);
+            std::cout << "กำลังเทรนโมเดล..." << std::endl;
+            std::cout << "เทรนโมเดลเสร็จสิ้น ความแม่นยำ: 92%" << std::endl;
+            hasTrainedModel = true;
+        } else if (line.find("show accuracy") == 0) {
+            if (!hasStarted || !hasCreatedProject || !hasLoadedData || !hasCreatedModel || !hasTrainedModel) {
+                std::cerr << "\033[31mข้อผิดพลาด: ต้องใช้คำสั่ง 'start', 'create [type]', 'load dataset', 'create model' และ 'train model' ก่อน\033[0m" << std::endl;
+                continue;
+            }
 
-                    if (lowerCmd.find("start") != std::string::npos) {
-                        hasStarted = true;
-                    } else if (lowerCmd.find("load") != std::string::npos) {
-                        if (!hasStarted) {
-                            std::cerr << "\033[33mคำเตือน: คุณควรเริ่มด้วยคำสั่ง 'start create ML' ก่อน\033[0m" << std::endl;
-                            valid = false;
-                        }
-                    } else if (lowerCmd.find("clean") != std::string::npos) {
-                        if (!hasLoadedData) {
-                            std::cerr << "\033[33mคำเตือน: คุณควรโหลดข้อมูลด้วยคำสั่ง 'load dataset' ก่อน\033[0m" << std::endl;
-                            valid = false;
-                        }
-                        hasCleanedData = true;
-                    } else if (lowerCmd.find("split") != std::string::npos) {
-                        if (!hasCleanedData) {
-                            std::cerr << "\033[33mคำเตือน: คุณควรทำความสะอาดข้อมูลด้วยคำสั่ง 'clean' ก่อน\033[0m" << std::endl;
-                            valid = false;
-                        }
-                        hasSplitData = true;
-                    } else if (lowerCmd.find("train") != std::string::npos) {
-                        if (!hasSplitData) {
-                            std::cerr << "\033[33mคำเตือน: คุณควรแบ่งข้อมูลด้วยคำสั่ง 'split' ก่อน\033[0m" << std::endl;
-                            valid = false;
-                        }
-                        hasTrainedModel = true;
-                    } else if (lowerCmd.find("evaluate") != std::string::npos) {
-                        if (!hasTrainedModel) {
-                            std::cerr << "\033[33mคำเตือน: คุณควรฝึกโมเดลด้วยคำสั่ง 'train' ก่อน\033[0m" << std::endl;
-                            valid = false;
-                        }
-                        hasEvaluatedModel = true;
-                    } else if (lowerCmd.find("save") != std::string::npos) {
-                        if (!hasTrainedModel) {
-                            std::cerr << "\033[33mคำเตือน: คุณควรฝึกโมเดลด้วยคำสั่ง 'train' ก่อนที่จะบันทึก\033[0m" << std::endl;
-                            valid = false;
-                        }
-                    } else if (lowerCmd.find("show") != std::string::npos) {
-                        if (!hasEvaluatedModel) {
-                            std::cerr << "\033[33mคำเตือน: คุณควรประเมินโมเดลด้วยคำสั่ง 'evaluate' ก่อน\033[0m" << std::endl;
-                            valid = false;
-                        }
-                    }
-
-                    // ประมวลผลคำสั่งถ้าลำดับขั้นตอนถูกต้อง
-                    if (valid) {
-                        if (command == "clean") {
-                            std::cout << "> clean" << std::endl;
-                            std::cout << "กำลังทำความสะอาดข้อมูล..." << std::endl;
-                            std::cout << "ลบค่า null และแทนที่ด้วยค่าเฉลี่ย" << std::endl;
-                            std::cout << "กำจัดค่า outlier" << std::endl;
-                            std::cout << "ทำความสะอาดข้อมูลเสร็จสิ้น" << std::endl;
-                        } else if (command == "split") {
-                            std::cout << "> split" << std::endl;
-                            std::cout << "กำลังแบ่งข้อมูลเป็นชุดฝึกและชุดทดสอบ..." << std::endl;
-                            std::cout << "แบ่งข้อมูล 80% สำหรับชุดฝึก และ 20% สำหรับชุดทดสอบ" << std::endl;
-                        } else if (command.substr(0, 5) == "train") {
-                            std::cout << "> train";
-                            std::string epochsStr = "100"; // ค่าเริ่มต้น
-                            if (command.substr(0, 12) == "train epochs") {
-                                epochsStr = command.substr(13);
-                                std::cout << " epochs " << epochsStr;
-                            }
-                            std::cout << std::endl;
-                            std::cout << "กำลังฝึกโมเดล Machine Learning..." << std::endl;
-                            std::cout << "จำนวน epochs: " << epochsStr << std::endl;
-                            std::cout << "โมเดลฝึกเสร็จสิ้น" << std::endl;
-                        } else if (command == "evaluate") {
-                            std::cout << "> evaluate" << std::endl;
-                            std::cout << "กำลังประเมินผลโมเดล..." << std::endl;
-                            std::cout << "ความแม่นยำ (accuracy): 0.92" << std::endl;
-                            std::cout << "ความแม่นยำเชิงลึก (precision): 0.89" << std::endl;
-                            std::cout << "ความไว (recall): 0.94" << std::endl;
-                        } else if (command.substr(0, 4) == "show") {
-                            std::cout << "> show";
-                            if (command.substr(0, 11) == "show metric") {
-                                std::string metric = command.substr(12);
-                                if (metric.front() == '"' && metric.back() == '"') {
-                                    metric = metric.substr(1, metric.length() - 2);
-                                }
-                                std::cout << " metric " << metric << std::endl;
-                                std::cout << "กำลังแสดงเมตริก: " << metric << std::endl;
-
-                                if (metric == "accuracy") {
-                                    std::cout << "ความแม่นยำ (accuracy): 0.92" << std::endl;
-                                } else if (metric == "precision") {
-                                    std::cout << "ความแม่นยำเชิงลึก (precision): 0.89" << std::endl;
-                                } else if (metric == "recall") {
-                                    std::cout << "ความไว (recall): 0.94" << std::endl;
-                                } else if (metric == "f1") {
-                                    std::cout << "F1 score: 0.91" << std::endl;
-                                } else {
-                                    std::cout << "ไม่พบเมตริก: " << metric << std::endl;
-                                }
-                            } else {
-                                std::cout << std::endl;
-                            }
-                        } else if (command.substr(0, 4) == "save") {
-                            std::cout << "> save";
-                            if (command.substr(0, 9) == "save path") {
-                                std::string path = command.substr(10);
-                                if (path.front() == '"' && path.back() == '"') {
-                                    path = path.substr(1, path.length() - 2);
-                                }
-                                std::cout << " path " << path << std::endl;
-                                // แสดงพาธเต็มของไฟล์ที่กำลังบันทึก
-                                char abs_path[1024];
-                                if (path[0] != '/') {  // ถ้าไม่ใช่พาธสัมบูรณ์
-                                    char cwd[1024];
-                                    if (getcwd(cwd, sizeof(cwd)) != NULL) {
-                                        // ตรวจสอบความยาวของ cwd และ path เพื่อป้องกัน buffer overflow
-                                        size_t cwd_len = strlen(cwd);
-                                        size_t path_len = path.length();
-
-                                        // ต้องการพื้นที่สำหรับ cwd + '/' + path + '\0'
-                                        if (cwd_len + 1 + path_len + 1 <= sizeof(abs_path)) {
-                                            // สร้างพาธที่ปลอดภัย
-                                            strcpy(abs_path, cwd);
-                                            abs_path[cwd_len] = '/';
-                                            strcpy(abs_path + cwd_len + 1, path.c_str());
-                                        } else {
-                                            // กรณีที่พาธยาวเกินไป ใช้เพียงพาธสัมพัทธ์
-                                            strncpy(abs_path, path.c_str(), sizeof(abs_path) - 1);
-                                            abs_path[sizeof(abs_path) - 1] = '\0';
-                                            std::cerr << "\033[33mคำเตือน: พาธไฟล์ยาวเกินไป ใช้พาธสัมพัทธ์แทน\033[0m" << std::endl;
-                                        }
-                                    } else {
-                                        strncpy(abs_path, path.c_str(), sizeof(abs_path));
-                                    }
-                                } else {
-                                    strncpy(abs_path, path.c_str(), sizeof(abs_path));
-                                }
-
-                                std::cout << "กำลังบันทึกโมเดลไปที่: " << path << std::endl;
-                                std::cout << "พาธเต็ม: " << abs_path << std::endl;
-
-                                // สร้างไฟล์ .pkl จริง
-                                std::ofstream file(path.c_str(), std::ios::binary);
-                                if (file.is_open()) {
-                                    // เขียนข้อมูลโมเดลพื้นฐาน
-                                    file << "# AI Language ML Model\n";
-                                    file << "MODEL_TYPE=ML\n";
-                                    file << "CREATED_TIME=" << time(nullptr) << "\n";
-                                    file << "PARAMETERS=learning_rate:0.01,epochs:100\n";
-
-                                    // เขียนค่า weight และ bias สมมติ
-                                    file << "WEIGHTS=1.5,2.3,-0.8\n";
-                                    file << "BIAS=0.5\n";
-
-                                    file.close();
-                                    std::cout << "บันทึกโมเดลสำเร็จ" << std::endl;
-                                } else {
-                                    std::cerr << "\033[31mเกิดข้อผิดพลาด: ไม่สามารถสร้างไฟล์ " << path << "\033[0m" << std::endl;
-                                }
-                            } else {
-                                std::cout << std::endl;
-                            }
-                        } else {
-                            interpreter.interpret(command);
-                        }
-                    } else {
-                        // คำสั่งที่ไม่รู้จัก
-                        std::cerr << "\033[31mError: Unknown command '" << command << "'\033[0m" << std::endl;
-                        std::cerr << "\033[31mExpected commands in order: start, create [type], load dataset, create model, train model, show accuracy\033[0m" << std::endl;
-                    }
-
-                    // ไม่ต้องสะสมคำสั่ง
-                } catch (const std::exception& e) {
-                    std::cerr << "\033[31mเกิดข้อผิดพลาด: " << e.what() << "\033[0m" << std::endl;
-                }
+            std::cout << "ความแม่นยำของโมเดล: 92%" << std::endl;
+            std::cout << "ค่า precision: 0.89" << std::endl;
+            std::cout << "ค่า recall: 0.94" << std::endl;
+            std::cout << "ค่า F1 score: 0.91" << std::endl;
+            hasShowedAccuracy = true;
+        } else {
+            // ตรวจสอบสถานะการทำงานปัจจุบัน และให้คำแนะนำ
+            if (!hasStarted) {
+                std::cerr << "\033[31mบรรทัดที่ 1: ข้อผิดพลาดที่จุดสิ้นสุดโค้ด: คาดหวัง 'start'\033[0m" << std::endl;
+            } else if (!hasCreatedProject) {
+                std::cerr << "\033[31mบรรทัดที่ 2: ข้อผิดพลาดที่จุดสิ้นสุดโค้ด: คาดหวัง 'create [type]' โดย type เป็น ML, DL หรือ RL\033[0m" << std::endl;
+            } else if (!hasLoadedData) {
+                std::cerr << "\033[31mข้อผิดพลาด: คาดหวัง 'load dataset \"<filename>\"'\033[0m" << std::endl;
+            } else if (!hasCreatedModel) {
+                std::cerr << "\033[31mข้อผิดพลาด: คาดหวัง 'create model <model_name>'\033[0m" << std::endl;
+            } else if (!hasTrainedModel) {
+                std::cerr << "\033[31mข้อผิดพลาด: คาดหวัง 'train model'\033[0m" << std::endl;
+            } else if (!hasShowedAccuracy) {
+                std::cerr << "\033[31mข้อผิดพลาด: คาดหวัง 'show accuracy'\033[0m" << std::endl;
+            } else {
+                std::cerr << "\033[31mคำสั่งไม่ถูกต้อง: '" << line << "'\033[0m" << std::endl;
+                std::cerr << "\033[31mทุกขั้นตอนถูกทำเสร็จสิ้นแล้ว, คุณสามารถใช้คำสั่ง 'exit' เพื่อออกจากโปรแกรม\033[0m" << std::endl;
             }
         }
     }
@@ -430,12 +310,8 @@ int main(int argc, char* argv[]) {
         // ทดสอบคำสั่งพื้นฐาน
         runDemo("start create ML");
         runDemo("load dataset \"data.csv\"");
-        runDemo("clean data");
-        runDemo("split data into train and test with ratio 0.8");
         runDemo("create model LinearRegression");
-        runDemo("create model DecisionTree with max_depth 5");
-        runDemo("train model with epochs 100 batch_size 32 learning_rate 0.001");
-        runDemo("evaluate model on test_data");
+        runDemo("train model");
         runDemo("show accuracy");
         runDemo("save model to \"trained_model.h5\"");
 
