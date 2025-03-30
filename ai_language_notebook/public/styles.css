@@ -23,4 +23,21 @@
 .action-buttons {
   display: flex;
   gap: 10px;
+  padding: 8px;
+  background: #2D3748;
+  border-bottom: 1px solid #4A5568;
+}
+
+.button {
+  padding: 4px 12px;
+  border-radius: 15px;
+  border: 1px solid #4A5568;
+  background: transparent;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.button:hover {
+  background: #4A5568;
 }
