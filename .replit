@@ -1,11 +1,11 @@
-modules = ["cpp-clang14", "nodejs-20", "bash", "nix"]
-run = "node index.js"
+modules = ["cpp-clang14", "c-clang14", "bash"]
+run = "cd ai_language && mkdir -p build && cd build && cmake .. && make && cd .. && ./ai_lang -i"
 
 [nix]
 channel = "stable-24_05"
 
 [deployment]
-run = ["sh", "-c", "node index.js"]
+run = ["sh", "-c", "cd ai_language && mkdir -p build && cd build && cmake .. && make && cd .. && ./ai_lang -i"]
 
 [workflows]
 runButton = "Build and Run C++"
