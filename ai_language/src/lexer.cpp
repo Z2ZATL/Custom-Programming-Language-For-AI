@@ -56,8 +56,22 @@ std::vector<Token> Lexer::tokenize() {
     return _tokens;
 }
 
+bool Lexer::isValidChar(char c) const {
+    // ตรวจสอบว่าเป็นตัวอักษรที่รองรับหรือไม่
+    // รองรับ ASCII และตัวอักษรพิเศษที่ใช้ในภาษาไทย
+    return (c >= 32 && c <= 126) || (static_cast<unsigned char>(c) >= 128);
+}
+
 void Lexer::scanToken() {
     char c = advance();
+
+    // ตรวจสอบตัวอักษรที่ไม่รองรับ
+    if (!isValidChar(c) && c != '\n' && c != '\t' && c != '\r' && c != ' ') {
+        std::string errorMsg = "พบตัวอักษรที่ไม่รู้จัก: '" + std::string(1, c) + "'";
+        _hasError = true;
+        _errorMsg = errorMsg;
+        return;
+    }
 
     switch (c) {
         // ข้ามช่องว่าง (whitespace)
