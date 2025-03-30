@@ -224,6 +224,7 @@ body {
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
+    white-space: nowrap;
 }
 
 .submenu-item:hover {
@@ -367,6 +368,12 @@ body {
     font-size: 14px;
     line-height: 1.5;
     border-radius: 4px;
+    width: 100%;
+}
+
+.CodeMirror-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 
 .cm-s-monokai .CodeMirror-gutters {
