@@ -335,31 +335,10 @@ body {
 
 /* Cell Styles */
 .cell {
-    border: 1px solid var(--cell-border);
-    border-radius: 4px;
     margin-bottom: 24px;
     margin-top: 24px;
     overflow: hidden;
     position: relative;
-}
-
-.add-buttons-top,
-.add-buttons-bottom,
-.notebook-header .add-buttons {
-    display: none !important;
-}
-
-.mini-button {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 3px 8px;
-    font-size: 12px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .cell-toolbar {

@@ -263,36 +263,7 @@ document.addEventListener('DOMContentLoaded', function() {
         addCodeButton.className = 'mini-button add-code-mini';
         addCodeButton.innerHTML = '+ โค้ด';
         addCodeButton.title = 'Add code cell';
-        addCodeButton.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const index = cells.indexOf(cell);
-            const position = index !== -1 ? index : cells.length;
-            
-            // Create new cell and insert at position
-            const newCell = createCell('code');
-            
-            // Move DOM element to the correct position
-            notebookContainer.insertBefore(newCell, cell);
-            
-            // Reorder cells array
-            cells.pop(); // Remove from end (where it was added by createCell)
-            cells.splice(position, 0, newCell);
-            
-            // Set as active cell
-            if (activeCell) {
-                activeCell.classList.remove('active');
-            }
-            activeCell = newCell;
-            newCell.classList.add('active');
-            newCell.editor.focus();
-        });
-        addButtonsTop.appendChild(addCodeButton);
-        
-        // Add + Text button
-        const addTextButton = document.createElement('button');
-        addTextButton.className = 'mini-button add-text-mini';
-        addTextButton.innerHTML = '+ ข้อความ';
-        addTextButton.title = 'Add text cell';
+        // Button functionality will be reimplemented
         addTextButton.addEventListener('click', (e) => {
             e.stopPropagation();
             const index = cells.indexOf(cell);
