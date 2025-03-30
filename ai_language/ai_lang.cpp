@@ -11,9 +11,9 @@
 #include <sstream>
 
 void showUsage(const std::string& programName) {
-    std::cout << "=== ทดสอบภาษาโปรแกรมสำหรับ AI ===" << std::endl << std::endl;
-    std::cout << "โปรดระบุไฟล์ .ai เพื่อรัน (เช่น " << programName << " example.ai)" << std::endl;
-    std::cout << "หรือใช้ -i เพื่อเข้าสู่โหมดโต้ตอบ (เช่น " << programName << " -i)" << std::endl;
+    std::cout << "วิธีใช้งาน: " << programName << " [ไฟล์.ai | -i]" << std::endl;
+    std::cout << "  ไฟล์.ai      ไฟล์โค้ดภาษา AI ที่ต้องการประมวลผล" << std::endl;
+    std::cout << "  -i, --interactive    เข้าสู่โหมดโต้ตอบ" << std::endl;
 }
 
 void runInteractiveMode() {
