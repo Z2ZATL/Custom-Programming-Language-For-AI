@@ -540,19 +540,19 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to initialize menu interaction
     function initializeMenu() {
         // File menu actions
-        document.getElementById('renameNotebook').addEventListener('click', function() {
+        document.getElementById('renameNotebook')?.addEventListener('click', function() {
             notebookTitle.focus();
         });
-        document.getElementById('saveNotebook').addEventListener('click', saveNotebook);
-        document.getElementById('openNotebook').addEventListener('click', loadNotebook);
+        document.getElementById('saveNotebook')?.addEventListener('click', saveNotebook);
+        document.getElementById('openNotebook')?.addEventListener('click', loadNotebook);
 
         // Download menu actions
-        document.getElementById('downloadNotebook').addEventListener('click', () => downloadNotebook('ipynb'));
-        document.getElementById('downloadPython').addEventListener('click', () => downloadNotebook('py'));
-        document.getElementById('downloadHTML').addEventListener('click', () => downloadNotebook('html'));
+        document.getElementById('downloadNotebook')?.addEventListener('click', () => downloadNotebook('ipynb'));
+        document.getElementById('downloadPython')?.addEventListener('click', () => downloadNotebook('py'));
+        document.getElementById('downloadHTML')?.addEventListener('click', () => downloadNotebook('html'));
 
         // Edit menu actions
-        document.getElementById('clearAllOutputs').addEventListener('click', () => {
+        document.getElementById('clearAllOutputs')?.addEventListener('click', () => {
             cells.forEach(cell => {
                 if (cell.type === 'code' && cell.outputElement) {
                     cell.outputElement.textContent = '';
@@ -563,7 +563,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // View menu actions
-        document.getElementById('toggleOutput').addEventListener('click', () => {
+        document.getElementById('toggleOutput')?.addEventListener('click', () => {
             const allHidden = cells.every(cell => 
                 cell.type !== 'code' || !cell.outputElement || cell.outputElement.style.display === 'none');
 
@@ -577,8 +577,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // Runtime menu actions
-        document.getElementById('runAllCells').addEventListener('click', runAllCells);
-        document.getElementById('runFocusedCell').addEventListener('click', () => {
+        document.getElementById('runAllCells')?.addEventListener('click', runAllCells);
+        document.getElementById('runFocusedCell')?.addEventListener('click', () => {
             if (activeCell) {
                 runCell(activeCell);
             }
@@ -603,7 +603,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.querySelectorAll('.panel-section').forEach(panel => {
                     panel.classList.remove('active');
                 });
-                document.getElementById(`${panelId}-panel`).classList.add('active');
+                document.getElementById(`${panelId}-panel`)?.classList.add('active');
 
                 console.log(`Switching to view: ${panelId}`);
             });
@@ -640,72 +640,85 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Add cell buttons
-    addCodeCellButton.addEventListener('click', () => {
-        const index = activeCell ? cells.indexOf(activeCell) : cells.length - 1;
-        const position = index !== -1 ? index + 1 : cells.length;
+    if (addCodeCellButton) {
+        addCodeCellButton.addEventListener('click', () => {
+            const index = activeCell ? cells.indexOf(activeCell) : cells.length - 1;
+            const position = index !== -1 ? index + 1 : cells.length;
 
-        // Create new cell and insert at position
-        const newCell = createCell('code');
+            // Create new cell and insert at position
+            const newCell = createCell('code');
 
-        // Move DOM element to the correct position
-        if (position < cells.length - 1) {
-            notebookContainer.insertBefore(newCell, cells[position + 1]);
+            // Move DOM element to the correct position
+            if (position < cells.length - 1) {
+                notebookContainer.insertBefore(newCell, cells[position + 1]);
 
-            // Reorder cells array
-            cells.pop(); // Remove from end (where it was added by createCell)
-            cells.splice(position, 0, newCell);
-        }
+                // Reorder cells array
+                cells.pop(); // Remove from end (where it was added by createCell)
+                cells.splice(position, 0, newCell);
+            }
 
-        // Set as active cell
-        if (activeCell) {
-            activeCell.classList.remove('active');
-        }
-        activeCell = newCell;
-        newCell.classList.add('active');
-        newCell.editor.focus();
-    });
+            // Set as active cell
+            if (activeCell) {
+                activeCell.classList.remove('active');
+            }
+            activeCell = newCell;
+            newCell.classList.add('active');
+            newCell.editor.focus();
+        });
+    }
 
-    addTextCellButton.addEventListener('click', () => {
-        const index = activeCell ? cells.indexOf(activeCell) : cells.length - 1;
-        const position = index !== -1 ? index + 1 : cells.length;
+    if (addTextCellButton) {
+        addTextCellButton.addEventListener('click', () => {
+            const index = activeCell ? cells.indexOf(activeCell) : cells.length - 1;
+            const position = index !== -1 ? index + 1 : cells.length;
 
-        // Create new cell and insert at position
-        const newCell = createCell('markdown');
+            // Create new cell and insert at position
+            const newCell = createCell('markdown');
 
-        // Move DOM element to the correct position
-        if (position < cells.length - 1) {
-            notebookContainer.insertBefore(newCell, cells[position + 1]);
+            // Move DOM element to the correct position
+            if (position < cells.length - 1) {
+                notebookContainer.insertBefore(newCell, cells[position + 1]);
 
-            // Reorder cells array
-            cells.pop(); // Remove from end (where it was added by createCell)
-            cells.splice(position, 0, newCell);
-        }
+                // Reorder cells array
+                cells.pop(); // Remove from end (where it was added by createCell)
+                cells.splice(position, 0, newCell);
+            }
 
-        // Set as active cell
-        if (activeCell) {
-            activeCell.classList.remove('active');
-        }
-        activeCell = newCell;
-        newCell.classList.add('active');
-        newCell.editor.focus();
-    });
+            // Set as active cell
+            if (activeCell) {
+                activeCell.classList.remove('active');
+            }
+            activeCell = newCell;
+            newCell.classList.add('active');
+            newCell.editor.focus();
+        });
+    }
 
     // Run buttons
-    runCellButton.addEventListener('click', () => {
-        if (activeCell) {
-            runCell(activeCell);
-        } else {
-            showNotification('ไม่มีเซลล์ที่เลือก', 'warning');
-        }
-    });
+    if (runCellButton) {
+        runCellButton.addEventListener('click', () => {
+            if (activeCell) {
+                runCell(activeCell);
+            } else {
+                showNotification('ไม่มีเซลล์ที่เลือก', 'warning');
+            }
+        });
+    }
 
-    runAllButton.addEventListener('click', runAllCells);
+    if (runAllButton) {
+        runAllButton.addEventListener('click', runAllCells);
+    }
+
 
     // Save button
-    saveNotebookButton.addEventListener('click', saveNotebook);
+    if (saveNotebookButton) {
+        saveNotebookButton.addEventListener('click', saveNotebook);
+    }
 
     // Close notification button
-    closeNotificationButton.addEventListener('click', hideNotification);
+    if (closeNotificationButton) {
+        closeNotificationButton.addEventListener('click', hideNotification);
+    }
 
     // Window click handler for modals
     window.addEventListener('click', (event) => {
