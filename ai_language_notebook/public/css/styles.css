@@ -343,38 +343,15 @@ body {
     position: relative;
 }
 
-.add-buttons-top {
-    display: flex;
-    gap: 4px;
-    opacity: 0;
-    transition: opacity 0.2s;
-    z-index: 10;
-    position: fixed;
-    right: 10px;
-    top: 0;
+.add-buttons-top,
+.add-buttons-bottom {
+    display: none;
 }
 
 .notebook-header .add-buttons {
     display: flex;
     gap: 8px;
     margin-bottom: 20px;
-}
-
-.add-buttons-bottom {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: -20px;
-    display: flex;
-    gap: 4px;
-    opacity: 0;
-    transition: opacity 0.2s;
-    z-index: 10;
-}
-
-.cell:hover .add-buttons-top,
-.cell:hover .add-buttons-bottom {
-    opacity: 1;
 }
 
 .mini-button {
