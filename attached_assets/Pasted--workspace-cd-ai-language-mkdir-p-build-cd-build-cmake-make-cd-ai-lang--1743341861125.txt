@@ -1,0 +1,69 @@
+~/workspace$ cd ai_language && mkdir -p build && cd build && cmake .. && make && cd .. && ./ai_lang -i
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/runner/workspace/ai_language/build
+[ 16%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreter.cpp.o
+In file included from /home/runner/workspace/ai_language/src/interpreter.cpp:6:
+/home/runner/workspace/ai_language/src/../include/interpreter.h:48:24: error: expected identifier before ‘false’
+   48 |           modelTrained(false), modelEvaluated(false), modelSaved(false) {}
+      |                        ^~~~~
+/home/runner/workspace/ai_language/src/../include/interpreter.h:48:24: error: expected ‘,’ or ‘...’ before ‘false’
+/home/runner/workspace/ai_language/src/../include/interpreter.h:48:11: error: ISO C++ forbids declaration of ‘modelTrained’ with no type [-fpermissive]
+   48 |           modelTrained(false), modelEvaluated(false), modelSaved(false) {}
+      |           ^~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/../include/interpreter.h:48:30: error: ‘int ai_language::Environment::modelTrained(int)’ conflicts with a previous declaration
+   48 |           modelTrained(false), modelEvaluated(false), modelSaved(false) {}
+      |                              ^
+/home/runner/workspace/ai_language/src/../include/interpreter.h:29:10: note: previous declaration ‘bool ai_language::Environment::modelTrained’
+   29 |     bool modelTrained;  ///< ตัวแปรบอกว่าได้ฝึกโมเดลแล้วหรือไม่
+      |          ^~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/../include/interpreter.h:48:47: error: expected identifier before ‘false’
+   48 |           modelTrained(false), modelEvaluated(false), modelSaved(false) {}
+      |                                               ^~~~~
+/home/runner/workspace/ai_language/src/../include/interpreter.h:48:47: error: expected ‘,’ or ‘...’ before ‘false’
+/home/runner/workspace/ai_language/src/../include/interpreter.h:48:32: error: ISO C++ forbids declaration of ‘modelEvaluated’ with no type [-fpermissive]
+   48 |           modelTrained(false), modelEvaluated(false), modelSaved(false) {}
+      |                                ^~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/../include/interpreter.h:48:53: error: ‘int ai_language::Environment::modelEvaluated(int)’ conflicts with a previous declaration
+   48 |           modelTrained(false), modelEvaluated(false), modelSaved(false) {}
+      |                                                     ^
+/home/runner/workspace/ai_language/src/../include/interpreter.h:30:10: note: previous declaration ‘bool ai_language::Environment::modelEvaluated’
+   30 |     bool modelEvaluated;  ///< ตัวแปรบอกว่าได้ประเมินผลโมเดลแล้วหรือไม่
+      |          ^~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/../include/interpreter.h:48:66: error: expected identifier before ‘false’
+   48 |   modelTrained(false), modelEvaluated(false), modelSaved(false) {}
+      |                                                          ^~~~~
+
+/home/runner/workspace/ai_language/src/../include/interpreter.h:48:66: error: expected ‘,’ or ‘...’ before ‘false’
+/home/runner/workspace/ai_language/src/../include/interpreter.h:48:55: error: ISO C++ forbids declaration of ‘modelSaved’ with no type [-fpermissive]
+   48 |           modelTrained(false), modelEvaluated(false), modelSaved(false) {}
+      |                                                       ^~~~~~~~~~
+/home/runner/workspace/ai_language/src/../include/interpreter.h:48:74: error: ‘int ai_language::Environment::modelSaved(int)’ conflicts with a previous declaration
+   48 |   modelTrained(false), modelEvaluated(false), modelSaved(false) {}
+      |                                                                  ^
+
+/home/runner/workspace/ai_language/src/../include/interpreter.h:31:10: note: previous declaration ‘bool ai_language::Environment::modelSaved’
+   31 |     bool modelSaved;  ///< ตัวแปรบอกว่าได้บันทึกโมเดลแล้วหรือไม่
+      |          ^~~~~~~~~~
+/home/runner/workspace/ai_language/src/../include/interpreter.h: In constructor ‘ai_language::Environment::Environment()’:
+/home/runner/workspace/ai_language/src/../include/interpreter.h:46:5: error: expected identifier before ‘bool’
+   46 |     bool isCompleteStatement(const std::string& statement) const;
+      |     ^~~~
+/home/runner/workspace/ai_language/src/../include/interpreter.h:46:5: error: expected ‘{’ before ‘bool’
+/home/runner/workspace/ai_language/src/../include/interpreter.h: In member function ‘int ai_language::Environment::modelSaved(int)’:
+/home/runner/workspace/ai_language/src/../include/interpreter.h:48:74: warning: no return statement in function returning non-void [-Wreturn-type]
+   48 |   modelTrained(false), modelEvaluated(false), modelSaved(false) {}
+      |                                                                  ^
+
+/home/runner/workspace/ai_language/src/interpreter.cpp: At global scope:
+/home/runner/workspace/ai_language/src/interpreter.cpp:389:6: error: no declaration matches ‘bool ai_language::Interpreter::isCompleteStatement(const std::string&) const’
+  389 | bool ai_language::Interpreter::isCompleteStatement(const std::string& statement) const {
+      |      ^~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreter.cpp:389:6: note: no functions named ‘bool ai_language::Interpreter::isCompleteStatement(const std::string&) const’
+/home/runner/workspace/ai_language/src/../include/interpreter.h:55:7: note: ‘class ai_language::Interpreter’ defined here
+   55 | class Interpreter {
+      |       ^~~~~~~~~~~
+make[2]: *** [CMakeFiles/ai_language_lib.dir/build.make:104: CMakeFiles/ai_language_lib.dir/src/interpreter.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:86: CMakeFiles/ai_language_lib.dir/all] Error 2
+make: *** [Makefile:91: all] Error 2
+~/.../ai_language/build$ 
