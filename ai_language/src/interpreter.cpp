@@ -140,23 +140,26 @@ void Interpreter::handleStartCommand(const std::map<std::string, std::string>& p
 }
 
 void Interpreter::handleLoadCommand(const std::map<std::string, std::string>& params) {
-    // ตรวจสอบว่ามีพารามิเตอร์ที่จำเป็นหรือไม่
-    if (params.find("filename") == params.end()) {
-        m_errorHandler("ต้องระบุชื่อไฟล์");
+    // ตรวจสอบว่าได้เริ่มต้นโปรเจกต์หรือยัง
+    if (m_environment.projectType.empty()) {
+        m_errorHandler("โปรดใช้คำสั่ง 'start' เพื่อเริ่มต้นโปรเจกต์ก่อนโหลดข้อมูล");
         return;
     }
 
-    if (params.find("type") == params.end()) {
-        m_errorHandler("ต้องระบุประเภทไฟล์");
-        return;
+    if (params.find("dataset") != params.end()) {
+        std::string filename = params.at("dataset");
+        m_environment.datasetPath = filename;
+
+        std::string fileType = "csv";  // ค่าเริ่มต้น
+        if (params.find("type") != params.end()) {
+            fileType = params.at("type");
+        }
+
+        m_outputHandler("กำลังโหลดข้อมูลจากไฟล์: " + filename);
+        m_environment.dataLoaded = true;
+    } else {
+        m_errorHandler("ไม่ได้ระบุชื่อไฟล์ข้อมูล");
     }
-
-    // ตั้งค่าข้อมูล
-    m_environment.datasetPath = params.at("filename");
-    m_environment.datasetType = params.at("type");
-    m_environment.dataLoaded = true;
-
-    m_outputHandler("กำลังโหลดข้อมูลจากไฟล์: " + m_environment.datasetPath);
 }
 
 void Interpreter::handleCleanCommand(const std::map<std::string, std::string>& params) {
