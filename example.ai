@@ -1,0 +1,10 @@
+
+# ตัวอย่างสคริปต์ AI Language
+start create ML
+load dataset "data.csv" type "csv"
+clean data
+split data
+train model epochs 100
+evaluate model
+show metric "accuracy"
+save model path "model.pkl"
