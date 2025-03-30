@@ -307,7 +307,8 @@ body {
 .cell {
     border: 1px solid var(--cell-border);
     border-radius: 4px;
-    margin-bottom: 8px;
+    margin-bottom: 24px;
+    margin-top: 24px;
     overflow: hidden;
     position: relative;
 }
@@ -324,7 +325,20 @@ body {
     z-index: 10;
 }
 
-.cell:hover .add-buttons-top {
+.add-buttons-bottom {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -20px;
+    display: flex;
+    gap: 4px;
+    opacity: 0;
+    transition: opacity 0.2s;
+    z-index: 10;
+}
+
+.cell:hover .add-buttons-top,
+.cell:hover .add-buttons-bottom {
     opacity: 1;
 }
 
@@ -388,12 +402,12 @@ body {
 
 /* CodeMirror Customization */
 .CodeMirror {
-    height: 30px;
     font-family: var(--code-font-family);
     font-size: 14px;
     line-height: 1.5;
     border-radius: 4px;
     width: 100%;
+    height: auto;
 }
 
 .CodeMirror-scroll {
@@ -403,6 +417,10 @@ body {
 
 .CodeMirror-lines {
     padding: 4px 0;
+}
+
+.CodeMirror-line {
+    height: 1.5em;
 }
 
 .cm-s-monokai .CodeMirror-gutters {

@@ -370,6 +370,78 @@ document.addEventListener('DOMContentLoaded', function() {
             cell.outputElement = cellOutput;
         }
         
+        // Add bottom buttons
+        const addButtonsBottom = document.createElement('div');
+        addButtonsBottom.className = 'add-buttons-bottom';
+        
+        // Add + Code button at bottom
+        const addCodeButtonBottom = document.createElement('button');
+        addCodeButtonBottom.className = 'mini-button add-code-mini';
+        addCodeButtonBottom.innerHTML = '+ โค้ด';
+        addCodeButtonBottom.title = 'Add code cell below';
+        addCodeButtonBottom.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const index = cells.indexOf(cell);
+            const position = index !== -1 ? index + 1 : cells.length;
+            
+            // Create new cell
+            const newCell = createCell('code');
+            
+            // If this is the last cell, the DOM element is already in the right place
+            if (position < cells.length) {
+                // Move DOM element to the correct position
+                notebookContainer.insertBefore(newCell, cells[position]);
+                
+                // Reorder cells array
+                cells.pop(); // Remove from end (where it was added by createCell)
+                cells.splice(position, 0, newCell);
+            }
+            
+            // Set as active cell
+            if (activeCell) {
+                activeCell.classList.remove('active');
+            }
+            activeCell = newCell;
+            newCell.classList.add('active');
+            newCell.editor.focus();
+        });
+        addButtonsBottom.appendChild(addCodeButtonBottom);
+        
+        // Add + Text button at bottom
+        const addTextButtonBottom = document.createElement('button');
+        addTextButtonBottom.className = 'mini-button add-text-mini';
+        addTextButtonBottom.innerHTML = '+ ข้อความ';
+        addTextButtonBottom.title = 'Add text cell below';
+        addTextButtonBottom.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const index = cells.indexOf(cell);
+            const position = index !== -1 ? index + 1 : cells.length;
+            
+            // Create new cell
+            const newCell = createCell('markdown');
+            
+            // If this is the last cell, the DOM element is already in the right place
+            if (position < cells.length) {
+                // Move DOM element to the correct position
+                notebookContainer.insertBefore(newCell, cells[position]);
+                
+                // Reorder cells array
+                cells.pop(); // Remove from end (where it was added by createCell)
+                cells.splice(position, 0, newCell);
+            }
+            
+            // Set as active cell
+            if (activeCell) {
+                activeCell.classList.remove('active');
+            }
+            activeCell = newCell;
+            newCell.classList.add('active');
+            newCell.editor.focus();
+        });
+        addButtonsBottom.appendChild(addTextButtonBottom);
+        
+        cell.appendChild(addButtonsBottom);
+        
         // Store editor instance in cell
         cell.editor = editor;
         cell.type = type;
