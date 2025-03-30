@@ -35,14 +35,24 @@ body {
 /* App Container */
 .app-container {
     display: grid;
-    grid-template-rows: auto auto 1fr;
-    grid-template-columns: auto 1fr;
-    grid-template-areas:
-        "header header"
-        "menu menu"
-        "side-panel main-content";
+    grid-template-rows: auto;
+    grid-template-columns: 1fr;
+    grid-template-areas: "header";
     height: 100vh;
     width: 100%;
+}
+
+/* Hide all content except top menu */
+.main-content,
+.side-panel,
+.toolbar,
+.global-actions,
+.cell,
+.cell-toolbar,
+.cell-actions,
+.cell-editor,
+.cell-output {
+    display: none !important;
 }
 
 /* Top Navigation Bar */
