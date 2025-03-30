@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // In a real implementation, this would send data to the server
         // For now, we'll just show a notification
         showNotification('บันทึกสมุดบันทึกเรียบร้อยแล้ว', 'success');
-        
+
         // Simulate saving to localStorage for demo purposes
         const notebookData = {
             fileName: notebookFileName,
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 };
             })
         };
-        
+
         localStorage.setItem('notebook_data', JSON.stringify(notebookData));
     }
 
@@ -87,20 +87,20 @@ document.addEventListener('DOMContentLoaded', function() {
         // In a real implementation, this would load data from the server
         // For demo purposes, we'll load from localStorage if available
         const savedData = localStorage.getItem('notebook_data');
-        
+
         if (savedData) {
             try {
                 const notebookData = JSON.parse(savedData);
-                
+
                 // Clear existing cells
                 notebookContainer.innerHTML = '';
                 cells = [];
                 cellCounter = 0;
-                
+
                 // Update notebook title
                 notebookFileName = notebookData.fileName;
                 notebookTitle.textContent = notebookFileName;
-                
+
                 // Create cells from saved data
                 notebookData.cells.forEach(cellData => {
                     const cell = createCell(cellData.type, cellData.content);
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         cell.outputElement.style.display = 'block';
                     }
                 });
-                
+
                 showNotification('โหลดสมุดบันทึกเรียบร้อยแล้ว', 'success');
             } catch (error) {
                 console.error('Error loading notebook:', error);
@@ -153,9 +153,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 };
             })
         };
-        
+
         let content, fileName, mimeType;
-        
+
         // Format specific conversions
         if (format === 'ipynb') {
             content = JSON.stringify(notebookData, null, 2);
@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', function() {
     ${cells.map(cell => {
         const content = cell.editor ? cell.editor.getValue() : '';
         const output = cell.outputElement ? cell.outputElement.textContent : '';
-        
+
         if (cell.type === 'code') {
             return `<div class="cell">
                 <div class="code">${content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>
@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', function() {
             html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
             html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
             html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
-            
+
             return `<div class="cell">
                 <div class="markdown">${html}</div>
             </div>`;
@@ -218,7 +218,7 @@ document.addEventListener('DOMContentLoaded', function() {
             fileName = notebookFileName.replace('.ipynb', '.html');
             mimeType = 'text/html';
         }
-        
+
         // Create download link
         const blob = new Blob([content], { type: mimeType });
         const url = URL.createObjectURL(blob);
@@ -226,10 +226,10 @@ document.addEventListener('DOMContentLoaded', function() {
         a.href = url;
         a.download = fileName;
         a.click();
-        
+
         // Cleanup
         setTimeout(() => URL.revokeObjectURL(url), 100);
-        
+
         showNotification(`ดาวน์โหลด ${fileName} เรียบร้อยแล้ว`, 'success');
     }
 
@@ -241,48 +241,19 @@ document.addEventListener('DOMContentLoaded', function() {
         cell.className = 'cell';
         cell.dataset.id = cellCounter++;
         cell.dataset.type = type;
-        
+
         // Create cell toolbar
         const cellToolbar = document.createElement('div');
         cellToolbar.className = 'cell-toolbar';
-        
+
         const cellType = document.createElement('div');
         cellType.className = 'cell-type';
         cellType.textContent = type === 'code' ? 'Code' : 'Markdown';
         cellToolbar.appendChild(cellType);
-        
+
         const cellActions = document.createElement('div');
         cellActions.className = 'cell-actions';
-        
-        // Cell buttons removed
-        // Button functionality will be reimplemented
-        addTextButton.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const index = cells.indexOf(cell);
-            const position = index !== -1 ? index : cells.length;
-            
-            // Create new cell and insert at position
-            const newCell = createCell('markdown');
-            
-            // Move DOM element to the correct position
-            notebookContainer.insertBefore(newCell, cell);
-            
-            // Reorder cells array
-            cells.pop(); // Remove from end (where it was added by createCell)
-            cells.splice(position, 0, newCell);
-            
-            // Set as active cell
-            if (activeCell) {
-                activeCell.classList.remove('active');
-            }
-            activeCell = newCell;
-            newCell.classList.add('active');
-            newCell.editor.focus();
-        });
-        addButtonsTop.appendChild(addTextButton);
-        
-        cell.appendChild(addButtonsTop);
-        
+
         // Add run button for code cells
         if (type === 'code') {
             const runButton = document.createElement('button');
@@ -292,7 +263,7 @@ document.addEventListener('DOMContentLoaded', function() {
             runButton.addEventListener('click', () => runCell(cell));
             cellActions.appendChild(runButton);
         }
-        
+
         // Add common cell action buttons
         const deleteButton = document.createElement('button');
         deleteButton.className = 'cell-action-button delete-cell';
@@ -300,15 +271,15 @@ document.addEventListener('DOMContentLoaded', function() {
         deleteButton.title = 'Delete cell';
         deleteButton.addEventListener('click', () => deleteCell(cell));
         cellActions.appendChild(deleteButton);
-        
+
         cellToolbar.appendChild(cellActions);
         cell.appendChild(cellToolbar);
-        
+
         // Create cell editor
         const cellEditor = document.createElement('div');
         cellEditor.className = 'cell-editor';
         cell.appendChild(cellEditor);
-        
+
         // Initialize CodeMirror editor
         const mode = type === 'code' ? 'python' : 'markdown';
         const editor = CodeMirror(cellEditor, {
@@ -323,7 +294,7 @@ document.addEventListener('DOMContentLoaded', function() {
             tabSize: 4,
             viewportMargin: Infinity
         });
-        
+
         // Add output container for code cells
         if (type === 'code') {
             const cellOutput = document.createElement('div');
@@ -332,84 +303,19 @@ document.addEventListener('DOMContentLoaded', function() {
             cell.appendChild(cellOutput);
             cell.outputElement = cellOutput;
         }
-        
-        // Add bottom buttons
-        const addButtonsBottom = document.createElement('div');
-        addButtonsBottom.className = 'add-buttons-bottom';
-        
-        // Add + Code button at bottom
-        const addCodeButtonBottom = document.createElement('button');
-        addCodeButtonBottom.className = 'mini-button add-code-mini';
-        addCodeButtonBottom.innerHTML = '+ โค้ด';
-        addCodeButtonBottom.title = 'Add code cell below';
-        addCodeButtonBottom.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const index = cells.indexOf(cell);
-            const position = index !== -1 ? index + 1 : cells.length;
-            
-            // Create new cell
-            const newCell = createCell('code');
-            
-            // If this is the last cell, the DOM element is already in the right place
-            if (position < cells.length) {
-                // Move DOM element to the correct position
-                notebookContainer.insertBefore(newCell, cells[position]);
-                
-                // Reorder cells array
-                cells.pop(); // Remove from end (where it was added by createCell)
-                cells.splice(position, 0, newCell);
-            }
-            
-            // Set as active cell
-            if (activeCell) {
-                activeCell.classList.remove('active');
-            }
-            activeCell = newCell;
-            newCell.classList.add('active');
-            newCell.editor.focus();
-        });
-        addButtonsBottom.appendChild(addCodeButtonBottom);
-        
-        // Add + Text button at bottom
-        const addTextButtonBottom = document.createElement('button');
-        addTextButtonBottom.className = 'mini-button add-text-mini';
-        addTextButtonBottom.innerHTML = '+ ข้อความ';
-        addTextButtonBottom.title = 'Add text cell below';
-        addTextButtonBottom.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const index = cells.indexOf(cell);
-            const position = index !== -1 ? index + 1 : cells.length;
-            
-            // Create new cell
-            const newCell = createCell('markdown');
-            
-            // If this is the last cell, the DOM element is already in the right place
-            if (position < cells.length) {
-                // Move DOM element to the correct position
-                notebookContainer.insertBefore(newCell, cells[position]);
-                
-                // Reorder cells array
-                cells.pop(); // Remove from end (where it was added by createCell)
-                cells.splice(position, 0, newCell);
-            }
-            
-            // Set as active cell
-            if (activeCell) {
-                activeCell.classList.remove('active');
-            }
-            activeCell = newCell;
-            newCell.classList.add('active');
-            newCell.editor.focus();
-        });
-        addButtonsBottom.appendChild(addTextButtonBottom);
-        
-        cell.appendChild(addButtonsBottom);
-        
+
+
+        // Add the cell to the notebook
+        notebookContainer.appendChild(cell);
+
+        // Add to cells array
+        cells.push(cell);
+
         // Store editor instance in cell
         cell.editor = editor;
         cell.type = type;
         cell.id = cell.dataset.id;
-        
+
         // Add event handler for selecting cell
         cell.addEventListener('click', () => {
             if (activeCell) {
@@ -419,16 +325,10 @@ document.addEventListener('DOMContentLoaded', function() {
             cell.classList.add('active');
             editor.focus();
         });
-        
-        // Add the cell to the notebook
-        notebookContainer.appendChild(cell);
-        
-        // Add to cells array
-        cells.push(cell);
-        
+
         // Refresh the editor to ensure it renders correctly
         setTimeout(() => editor.refresh(), 10);
-        
+
         return cell;
     }
 
@@ -442,27 +342,27 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to run cell
     function runCell(cell) {
         if (!cell || cell.type !== 'code') return;
-        
+
         const code = cell.editor.getValue();
         const outputElement = cell.outputElement;
-        
+
         if (!code.trim()) {
             outputElement.textContent = '';
             outputElement.style.display = 'none';
             return;
         }
-        
+
         // Show "running" indicator
         outputElement.textContent = 'กำลังประมวลผล...';
         outputElement.style.display = 'block';
-        
+
         // In a real implementation, this would send the code to the server
         // For now, we'll simulate execution
         simulateCodeExecution(code)
             .then(result => {
                 outputElement.textContent = result.output;
                 outputElement.style.display = 'block';
-                
+
                 // If there's visualization data, display it
                 if (result.visualization) {
                     appendVisualization(outputElement, result.visualization);
@@ -481,7 +381,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 try {
                     let output = '';
                     let visualization = null;
-                    
+
                     // Simulate different outputs based on code content
                     if (code.includes('print(')) {
                         // Extract content from print statements
@@ -513,7 +413,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     } else {
                         output = 'โค้ดทำงานเสร็จสิ้น โดยไม่มีเอาต์พุต';
                     }
-                    
+
                     resolve({ output, visualization });
                 } catch (error) {
                     reject(error);
@@ -536,10 +436,10 @@ document.addEventListener('DOMContentLoaded', function() {
             plotDiv.style.display = 'flex';
             plotDiv.style.alignItems = 'center';
             plotDiv.style.justifyContent = 'center';
-            
+
             // Placeholder content (in a real app, this would be a chart)
             plotDiv.innerHTML = '<div style="text-align:center;"><i class="fas fa-chart-line" style="font-size:48px;color:#4285f4;margin-bottom:8px;"></i><div>Matplotlib Plot Visualization</div></div>';
-            
+
             outputElement.appendChild(plotDiv);
         }
     }
@@ -550,19 +450,19 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!confirm('คุณแน่ใจหรือไม่ว่าต้องการลบเซลล์นี้?')) {
             return;
         }
-        
+
         const cellIndex = cells.indexOf(cell);
         if (cellIndex !== -1) {
             // Remove from cells array
             cells.splice(cellIndex, 1);
-            
+
             // Remove from DOM
             cell.remove();
-            
+
             // Update active cell if needed
             if (activeCell === cell) {
                 activeCell = null;
-                
+
                 // Set next cell as active, or previous if no next
                 if (cells.length > 0) {
                     const newActiveIndex = Math.min(cellIndex, cells.length - 1);
@@ -571,7 +471,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     activeCell.editor.focus();
                 }
             }
-            
+
             showNotification('ลบเซลล์เรียบร้อยแล้ว', 'info');
         }
     }
@@ -579,10 +479,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to run all cells
     function runAllCells() {
         if (cells.length === 0) return;
-        
+
         // Show notification
         showNotification('กำลังเรียกใช้ทุกเซลล์...', 'info');
-        
+
         // Run cells sequentially
         let index = 0;
         function runNextCell() {
@@ -599,7 +499,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 showNotification('เรียกใช้ทุกเซลล์เรียบร้อยแล้ว', 'success');
             }
         }
-        
+
         runNextCell();
     }
 
@@ -618,14 +518,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to show notification
     function showNotification(message, type = 'info') {
         notificationMessage.textContent = message;
-        
+
         // Apply type-specific styling
         notification.className = 'notification';
         notification.classList.add(`notification-${type}`);
-        
+
         // Show notification
         notification.style.display = 'flex';
-        
+
         // Auto-hide after a delay
         setTimeout(() => {
             hideNotification();
@@ -645,12 +545,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         document.getElementById('saveNotebook').addEventListener('click', saveNotebook);
         document.getElementById('openNotebook').addEventListener('click', loadNotebook);
-        
+
         // Download menu actions
         document.getElementById('downloadNotebook').addEventListener('click', () => downloadNotebook('ipynb'));
         document.getElementById('downloadPython').addEventListener('click', () => downloadNotebook('py'));
         document.getElementById('downloadHTML').addEventListener('click', () => downloadNotebook('html'));
-        
+
         // Edit menu actions
         document.getElementById('clearAllOutputs').addEventListener('click', () => {
             cells.forEach(cell => {
@@ -661,21 +561,21 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             showNotification('ล้างเอาต์พุตทั้งหมดเรียบร้อยแล้ว', 'info');
         });
-        
+
         // View menu actions
         document.getElementById('toggleOutput').addEventListener('click', () => {
             const allHidden = cells.every(cell => 
                 cell.type !== 'code' || !cell.outputElement || cell.outputElement.style.display === 'none');
-                
+
             cells.forEach(cell => {
                 if (cell.type === 'code' && cell.outputElement) {
                     cell.outputElement.style.display = allHidden ? 'block' : 'none';
                 }
             });
-            
+
             showNotification(allHidden ? 'แสดงเอาต์พุตทั้งหมด' : 'ซ่อนเอาต์พุตทั้งหมด', 'info');
         });
-        
+
         // Runtime menu actions
         document.getElementById('runAllCells').addEventListener('click', runAllCells);
         document.getElementById('runFocusedCell').addEventListener('click', () => {
@@ -683,7 +583,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 runCell(activeCell);
             }
         });
-        
+
         // Help menu actions
         document.getElementById('keyboard-shortcuts')?.addEventListener('click', () => {
             showModal(keyboardShortcutsModal);
@@ -697,14 +597,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Update active state
                 panelTabs.forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
-                
+
                 // Show corresponding panel content
                 const panelId = tab.getAttribute('data-panel');
                 document.querySelectorAll('.panel-section').forEach(panel => {
                     panel.classList.remove('active');
                 });
                 document.getElementById(`${panelId}-panel`).classList.add('active');
-                
+
                 console.log(`Switching to view: ${panelId}`);
             });
         });
@@ -721,14 +621,14 @@ document.addEventListener('DOMContentLoaded', function() {
             showNotification(`ชื่อสมุดบันทึกถูกเปลี่ยนเป็น "${notebookFileName}"`, 'success');
         }
     });
-    
+
     notebookTitle.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') {
             e.preventDefault();
             notebookTitle.blur();
         }
     });
-    
+
     // Close modal buttons
     closeModalButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -738,24 +638,24 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-    
+
     // Add cell buttons
     addCodeCellButton.addEventListener('click', () => {
         const index = activeCell ? cells.indexOf(activeCell) : cells.length - 1;
         const position = index !== -1 ? index + 1 : cells.length;
-        
+
         // Create new cell and insert at position
         const newCell = createCell('code');
-        
+
         // Move DOM element to the correct position
         if (position < cells.length - 1) {
             notebookContainer.insertBefore(newCell, cells[position + 1]);
-            
+
             // Reorder cells array
             cells.pop(); // Remove from end (where it was added by createCell)
             cells.splice(position, 0, newCell);
         }
-        
+
         // Set as active cell
         if (activeCell) {
             activeCell.classList.remove('active');
@@ -764,23 +664,23 @@ document.addEventListener('DOMContentLoaded', function() {
         newCell.classList.add('active');
         newCell.editor.focus();
     });
-    
+
     addTextCellButton.addEventListener('click', () => {
         const index = activeCell ? cells.indexOf(activeCell) : cells.length - 1;
         const position = index !== -1 ? index + 1 : cells.length;
-        
+
         // Create new cell and insert at position
         const newCell = createCell('markdown');
-        
+
         // Move DOM element to the correct position
         if (position < cells.length - 1) {
             notebookContainer.insertBefore(newCell, cells[position + 1]);
-            
+
             // Reorder cells array
             cells.pop(); // Remove from end (where it was added by createCell)
             cells.splice(position, 0, newCell);
         }
-        
+
         // Set as active cell
         if (activeCell) {
             activeCell.classList.remove('active');
@@ -789,7 +689,7 @@ document.addEventListener('DOMContentLoaded', function() {
         newCell.classList.add('active');
         newCell.editor.focus();
     });
-    
+
     // Run buttons
     runCellButton.addEventListener('click', () => {
         if (activeCell) {
@@ -798,33 +698,33 @@ document.addEventListener('DOMContentLoaded', function() {
             showNotification('ไม่มีเซลล์ที่เลือก', 'warning');
         }
     });
-    
+
     runAllButton.addEventListener('click', runAllCells);
-    
+
     // Save button
     saveNotebookButton.addEventListener('click', saveNotebook);
-    
+
     // Close notification button
     closeNotificationButton.addEventListener('click', hideNotification);
-    
+
     // Window click handler for modals
     window.addEventListener('click', (event) => {
         if (event.target.classList.contains('modal')) {
             hideModal(event.target);
         }
     });
-    
+
     // Keyboard shortcuts
     document.addEventListener('keydown', (event) => {
         // Check if ctrl or cmd key is pressed
         const ctrlOrCmd = event.ctrlKey || event.metaKey;
-        
+
         // Ctrl+S for save
         if (ctrlOrCmd && event.key === 's') {
             event.preventDefault();
             saveNotebook();
         }
-        
+
         // Ctrl+Enter to run current cell
         if (ctrlOrCmd && event.key === 'Enter') {
             event.preventDefault();
@@ -832,29 +732,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 runCell(activeCell);
             }
         }
-        
+
         // Shift+Enter to run cell and create new one
         if (event.shiftKey && event.key === 'Enter') {
             event.preventDefault();
             if (activeCell) {
                 runCell(activeCell);
-                
+
                 // Create new cell
                 const index = cells.indexOf(activeCell);
                 const position = index !== -1 ? index + 1 : cells.length;
-                
+
                 // Create new cell and insert at position
                 const newCell = createCell('code');
-                
+
                 // Move DOM element to the correct position
                 if (position < cells.length - 1) {
                     notebookContainer.insertBefore(newCell, cells[position + 1]);
-                    
+
                     // Reorder cells array
                     cells.pop(); // Remove from end (where it was added by createCell)
                     cells.splice(position, 0, newCell);
                 }
-                
+
                 // Set as active cell
                 activeCell.classList.remove('active');
                 activeCell = newCell;

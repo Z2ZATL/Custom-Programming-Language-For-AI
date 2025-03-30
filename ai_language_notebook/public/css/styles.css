@@ -786,9 +786,4 @@ body.dark-mode {
     --shadow-color: rgba(0, 0, 0, 0.5);
 }
 
-.add-buttons-top,
-.add-buttons-bottom,
-.notebook-header .add-buttons,
-.mini-button {
-    display: none !important;
-}
+/* Removed add buttons styles */
