@@ -50,7 +50,7 @@ void runInteractiveMode() {
             break;
         }
 
-        // แก้ไขข้อผิดพลาดในการตรวจสอบคำสั่ง start create ML
+        // แก้ไขข้อผิดพลาดในการตรวจสอบคำสั่งพิเศษ
         if (line.find("start create") == 0) {
             // แยกส่วนคำสั่ง
             std::istringstream iss(line);
@@ -70,6 +70,42 @@ void runInteractiveMode() {
                 }
             } else {
                 std::cerr << "\033[31mรูปแบบคำสั่งไม่ถูกต้อง ตัวอย่าง: start create ML หรือ start create DL หรือ start create RL\033[0m" << std::endl;
+            }
+        } else if (line.find("load dataset") == 0) {
+            // ตรวจจับคำสั่ง load dataset
+            std::string filename, type;
+            size_t filenameStart = line.find("\"");
+            size_t filenameEnd = line.find("\"", filenameStart + 1);
+            
+            if (filenameStart != std::string::npos && filenameEnd != std::string::npos) {
+                filename = line.substr(filenameStart + 1, filenameEnd - filenameStart - 1);
+                
+                // ตรวจหา type
+                size_t typePos = line.find("type", filenameEnd);
+                if (typePos != std::string::npos) {
+                    size_t typeStart = line.find("\"", typePos);
+                    size_t typeEnd = line.find("\"", typeStart + 1);
+                    
+                    if (typeStart != std::string::npos && typeEnd != std::string::npos) {
+                        type = line.substr(typeStart + 1, typeEnd - typeStart - 1);
+                        std::cout << "กำลังโหลดข้อมูลจากไฟล์: " << filename << " ประเภท: " << type << std::endl;
+                        
+                        // ตรวจสอบว่าไฟล์มีอยู่หรือไม่
+                        std::ifstream f(filename);
+                        if (!f.good()) {
+                            std::cout << "คำเตือน: ไม่พบไฟล์ \"" << filename << "\" ใน interactive mode คุณควรสร้างหรือนำเข้าไฟล์ข้อมูลก่อน" << std::endl;
+                            std::cout << "คำแนะนำ: ใช้คำสั่ง \"exit\" เพื่อออก แล้วสร้างไฟล์ data.csv ในไดเรกทอรีหลัก" << std::endl;
+                        } else {
+                            std::cout << "โหลดข้อมูลสำเร็จ" << std::endl;
+                        }
+                    } else {
+                        std::cerr << "\033[31mรูปแบบคำสั่งไม่ถูกต้อง - ไม่พบประเภทไฟล์ ตัวอย่าง: load dataset \"data.csv\" type \"csv\"\033[0m" << std::endl;
+                    }
+                } else {
+                    std::cerr << "\033[31mรูปแบบคำสั่งไม่ถูกต้อง - ไม่พบคีย์เวิร์ด type ตัวอย่าง: load dataset \"data.csv\" type \"csv\"\033[0m" << std::endl;
+                }
+            } else {
+                std::cerr << "\033[31mรูปแบบคำสั่งไม่ถูกต้อง - ไม่พบชื่อไฟล์ ตัวอย่าง: load dataset \"data.csv\" type \"csv\"\033[0m" << std::endl;
             }
         } else {
             // ประมวลผลคำสั่งด้วย interpreter ปกติ
