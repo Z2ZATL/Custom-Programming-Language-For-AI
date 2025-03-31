@@ -1,0 +1,39 @@
+~/workspace$ cd ai_language && mkdir -p build && cd build && cmake .. && make
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/runner/workspace/ai_language/build
+[ 12%] Building CXX object CMakeFiles/ai_language_lib.dir/src/RLInterpreter.cpp.o
+/home/runner/workspace/ai_language/src/RLInterpreter.cpp: In member function ‘virtual void ai_language::RLInterpreter::handleLoadCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/RLInterpreter.cpp:229:9: error: ‘datasetFilename’ was not declared in this scope
+  229 |         datasetFilename = filename;
+      |         ^~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/RLInterpreter.cpp: In member function ‘virtual void ai_language::RLInterpreter::handleSaveCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/RLInterpreter.cpp:516:28: error: ‘datasetFilename’ was not declared in this scope
+  516 |     file << "Dataset: " << datasetFilename << std::endl;
+      |                            ^~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/RLInterpreter.cpp: At global scope:
+/home/runner/workspace/ai_language/src/RLInterpreter.cpp:523:6: error: no declaration matches ‘void ai_language::RLInterpreter::handleRunSimulationCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+  523 | void RLInterpreter::handleRunSimulationCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/RLInterpreter.cpp:523:6: note: no functions named ‘void ai_language::RLInterpreter::handleRunSimulationCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+In file included from /home/runner/workspace/ai_language/src/RLInterpreter.cpp:2:
+/home/runner/workspace/ai_language/src/../include/RLInterpreter.h:9:7: note: ‘class ai_language::RLInterpreter’ defined here
+    9 | class RLInterpreter : public BaseInterpreter {
+      |       ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/RLInterpreter.cpp:595:6: error: no declaration matches ‘void ai_language::RLInterpreter::handleEvaluateCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+  595 | void RLInterpreter::handleEvaluateCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/RLInterpreter.cpp:595:6: note: no functions named ‘void ai_language::RLInterpreter::handleEvaluateCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+/home/runner/workspace/ai_language/src/../include/RLInterpreter.h:9:7: note: ‘class ai_language::RLInterpreter’ defined here
+    9 | class RLInterpreter : public BaseInterpreter {
+      |       ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/RLInterpreter.cpp:642:6: error: no declaration matches ‘void ai_language::RLInterpreter::interpretLine(const std::string&)’
+  642 | void RLInterpreter::interpretLine(const std::string& line) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/RLInterpreter.cpp:642:6: note: no functions named ‘void ai_language::RLInterpreter::interpretLine(const std::string&)’
+/home/runner/workspace/ai_language/src/../include/RLInterpreter.h:9:7: note: ‘class ai_language::RLInterpreter’ defined here
+    9 | class RLInterpreter : public BaseInterpreter {
+      |       ^~~~~~~~~~~~~
+make[2]: *** [CMakeFiles/ai_language_lib.dir/build.make:118: CMakeFiles/ai_language_lib.dir/src/RLInterpreter.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:86: CMakeFiles/ai_language_lib.dir/all] Error 2
+make: *** [Makefile:91: all] Error 2
