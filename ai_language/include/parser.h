@@ -307,6 +307,11 @@ private:
 
 // คำสั่ง predict <input>
 class PredictStatement : public Statement {
+private:
+    std::map<std::string, std::string> params;
+    
+public:
+    PredictStatement(const std::map<std::string, std::string>& params);
 public:
     std::string predictInput;
     std::unordered_map<std::string, std::string> parameters;
