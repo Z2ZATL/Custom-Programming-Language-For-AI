@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# สคริปต์สำหรับบันทึก output ของโปรแกรม AI Language ในโหมดโต้ตอบ
+
+# สร้างไฟล์ output
+OUTPUT_FILE="Program test/interaction_output_$(date +%Y%m%d_%H%M%S).txt"
+
+echo "บันทึก output ไปที่: $OUTPUT_FILE"
+echo "===== เริ่มต้นการบันทึก $(date) =====" > "$OUTPUT_FILE"
+
+# รันโปรแกรมและบันทึก output
+cd ai_language && ./ai_lang -i | tee -a "$OUTPUT_FILE"
+
+echo "===== สิ้นสุดการบันทึก $(date) =====" >> "$OUTPUT_FILE"
+echo "บันทึกเสร็จสิ้น"
