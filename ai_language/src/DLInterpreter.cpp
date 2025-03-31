@@ -13,11 +13,6 @@ DLInterpreter::DLInterpreter() {
     projectType = "DL";
 }
 
-DLInterpreter::~DLInterpreter() {
-}
-
-void DLInterpreter::setDefaultParameters() {
-
 std::vector<std::string> DLInterpreter::tokenizeLine(const std::string& line) {
     std::vector<std::string> tokens;
     std::string currentToken;
@@ -44,6 +39,12 @@ std::vector<std::string> DLInterpreter::tokenizeLine(const std::string& line) {
     return tokens;
 }
 
+
+
+DLInterpreter::~DLInterpreter() {
+}
+
+void DLInterpreter::setDefaultParameters() {
     // ล้างค่าเดิม
     parameters.clear();
     
