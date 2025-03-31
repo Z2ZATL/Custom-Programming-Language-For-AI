@@ -644,7 +644,7 @@ void RLInterpreter::interpretLine(const std::string& line) {
     if (line.empty() || line[0] == '#') {
 
 // แยกบรรทัดคำสั่งเป็น tokens
-        std::vector<std::string> RLInterpreter::tokenizeLine(const std::string& line) {
+        std::vector<std::string> tokenizeLine(const std::string& line) {
             std::vector<std::string> tokens;
             std::string token;
             bool inQuotes = false;
