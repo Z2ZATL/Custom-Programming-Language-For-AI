@@ -3,18 +3,18 @@
 # ไฟล์นี้แสดงวิธีการตั้งค่าเขตเวลาที่มีผลต่อเวลาที่บันทึกในไฟล์โมเดล
 
 start
-create ML
+create RL
 
 # โหลดข้อมูล
-load dataset "datasets/linear_data.csv"
+load dataset "datasets/environment.json"
 
 # สร้างโมเดล
-create model LinearRegression
+create model QLearning
 
 # ตั้งค่าพารามิเตอร์
-set learning_rate 0.01
-set epochs 100
-set batch_size 32
+set learning_rate 0.1
+set episodes 1000
+set discount_factor 0.9
 
 # ตั้งค่าเขตเวลาเป็น UTC+7 (ประเทศไทย)
 set timezone 7
@@ -24,13 +24,13 @@ train model
 show accuracy
 
 # บันทึกโมเดล (เวลาที่บันทึกจะเป็นเวลาตามเขตเวลา UTC+7)
-save model "models/linear_model_thailand_time.mlmodel"
+save model "models/rl_model_thailand_time.rlmodel"
 
 # เปลี่ยนเขตเวลาเป็น UTC+9 (ญี่ปุ่น)
 set timezone 9
 
 # บันทึกโมเดลอีกครั้ง (เวลาที่บันทึกจะเป็นเวลาตามเขตเวลา UTC+9)
-save model "models/linear_model_japan_time.mlmodel"
+save model "models/rl_model_japan_time.rlmodel"
 
 # แสดงข้อความสรุป
 # หลังจากรันไฟล์นี้ ให้ตรวจสอบเวลาในไฟล์โมเดลทั้งสองที่บันทึกไว้

@@ -54,8 +54,8 @@ create RL   # สำหรับ Reinforcement Learning
 load dataset "datasets/linear_data.csv"
 load dataset "datasets/iris.csv" type "csv"
 load dataset "datasets/images/" type "image"
-load environment "datasets/environment.json"
-load config "datasets/config.json"
+load dataset "datasets/environment.json"
+load model "models/trained_model.mlmodel"
 ```
 
 ### คำสั่งสร้างโมเดล
@@ -158,8 +158,8 @@ set discount_factor 0.9
 set exploration_rate 0.3
 train model
 evaluate model
-show performance
-save model "q_learning_model.ml"
+show accuracy
+save model "q_learning_model.rlmodel"
 ```
 
 ## การใช้ค่าพารามิเตอร์อัตโนมัติ

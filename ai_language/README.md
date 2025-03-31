@@ -79,7 +79,7 @@ save model "models/cnn_model.dlmodel"
 start
 create RL
 
-# โหลดสภาพแวดล้อมและตั้งค่า
+# โหลดข้อมูลสภาพแวดล้อม
 load dataset "datasets/environment.json"
 
 # สร้างโมเดล Q-Learning
