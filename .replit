@@ -8,7 +8,7 @@ channel = "stable-24_05"
 run = ["sh", "-c", "cd ai_language && mkdir -p build && cd build && cmake .. && make && cd .. && ./ai_lang -i"]
 
 [workflows]
-runButton = "Run with New Syntax"
+runButton = "Fix and Build"
 
 [[workflows.workflow]]
 name = "Build and Run C++"
@@ -72,3 +72,12 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "cd ai_language && ./run_example.sh ml linear_regression"
+
+[[workflows.workflow]]
+name = "Fix and Build"
+author = 41026532
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd ai_language && mkdir -p build && cd build && cmake .. && make"

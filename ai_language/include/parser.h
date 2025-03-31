@@ -33,10 +33,14 @@ public:
  */
 class Statement {
 public:
-    Token token; // Token ที่เกี่ยวข้องกับคำสั่งนี้
+    Token keyword;  // คำสำคัญที่เริ่มต้นคำสั่ง
+
+    // เพิ่ม constructor แบบว่างเปล่าเพื่อแก้ปัญหา "deleted function"
+    Statement() : keyword(TokenType::UNKNOWN, "", 0, 0) {}
+
     virtual ~Statement() = default;
-    virtual std::string toString() const = 0;
-    virtual void execute() const = 0;
+
+    // ตอนนี้ไม่มีดำเนินการร่วม ให้คลาสลูกเป็นผู้จัดการ
 };
 
 /**
@@ -379,6 +383,7 @@ private:
 
     // ดูว่า token ปัจจุบันเป็นประเภทที่คาดหวังหรือไม่ ถ้าใช่ จะเลื่อน token pointer ไปข้างหน้า
     bool match(TokenType type);
+    bool match(const std::vector<TokenType>& types);
 
     // ตรวจสอบประเภทของ token ปัจจุบันโดยไม่เลื่อน token pointer
     bool check(TokenType type) const;
@@ -410,6 +415,12 @@ private:
 
     // ข้ามเครื่องหมายขึ้นบรรทัดใหม่ (ถ้ามี)
     void consumeNewlines();
+
+    // เพิ่มประกาศฟังก์ชันที่ใช้ในไฟล์ parser.cpp แต่ไม่ได้ประกาศใน parser.h
+    void resetError();
+    std::shared_ptr<Statement> cleanStatement();
+    std::shared_ptr<Statement> visualizeStatement();
+
 
 public:
     Parser();
