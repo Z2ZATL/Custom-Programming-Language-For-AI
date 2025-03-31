@@ -1,4 +1,3 @@
-
 #include "../include/RLInterpreter.h"
 #include <random>
 #include <iomanip>
@@ -19,7 +18,7 @@ RLInterpreter::~RLInterpreter() {
 void RLInterpreter::setDefaultParameters() {
     // ล้างค่าเดิม
     parameters.clear();
-    
+
     // กำหนดค่าเริ่มต้นสำหรับ RL
     parameters["learning_rate"] = 0.1;
     parameters["discount_factor"] = 0.9;
@@ -106,7 +105,7 @@ void RLInterpreter::handleModelCreation(const std::string& modelName) {
 
     hasCreatedModel = true;
     hasTrainedModel = false;
-    
+
     std::cout << GREEN << "Model created: " << modelType << RESET << std::endl;
 }
 
@@ -228,7 +227,7 @@ void RLInterpreter::handleLoadCommand(const std::vector<std::string>& args) {
 
         datasetFilename = filename;
         hasLoadedData = true;
-        
+
         std::cout << GREEN << (args[0] == "dataset" ? "Dataset" : "Environment") << " loaded successfully" << RESET << std::endl;
     } else if (args[0] == "model") {
         if (args.size() < 2) {
@@ -253,7 +252,7 @@ void RLInterpreter::handleLoadCommand(const std::vector<std::string>& args) {
         hasCreatedModel = true;
         hasTrainedModel = true;
         modelType = "LoadedModel";
-        
+
         std::cout << GREEN << "Model loaded successfully" << RESET << std::endl;
     } else {
         std::cerr << RED << "ข้อผิดพลาด: คำสั่ง 'load' ต้องตามด้วย 'dataset', 'environment' หรือ 'model'" << RESET << std::endl;
@@ -375,7 +374,7 @@ void RLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
         std::uniform_real_distribution<> reward_dis(-100.0, 500.0);
         std::uniform_int_distribution<> step_dis(50, 200);
         std::uniform_real_distribution<> time_dis(10.0, 100.0);
-        
+
         double avg_reward = reward_dis(gen);
         int avg_steps = step_dis(gen);
         double training_time = time_dis(gen);
@@ -570,7 +569,7 @@ void RLInterpreter::handleRunSimulationCommand(const std::vector<std::string>& a
     for (int e = 1; e <= episodes; e++) {
         int steps = step_dis(gen);
         std::cout << BLUE << "Episode " << e << ":" << RESET << std::endl;
-        
+
         double total_reward = 0.0;
         for (int s = 1; s <= steps; s++) {
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -578,12 +577,12 @@ void RLInterpreter::handleRunSimulationCommand(const std::vector<std::string>& a
             int action = (s * 2) % 4 + 1;
             double reward = reward_dis(gen);
             total_reward += reward;
-            
+
             std::cout << "  Step " << s << ": State " << state 
                       << " -> Action " << action 
                       << " -> Reward " << std::fixed << std::setprecision(2) << reward << std::endl;
         }
-        
+
         std::cout << GREEN << "  Episode " << e << " complete. Total steps: " << steps 
                   << ", Total reward: " << std::fixed << std::setprecision(2) << total_reward << RESET << std::endl;
         std::cout << std::endl;
@@ -613,7 +612,7 @@ void RLInterpreter::handleEvaluateCommand(const std::vector<std::string>& args) 
         return;
     }
 
-    if (args.size() < 1 || args[0] != "model") {
+    if (args.size() < 1|| args[0] != "model") {
         std::cerr << RED << "ข้อผิดพลาด: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'evaluate model'" << RESET << std::endl;
         return;
     }
@@ -624,7 +623,7 @@ void RLInterpreter::handleEvaluateCommand(const std::vector<std::string>& args) 
     std::uniform_real_distribution<> reward_dis(50.0, 500.0);
     std::uniform_int_distribution<> step_dis(50, 150);
     std::uniform_real_distribution<> success_dis(0.6, 0.95);
-    
+
     double avg_reward = reward_dis(gen);
     int avg_steps = step_dis(gen);
     double success_rate = success_dis(gen);
@@ -642,39 +641,36 @@ void RLInterpreter::handleEvaluateCommand(const std::vector<std::string>& args) 
 void RLInterpreter::interpretLine(const std::string& line) {
     // ข้ามบรรทัดว่างและคอมเมนต์
     if (line.empty() || line[0] == '#') {
-
-// แยกบรรทัดคำสั่งเป็น tokens
-        std::vector<std::string> tokenizeLine(const std::string& line) {
-            std::vector<std::string> tokens;
-            std::string token;
-            bool inQuotes = false;
-
-            for (char c : line) {
-                if (c == '"') {
-                    inQuotes = !inQuotes;
-                    token += c;
-                } else if (c == ' ' && !inQuotes) {
-                    if (!token.empty()) {
-                        tokens.push_back(token);
-                        token.clear();
-                    }
-                } else {
-                    token += c;
-                }
-            }
-
-            if (!token.empty()) {
-                tokens.push_back(token);
-            }
-
-            return tokens;
-        }
-
-
         return;
     }
 
     // แยกคำสั่งและพารามิเตอร์
+    auto tokenizeLine = [&](const std::string& line) {
+        std::vector<std::string> tokens;
+        std::string token;
+        bool inQuotes = false;
+
+        for (char c : line) {
+            if (c == '"') {
+                inQuotes = !inQuotes;
+                token += c;
+            } else if (c == ' ' && !inQuotes) {
+                if (!token.empty()) {
+                    tokens.push_back(token);
+                    token.clear();
+                }
+            } else {
+                token += c;
+            }
+        }
+
+        if (!token.empty()) {
+            tokens.push_back(token);
+        }
+
+        return tokens;
+    };
+
     std::vector<std::string> tokens = tokenizeLine(line);
     if (tokens.empty()) {
         return;
