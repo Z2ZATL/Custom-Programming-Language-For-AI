@@ -1,0 +1,103 @@
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/runner/w[ 16%] Building CXX object CMakeFiles/ai_language_lib.dir/src/parser.cpp.o
+In file included from /home/runner/workspace/ai_language/src/parser.cpp:12:
+/home/runner/workspace/ai_language/include/parser.h:312:7: error: redefinition of ‘class ai_language::PredictStatement’
+  312 | class PredictStatement : public Statement {
+      |       ^~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:131:7: note: previous definition of ‘class ai_language::PredictStatement’
+  131 | class PredictStatement : public Statement {
+      |       ^~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: In constructor ‘ai_language::StartStatement::StartStatement(const std::string&)’:
+/home/runner/workspace/ai_language/src/parser.cpp:21:32: error: use of deleted function ‘ai_language::Statement::Statement()’
+   21 |     : learningType(learningType) {}
+      |                                ^
+/home/runner/workspace/ai_language/include/parser.h:34:7: note: ‘ai_language::Statement::Statement()’ is implicitly deleted because the default definition would be ill-formed:
+   34 | class Statement {
+      |       ^~~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:34:7: error: no matching function for call to ‘ai_language::Token::Token()’
+In file included from /home/runner/workspace/ai_language/include/parser.h:9:
+/home/runner/workspace/ai_language/include/lexer.h:93:5: note: candidate: ‘ai_language::Token::Token(ai_language::TokenType, const std::string&, int, int)’
+   93 |     Token(TokenType type, const std::string& value, int line, int column)
+      |     ^~~~~
+/home/runner/workspace/ai_language/include/lexer.h:93:5: note:   candidate expects 4 arguments, 0 provided
+/home/runner/workspace/ai_language/include/lexer.h:87:8: note: candidate: ‘ai_language::Token::Token(const ai_language::Token&)’
+   87 | struct Token {
+      |        ^~~~~
+/home/runner/workspace/ai_language/include/lexer.h:87:8: note:   candidate expects 1 argument, 0 provided
+/home/runner/workspace/ai_language/include/lexer.h:87:8: note: candidate: ‘ai_language::Token::Token(ai_language::Token&&)’
+/home/runner/workspace/ai_language/include/lexer.h:87:8: note:   candidate expects 1 argument, 0 provided
+/home/runner/workspace/ai_language/src/parser.cpp: In constructor ‘ai_language::LoadStatement::LoadStatement(const std::string&, const std::string&)’:
+/home/runner/workspace/ai_language/src/parser.cpp:42:44: error: use of deleted function ‘ai_language::Statement::Statement()’
+   42 |  filename(filename), fileType(fileType) {}
+      |                                       ^
+
+/home/runner/workspace/ai_language/src/parser.cpp: In constructor ‘ai_language::CleanStatement::CleanStatement(const std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/parser.cpp:54:20: error: use of deleted function ‘ai_language::Statement::Statement()’
+   54 |     : params(params) {}
+      |                    ^
+/home/runner/workspace/ai_language/src/parser.cpp: In constructor ‘ai_language::SplitStatement::SplitStatement(const std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/parser.cpp:78:20: error: use of deleted function ‘ai_language::Statement::Statement()’
+   78 |     : params(params) {}
+      |                    ^
+/home/runner/workspace/ai_language/src/parser.cpp: In constructor ‘ai_language::TrainStatement::TrainStatement(const std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/parser.cpp:102:20: error: use of deleted function ‘ai_language::Statement::Statement()’
+  102 |     : params(params) {}
+      |                    ^
+/home/runner/workspace/ai_language/src/parser.cpp: In constructor ‘ai_language::EvaluateStatement::EvaluateStatement(const std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/parser.cpp:134:20: error: use of deleted function ‘ai_language::Statement::Statement()’
+  134 |     : params(params) {}
+      |                    ^
+/home/runner/workspace/ai_language/src/parser.cpp: In constructor ‘ai_language::PredictStatement::PredictStatement(const std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/parser.cpp:158:20: error: use of deleted function ‘ai_language::Statement::Statement()’
+  158 |     : params(params) {}
+      |                    ^
+/home/runner/workspace/ai_language/src/parser.cpp: In constructor ‘ai_language::SaveStatement::SaveStatement(const std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/parser.cpp:182:20: error: use of deleted function ‘ai_language::Statement::Statement()’
+  182 |     : params(params) {}
+      |                    ^
+/home/runner/workspace/ai_language/src/parser.cpp: In constructor ‘ai_language::ShowStatement::ShowStatement(const std::string&, const std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/parser.cpp:213:36: error: use of deleted function ‘ai_language::Statement::Statement()’
+  213 |     : target(target), params(params) {}
+      |                                    ^
+/home/runner/workspace/ai_language/src/parser.cpp: In constructor ‘ai_language::VisualizeStatement::VisualizeStatement(const std::string&, const std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/parser.cpp:244:36: error: use of deleted function ‘ai_language::Statement::Statement()’
+  244 |     : target(target), params(params) {}
+      |                                    ^
+/home/runner/workspace/ai_language/src/parser.cpp: In constructor ‘ai_language::PlotStatement::PlotStatement(const std::string&, const std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/parser.cpp:268:36: error: use of deleted function ‘ai_language::Statement::Statement()’
+  268 |     : target(target), params(params) {}
+      |                                    ^
+/home/runner/workspace/ai_language/src/parser.cpp: At global scope:
+/home/runner/workspace/ai_language/src/parser.cpp:349:6: error: no declaration matches ‘void ai_language::Parser::resetError()’
+  349 | void Parser::resetError() {
+      |      ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:349:6: note: no functions named ‘void ai_language::Parser::resetError()’
+/home/runner/workspace/ai_language/include/parser.h:331:7: note: ‘class ai_language::Parser’ defined here
+  331 | class Parser {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:383:6: error: no declaration matches ‘bool ai_language::Parser::match(const std::vector<ai_language::TokenType>&)’
+  383 | bool Parser::match(const std::vector<TokenType>& types) {
+      |      ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:375:6: note: candidate is: ‘bool ai_language::Parser::match(ai_language::TokenType)’
+  375 | bool Parser::match(TokenType type) {
+      |      ^~~~~~
+/home/runner/workspace/ai_language/include/parser.h:331:7: note: ‘class ai_language::Parser’ defined here
+  331 | class Parser {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: In member function ‘std::shared_ptr<ai_language::Statement> ai_language::Parser::statement()’:
+/home/runner/workspace/ai_language/src/parser.cpp:418:16: error: ‘cleanStatement’ was not declared in this scope; did you mean ‘CleanStatement’?
+  418 |         return cleanStatement();
+      |                ^~~~~~~~~~~~~~
+      |                CleanStatement
+/home/runner/workspace/ai_language/src/parser.cpp: At global scope:
+/home/runner/workspace/ai_language/src/parser.cpp:493:28: error: no declaration matches ‘std::shared_ptr<ai_language::Statement> ai_language::Parser::cleanStatement()’
+  493 | std::shared_ptr<Statement> Parser::cleanStatement() {
+      |                            ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:493:28: note: no functions named ‘std::shared_ptr<ai_language::Statement> ai_language::Parser::cleanStatement()’
+/home/runner/workspace/ai_language/include/parser.h:331:7: note: ‘class ai_language::Parser’ defined here
+  331 | class Parser {
+      |       ^~~~~~
+make[2]: *** [CMakeFiles/ai_language_lib.dir/build.make:90: CMakeFiles/ai_language_lib.dir/src/parser.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:86: CMakeFiles/ai_language_lib.dir/all] Error 2
+make: *** [Makefile:91: all] Error 2
