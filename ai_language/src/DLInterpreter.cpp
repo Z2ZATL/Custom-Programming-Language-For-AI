@@ -795,9 +795,6 @@ void DLInterpreter::interpretLine(const std::string& line) {
     } else {
         std::cerr << RED << "ข้อผิดพลาด: ไม่รู้จักคำสั่ง '" << command << "'" << RESET << std::endl;
     }
-}
-
-} // namespace ai_language
 void DLInterpreter::handleHelpCommand() {
     std::cout << BLUE << "\n=== DL คำสั่งที่ใช้งานได้ ===" << RESET << std::endl;
     std::cout << GREEN << "start" << RESET << " - เริ่มต้นการใช้งานโปรเจค" << std::endl;
@@ -815,3 +812,5 @@ void DLInterpreter::handleHelpCommand() {
     std::cout << GREEN << "help" << RESET << " - แสดงรายการคำสั่งที่ใช้งานได้" << std::endl;
     std::cout << GREEN << "exit" << RESET << " - ออกจากโปรแกรม" << std::endl;
 }
+
+} // namespace ai_language
