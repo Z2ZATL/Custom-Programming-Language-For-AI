@@ -1,0 +1,36 @@
+
+# ตัวอย่างลำดับการทำงานของ Syntax ภาษา AI
+
+# 1. คำสั่งเริ่มต้น
+start
+
+# 2. คำสั่งสร้างโปรเจกต์ (เลือกได้ระหว่าง ML, DL, RL)
+create ML
+
+# 3. คำสั่งโหลดข้อมูล
+load dataset "datasets/linear_data.csv" type "csv"
+
+# 4. คำสั่งสร้างโมเดล
+create model LinearRegression
+
+# 5. คำสั่งปรับแต่งการเทรน (ไม่บังคับ)
+set learning_rate 0.01
+set epochs 100
+set batch_size 32
+
+# 6. คำสั่งเทรนโมเดล
+train model
+
+# 7. คำสั่งแสดงผลลัพธ์
+show accuracy
+show loss
+show graph
+
+# 8. คำสั่งบันทึกโมเดล
+save model "trained_model.ml"
+
+# 9. คำสั่งโหลดโมเดล (ทางเลือกแทนการสร้างโมเดลใหม่)
+# load model "trained_model.ml"
+
+# 10. คำสั่งสิ้นสุด
+end

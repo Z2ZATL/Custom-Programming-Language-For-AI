@@ -1,22 +1,673 @@
-/**
- * @file ai_lang.cpp
- * @brief โปรแกรมหลักสำหรับแปลภาษา AI
- */
 
-#include "include/interpreter.h"
 #include <iostream>
-#include <fstream>
 #include <string>
-#include <sstream>
-#include <ctime>
-#include <unistd.h>  // สำหรับ getcwd
-#include <cstring>   // สำหรับ strncpy
-#include <algorithm> // for std::transform
-#include <cstdlib> // for getenv
+#include <fstream>
+#include <vector>
+#include <unordered_map>
+#include <algorithm>
+#include <random>
 
-void showUsage(const std::string& programName) {
-    std::cout << "วิธีใช้งาน: " << programName << " [ไฟล์.ai | -i | -h]" << std::endl;
-    std::cout << "  ไฟล์.ai      ไฟล์โค้ดภาษา AI ที่ต้องการประมวลผล" << std::endl;
+// กำหนดสีสำหรับข้อความในคอนโซล
+const std::string RESET = "\033[0m";
+const std::string RED = "\033[31m";
+const std::string GREEN = "\033[32m";
+const std::string YELLOW = "\033[33m";
+const std::string BLUE = "\033[34m";
+const std::string MAGENTA = "\033[35m";
+const std::string CYAN = "\033[36m";
+
+namespace ai_language {
+
+class Interpreter {
+private:
+    bool hasStarted = false;
+    bool hasCreatedProject = false;
+    std::string projectType = "";
+    bool hasLoadedData = false;
+    std::string datasetPath = "";
+    bool hasCreatedModel = false;
+    std::string modelType = "";
+    bool hasTrainedModel = false;
+    bool hasShowedAccuracy = false;
+    bool hasSavedModel = false;
+
+    // พารามิเตอร์สำหรับการฝึกโมเดล
+    std::unordered_map<std::string, double> parameters;
+
+    // ค่าพารามิเตอร์เริ่มต้นสำหรับแต่ละประเภท AI
+    void setDefaultParameters() {
+        // ล้างค่าเดิม
+        parameters.clear();
+
+        if (projectType == "ML") {
+            parameters["learning_rate"] = 0.01;
+            parameters["epochs"] = 50;
+            parameters["batch_size"] = 32;
+        } else if (projectType == "DL") {
+            parameters["learning_rate"] = 0.001;
+            parameters["epochs"] = 100;
+            parameters["batch_size"] = 32;
+        } else if (projectType == "RL") {
+            parameters["learning_rate"] = 0.1;
+            parameters["episodes"] = 1000;
+            parameters["discount_factor"] = 0.9;
+        }
+    }
+
+public:
+    void interpretFile(const std::string& filename) {
+        std::ifstream file(filename);
+        if (!file.is_open()) {
+            std::cerr << RED << "ข้อผิดพลาด: ไม่สามารถเปิดไฟล์ " << filename << RESET << std::endl;
+            return;
+        }
+
+        std::string line;
+        while (std::getline(file, line)) {
+            // ข้ามบรรทัดว่างและคอมเมนต์
+            if (line.empty() || line[0] == '#') {
+                continue;
+            }
+            
+            interpretLine(line);
+        }
+    }
+
+    void interpretLine(const std::string& line) {
+        // แยกคำสั่งและพารามิเตอร์
+        std::vector<std::string> tokens;
+        std::string currentToken;
+        bool inQuotes = false;
+
+        for (char c : line) {
+            if (c == '"') {
+                inQuotes = !inQuotes;
+                currentToken += c;
+            } else if (c == ' ' && !inQuotes) {
+                if (!currentToken.empty()) {
+                    tokens.push_back(currentToken);
+                    currentToken.clear();
+                }
+            } else {
+                currentToken += c;
+            }
+        }
+
+        if (!currentToken.empty()) {
+            tokens.push_back(currentToken);
+        }
+
+        if (tokens.empty()) {
+            return;
+        }
+
+        // ประมวลผลคำสั่ง
+        std::string command = tokens[0];
+
+        if (command == "start") {
+            // คำสั่ง start
+            hasStarted = true;
+            std::cout << GREEN << "Program started" << RESET << std::endl;
+        } else if (command == "end") {
+            // คำสั่ง end
+            std::cout << GREEN << "Program ended" << RESET << std::endl;
+        } else if (command == "create") {
+            // คำสั่ง create
+            if (!hasStarted) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'start' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (tokens.size() < 2) {
+                std::cerr << RED << "ข้อผิดพลาด: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'create [type]' หรือ 'create model [model_name]'" << RESET << std::endl;
+                return;
+            }
+
+            if (tokens[1] == "ML" || tokens[1] == "DL" || tokens[1] == "RL") {
+                // สร้างโปรเจค
+                if (hasCreatedProject) {
+                    std::cerr << YELLOW << "คำเตือน: กำลังสร้างโปรเจคใหม่ ข้อมูลเดิมจะถูกรีเซ็ต" << RESET << std::endl;
+                }
+
+                projectType = tokens[1];
+                hasCreatedProject = true;
+                hasLoadedData = false;
+                hasCreatedModel = false;
+                hasTrainedModel = false;
+                hasShowedAccuracy = false;
+                hasSavedModel = false;
+
+                // ตั้งค่าพารามิเตอร์เริ่มต้น
+                setDefaultParameters();
+
+                std::string projectTypeText;
+                if (projectType == "ML") projectTypeText = "Machine Learning";
+                else if (projectType == "DL") projectTypeText = "Deep Learning";
+                else if (projectType == "RL") projectTypeText = "Reinforcement Learning";
+
+                std::cout << GREEN << "Project created: " << projectTypeText << RESET << std::endl;
+            } else if (tokens[1] == "model") {
+                // สร้างโมเดล
+                if (!hasCreatedProject) {
+                    std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create [type]' ก่อน" << RESET << std::endl;
+                    return;
+                }
+
+                if (!hasLoadedData) {
+                    std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'load dataset' ก่อน" << RESET << std::endl;
+                    return;
+                }
+
+                if (tokens.size() < 3) {
+                    std::cerr << RED << "ข้อผิดพลาด: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'create model [model_name]'" << RESET << std::endl;
+                    return;
+                }
+
+                modelType = tokens[2];
+                hasCreatedModel = true;
+                hasTrainedModel = false;
+                hasShowedAccuracy = false;
+                hasSavedModel = false;
+
+                std::cout << GREEN << "Model created: " << modelType << RESET << std::endl;
+            } else {
+                std::cerr << RED << "ข้อผิดพลาด: ประเภท '" << tokens[1] << "' ไม่ถูกต้อง ต้องเป็น 'ML', 'DL', 'RL' หรือ 'model'" << RESET << std::endl;
+            }
+        } else if (command == "load") {
+            // คำสั่ง load
+            if (!hasStarted) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'start' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (!hasCreatedProject) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create [type]' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (tokens.size() < 3) {
+                std::cerr << RED << "ข้อผิดพลาด: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'load dataset \"[filename]\"' หรือ 'load model \"[filename]\"'" << RESET << std::endl;
+                return;
+            }
+
+            if (tokens[1] == "dataset") {
+                // โหลดข้อมูล
+                if (tokens.size() < 3) {
+                    std::cerr << RED << "ข้อผิดพลาด: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'load dataset \"[filename]\"'" << RESET << std::endl;
+                    return;
+                }
+
+                // แยกชื่อไฟล์จากเครื่องหมายคำพูด
+                std::string filename = tokens[2];
+                if (filename.size() >= 2 && filename.front() == '"' && filename.back() == '"') {
+                    filename = filename.substr(1, filename.size() - 2);
+                }
+
+                datasetPath = filename;
+                hasLoadedData = true;
+                hasCreatedModel = false;
+                hasTrainedModel = false;
+                hasShowedAccuracy = false;
+                hasSavedModel = false;
+
+                std::cout << GREEN << "Dataset loaded successfully" << RESET << std::endl;
+            } else if (tokens[1] == "model") {
+                // โหลดโมเดล
+                if (!hasLoadedData) {
+                    std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'load dataset' ก่อน" << RESET << std::endl;
+                    return;
+                }
+
+                if (tokens.size() < 3) {
+                    std::cerr << RED << "ข้อผิดพลาด: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'load model \"[filename]\"'" << RESET << std::endl;
+                    return;
+                }
+
+                // แยกชื่อไฟล์จากเครื่องหมายคำพูด
+                std::string filename = tokens[2];
+                if (filename.size() >= 2 && filename.front() == '"' && filename.back() == '"') {
+                    filename = filename.substr(1, filename.size() - 2);
+                }
+
+                modelType = "LoadedModel";
+                hasCreatedModel = true;
+                hasTrainedModel = false;
+                hasShowedAccuracy = false;
+                hasSavedModel = false;
+
+                std::cout << GREEN << "Model loaded successfully: " << filename << RESET << std::endl;
+            } else {
+                std::cerr << RED << "ข้อผิดพลาด: ประเภทข้อมูล '" << tokens[1] << "' ไม่ถูกต้อง ต้องเป็น 'dataset' หรือ 'model'" << RESET << std::endl;
+            }
+        } else if (command == "set") {
+            // คำสั่ง set
+            if (!hasStarted) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'start' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (!hasCreatedProject) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create [type]' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (!hasCreatedModel) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create model' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (hasTrainedModel) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'train model'" << RESET << std::endl;
+                return;
+            }
+
+            if (tokens.size() < 3) {
+                std::cerr << RED << "ข้อผิดพลาด: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'set [parameter] [value]'" << RESET << std::endl;
+                return;
+            }
+
+            std::string paramName = tokens[1];
+            double paramValue;
+            
+            try {
+                paramValue = std::stod(tokens[2]);
+            } catch (const std::invalid_argument&) {
+                std::cerr << RED << "ข้อผิดพลาด: ค่า '" << tokens[2] << "' ไม่ใช่ตัวเลข" << RESET << std::endl;
+                return;
+            } catch (const std::out_of_range&) {
+                std::cerr << RED << "ข้อผิดพลาด: ค่า '" << tokens[2] << "' เกินขอบเขต" << RESET << std::endl;
+                return;
+            }
+
+            // กำหนดค่าพารามิเตอร์
+            parameters[paramName] = paramValue;
+
+            std::cout << GREEN << "Parameter set: " << paramName << " = " << paramValue << RESET << std::endl;
+        } else if (command == "train") {
+            // คำสั่ง train
+            if (!hasStarted) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'start' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (!hasCreatedProject) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create [type]' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (!hasLoadedData) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'load dataset' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (!hasCreatedModel) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create model' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (tokens.size() < 2 || tokens[1] != "model") {
+                std::cerr << RED << "ข้อผิดพลาด: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'train model'" << RESET << std::endl;
+                return;
+            }
+
+            // แสดงการฝึกโมเดล
+            std::cout << BLUE << "Training model with parameters:" << RESET << std::endl;
+            for (const auto& param : parameters) {
+                std::cout << BLUE << "  - " << param.first << ": " << param.second << RESET << std::endl;
+            }
+
+            // จำลองการฝึกโมเดล
+            std::cout << "Training";
+            for (int i = 0; i < 5; i++) {
+                std::cout << "." << std::flush;
+                std::this_thread::sleep_for(std::chrono::milliseconds(300));
+            }
+            std::cout << std::endl;
+
+            hasTrainedModel = true;
+            std::cout << GREEN << "Training complete" << RESET << std::endl;
+        } else if (command == "show") {
+            // คำสั่ง show
+            if (!hasStarted) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'start' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (!hasCreatedProject) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create [type]' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (!hasLoadedData) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'load dataset' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (!hasCreatedModel) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create model' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (!hasTrainedModel) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'train model' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (tokens.size() < 2) {
+                std::cerr << RED << "ข้อผิดพลาด: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'show [result_type]'" << RESET << std::endl;
+                return;
+            }
+
+            std::string resultType = tokens[1];
+
+            if (resultType == "accuracy") {
+                // สุ่มค่าความแม่นยำระหว่าง 80.0 - 99.9
+                std::random_device rd;
+                std::mt19937 gen(rd());
+                std::uniform_real_distribution<> dis(80.0, 99.9);
+                double accuracy = dis(gen);
+
+                std::cout << GREEN << "Accuracy: " << std::fixed << std::setprecision(2) << accuracy << "%" << RESET << std::endl;
+                hasShowedAccuracy = true;
+            } else if (resultType == "loss") {
+                // สุ่มค่า loss ระหว่าง 0.01 - 0.5
+                std::random_device rd;
+                std::mt19937 gen(rd());
+                std::uniform_real_distribution<> dis(0.01, 0.5);
+                double loss = dis(gen);
+
+                std::cout << GREEN << "Loss: " << std::fixed << std::setprecision(4) << loss << RESET << std::endl;
+            } else if (resultType == "graph" || resultType == "data") {
+                std::cout << GREEN << "Visualization displayed." << RESET << std::endl;
+                
+                // แสดง ASCII art graph ง่ายๆ
+                std::cout << BLUE << "    ^" << std::endl;
+                std::cout << "    |" << std::endl;
+                std::cout << "    |   *" << std::endl;
+                std::cout << "    |     *" << std::endl;
+                std::cout << "    |       *" << std::endl;
+                std::cout << "    |         *" << std::endl;
+                std::cout << "    |           *" << std::endl;
+                std::cout << "    |              *" << std::endl;
+                std::cout << "    |                 *" << std::endl;
+                std::cout << "    +-------------------------------->" << RESET << std::endl;
+            } else {
+                std::cerr << YELLOW << "คำเตือน: ประเภทผลลัพธ์ '" << resultType << "' ไม่รองรับ ใช้ 'accuracy', 'loss' หรือ 'graph'" << RESET << std::endl;
+            }
+        } else if (command == "save") {
+            // คำสั่ง save
+            if (!hasStarted) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'start' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (!hasCreatedProject) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create [type]' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (!hasLoadedData) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'load dataset' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (!hasCreatedModel) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create model' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (!hasTrainedModel) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'train model' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (tokens.size() < 3 || tokens[1] != "model") {
+                std::cerr << RED << "ข้อผิดพลาด: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'save model \"[filename]\"'" << RESET << std::endl;
+                return;
+            }
+
+            // แยกชื่อไฟล์จากเครื่องหมายคำพูด
+            std::string filename = tokens[2];
+            if (filename.size() >= 2 && filename.front() == '"' && filename.back() == '"') {
+                filename = filename.substr(1, filename.size() - 2);
+            }
+
+            hasSavedModel = true;
+
+            std::cout << GREEN << "Model saved to: " << filename << RESET << std::endl;
+        } else if (command == "visualize") {
+            // คำสั่ง visualize
+            if (!hasStarted) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'start' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (!hasCreatedProject) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create [type]' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (!hasLoadedData) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'load dataset' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            std::cout << GREEN << "Visualization:" << RESET << std::endl;
+            
+            // แสดง ASCII art scatter plot ง่ายๆ
+            std::cout << BLUE << "    ^" << std::endl;
+            std::cout << "    |  * *" << std::endl;
+            std::cout << "    |    *  *" << std::endl;
+            std::cout << "    | *    *" << std::endl;
+            std::cout << "    |     *   *" << std::endl;
+            std::cout << "    |  *     *" << std::endl;
+            std::cout << "    |       *  *" << std::endl;
+            std::cout << "    |  *  *    *" << std::endl;
+            std::cout << "    |           *" << std::endl;
+            std::cout << "    +-------------------------------->" << RESET << std::endl;
+        } else if (command == "evaluate") {
+            // คำสั่ง evaluate
+            if (!hasStarted) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'start' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (!hasCreatedProject) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create [type]' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (!hasLoadedData) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'load dataset' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (!hasCreatedModel) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create model' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (!hasTrainedModel) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'train model' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (tokens.size() < 2 || tokens[1] != "model") {
+                std::cerr << RED << "ข้อผิดพลาด: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'evaluate model'" << RESET << std::endl;
+                return;
+            }
+
+            // สุ่มค่าสำหรับเมทริกต่างๆ
+            std::random_device rd;
+            std::mt19937 gen(rd());
+            std::uniform_real_distribution<> acc_dis(80.0, 99.9);
+            std::uniform_real_distribution<> loss_dis(0.01, 0.5);
+            std::uniform_real_distribution<> f1_dis(0.7, 0.99);
+            
+            double accuracy = acc_dis(gen);
+            double loss = loss_dis(gen);
+            double precision = acc_dis(gen);
+            double recall = acc_dis(gen);
+            double f1_score = f1_dis(gen);
+
+            std::cout << GREEN << "Model Evaluation:" << RESET << std::endl;
+            std::cout << BLUE << "  Accuracy: " << std::fixed << std::setprecision(2) << accuracy << "%" << RESET << std::endl;
+            std::cout << BLUE << "  Loss: " << std::fixed << std::setprecision(4) << loss << RESET << std::endl;
+            
+            if (projectType == "ML" || projectType == "DL") {
+                std::cout << BLUE << "  Precision: " << std::fixed << std::setprecision(2) << precision << "%" << RESET << std::endl;
+                std::cout << BLUE << "  Recall: " << std::fixed << std::setprecision(2) << recall << "%" << RESET << std::endl;
+                std::cout << BLUE << "  F1 Score: " << std::fixed << std::setprecision(2) << f1_score << RESET << std::endl;
+            }
+            
+            if (projectType == "RL") {
+                std::cout << BLUE << "  Average Reward: " << std::fixed << std::setprecision(2) << precision << RESET << std::endl;
+                std::cout << BLUE << "  Episodes Completed: 1000" << RESET << std::endl;
+                std::cout << BLUE << "  Success Rate: " << std::fixed << std::setprecision(2) << recall << "%" << RESET << std::endl;
+            }
+        } else if (command == "plot") {
+            // คำสั่ง plot
+            if (!hasStarted) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'start' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (!hasCreatedProject) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create [type]' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (!hasTrainedModel) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'train model' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            std::cout << GREEN << "Plotting:" << RESET << std::endl;
+            
+            // แสดง ASCII art graph ง่ายๆ
+            std::cout << CYAN << "    ^" << std::endl;
+            std::cout << "    |            ****" << std::endl;
+            std::cout << "    |         ***" << std::endl;
+            std::cout << "    |      ***" << std::endl;
+            std::cout << "    |    **" << std::endl;
+            std::cout << "    |  **" << std::endl;
+            std::cout << "    | *" << std::endl;
+            std::cout << "    |*" << std::endl;
+            std::cout << "    |" << std::endl;
+            std::cout << "    +-------------------------------->" << RESET << std::endl;
+        } else if (command == "add") {
+            // คำสั่ง add (สำหรับ Neural Network)
+            if (!hasStarted) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'start' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (!hasCreatedProject) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create [type]' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (projectType != "DL") {
+                std::cerr << RED << "ข้อผิดพลาด: คำสั่ง 'add layer' ใช้ได้เฉพาะกับโปรเจค Deep Learning เท่านั้น" << RESET << std::endl;
+                return;
+            }
+
+            if (!hasCreatedModel) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create model' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (tokens.size() < 4 || tokens[1] != "layer") {
+                std::cerr << RED << "ข้อผิดพลาด: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'add layer [layer_type] [parameters]'" << RESET << std::endl;
+                return;
+            }
+
+            std::string layerType = tokens[2];
+            std::string layerSize = tokens.size() > 3 ? tokens[3] : "0";
+
+            std::cout << GREEN << "Layer added: " << layerType << " with size " << layerSize << RESET << std::endl;
+        } else if (command == "clean" || command == "split") {
+            // คำสั่ง clean/split (สำหรับการจัดการข้อมูล)
+            if (!hasStarted) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'start' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (!hasCreatedProject) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create [type]' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (!hasLoadedData) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'load dataset' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (command == "clean") {
+                std::cout << GREEN << "Data cleaned successfully" << RESET << std::endl;
+            } else {
+                std::cout << GREEN << "Data split successfully" << RESET << std::endl;
+            }
+        } else if (command == "predict") {
+            // คำสั่ง predict
+            if (!hasStarted) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'start' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (!hasCreatedProject) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create [type]' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (!hasLoadedData) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'load dataset' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (!hasCreatedModel) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create model' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            if (!hasTrainedModel) {
+                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'train model' ก่อน" << RESET << std::endl;
+                return;
+            }
+
+            // สุ่มค่าทำนาย
+            std::random_device rd;
+            std::mt19937 gen(rd());
+            std::uniform_real_distribution<> dis(0.0, 100.0);
+            double prediction = dis(gen);
+
+            std::cout << GREEN << "Prediction: " << std::fixed << std::setprecision(2) << prediction << RESET << std::endl;
+        } else if (command == "help") {
+            // คำสั่ง help
+            std::cout << CYAN << "คำสั่งที่ใช้ได้:" << RESET << std::endl;
+            std::cout << "  start                       - เริ่มต้นโปรแกรม" << std::endl;
+            std::cout << "  create ML/DL/RL             - สร้างโปรเจค AI" << std::endl;
+            std::cout << "  load dataset \"[filename]\"    - โหลดข้อมูล" << std::endl;
+            std::cout << "  create model [model_name]   - สร้างโมเดล" << std::endl;
+            std::cout << "  set [parameter] [value]     - ตั้งค่าพารามิเตอร์" << std::endl;
+            std::cout << "  train model                 - ฝึกโมเดล" << std::endl;
+            std::cout << "  show accuracy/loss/graph    - แสดงผลลัพธ์" << std::endl;
+            std::cout << "  save model \"[filename]\"     - บันทึกโมเดล" << std::endl;
+            std::cout << "  load model \"[filename]\"     - โหลดโมเดล" << std::endl;
+            std::cout << "  end                         - สิ้นสุดโปรแกรม" << std::endl;
+        } else {
+            // คำสั่งไม่รองรับ
+            std::cerr << RED << "ข้อผิดพลาด: คำสั่ง '" << command << "' ไม่รองรับ" << RESET << std::endl;
+            std::cerr << YELLOW << "ลองใช้คำสั่ง 'help' เพื่อดูคำสั่งที่ใช้ได้" << RESET << std::endl;
+        }
+    }
+};
+
+} // namespace ai_language
+
+void printUsage() {
+    std::cout << "วิธีใช้: ai_lang [options] [filename]" << std::endl;
+    std::cout << "Options:" << std::endl;
     std::cout << "  -i, --interactive    เข้าสู่โหมดโต้ตอบ" << std::endl;
     std::cout << "  -h, --help          แสดงวิธีใช้" << std::endl;
 }
@@ -25,360 +676,72 @@ void runInteractiveMode() {
     std::cout << "=== โหมดโต้ตอบของภาษา AI ===" << std::endl;
     std::cout << "พิมพ์คำสั่งและกด Enter เพื่อดำเนินการ (พิมพ์ 'exit' เพื่อออก)" << std::endl << std::endl;
 
+    // แสดงคำแนะนำหรือตัวอย่างคำสั่ง
+    std::cout << "ตัวอย่างคำสั่ง:" << std::endl;
+    std::cout << "  start" << std::endl;
+    std::cout << "  create ML                        # สร้างโปรเจค Machine Learning" << std::endl;
+    std::cout << "  create DL                        # สร้างโปรเจค Deep Learning" << std::endl;
+    std::cout << "  create RL                        # สร้างโปรเจค Reinforcement Learning" << std::endl;
+    std::cout << "  load dataset \"datasets/linear_data.csv\" type \"csv\"  # โหลดข้อมูลสำหรับ ML" << std::endl;
+    std::cout << "  load dataset \"datasets/iris.csv\" type \"csv\"         # โหลดข้อมูลสำหรับ DL" << std::endl;
+    std::cout << "  load environment \"datasets/environment.json\"         # โหลดสภาพแวดล้อมสำหรับ RL" << std::endl;
+    std::cout << "  create model LinearRegression    # สร้างโมเดล LinearRegression" << std::endl;
+    std::cout << "  create model NeuralNetwork       # สร้างโมเดล Neural Network" << std::endl;
+    std::cout << "  create model QLearning           # สร้างโมเดล Q-Learning" << std::endl;
+    std::cout << "  set learning_rate 0.01           # ตั้งค่า learning rate" << std::endl;
+    std::cout << "  set epochs 100                   # ตั้งค่าจำนวนรอบการเรียนรู้" << std::endl;
+    std::cout << "  train model                      # ฝึกโมเดล" << std::endl;
+    std::cout << "  evaluate model                   # ประเมินประสิทธิภาพโมเดล" << std::endl;
+    std::cout << "  show accuracy                    # แสดงความแม่นยำของโมเดล" << std::endl;
+    std::cout << "  save model \"model_name.dat\"      # บันทึกโมเดล" << std::endl << std::endl;
+
+    std::cout << "คำแนะนำเพิ่มเติม: ดูไฟล์ USAGE_GUIDE.md สำหรับรายละเอียดเพิ่มเติม" << std::endl;
+    std::cout << "หรือดูตัวอย่างไฟล์ในโฟลเดอร์ examples/" << std::endl << std::endl;
+
+    std::cout << "ข้อมูลตัวอย่างอยู่ในโฟลเดอร์ datasets/" << std::endl;
+    std::cout << "  - linear_data.csv      # สำหรับ Linear Regression" << std::endl;
+    std::cout << "  - classification_data.csv # สำหรับ Classification" << std::endl;
+    std::cout << "  - iris.csv             # สำหรับ Neural Network" << std::endl;
+    std::cout << "  - images/              # สำหรับ CNN" << std::endl;
+    std::cout << "  - environment.json     # สำหรับ Reinforcement Learning" << std::endl;
+    std::cout << "  - config.json          # สำหรับการตั้งค่า RL" << std::endl << std::endl;
+
     ai_language::Interpreter interpreter;
     std::string line;
     std::string command;
 
-    // ตั้งค่าฟังก์ชันสำหรับแสดงผลลัพธ์
-    interpreter.setOutputHandler([](const std::string& message) {
-        std::cout << message << std::endl;
-    });
-
-    // ตั้งค่าฟังก์ชันสำหรับแสดงข้อผิดพลาด
-    interpreter.setErrorHandler([](const std::string& message) {
-        std::cerr << "\033[31m" << message << "\033[0m" << std::endl;
-    });
-
-    // แสดงคำแนะนำสำหรับการใช้งาน
-    std::cout << "ตัวอย่างคำสั่ง:\n";
-    std::cout << "  start\n";
-    std::cout << "  create ML                        # สร้างโปรเจค Machine Learning\n";
-    std::cout << "  create DL                        # สร้างโปรเจค Deep Learning\n";
-    std::cout << "  create RL                        # สร้างโปรเจค Reinforcement Learning\n";
-    std::cout << "  load dataset \"datasets/linear_data.csv\" type \"csv\"  # โหลดข้อมูลสำหรับ ML\n";
-    std::cout << "  load dataset \"datasets/iris.csv\" type \"csv\"         # โหลดข้อมูลสำหรับ DL\n";
-    std::cout << "  load environment \"datasets/environment.json\"         # โหลดสภาพแวดล้อมสำหรับ RL\n";
-    std::cout << "  create model LinearRegression    # สร้างโมเดล LinearRegression\n";
-    std::cout << "  create model NeuralNetwork       # สร้างโมเดล Neural Network\n";
-    std::cout << "  create model QLearning           # สร้างโมเดล Q-Learning\n";
-    std::cout << "  set learning_rate 0.01           # ตั้งค่า learning rate\n";
-    std::cout << "  set epochs 100                   # ตั้งค่าจำนวนรอบการเรียนรู้\n";
-    std::cout << "  train model                      # ฝึกโมเดล\n";
-    std::cout << "  evaluate model                   # ประเมินประสิทธิภาพโมเดล\n";
-    std::cout << "  show accuracy                    # แสดงความแม่นยำของโมเดล\n";
-    std::cout << "  save model \"model_name.dat\"      # บันทึกโมเดล\n\n";
-    std::cout << "คำแนะนำเพิ่มเติม: ดูไฟล์ USAGE_GUIDE.md สำหรับรายละเอียดเพิ่มเติม\n";
-    std::cout << "หรือดูตัวอย่างไฟล์ในโฟลเดอร์ examples/\n\n";
-    std::cout << "ข้อมูลตัวอย่างอยู่ในโฟลเดอร์ datasets/\n";
-    std::cout << "  - linear_data.csv      # สำหรับ Linear Regression\n";
-    std::cout << "  - classification_data.csv # สำหรับ Classification\n";
-    std::cout << "  - iris.csv             # สำหรับ Neural Network\n";
-    std::cout << "  - images/              # สำหรับ CNN\n";
-    std::cout << "  - environment.json     # สำหรับ Reinforcement Learning\n";
-    std::cout << "  - config.json          # สำหรับการตั้งค่า RL\n\n";
-    std::cout << "clean data\n";
-    std::cout << "  split data\n";
-    std::cout << "  train model epochs 100\n\n";
-
-
-    bool hasStarted = false;
-    bool hasLoadedData = false;
-    bool hasCleanedData = false;
-    bool hasSplitData = false;
-    bool hasTrainedModel = false;
-    bool hasEvaluatedModel = false;
-    bool hasCreatedProject = false;
-    bool hasCreatedModel = false;
-    bool hasShowedAccuracy = false;
-
-
+    // รับคำสั่งจากผู้ใช้จนกว่าจะพิมพ์ 'exit'
     while (true) {
         std::cout << "AI> ";
         std::getline(std::cin, line);
-
-        if (line == "exit" || line == "quit") {
+        
+        if (line == "exit") {
             break;
         }
-
-        // ตรวจสอบคำสั่งตามไวยากรณ์ใหม่
-        if (line == "start") {
-            if (!hasStarted) {
-                std::cout << "Program started" << std::endl;
-                hasStarted = true;
-            } else {
-                std::cerr << "\033[31mข้อผิดพลาด: คำสั่ง 'start' ถูกใช้ไปแล้ว\033[0m" << std::endl;
-            }
-        } else if (line.find("create ") == 0) {
-            if (!hasStarted) {
-                std::cerr << "\033[31mข้อผิดพลาด: ต้องใช้คำสั่ง 'start' ก่อน\033[0m" << std::endl;
-                continue;
-            }
-
-            // แยกคำสั่งหลังคำว่า "create "
-            std::string remainder = line.substr(7);
-            
-            // ตรวจสอบว่าเป็นคำสั่ง create model หรือไม่
-            if (remainder.find("model") == 0) {
-                // คำสั่ง create model
-                if (!hasCreatedProject) {
-                    std::cerr << "\033[31mข้อผิดพลาด: ต้องใช้คำสั่ง 'create [ML/DL/RL]' ก่อน\033[0m" << std::endl;
-                    continue;
-                }
-                
-                if (hasCreatedModel) {
-                    std::cerr << "\033[31mข้อผิดพลาด: คำสั่ง 'create model' ถูกใช้ไปแล้ว\033[0m" << std::endl;
-                    continue;
-                }
-                
-                // ดึงชื่อโมเดล (ถ้ามี)
-                std::string model_name;
-                size_t spacePos = remainder.find(' ');
-                if (spacePos != std::string::npos && spacePos + 1 < remainder.length()) {
-                    model_name = remainder.substr(spacePos + 1);
-                    std::cout << "Model created: " << model_name << std::endl;
-                    hasCreatedModel = true;
-                } else {
-                    std::cerr << "\033[31mข้อผิดพลาด: ต้องระบุชื่อโมเดล - ตัวอย่าง: create model LinearRegression\033[0m" << std::endl;
-                }
-            } else {
-                // คำสั่ง create [type] (ML/DL/RL)
-                if (hasCreatedProject) {
-                    std::cerr << "\033[31mข้อผิดพลาด: คำสั่ง 'create [ML/DL/RL]' ถูกใช้ไปแล้ว\033[0m" << std::endl;
-                    continue;
-                }
-                
-                // ดึงประเภทโปรเจกต์
-                std::string type;
-                size_t spacePos = remainder.find(' ');
-                if (spacePos != std::string::npos) {
-                    type = remainder.substr(0, spacePos);
-                } else {
-                    type = remainder;
-                }
-                
-                // ตรวจสอบประเภทโปรเจกต์
-                if (type == "ML" || type == "DL" || type == "RL") {
-                    std::cout << "Project created: ";
-                    if (type == "ML") {
-                        std::cout << "Machine Learning";
-                    } else if (type == "DL") {
-                        std::cout << "Deep Learning";
-                    } else if (type == "RL") {
-                        std::cout << "Reinforcement Learning";
-                    }
-                    std::cout << std::endl;
-                    hasCreatedProject = true;
-                } else {
-                    std::cerr << "\033[31mข้อผิดพลาด: รูปแบบประเภทโปรเจกต์ไม่ถูกต้อง ต้องเป็น ML, DL หรือ RL\033[0m" << std::endl;
-                }
-            }
-
-        } else if (line.find("load dataset") == 0) {
-            // ตรวจสอบการโหลดข้อมูล
-            if (!hasStarted || !hasCreatedProject) {
-                std::cerr << "\033[31mข้อผิดพลาด: ต้องใช้คำสั่ง 'start' และ 'create [type]' ก่อน\033[0m" << std::endl;
-                continue;
-            }
-
-            if (hasLoadedData) {
-                std::cerr << "\033[31mข้อผิดพลาด: คำสั่ง 'load dataset' ถูกใช้ไปแล้ว\033[0m" << std::endl;
-                continue;
-            }
-
-            // แยกชื่อไฟล์
-            std::string filename;
-            size_t filenameStart = line.find("\"");
-            size_t filenameEnd = line.find("\"", filenameStart + 1);
-
-            if (filenameStart != std::string::npos && filenameEnd != std::string::npos) {
-                filename = line.substr(filenameStart + 1, filenameEnd - filenameStart - 1);
-
-                // ตรวจสอบว่าเป็นไฟล์ CSV หรือไม่
-                if (filename.length() < 4 || filename.substr(filename.length() - 4) != ".csv") {
-                    std::cerr << "\033[31mข้อผิดพลาด: ไฟล์ต้องเป็นนามสกุล .csv\033[0m" << std::endl;
-                    continue;
-                }
-
-                // ตรวจสอบว่าไฟล์มีอยู่หรือไม่
-                std::ifstream f(filename);
-                if (!f.good()) {
-                    std::cerr << "\033[31mข้อผิดพลาด: ไม่พบไฟล์ \"" << filename << "\"\033[0m" << std::endl;
-                    std::cout << "คำแนะนำ: ใช้คำสั่ง \"exit\" เพื่อออก แล้วสร้างไฟล์ data.csv ในไดเรกทอรีหลัก" << std::endl;
-                } else {
-                    hasLoadedData = true;
-                    std::cout << "Dataset loaded successfully" << std::endl;
-                }
-            } else {
-                std::cerr << "\033[31mรูปแบบคำสั่งไม่ถูกต้อง - ตัวอย่าง: load dataset \"data.csv\"\033[0m" << std::endl;
-            }
-        } else if (line == "train model") {
-            if (!hasStarted || !hasCreatedProject || !hasLoadedData || !hasCreatedModel) {
-                std::cerr << "\033[31mข้อผิดพลาด: ต้องใช้คำสั่ง 'start', 'create [type]', 'load dataset' และ 'create model' ก่อน\033[0m" << std::endl;
-                continue;
-            }
-
-            if (hasTrainedModel) {
-                std::cerr << "\033[31mข้อผิดพลาด: คำสั่ง 'train model' ถูกใช้ไปแล้ว\033[0m" << std::endl;
-                continue;
-            }
-
-            std::cout << "Training complete" << std::endl;
-            hasTrainedModel = true;
-        } else if (line == "show accuracy") {
-            if (!hasStarted || !hasCreatedProject || !hasLoadedData || !hasCreatedModel || !hasTrainedModel) {
-                std::cerr << "\033[31mข้อผิดพลาด: ต้องใช้คำสั่ง 'start', 'create [type]', 'load dataset', 'create model' และ 'train model' ก่อน\033[0m" << std::endl;
-                continue;
-            }
-
-            std::cout << "Accuracy: 85.5%" << std::endl;
-            hasShowedAccuracy = true;
-        } else {
-            // ตรวจสอบสถานะการทำงานปัจจุบัน และให้คำแนะนำ
-            if (!hasStarted) {
-                std::cerr << "\033[31mข้อผิดพลาด: ต้องเริ่มด้วยคำสั่ง 'start'\033[0m" << std::endl;
-            } else if (!hasCreatedProject) {
-                std::cerr << "\033[31mข้อผิดพลาด: ต้องใช้คำสั่ง 'create [type]' โดย type เป็น ML, DL หรือ RL\033[0m" << std::endl;
-            } else if (!hasLoadedData) {
-                std::cerr << "\033[31mข้อผิดพลาด: ต้องใช้คำสั่ง 'load dataset \"<filename>\"'\033[0m" << std::endl;
-            } else if (!hasCreatedModel) {
-                std::cerr << "\033[31mข้อผิดพลาด: ต้องใช้คำสั่ง 'create model <model_name>'\033[0m" << std::endl;
-            } else if (!hasTrainedModel) {
-                std::cerr << "\033[31mข้อผิดพลาด: ต้องใช้คำสั่ง 'train model'\033[0m" << std::endl;
-            } else if (!hasShowedAccuracy) {
-                std::cerr << "\033[31mข้อผิดพลาด: ต้องใช้คำสั่ง 'show accuracy'\033[0m" << std::endl;
-            } else {
-                std::cerr << "\033[31mคำสั่งไม่ถูกต้อง: '" << line << "'\033[0m" << std::endl;
-                std::cerr << "\033[31mทุกขั้นตอนถูกทำเสร็จสิ้นแล้ว, คุณสามารถใช้คำสั่ง 'exit' เพื่อออกจากโปรแกรม\033[0m" << std::endl;
-            }
-        }
+        
+        interpreter.interpretLine(line);
     }
-
-    std::cout << "ออกจากโปรแกรม" << std::endl;
 }
-
-void runFile(const std::string& filename) {
-    // ตรวจสอบว่าไฟล์มีอยู่จริง
-    std::ifstream file(filename);
-    if (!file.is_open()) {
-        std::cerr << "Error: ไม่สามารถเปิดไฟล์ " << filename << std::endl;
-        return;
-    }
-
-    // อ่านเนื้อหาทั้งหมดของไฟล์
-    std::stringstream buffer;
-    buffer << file.rdbuf();
-    file.close();
-
-    // สร้าง interpreter และตั้งค่าฟังก์ชันสำหรับแสดงผลลัพธ์และข้อผิดพลาด
-    ai_language::Interpreter interpreter;
-
-    interpreter.setOutputHandler([](const std::string& message) {
-        std::cout << message << std::endl;
-    });
-
-    interpreter.setErrorHandler([](const std::string& message) {
-        std::cerr << "\033[31m" << message << "\033[0m" << std::endl;
-    });
-
-    // ประมวลผลโค้ด
-    interpreter.interpret(buffer.str());
-}
-
-void runDemo(const std::string& command) {
-    bool isTesting = (getenv("AI_LANG_TESTING") != nullptr);
-
-    if (!isTesting) {
-        std::cout << "\n> " << command << std::endl;
-    } else {
-        // เมื่อทดสอบ แสดงเฉพาะคำสั่งโดยไม่มีผลลัพธ์
-        //std::cout << "> " << command << std::endl;
-    }
-
-    ai_language::Interpreter interpreter;
-
-    // กำหนด output handler
-    interpreter.setOutputHandler([isTesting](const std::string& message) {
-        if (!isTesting) {
-            std::cout << message << std::endl;
-        }
-    });
-
-    // กำหนด error handler
-    interpreter.setErrorHandler([isTesting](const std::string& message) {
-        if (!isTesting) {
-            std::cerr << "\033[31m" << message << "\033[0m" << std::endl;
-        }
-    });
-
-    interpreter.interpret(command);
-}
-
 
 int main(int argc, char* argv[]) {
-    bool isTesting = (getenv("AI_LANG_TESTING") != nullptr);
-
-    if (argc > 1) {
-        std::string arg = argv[1];
-        if (arg == "-i" || arg == "--interactive") {
-            if (!isTesting) {
-                runInteractiveMode();
-            }
-            return 0;
-        } else if (arg == "-h" || arg == "--help") {
-            if (!isTesting) {
-                showUsage(argv[0]);
-            }
-            return 0;
-        } else {
-            // อ่านไฟล์และดำเนินการตามคำสั่ง
-            std::ifstream file(arg);
-            if (file.is_open()) {
-                std::string content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-                ai_language::Interpreter interpreter;
-
-                // ตั้งค่า handler เพื่อไม่แสดงผลในโหมดทดสอบ
-                if (isTesting) {
-                    interpreter.setOutputHandler([](const std::string& message) {
-                        // ไม่แสดงผลใดๆ ในโหมดทดสอบ
-                    });
-                    interpreter.setErrorHandler([](const std::string& message) {
-                        // ไม่แสดงข้อผิดพลาดใดๆ ในโหมดทดสอบ
-                    });
-                }
-
-                interpreter.interpret(content);
-                return 0;
-            } else {
-                if (!isTesting) {
-                    std::cerr << "ไม่สามารถเปิดไฟล์: " << arg << std::endl;
-                }
-                return 1;
-            }
-        }
-    } else {
-        if (!isTesting) {
-            std::cout << "=== ทดสอบภาษาโปรแกรมสำหรับ AI ===\n" << std::endl;
-        }
-
-        // ทดสอบคำสั่งพื้นฐาน
-        runDemo("start");
-        runDemo("create ML");
-        runDemo("load dataset \"data.csv\"");
-        runDemo("create model LinearRegression");
-        runDemo("train model");
-        runDemo("show accuracy");
-        runDemo("save model to \"trained_model.h5\"");
-
-        if (!isTesting) {
-            // ทดสอบคำสั่งสำหรับ Deep Learning
-            std::cout << "\n=== Deep Learning ===\n";
-            runDemo("start");
-            runDemo("create DL");
-            runDemo("create neural_network with layers 3 nodes 128 activation \"relu\"");
-            runDemo("train model for epochs 50");
-
-            // ทดสอบคำสั่งสำหรับ Reinforcement Learning
-            std::cout << "\n=== Reinforcement Learning ===\n";
-            runDemo("start");
-            runDemo("create RL");
-            runDemo("create agent with policy \"DQN\"");
-            runDemo("train agent for episodes 1000");
-
-            std::cout << "\n=== การแสดงผลข้อมูล ===\n";
-            runDemo("visualize data");
-            runDemo("plot learning_curve");
-        }
-
+    // ตรวจสอบ arguments
+    if (argc == 1) {
+        printUsage();
         return 0;
     }
+
+    std::string arg = argv[1];
+    if (arg == "-h" || arg == "--help") {
+        printUsage();
+        return 0;
+    } else if (arg == "-i" || arg == "--interactive") {
+        runInteractiveMode();
+        return 0;
+    } else {
+        // ประมวลผลไฟล์
+        ai_language::Interpreter interpreter;
+        interpreter.interpretFile(arg);
+    }
+
+    return 0;
 }

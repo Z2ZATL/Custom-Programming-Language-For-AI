@@ -1,0 +1,28 @@
+
+# ตัวอย่างการใช้งานการตั้งค่าอัตโนมัติ
+
+# ตัวอย่างที่ 1: ใช้ค่าอัตโนมัติ
+start
+create ML
+load dataset "datasets/linear_data.csv" type "csv"
+create model LinearRegression
+# โปรแกรมจะตั้งค่าอัตโนมัติ:
+# - learning_rate = 0.01
+# - epochs = 50
+# - batch_size = 32
+train model
+show accuracy
+end
+
+# ตัวอย่างที่ 2: ปรับแต่งบางค่า ค่าที่เหลือจะเป็นค่าอัตโนมัติ
+start
+create DL
+load dataset "datasets/iris.csv" type "csv"
+create model NeuralNetwork
+set learning_rate 0.005  # ปรับแต่งเฉพาะ learning_rate
+# ส่วน epochs และ batch_size จะใช้ค่าอัตโนมัติ:
+# - epochs = 100
+# - batch_size = 32
+train model
+show accuracy
+end
