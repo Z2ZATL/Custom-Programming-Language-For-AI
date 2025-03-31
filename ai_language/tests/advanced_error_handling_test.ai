@@ -47,3 +47,67 @@ start \
 create ML \
 load dataset "datasets/linear_data.csv" \
 create model LinearRegression! ;;
+# ไฟล์ทดสอบขั้นสูงสำหรับการจัดการข้อผิดพลาดของภาษา AI
+
+# 1. ทดสอบการทำงานกับไฟล์ที่ไม่มีอยู่จริง
+start \
+create ML \
+load dataset "nonexistent_file.csv" ;;
+
+# 2. ทดสอบการตั้งค่าพารามิเตอร์ที่ไม่ใช่ตัวเลข
+start \
+create ML \
+load dataset "datasets/linear_data.csv" \
+create model LinearRegression \
+set learning_rate abc ;;
+
+# 3. ทดสอบการใช้ค่าพารามิเตอร์ที่ไม่อยู่ในช่วงที่ถูกต้อง
+start \
+create ML \
+load dataset "datasets/linear_data.csv" \
+create model LinearRegression \
+set learning_rate -5 \
+set epochs -10 ;;
+
+# 4. ทดสอบการฝึกโมเดลก่อนตั้งค่าพารามิเตอร์
+start \
+create ML \
+load dataset "datasets/linear_data.csv" \
+create model LinearRegression \
+train model ;;
+
+# 5. ทดสอบการแสดงผลก่อนการฝึกโมเดล
+start \
+create ML \
+load dataset "datasets/linear_data.csv" \
+create model LinearRegression \
+show accuracy ;;
+
+# 6. ทดสอบการสร้างโมเดลที่ไม่รองรับใน ML
+start \
+create ML \
+load dataset "datasets/linear_data.csv" \
+create model UnsupportedModel ;;
+
+# 7. ทดสอบการใช้คำสั่งที่มีวิธีใช้ผิด
+start \
+create ML \
+train ;;
+
+# 8. ทดสอบการใช้คำสั่งที่มีการป้อนพารามิเตอร์ไม่ครบ
+start \
+create ML \
+set ;;
+
+# 9. ทดสอบการบันทึกโมเดลก่อนการฝึก
+start \
+create ML \
+load dataset "datasets/linear_data.csv" \
+create model LinearRegression \
+save model "test.ml" ;;
+
+# 10. ทดสอบการโหลดโมเดลที่ไม่มีอยู่
+start \
+create ML \
+load dataset "datasets/linear_data.csv" \
+load model "nonexistent_model.ml" ;;

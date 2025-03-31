@@ -227,12 +227,11 @@ public:
                 }
 
                 // ตรวจสอบการมีอยู่ของไฟล์
-                std::ifstream file(filename);
-                if (!file) {
+                struct stat buffer;
+                if (stat(filename.c_str(), &buffer) != 0) {
                     std::cerr << RED << "ข้อผิดพลาด: ไฟล์ " << filename << " ไม่พบ" << RESET << std::endl;
                     return;
                 }
-                file.close();
 
                 datasetPath = filename;
                 hasLoadedData = true;
