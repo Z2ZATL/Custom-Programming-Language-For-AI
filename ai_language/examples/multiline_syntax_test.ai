@@ -45,7 +45,7 @@ plot model ;;
 # คำสั่งทดสอบสำหรับ Reinforcement Learning
 start \
 create RL \
-load environment "datasets/environment.json" \
+load dataset "datasets/environment.json" type "json" \
 create model QLearning \
 set learning_rate 0.1 \
 set discount_factor 0.9 \
