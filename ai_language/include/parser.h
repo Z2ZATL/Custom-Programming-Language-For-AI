@@ -1,4 +1,3 @@
-
 /**
  * @file parser.h
  * @brief คลาสสำหรับแปลง token เป็น AST
@@ -13,6 +12,8 @@
 #include <string>
 #include <map>
 #include <functional>
+#include <unordered_map>
+#include <stdexcept>
 
 namespace ai_language {
 
@@ -32,6 +33,7 @@ public:
  */
 class Statement {
 public:
+    Token token; // Token ที่เกี่ยวข้องกับคำสั่งนี้
     virtual ~Statement() = default;
     virtual std::string toString() const = 0;
     virtual void execute() const = 0;
@@ -46,7 +48,7 @@ public:
     StartStatement(const std::string& learningType);
     std::string toString() const override;
     void execute() const override;
-    
+
 private:
     std::string learningType;  ///< ประเภทการเรียนรู้ (ML, DL, RL)
 };
@@ -60,7 +62,7 @@ public:
     LoadStatement(const std::string& filename, const std::string& fileType);
     std::string toString() const override;
     void execute() const override;
-    
+
 private:
     std::string filename;  ///< ชื่อไฟล์
     std::string fileType;  ///< ประเภทไฟล์ (csv, json)
@@ -75,7 +77,7 @@ public:
     CleanStatement(const std::map<std::string, std::string>& params = {});
     std::string toString() const override;
     void execute() const override;
-    
+
 private:
     std::map<std::string, std::string> params;  ///< พารามิเตอร์เพิ่มเติม
 };
@@ -89,7 +91,7 @@ public:
     SplitStatement(const std::map<std::string, std::string>& params = {});
     std::string toString() const override;
     void execute() const override;
-    
+
 private:
     std::map<std::string, std::string> params;  ///< พารามิเตอร์เพิ่มเติม
 };
@@ -103,7 +105,7 @@ public:
     TrainStatement(const std::map<std::string, std::string>& params = {});
     std::string toString() const override;
     void execute() const override;
-    
+
 private:
     std::map<std::string, std::string> params;  ///< พารามิเตอร์เพิ่มเติม
 };
@@ -117,7 +119,7 @@ public:
     EvaluateStatement(const std::map<std::string, std::string>& params = {});
     std::string toString() const override;
     void execute() const override;
-    
+
 private:
     std::map<std::string, std::string> params;  ///< พารามิเตอร์เพิ่มเติม
 };
@@ -131,7 +133,7 @@ public:
     PredictStatement(const std::map<std::string, std::string>& params = {});
     std::string toString() const override;
     void execute() const override;
-    
+
 private:
     std::map<std::string, std::string> params;  ///< พารามิเตอร์เพิ่มเติม
 };
@@ -145,7 +147,7 @@ public:
     SaveStatement(const std::map<std::string, std::string>& params = {});
     std::string toString() const override;
     void execute() const override;
-    
+
 private:
     std::map<std::string, std::string> params;  ///< พารามิเตอร์เพิ่มเติม
 };
@@ -159,7 +161,7 @@ public:
     ShowStatement(const std::string& target, const std::map<std::string, std::string>& params = {});
     std::string toString() const override;
     void execute() const override;
-    
+
 private:
     std::string target;  ///< เป้าหมายที่ต้องการแสดง (model, metric)
     std::map<std::string, std::string> params;  ///< พารามิเตอร์เพิ่มเติม
@@ -174,7 +176,7 @@ public:
     VisualizeStatement(const std::string& target, const std::map<std::string, std::string>& params = {});
     std::string toString() const override;
     void execute() const override;
-    
+
 private:
     std::string target;  ///< เป้าหมายที่ต้องการแสดงภาพ (data, model)
     std::map<std::string, std::string> params;  ///< พารามิเตอร์เพิ่มเติม
@@ -189,7 +191,7 @@ public:
     PlotStatement(const std::string& target, const std::map<std::string, std::string>& params = {});
     std::string toString() const override;
     void execute() const override;
-    
+
 private:
     std::string target;  ///< เป้าหมายที่ต้องการพล็อต (data, result)
     std::map<std::string, std::string> params;  ///< พารามิเตอร์เพิ่มเติม
@@ -203,113 +205,11 @@ class Program {
 public:
     Program(const std::vector<std::shared_ptr<Statement>>& statements);
     void execute() const;
-    
+
 private:
     std::vector<std::shared_ptr<Statement>> statements;  ///< รายการของคำสั่ง
 };
 
-/**
- * @class Parser
- * @brief คลาสสำหรับแปลง token เป็น AST
- */
-class Parser {
-public:
-    /**
-     * @brief คอนสตรักเตอร์
-     */
-    Parser();
-    
-    /**
-     * @brief ตั้งค่าฟังก์ชันสำหรับแสดงข้อผิดพลาด
-     * @param handler ฟังก์ชันสำหรับแสดงข้อผิดพลาด
-     */
-    void setErrorHandler(std::function<void(const std::string&)> handler);
-    
-    /**
-     * @brief แปลง token เป็น AST
-     * @param tokens รายการของ token
-     * @return std::shared_ptr<Program> โปรแกรมที่แปลงแล้ว
-     */
-    std::shared_ptr<Program> parse(const std::vector<Token>& tokens);
-    
-    /**
-     * @brief ตรวจสอบว่ามีข้อผิดพลาดหรือไม่
-     * @return bool true ถ้ามีข้อผิดพลาด, false ถ้าไม่มี
-     */
-    bool hasError() const;
-    
-    /**
-     * @brief รีเซ็ตสถานะข้อผิดพลาด
-     */
-    void resetError();
-    
-private:
-    // ตัวแปรสถานะ
-    std::vector<Token> m_tokens;  ///< รายการของ token
-    int m_current;  ///< ตำแหน่งปัจจุบัน
-    bool m_hasError;  ///< ตัวแปรบอกว่ามีข้อผิดพลาดหรือไม่
-    std::function<void(const std::string&)> m_errorHandler;  ///< ฟังก์ชันสำหรับแสดงข้อผิดพลาด
-    
-    // เมธอดช่วยเหลือ
-    bool isAtEnd() const;
-    Token peek() const;
-    Token previous() const;
-    Token advance();
-    bool check(TokenType type) const;
-    bool match(TokenType type);
-    bool match(const std::vector<TokenType>& types);
-    void consumeNewlines();
-    Token consume(TokenType type, const std::string& message);
-    
-    // เมธอดสำหรับแปลงคำสั่งต่างๆ
-    std::shared_ptr<Statement> declaration();
-    std::shared_ptr<Statement> statement();
-    std::shared_ptr<Statement> startStatement();
-    std::shared_ptr<Statement> loadStatement();
-    std::shared_ptr<Statement> cleanStatement();
-    std::shared_ptr<Statement> splitStatement();
-    std::shared_ptr<Statement> trainStatement();
-    std::shared_ptr<Statement> evaluateStatement();
-    std::shared_ptr<Statement> predictStatement();
-    std::shared_ptr<Statement> saveStatement();
-    std::shared_ptr<Statement> showStatement();
-    std::shared_ptr<Statement> visualizeStatement();
-    std::shared_ptr<Statement> plotStatement();
-    
-    // เมธอดสำหรับแปลงพารามิเตอร์
-    std::map<std::string, std::string> parseParameters();
-    
-    // เมธอดสำหรับจัดการข้อผิดพลาด
-    void error(const std::string& message);
-    void error(const Token& token, const std::string& message);
-    void synchronize();
-};
-
-/**
- * @brief ฟังก์ชันช่วยเหลือสำหรับแปลงคำสั่งและพารามิเตอร์
- */
-std::map<std::string, std::string> parseParams(const std::string& paramString);
-
-} // namespace ai_language
-
-#endif // AI_LANGUAGE_PARSER_H
-/**
- * @file parser.h
- * @brief Parser สำหรับภาษา AI ที่แปลง Token เป็นคำสั่งที่เข้าใจได้
- */
-
-#ifndef AI_LANGUAGE_PARSER_H
-#define AI_LANGUAGE_PARSER_H
-
-#include "lexer.h"
-#include <vector>
-#include <memory>
-#include <string>
-#include <functional>
-#include <unordered_map>
-#include <stdexcept>
-
-namespace ai_language {
 
 // ข้อยกเว้นสำหรับการแจ้งข้อผิดพลาดในการแปลความหมาย
 class ParserError : public std::runtime_error {
@@ -317,21 +217,12 @@ public:
     explicit ParserError(const std::string& message) : std::runtime_error(message) {}
 };
 
-// คลาสฐานสำหรับคำสั่งทั้งหมด
-class Statement {
-public:
-    Token token;  // Token ที่เกี่ยวข้องกับคำสั่งนี้
-    virtual ~Statement() = default;
-};
-
-// คำสั่ง start
-class StartStatement : public Statement {
-};
-
 // คำสั่ง create <project_type>
 class CreateProjectStatement : public Statement {
 public:
     std::string projectType;  // ML, DL, หรือ RL
+    std::string toString() const override;
+    void execute() const override;
 };
 
 // คำสั่ง create model <model_name>
@@ -339,6 +230,8 @@ class CreateModelStatement : public Statement {
 public:
     std::string modelName;
     std::unordered_map<std::string, std::string> parameters;
+    std::string toString() const override;
+    void execute() const override;
 };
 
 // คำสั่ง load dataset <dataset_path>
@@ -346,18 +239,24 @@ class LoadDatasetStatement : public Statement {
 public:
     std::string dataPath;
     std::string dataType;
+    std::string toString() const override;
+    void execute() const override;
 };
 
 // คำสั่ง load model <model_path>
 class LoadModelStatement : public Statement {
 public:
     std::string modelPath;
+    std::string toString() const override;
+    void execute() const override;
 };
 
 // คำสั่ง load environment <environment_path>
 class LoadEnvironmentStatement : public Statement {
 public:
     std::string environmentPath;
+    std::string toString() const override;
+    void execute() const override;
 };
 
 // คำสั่ง set <param_name> <param_value>
@@ -365,26 +264,38 @@ class SetParameterStatement : public Statement {
 public:
     std::string paramName;
     std::string paramValue;
+    std::string toString() const override;
+    void execute() const override;
 };
 
 // คำสั่ง train model
 class TrainModelStatement : public Statement {
+public:
+    std::string toString() const override;
+    void execute() const override;
 };
 
 // คำสั่ง evaluate model
 class EvaluateModelStatement : public Statement {
+public:
+    std::string toString() const override;
+    void execute() const override;
 };
 
 // คำสั่ง show <metric_type>
 class ShowMetricStatement : public Statement {
 public:
     std::string metricType;  // accuracy, loss, performance, หรือ graph
+    std::string toString() const override;
+    void execute() const override;
 };
 
 // คำสั่ง save model <save_path>
 class SaveModelStatement : public Statement {
 public:
     std::string savePath;
+    std::string toString() const override;
+    void execute() const override;
 };
 
 // คำสั่ง add layer <layer_type> <parameters...>
@@ -393,6 +304,8 @@ public:
     std::string layerType;
     std::unordered_map<std::string, std::string> parameters;
     std::vector<std::string> orderedParams;  // สำหรับพารามิเตอร์ที่ไม่มีชื่อ
+    std::string toString() const override;
+    void execute() const override;
 };
 
 // คำสั่ง predict <input>
@@ -400,35 +313,53 @@ class PredictStatement : public Statement {
 public:
     std::string predictInput;
     std::unordered_map<std::string, std::string> parameters;
+    std::string toString() const override;
+    void execute() const override;
 };
 
 // คำสั่ง end
 class EndStatement : public Statement {
+public:
+    std::string toString() const override;
+    void execute() const override;
 };
 
-// Parser หลัก
+/**
+ * @class Parser
+ * @brief คลาสสำหรับแปลง token เป็น AST
+ */
 class Parser {
-public:
-    explicit Parser(const std::vector<Token>& tokens);
-    
-    // แปลง Token เป็นคำสั่ง
-    std::vector<std::unique_ptr<Statement>> parse();
-    
-    // ข้อผิดพลาด
-    bool hasError() const;
-    std::string getErrorMessage() const;
-    
-    // ตั้งค่าฟังก์ชันสำหรับจัดการข้อผิดพลาด
-    void setErrorHandler(std::function<void(const std::string&)> handler);
-    
 private:
     std::vector<Token> m_tokens;
     size_t m_current;
     bool m_hasError;
     std::string m_errorMsg;
     std::function<void(const std::string&)> m_errorHandler;
-    
-    // วิธีการแปลความหมายของคำสั่งต่างๆ
+
+    // โครงสร้างข้อมูลเพื่อเก็บข้อมูลตั้งค่า (configuration)
+    struct {
+        bool expectType = true;    // คาดหวังคำสั่ง type หรือไม่
+        bool expectPath = true;    // คาดหวังคำสั่ง path หรือไม่
+    } m_config;
+
+    std::shared_ptr<Statement> declaration();
+    std::shared_ptr<Statement> statement();
+    std::shared_ptr<Statement> startStatement();
+    std::shared_ptr<Statement> createStatement();
+    std::shared_ptr<Statement> loadStatement();
+    std::shared_ptr<Statement> splitStatement();
+    std::shared_ptr<Statement> trainStatement();
+    std::shared_ptr<Statement> evaluateStatement();
+    std::shared_ptr<Statement> showStatement();
+    std::shared_ptr<Statement> visualizeStatement();
+    std::shared_ptr<Statement> plotStatement();
+    std::shared_ptr<Statement> predictStatement();
+    std::shared_ptr<Statement> saveStatement();
+    std::shared_ptr<Statement> endStatement();
+    std::shared_ptr<Statement> addLayerStatement();
+    std::shared_ptr<Statement> setStatement();
+
+    // สำหรับการพัฒนาเวอร์ชันใหม่
     std::unique_ptr<Statement> parseStatement();
     std::unique_ptr<Statement> parseStartStatement();
     std::unique_ptr<Statement> parseCreateStatement();
@@ -441,19 +372,67 @@ private:
     std::unique_ptr<Statement> parseAddLayerStatement();
     std::unique_ptr<Statement> parsePredictStatement();
     std::unique_ptr<Statement> parseEndStatement();
-    
-    // ฟังก์ชันช่วยเหลือ
-    Token consume(TokenType type, const std::string& message);
-    void consumeEndOfStatement();
-    bool match(TokenType type);
-    bool check(TokenType type);
-    Token advance();
-    bool isAtEnd();
+
+    // เพิ่มฟังก์ชันสำหรับตรวจสอบจุดสิ้นสุดของคำสั่ง
     bool isAtEndOfStatement();
-    Token peek();
-    Token previous();
+    void consumeEndOfStatement();
+
+    // ดูว่า token ปัจจุบันเป็นประเภทที่คาดหวังหรือไม่ ถ้าใช่ จะเลื่อน token pointer ไปข้างหน้า
+    bool match(TokenType type);
+
+    // ตรวจสอบประเภทของ token ปัจจุบันโดยไม่เลื่อน token pointer
+    bool check(TokenType type) const;
+
+    // เลื่อน token pointer ไปข้างหน้าและคืนค่า token ก่อนหน้า
+    Token advance();
+
+    // ตรวจสอบว่าถึงจุดสิ้นสุดของโค้ดหรือไม่
+    bool isAtEnd() const;
+
+    // คืนค่า token ปัจจุบันโดยไม่เลื่อน token pointer
+    Token peek() const;
+
+    // คืนค่า token ก่อนหน้าโดยไม่เลื่อน token pointer
+    Token previous() const;
+
+    // ทำให้ token ปัจจุบันเป็นประเภทที่คาดหวัง ถ้าไม่ใช่ จะรายงานข้อผิดพลาด
+    Token consume(TokenType type, const std::string& message);
+
+    // รายงานข้อผิดพลาดที่ token ปัจจุบัน
+    void error(const Token& token, const std::string& message);
+    void error(const std::string& message);
+
+    // ข้ามไปถึงคำสั่งถัดไปเมื่อเกิดข้อผิดพลาด
     void synchronize();
+
+    // แปลงพารามิเตอร์แบบ key-value
+    std::map<std::string, std::string> parseParameters();
+
+    // ข้ามเครื่องหมายขึ้นบรรทัดใหม่ (ถ้ามี)
+    void consumeNewlines();
+
+public:
+    Parser();
+    Parser(const std::vector<Token>& tokens);
+
+    // ตั้งค่าตัวจัดการข้อผิดพลาด
+    void setErrorHandler(std::function<void(const std::string&)> handler);
+
+    // ตรวจสอบว่ามีข้อผิดพลาดหรือไม่
+    bool hasError() const;
+
+    // สำหรับเวอร์ชันใหม่
+    std::string getErrorMessage() const;
+    std::vector<std::unique_ptr<Statement>> parse();
+
+    // แปลง token เป็น AST และคืนค่าเป็นโครงสร้างต้นไม้
+    std::shared_ptr<Program> parse(const std::vector<Token>& tokens);
 };
+
+/**
+ * @brief ฟังก์ชันช่วยเหลือสำหรับแปลงคำสั่งและพารามิเตอร์
+ */
+std::map<std::string, std::string> parseParams(const std::string& paramString);
 
 } // namespace ai_language
 
