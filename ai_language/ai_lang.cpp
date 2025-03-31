@@ -205,7 +205,8 @@ public:
                 }
 
                 if (hasInvalidChars) {
-                    std::cerr << YELLOW << "คำเตือน: ชื่อโมเดลมีอักขระพิเศษที่อาจทำให้เกิดปัญหา" << RESET << std::endl;
+                    std::cerr << RED << "ข้อผิดพลาด: ชื่อโมเดลมีอักขระพิเศษที่ไม่ได้รับอนุญาต" << RESET << std::endl;
+                    return;
                 }
 
                 // ตรวจสอบชื่อโมเดลที่รองรับ
@@ -227,7 +228,16 @@ public:
                 }
 
                 if (!isSupported) {
-                    std::cerr << YELLOW << "คำเตือน: โมเดล '" << modelType << "' อาจไม่รองรับในโปรเจค " << projectType << RESET << std::endl;
+                    std::cerr << RED << "ข้อผิดพลาด: โมเดล '" << modelType << "' ไม่รองรับในโปรเจค " << projectType << RESET << std::endl;
+                    std::cerr << YELLOW << "โมเดลที่รองรับในโปรเจค " << projectType << " ได้แก่: ";
+                    for (size_t i = 0; i < supportedModels.size(); ++i) {
+                        std::cerr << supportedModels[i];
+                        if (i < supportedModels.size() - 1) {
+                            std::cerr << ", ";
+                        }
+                    }
+                    std::cerr << RESET << std::endl;
+                    return;
                 }
 
                 hasCreatedModel = true;
@@ -350,12 +360,15 @@ public:
 
                 // ตรวจสอบค่าลบหรือค่าไม่ถูกต้อง
                 if (paramName == "learning_rate" && numericValue < 0) {
-                    std::cerr << YELLOW << "คำเตือน: ค่า learning_rate ติดลบ (-" << std::abs(numericValue) 
-                             << ") อาจทำให้โมเดลไม่ลู่เข้า" << RESET << std::endl;
+                    std::cerr << RED << "ข้อผิดพลาด: ค่า learning_rate ไม่สามารถเป็นค่าติดลบได้ (" << numericValue 
+                             << ")" << RESET << std::endl;
+                    return;
                 } else if (paramName == "epochs" && numericValue <= 0) {
-                    std::cerr << YELLOW << "คำเตือน: จำนวน epochs ควรมากกว่า 0" << RESET << std::endl;
+                    std::cerr << RED << "ข้อผิดพลาด: จำนวน epochs ต้องมากกว่า 0" << RESET << std::endl;
+                    return;
                 } else if (paramName == "batch_size" && numericValue <= 0) {
-                    std::cerr << YELLOW << "คำเตือน: ค่า batch_size ควรมากกว่า 0" << RESET << std::endl;
+                    std::cerr << RED << "ข้อผิดพลาด: ค่า batch_size ต้องมากกว่า 0" << RESET << std::endl;
+                    return;
                 }
 
                 // ตั้งค่าพารามิเตอร์
