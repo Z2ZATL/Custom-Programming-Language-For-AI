@@ -89,32 +89,37 @@ void runInteractiveMode() {
             // แยกประเภทโปรเจกต์และโมเดล (ถ้ามี)
             std::string type;
             std::string model_name;
-            size_t spacePos = line.find(' ', 7); // find space after "create "
-
+            
+            // ตรวจสอบหาช่องว่างหลังคำว่า "create "
+            size_t spacePos = line.find(' ', 7); 
+            
             if (spacePos != std::string::npos) {
+                // กรณีมีช่องว่างหลัง "create "
                 type = line.substr(7, spacePos - 7);
                 model_name = line.substr(spacePos + 1);
+            } else {
+                // กรณีไม่มีช่องว่างหลัง "create " (เช่น "create ML" ไม่มีข้อความต่อท้าย)
+                type = line.substr(7);
+                model_name = "";
+            }
+            
+            // ตรวจสอบประเภทโปรเจกต์
+            if (type == "ML" || type == "DL" || type == "RL") {
+                std::cout << "Project created: ";
+                if (type == "ML") {
+                    std::cout << "Machine Learning";
+                } else if (type == "DL") {
+                    std::cout << "Deep Learning";
+                } else if (type == "RL") {
+                    std::cout << "Reinforcement Learning";
+                }
+                std::cout << std::endl;
+                hasCreatedProject = true;
 
-                if (type == "ML" || type == "DL" || type == "RL") {
-                    std::cout << "Project created: ";
-                    if (type == "ML") {
-                        std::cout << "Machine Learning";
-                    } else if (type == "DL") {
-                        std::cout << "Deep Learning";
-                    } else if (type == "RL") {
-                        std::cout << "Reinforcement Learning";
-                    }
-                    std::cout << std::endl;
-                    hasCreatedProject = true;
-
-
-                    if(!model_name.empty()){
-                        std::cout << "Model created: " << model_name << std::endl;
-                        hasCreatedModel = true;
-                    }
-
-                } else {
-                    std::cerr << "\033[31mข้อผิดพลาด: รูปแบบประเภทโปรเจกต์ไม่ถูกต้อง ต้องเป็น ML, DL หรือ RL\033[0m" << std::endl;
+                // ตรวจสอบว่ามีการระบุชื่อโมเดลหรือไม่
+                if(!model_name.empty()){
+                    std::cout << "Model created: " << model_name << std::endl;
+                    hasCreatedModel = true;
                 }
             } else {
                 std::cerr << "\033[31mข้อผิดพลาด: รูปแบบประเภทโปรเจกต์ไม่ถูกต้อง ต้องเป็น ML, DL หรือ RL\033[0m" << std::endl;
