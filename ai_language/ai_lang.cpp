@@ -6,6 +6,9 @@
 #include <unordered_map>
 #include <algorithm>
 #include <random>
+#include <iomanip>
+#include <thread>
+#include <chrono>
 
 // กำหนดสีสำหรับข้อความในคอนโซล
 const std::string RESET = "\033[0m";
