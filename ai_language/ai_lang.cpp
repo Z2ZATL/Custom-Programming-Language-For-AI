@@ -677,7 +677,9 @@ void printUsage() {
 
 void runInteractiveMode() {
     std::cout << "=== โหมดโต้ตอบของภาษา AI ===" << std::endl;
-    std::cout << "พิมพ์คำสั่งและกด Enter เพื่อดำเนินการ (พิมพ์ 'exit' เพื่อออก)" << std::endl << std::endl;
+    std::cout << "พิมพ์คำสั่งและกด Enter เพื่อดำเนินการ (พิมพ์ 'exit' เพื่อออก)" << std::endl;
+    std::cout << "รองรับคำสั่งหลายบรรทัด - พิมพ์ '\\' แล้วกด Enter เพื่อพิมพ์ต่อในบรรทัดถัดไป" << std::endl;
+    std::cout << "พิมพ์ ';;' เพื่อดำเนินการทั้งหมด" << std::endl << std::endl;
 
     // แสดงคำแนะนำหรือตัวอย่างคำสั่ง
     std::cout << "ตัวอย่างคำสั่ง:" << std::endl;
@@ -698,6 +700,12 @@ void runInteractiveMode() {
     std::cout << "  show accuracy                    # แสดงความแม่นยำของโมเดล" << std::endl;
     std::cout << "  save model \"model_name.dat\"      # บันทึกโมเดล" << std::endl << std::endl;
 
+    std::cout << "ตัวอย่างคำสั่งหลายบรรทัด:" << std::endl;
+    std::cout << "  start \\" << std::endl;
+    std::cout << "  create ML \\" << std::endl;
+    std::cout << "  load dataset \"datasets/linear_data.csv\" \\" << std::endl;
+    std::cout << "  create model LinearRegression ;;" << std::endl << std::endl;
+
     std::cout << "คำแนะนำเพิ่มเติม: ดูไฟล์ USAGE_GUIDE.md สำหรับรายละเอียดเพิ่มเติม" << std::endl;
     std::cout << "หรือดูตัวอย่างไฟล์ในโฟลเดอร์ examples/" << std::endl << std::endl;
 
@@ -710,19 +718,60 @@ void runInteractiveMode() {
     std::cout << "  - config.json          # สำหรับการตั้งค่า RL" << std::endl << std::endl;
 
     ai_language::Interpreter interpreter;
+    std::string multiline = "";
     std::string line;
-    std::string command;
 
     // รับคำสั่งจากผู้ใช้จนกว่าจะพิมพ์ 'exit'
     while (true) {
-        std::cout << "AI> ";
+        if (multiline.empty()) {
+            std::cout << "AI> ";
+        } else {
+            std::cout << "... ";
+        }
+        
         std::getline(std::cin, line);
         
-        if (line == "exit") {
+        if (line == "exit" && multiline.empty()) {
             break;
         }
         
-        interpreter.interpretLine(line);
+        // ตรวจสอบการป้อนหลายบรรทัด
+        if (!line.empty() && line.back() == '\\') {
+            // ลบเครื่องหมาย \ และเก็บคำสั่งไว้
+            line.pop_back();
+            multiline += line + "\n";
+            continue;
+        }
+        
+        // เพิ่มบรรทัดปัจจุบันเข้าไปในคำสั่งหลายบรรทัด
+        multiline += line;
+        
+        // ตรวจสอบว่าเป็นการสิ้นสุดคำสั่งหลายบรรทัดหรือไม่
+        if (multiline.find(";;") != std::string::npos || line.find(";;") != std::string::npos) {
+            // ลบเครื่องหมาย ;; ออก
+            size_t pos = multiline.find(";;");
+            if (pos != std::string::npos) {
+                multiline.erase(pos, 2);
+            }
+            
+            // แยกคำสั่งและประมวลผลทีละคำสั่ง
+            std::istringstream stream(multiline);
+            std::string command;
+            
+            while (std::getline(stream, command)) {
+                if (!command.empty() && command.front() != '#') {
+                    interpreter.interpretLine(command);
+                }
+            }
+            
+            multiline = "";
+        } else if (multiline.find(";;") == std::string::npos && line.find(";;") == std::string::npos) {
+            // ถ้าไม่มีเครื่องหมาย ;; ในบรรทัดเดียว ให้ประมวลผลทันที
+            if (!multiline.empty() && multiline.front() != '#') {
+                interpreter.interpretLine(multiline);
+            }
+            multiline = "";
+        }
     }
 }
 
