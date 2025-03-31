@@ -90,3 +90,12 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "cd ai_language && mkdir -p build && cd build && cmake .. && make && cd .. && ./ai_lang -i"
+
+[[workflows.workflow]]
+name = "Test Error Handling"
+author = 41026532
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd ai_language && mkdir -p build && cd build && cmake .. && make && cd .. && ./ai_lang tests/error_handling_test.ai"

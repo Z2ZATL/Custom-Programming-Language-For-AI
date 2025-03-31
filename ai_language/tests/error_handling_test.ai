@@ -1,0 +1,53 @@
+
+# ไฟล์ทดสอบการจัดการข้อผิดพลาดของภาษา AI
+# ใช้สำหรับตรวจสอบว่าการจัดการข้อผิดพลาดทำงานได้ถูกต้องหรือไม่
+
+# 1. ทดสอบคำสั่งที่ไม่มีการเริ่มต้นก่อน
+create model LinearRegression ;;
+
+# 2. ทดสอบการโหลดไฟล์ที่ไม่มีอยู่
+start \
+create ML \
+load dataset "ไม่มีไฟล์นี้.csv" ;;
+
+# 3. ทดสอบการตั้งค่าพารามิเตอร์ที่ไม่ถูกต้อง
+start \
+create ML \
+set learning_rate -1000 ;;
+
+# 4. ทดสอบการใช้คำสั่งผิดประเภทของโมเดล
+start \
+create ML \
+add layer input 4 ;;
+
+# 5. ทดสอบการฝึกโมเดลโดยไม่โหลดข้อมูล
+start \
+create ML \
+create model LinearRegression \
+train model ;;
+
+# 6. ทดสอบการสร้างโมเดลซ้ำ
+start \
+create ML \
+create model LinearRegression \
+create model LinearRegression ;;
+
+# 7. ทดสอบการบันทึกโมเดลที่ยังไม่ได้สร้าง
+start \
+save model "test.ml" ;;
+
+# 8. ทดสอบคำสั่งที่ไม่มีอยู่
+start \
+nonexistent_command ;;
+
+# 9. ทดสอบการรวมคำสั่งที่ถูกต้องและไม่ถูกต้อง
+start \
+create ML \
+load dataset "datasets/linear_data.csv" type "csv" \
+create model LinearRegression \
+set learning_rate abc \
+train model ;;
+
+# 10. ทดสอบคำสั่งที่มีไวยากรณ์ผิด (ไม่มีพารามิเตอร์)
+start \
+create ;;
