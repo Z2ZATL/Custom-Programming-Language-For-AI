@@ -54,3 +54,12 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "cd ai_language && mkdir -p build && cd build && cmake .. && make && cd .. && ./ai_lang -i"
+
+[[workflows.workflow]]
+name = "Run with Data Setup"
+author = 41000523
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd ai_language && mkdir -p build datasets examples/{ml_examples,dl_examples,rl_examples} && cd build && cmake .. && make && cd .. && ./ai_lang -i"

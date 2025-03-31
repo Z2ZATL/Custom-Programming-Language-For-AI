@@ -1,0 +1,13 @@
+
+# ตัวอย่างการใช้ Classification
+start
+create ML
+load dataset "datasets/classification_data.csv" type "csv"
+create model RandomForest
+set trees 100
+set max_depth 5
+train model
+visualize data
+evaluate model
+show accuracy
+save model "classification_model.dat"

@@ -1,0 +1,10 @@
+
+{
+  "learning_rate": 0.1,
+  "episodes": 1000,
+  "discount_factor": 0.9,
+  "exploration_rate": 0.3,
+  "exploration_decay": 0.01,
+  "algorithm": "q_learning",
+  "max_steps_per_episode": 100
+}

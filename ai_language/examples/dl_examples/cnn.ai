@@ -1,0 +1,22 @@
+
+# ตัวอย่างการใช้ CNN
+start
+create DL
+load dataset "datasets/images/" type "image"
+create model CNN
+add layer convolutional filters 32 kernel_size 3 activation "relu"
+add layer pooling size 2
+add layer convolutional filters 64 kernel_size 3 activation "relu"
+add layer pooling size 2
+add layer dropout rate 0.25
+add layer flatten
+add layer dense 128 activation "relu"
+add layer dropout rate 0.5
+add layer output 3 activation "softmax"
+set learning_rate 0.001
+set epochs 50
+set batch_size 32
+train model
+evaluate model
+show accuracy
+save model "cnn_model.dat"

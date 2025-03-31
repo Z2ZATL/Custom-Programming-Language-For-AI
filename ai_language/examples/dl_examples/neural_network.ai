@@ -1,0 +1,17 @@
+
+# ตัวอย่างการใช้ Neural Network
+start
+create DL
+load dataset "datasets/iris.csv" type "csv"
+create model NeuralNetwork
+add layer input 4
+add layer hidden 8 activation "relu"
+add layer hidden 6 activation "relu"
+add layer output 3 activation "softmax"
+set learning_rate 0.001
+set epochs 200
+set batch_size 16
+train model
+evaluate model
+show accuracy
+save model "neural_network_model.dat"

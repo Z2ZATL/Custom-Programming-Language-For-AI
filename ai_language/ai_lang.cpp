@@ -42,11 +42,34 @@ void runInteractiveMode() {
     // แสดงคำแนะนำสำหรับการใช้งาน
     std::cout << "ตัวอย่างคำสั่ง:\n";
     std::cout << "  start\n";
-    std::cout << "  create ML\n";
-    std::cout << "  load dataset \"data.csv\" type \"csv\"\n";
-    std::cout << "  clean data\n";
+    std::cout << "  create ML                        # สร้างโปรเจค Machine Learning\n";
+    std::cout << "  create DL                        # สร้างโปรเจค Deep Learning\n";
+    std::cout << "  create RL                        # สร้างโปรเจค Reinforcement Learning\n";
+    std::cout << "  load dataset \"datasets/linear_data.csv\" type \"csv\"  # โหลดข้อมูลสำหรับ ML\n";
+    std::cout << "  load dataset \"datasets/iris.csv\" type \"csv\"         # โหลดข้อมูลสำหรับ DL\n";
+    std::cout << "  load environment \"datasets/environment.json\"         # โหลดสภาพแวดล้อมสำหรับ RL\n";
+    std::cout << "  create model LinearRegression    # สร้างโมเดล LinearRegression\n";
+    std::cout << "  create model NeuralNetwork       # สร้างโมเดล Neural Network\n";
+    std::cout << "  create model QLearning           # สร้างโมเดล Q-Learning\n";
+    std::cout << "  set learning_rate 0.01           # ตั้งค่า learning rate\n";
+    std::cout << "  set epochs 100                   # ตั้งค่าจำนวนรอบการเรียนรู้\n";
+    std::cout << "  train model                      # ฝึกโมเดล\n";
+    std::cout << "  evaluate model                   # ประเมินประสิทธิภาพโมเดล\n";
+    std::cout << "  show accuracy                    # แสดงความแม่นยำของโมเดล\n";
+    std::cout << "  save model \"model_name.dat\"      # บันทึกโมเดล\n\n";
+    std::cout << "คำแนะนำเพิ่มเติม: ดูไฟล์ USAGE_GUIDE.md สำหรับรายละเอียดเพิ่มเติม\n";
+    std::cout << "หรือดูตัวอย่างไฟล์ในโฟลเดอร์ examples/\n\n";
+    std::cout << "ข้อมูลตัวอย่างอยู่ในโฟลเดอร์ datasets/\n";
+    std::cout << "  - linear_data.csv      # สำหรับ Linear Regression\n";
+    std::cout << "  - classification_data.csv # สำหรับ Classification\n";
+    std::cout << "  - iris.csv             # สำหรับ Neural Network\n";
+    std::cout << "  - images/              # สำหรับ CNN\n";
+    std::cout << "  - environment.json     # สำหรับ Reinforcement Learning\n";
+    std::cout << "  - config.json          # สำหรับการตั้งค่า RL\n\n";
+    std::cout << "clean data\n";
     std::cout << "  split data\n";
     std::cout << "  train model epochs 100\n\n";
+
 
     bool hasStarted = false;
     bool hasLoadedData = false;
