@@ -20,7 +20,7 @@ private:
     // ตัวแปรสำหรับเก็บประเภทโมเดล
     std::string modelType;
     std::string datasetFilename; // เพิ่มตัวแปรสำหรับเก็บชื่อไฟล์ข้อมูล
-    
+
     // Helper function
     std::vector<std::string> tokenizeLine(const std::string& line);
 
@@ -54,6 +54,8 @@ public:
     void handleDataVisualization();
     void handleModelPlotting();
     void handleModelEvaluation();
+    void handleHelpCommand(); // Added declaration
+
 };
 
 } // namespace ai_language
