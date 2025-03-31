@@ -80,18 +80,18 @@ void runInteractiveMode() {
                 std::cerr << "\033[31mข้อผิดพลาด: ต้องใช้คำสั่ง 'start' ก่อน\033[0m" << std::endl;
                 continue;
             }
-            
+
             if (hasCreatedProject) {
                 std::cerr << "\033[31mข้อผิดพลาด: คำสั่ง 'create [type]' ถูกใช้ไปแล้ว\033[0m" << std::endl;
                 continue;
             }
-            
+
             // แยกประเภทโปรเจกต์
             std::string type = line.substr(7); // ตัด "create " ออก
-            
+
             if (type == "ML" || type == "DL" || type == "RL") {
                 std::cout << "Project created: ";
-                
+
                 if (type == "ML") {
                     std::cout << "Machine Learning" << std::endl;
                 } else if (type == "DL") {
@@ -99,7 +99,7 @@ void runInteractiveMode() {
                 } else if (type == "RL") {
                     std::cout << "Reinforcement Learning" << std::endl;
                 }
-                
+
                 hasCreatedProject = true;
             } else {
                 std::cerr << "\033[31mข้อผิดพลาด: รูปแบบประเภทโปรเจกต์ไม่ถูกต้อง ต้องเป็น ML, DL หรือ RL\033[0m" << std::endl;
@@ -110,26 +110,26 @@ void runInteractiveMode() {
                 std::cerr << "\033[31mข้อผิดพลาด: ต้องใช้คำสั่ง 'start' และ 'create [type]' ก่อน\033[0m" << std::endl;
                 continue;
             }
-            
+
             if (hasLoadedData) {
                 std::cerr << "\033[31mข้อผิดพลาด: คำสั่ง 'load dataset' ถูกใช้ไปแล้ว\033[0m" << std::endl;
                 continue;
             }
-            
+
             // แยกชื่อไฟล์
             std::string filename;
             size_t filenameStart = line.find("\"");
             size_t filenameEnd = line.find("\"", filenameStart + 1);
-            
+
             if (filenameStart != std::string::npos && filenameEnd != std::string::npos) {
                 filename = line.substr(filenameStart + 1, filenameEnd - filenameStart - 1);
-                
+
                 // ตรวจสอบว่าเป็นไฟล์ CSV หรือไม่
                 if (filename.length() < 4 || filename.substr(filename.length() - 4) != ".csv") {
                     std::cerr << "\033[31mข้อผิดพลาด: ไฟล์ต้องเป็นนามสกุล .csv\033[0m" << std::endl;
                     continue;
                 }
-                
+
                 // ตรวจสอบว่าไฟล์มีอยู่หรือไม่
                 std::ifstream f(filename);
                 if (!f.good()) {
