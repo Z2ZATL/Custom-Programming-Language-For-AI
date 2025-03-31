@@ -468,21 +468,21 @@ public:
                 filename += extension;
             }
 
-            // สร้างโฟลเดอร์ models ถ้ายังไม่มี
-            std::string modelsDir = "models";
+            // สร้างโฟลเดอร์ Program test/model ถ้ายังไม่มี
+            std::string modelsDir = "Program test/model";
             struct stat st;
             if (stat(modelsDir.c_str(), &st) != 0) {
                 // สร้างโฟลเดอร์ถ้าไม่มี
                 #ifdef _WIN32
-                system("mkdir models");
+                system("mkdir -p \"Program test/model\"");
                 #else
-                system("mkdir -p models");
+                system("mkdir -p \"Program test/model\"");
                 #endif
             }
 
             // จัดการเส้นทางไฟล์
             if (filename.find('/') == std::string::npos && filename.find('\\') == std::string::npos) {
-                // ถ้าไม่ได้ระบุเส้นทาง ให้เก็บในโฟลเดอร์ models
+                // ถ้าไม่ได้ระบุเส้นทาง ให้เก็บในโฟลเดอร์ Program test/model
                 filename = modelsDir + "/" + filename;
             }
 
