@@ -17,6 +17,33 @@ DLInterpreter::~DLInterpreter() {
 }
 
 void DLInterpreter::setDefaultParameters() {
+
+std::vector<std::string> DLInterpreter::tokenizeLine(const std::string& line) {
+    std::vector<std::string> tokens;
+    std::string currentToken;
+    bool inQuotes = false;
+    
+    for (char c : line) {
+        if (c == '"') {
+            inQuotes = !inQuotes;
+            currentToken += c;
+        } else if (c == ' ' && !inQuotes) {
+            if (!currentToken.empty()) {
+                tokens.push_back(currentToken);
+                currentToken.clear();
+            }
+        } else {
+            currentToken += c;
+        }
+    }
+    
+    if (!currentToken.empty()) {
+        tokens.push_back(currentToken);
+    }
+    
+    return tokens;
+}
+
     // ล้างค่าเดิม
     parameters.clear();
     

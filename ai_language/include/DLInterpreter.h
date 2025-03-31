@@ -20,14 +20,17 @@ private:
     // ตัวแปรสำหรับเก็บประเภทโมเดล
     std::string modelType;
     std::string datasetFilename; // เพิ่มตัวแปรสำหรับเก็บชื่อไฟล์ข้อมูล
+    
+    // Helper function
+    std::vector<std::string> tokenizeLine(const std::string& line);
 
 public:
     DLInterpreter();
     ~DLInterpreter() override;
 
     // เมธอดสำหรับการประมวลผลไฟล์และคำสั่ง
-    void interpretFile(const std::string& filename) override;
-    void interpretLine(const std::string& line) override;
+    void interpretFile(const std::string& filename);
+    void interpretLine(const std::string& line);
 
     // เมธอดสำหรับการดำเนินการตามประเภทของคำสั่ง
     void handleStartCommand() override;
