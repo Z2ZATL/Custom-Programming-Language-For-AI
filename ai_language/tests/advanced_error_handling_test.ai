@@ -15,7 +15,7 @@ load dataset "datasets/linear_data.csv"\
 create model LinearRegression\
 set learning_rate abc ;;
 
-# 3. ทดสอบการใช้คำสั่งฝึกโมเดลหลายครั้ง
+# 3. ทดสอบการใช้คำสั่งฝึกโมเดลสองครั้ง (ครั้งที่ 2 ควรแสดงข้อผิดพลาด)
 start \
 create ML \
 load dataset "datasets/linear_data.csv" \
@@ -54,21 +54,21 @@ start \
 create ML \
 load dataset "datasets/linear_data.csv" \
 create model LinearRegression! ;;
-# ไฟล์ทดสอบขั้นสูงสำหรับการจัดการข้อผิดพลาดของภาษา AI
+# ไฟล์ทดสอบขั้นสูงสำหรับการจัดการข้อผิดพลาดของภาษา AI (ส่วนที่ 2)
 
-# 1. ทดสอบการทำงานกับไฟล์ที่ไม่มีอยู่จริง
+# 1. ทดสอบการทำงานกับไฟล์ที่ไม่มีอยู่จริง (ควรแสดงข้อผิดพลาด: ไฟล์ไม่พบ)
 start \
 create ML \
 load dataset "nonexistent_file.csv" ;;
 
-# 2. ทดสอบการตั้งค่าพารามิเตอร์ที่ไม่ใช่ตัวเลข
+# 2. ทดสอบการตั้งค่าพารามิเตอร์ที่ไม่ใช่ตัวเลข (ควรแสดงข้อผิดพลาด: ค่าไม่ใช่ตัวเลข)
 start \
 create ML \
 load dataset "datasets/linear_data.csv" \
 create model LinearRegression \
 set learning_rate abc ;;
 
-# 3. ทดสอบการใช้ค่าพารามิเตอร์ที่ไม่อยู่ในช่วงที่ถูกต้อง
+# 3. ทดสอบการใช้ค่าพารามิเตอร์ที่ไม่อยู่ในช่วงที่ถูกต้อง (ควรแสดงข้อผิดพลาด: ค่าติดลบไม่ได้)
 start \
 create ML \
 load dataset "datasets/linear_data.csv" \

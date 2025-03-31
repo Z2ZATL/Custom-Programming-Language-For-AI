@@ -412,6 +412,11 @@ public:
                 std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create model' ก่อน" << RESET << std::endl;
                 return;
             }
+            
+            if (hasTrainedModel) {
+                std::cerr << RED << "ข้อผิดพลาด: โมเดลนี้ได้ฝึกไปแล้ว ถ้าต้องการฝึกใหม่ให้สร้างโมเดลใหม่" << RESET << std::endl;
+                return;
+            }
 
             // ตรวจสอบค่าพารามิเตอร์ที่ไม่เหมาะสม
             bool hasWarning = false;
