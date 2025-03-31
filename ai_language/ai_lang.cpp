@@ -474,9 +474,13 @@ public:
             if (stat(modelsDir.c_str(), &st) != 0) {
                 // สร้างโฟลเดอร์ถ้าไม่มี
                 #ifdef _WIN32
-                system("mkdir -p \"Program test/model\"");
+                if (system("mkdir -p \"Program test/model\"") != 0) {
+                    std::cerr << RED << "ข้อผิดพลาด: ไม่สามารถสร้างโฟลเดอร์ \"Program test/model\"" << RESET << std::endl;
+                }
                 #else
-                system("mkdir -p \"Program test/model\"");
+                if (system("mkdir -p \"Program test/model\"") != 0) {
+                    std::cerr << RED << "ข้อผิดพลาด: ไม่สามารถสร้างโฟลเดอร์ \"Program test/model\"" << RESET << std::endl;
+                }
                 #endif
             }
 
@@ -719,7 +723,7 @@ public:
             std::cout << "  load dataset \"[filename]\"    - โหลดข้อมูล" << std::endl;
             std::cout << "  create model [model_name]   - สร้างโมเดล" << std::endl;
             std::cout << "  set [parameter] [value]     - ตั้งค่าพารามิเตอร์" << std::endl;
-            std::cout << "  train model                 - ฝึกโมเดล" << std::endl;
+            std::cout << "  train model                 - ฝึกโมเดเดล" << std::endl;
             std::cout << "  show accuracy/loss/graph    - แสดงผลลัพธ์" << std::endl;
             std::cout << "  save model \"[filename]\"     - บันทึกโมเดล" << std::endl;
             std::cout << "  load model \"[filename]\"     - โหลดโมเดล" << std::endl;
