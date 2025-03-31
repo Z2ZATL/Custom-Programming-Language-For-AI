@@ -1,0 +1,8 @@
+// RL Model: QLearning
+// Created: 2025-03-31 13:22:06
+// Parameters:
+//   discount_factor: 0.9
+//   episodes: 1000
+//   learning_rate: 0.1
+
+// Model data (binary/serialized) would be here in a real implementation

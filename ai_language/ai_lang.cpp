@@ -723,7 +723,7 @@ public:
             std::cout << "  show accuracy/loss/graph    - แสดงผลลัพธ์" << std::endl;
             std::cout << "  save model \"[filename]\"     - บันทึกโมเดล" << std::endl;
             std::cout << "  load model \"[filename]\"     - โหลดโมเดล" << std::endl;
-            stdcout << "  end                         - สิ้นสุดโปรแกรม" << std::endl;
+            std::cout << "  end                         - สิ้นสุดโปรแกรม" << std::endl;
         } else {
             // คำสั่งไม่รองรับ
             std::cerr << RED << "ข้อผิดพลาด: คำสั่ง '" << command << "' ไม่รองรับ" << RESET << std::endl;
