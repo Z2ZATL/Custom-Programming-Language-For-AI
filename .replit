@@ -8,7 +8,7 @@ channel = "stable-24_05"
 run = ["sh", "-c", "cd ai_language && mkdir -p build && cd build && cmake .. && make && cd .. && ./ai_lang -i"]
 
 [workflows]
-runButton = "Fix and Build"
+runButton = "Run Interactive Mode"
 
 [[workflows.workflow]]
 name = "Build and Run C++"
@@ -81,3 +81,12 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "cd ai_language && mkdir -p build && cd build && cmake .. && make"
+
+[[workflows.workflow]]
+name = "Run Interactive Mode"
+author = 41026532
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd ai_language && mkdir -p build && cd build && cmake .. && make && cd .. && ./ai_lang -i"
