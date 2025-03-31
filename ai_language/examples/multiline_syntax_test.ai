@@ -1,0 +1,59 @@
+
+# ตัวอย่างการใช้งาน syntax หลายบรรทัดที่ครอบคลุมทุกฟังก์ชั่น
+
+# คำสั่งเริ่มต้นและสร้างโปรเจกต์
+start \
+create ML \
+load dataset "datasets/classification_data.csv" type "csv" \
+create model RandomForest \
+set trees 100 \
+set max_depth 5 \
+set learning_rate 0.01 \
+set epochs 50 \
+set batch_size 32 \
+train model \
+visualize data \
+evaluate model \
+show accuracy \
+show loss \
+show graph \
+save model "multiline_test_model.pkl" ;;
+
+# คำสั่งทดสอบการโหลดโมเดลและตั้งค่าเพิ่มเติม
+load model "multiline_test_model.pkl" \
+set trees 150 \
+set learning_rate 0.005 \
+train model \
+show performance ;;
+
+# คำสั่งทดสอบสำหรับ Deep Learning
+start \
+create DL \
+load dataset "datasets/iris.csv" type "csv" \
+create model NeuralNetwork \
+add layer input 4 \
+add layer hidden 8 activation "relu" \
+add layer dropout 0.2 \
+add layer hidden 4 activation "relu" \
+add layer output 3 activation "softmax" \
+set learning_rate 0.001 \
+set epochs 100 \
+train model \
+show accuracy \
+plot model ;;
+
+# คำสั่งทดสอบสำหรับ Reinforcement Learning
+start \
+create RL \
+load environment "datasets/environment.json" \
+create model QLearning \
+set learning_rate 0.1 \
+set discount_factor 0.9 \
+set exploration_rate 0.3 \
+set episodes 1000 \
+train model \
+show performance \
+save model "rl_multiline_model.ml" ;;
+
+# ทดสอบคำสั่งช่วยเหลือและอื่นๆ
+help ;;
