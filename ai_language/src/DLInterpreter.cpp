@@ -798,3 +798,20 @@ void DLInterpreter::interpretLine(const std::string& line) {
 }
 
 } // namespace ai_language
+void DLInterpreter::handleHelpCommand() {
+    std::cout << BLUE << "\n=== DL คำสั่งที่ใช้งานได้ ===" << RESET << std::endl;
+    std::cout << GREEN << "start" << RESET << " - เริ่มต้นการใช้งานโปรเจค" << std::endl;
+    std::cout << GREEN << "create DL" << RESET << " - สร้างโปรเจค Deep Learning" << std::endl;
+    std::cout << GREEN << "load dataset \"[filename]\"" << RESET << " - โหลดข้อมูลจากไฟล์" << std::endl;
+    std::cout << GREEN << "create model [model_name]" << RESET << " - สร้างโมเดล Deep Learning" << std::endl;
+    std::cout << GREEN << "add layer [layer_type] [units] [options]" << RESET << " - เพิ่มเลเยอร์ (input, hidden, output)" << std::endl;
+    std::cout << GREEN << "set [parameter] [value]" << RESET << " - ตั้งค่าพารามิเตอร์การฝึก (learning_rate, epochs, batch_size)" << std::endl;
+    std::cout << GREEN << "train model" << RESET << " - ฝึกโมเดล" << std::endl;
+    std::cout << GREEN << "evaluate model" << RESET << " - ประเมินโมเดล" << std::endl;
+    std::cout << GREEN << "predict [data]" << RESET << " - ทำนายผลลัพธ์จากข้อมูลที่ระบุ" << std::endl;
+    std::cout << GREEN << "save model \"[filename]\"" << RESET << " - บันทึกโมเดลลงไฟล์" << std::endl;
+    std::cout << GREEN << "load model \"[filename]\"" << RESET << " - โหลดโมเดลจากไฟล์" << std::endl;
+    std::cout << GREEN << "plot [metric]" << RESET << " - แสดงกราฟข้อมูล (accuracy, loss)" << std::endl;
+    std::cout << GREEN << "help" << RESET << " - แสดงรายการคำสั่งที่ใช้งานได้" << std::endl;
+    std::cout << GREEN << "exit" << RESET << " - ออกจากโปรแกรม" << std::endl;
+}

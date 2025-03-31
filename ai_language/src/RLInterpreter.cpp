@@ -638,6 +638,29 @@ void RLInterpreter::handleEvaluateCommand(const std::vector<std::string>& args) 
     std::cout << "└───────────────────────────┴─────────────┘" << std::endl;
 }
 
+std::vector<std::string> RLInterpreter::tokenizeLine(const std::string& line) {
+    std::vector<std::string> tokens;
+    std::string token;
+    bool inQuotes = false;
+    for (char c : line) {
+        if (c == '"') {
+            inQuotes = !inQuotes;
+            token += c;
+        } else if (c == ' ' && !inQuotes) {
+            if (!token.empty()) {
+                tokens.push_back(token);
+                token.clear();
+            }
+        } else {
+            token += c;
+        }
+    }
+    if (!token.empty()) {
+        tokens.push_back(token);
+    }
+    return tokens;
+}
+
 void RLInterpreter::interpretLine(const std::string& line) {
     // ข้ามบรรทัดว่างและคอมเมนต์
     if (line.empty() || line[0] == '#') {
@@ -645,32 +668,6 @@ void RLInterpreter::interpretLine(const std::string& line) {
     }
 
     // แยกคำสั่งและพารามิเตอร์
-    auto tokenizeLine = [&](const std::string& line) {
-        std::vector<std::string> tokens;
-        std::string token;
-        bool inQuotes = false;
-
-        for (char c : line) {
-            if (c == '"') {
-                inQuotes = !inQuotes;
-                token += c;
-            } else if (c == ' ' && !inQuotes) {
-                if (!token.empty()) {
-                    tokens.push_back(token);
-                    token.clear();
-                }
-            } else {
-                token += c;
-            }
-        }
-
-        if (!token.empty()) {
-            tokens.push_back(token);
-        }
-
-        return tokens;
-    };
-
     std::vector<std::string> tokens = tokenizeLine(line);
     if (tokens.empty()) {
         return;
