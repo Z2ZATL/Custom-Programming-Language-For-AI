@@ -86,24 +86,40 @@ void runInteractiveMode() {
                 continue;
             }
 
-            // แยกประเภทโปรเจกต์
-            std::string type = line.substr(7); // ตัด "create " ออก
+            // แยกประเภทโปรเจกต์และโมเดล (ถ้ามี)
+            std::string type;
+            std::string model_name;
+            size_t spacePos = line.find(' ', 7); // find space after "create "
 
-            if (type == "ML" || type == "DL" || type == "RL") {
-                std::cout << "Project created: ";
+            if (spacePos != std::string::npos) {
+                type = line.substr(7, spacePos - 7);
+                model_name = line.substr(spacePos + 1);
 
-                if (type == "ML") {
-                    std::cout << "Machine Learning" << std::endl;
-                } else if (type == "DL") {
-                    std::cout << "Deep Learning" << std::endl;
-                } else if (type == "RL") {
-                    std::cout << "Reinforcement Learning" << std::endl;
+                if (type == "ML" || type == "DL" || type == "RL") {
+                    std::cout << "Project created: ";
+                    if (type == "ML") {
+                        std::cout << "Machine Learning";
+                    } else if (type == "DL") {
+                        std::cout << "Deep Learning";
+                    } else if (type == "RL") {
+                        std::cout << "Reinforcement Learning";
+                    }
+                    std::cout << std::endl;
+                    hasCreatedProject = true;
+
+
+                    if(!model_name.empty()){
+                        std::cout << "Model created: " << model_name << std::endl;
+                        hasCreatedModel = true;
+                    }
+
+                } else {
+                    std::cerr << "\033[31mข้อผิดพลาด: รูปแบบประเภทโปรเจกต์ไม่ถูกต้อง ต้องเป็น ML, DL หรือ RL\033[0m" << std::endl;
                 }
-
-                hasCreatedProject = true;
             } else {
                 std::cerr << "\033[31mข้อผิดพลาด: รูปแบบประเภทโปรเจกต์ไม่ถูกต้อง ต้องเป็น ML, DL หรือ RL\033[0m" << std::endl;
             }
+
         } else if (line.find("load dataset") == 0) {
             // ตรวจสอบการโหลดข้อมูล
             if (!hasStarted || !hasCreatedProject) {
@@ -141,28 +157,6 @@ void runInteractiveMode() {
                 }
             } else {
                 std::cerr << "\033[31mรูปแบบคำสั่งไม่ถูกต้อง - ตัวอย่าง: load dataset \"data.csv\"\033[0m" << std::endl;
-            }
-        } else if (line.find("create model") == 0) {
-            if (!hasStarted || !hasCreatedProject || !hasLoadedData) {
-                std::cerr << "\033[31mข้อผิดพลาด: ต้องใช้คำสั่ง 'start', 'create [type]' และ 'load dataset' ก่อน\033[0m" << std::endl;
-                continue;
-            }
-
-            if (hasCreatedModel) {
-                std::cerr << "\033[31mข้อผิดพลาด: คำสั่ง 'create model' ถูกใช้ไปแล้ว\033[0m" << std::endl;
-                continue;
-            }
-
-            // แยกชื่อโมเดล
-            std::istringstream iss(line);
-            std::string cmd1, cmd2, model_name;
-            iss >> cmd1 >> cmd2 >> model_name;
-
-            if (!model_name.empty()) {
-                std::cout << "Model created: " << model_name << std::endl;
-                hasCreatedModel = true;
-            } else {
-                std::cerr << "\033[31mข้อผิดพลาด: ต้องระบุชนิดของโมเดล เช่น 'create model LinearRegression'\033[0m" << std::endl;
             }
         } else if (line == "train model") {
             if (!hasStarted || !hasCreatedProject || !hasLoadedData || !hasCreatedModel) {
