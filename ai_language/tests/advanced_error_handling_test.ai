@@ -1,0 +1,49 @@
+
+# ไฟล์ทดสอบการจัดการข้อผิดพลาดขั้นสูงของภาษา AI
+
+# 1. ทดสอบการตั้งค่าพารามิเตอร์ที่ไม่ถูกต้อง (ค่าลบ)
+start \
+create ML \
+create model LinearRegression \
+set learning_rate -0.1 ;;
+
+# 2. ทดสอบการตั้งค่าพารามิเตอร์ที่ไม่ถูกต้อง (ค่าที่ไม่ใช่ตัวเลข)
+start \
+create ML \
+create model LinearRegression \
+set learning_rate abc ;;
+
+# 3. ทดสอบการใช้คำสั่งฝึกโมเดลหลายครั้ง
+start \
+create ML \
+load dataset "datasets/linear_data.csv" \
+create model LinearRegression \
+train model \
+train model ;;
+
+# 4. ทดสอบการใช้คำสั่งที่ไม่มีในโมดูลปัจจุบัน
+start \
+create ML \
+predict data ;;
+
+# 5. ทดสอบการใช้ timezone ที่ไม่ถูกต้อง
+start \
+create ML \
+set timezone UTC+20 ;;
+
+# 6. ทดสอบการใช้คำสั่งแบบไม่มีพารามิเตอร์ที่จำเป็น
+start \
+create ML \
+load ;;
+
+# 7. ทดสอบการใช้คำสั่งที่มีวงเล็บปิดไม่ครบ
+start \
+create ML \
+load dataset "datasets/linear_data.csv" \
+create model (LinearRegression ;;
+
+# 8. ทดสอบการใช้คำสั่งที่มีเครื่องหมายพิเศษที่ไม่รองรับ
+start \
+create ML \
+load dataset "datasets/linear_data.csv" \
+create model LinearRegression! ;;

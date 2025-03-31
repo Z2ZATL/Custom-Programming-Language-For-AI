@@ -59,15 +59,15 @@ private:
 
     // เวลาของ timezone ของผู้ใช้ (ชั่วโมง)
     int userTimezoneOffset = 7; // ค่าเริ่มต้นคือ UTC+7 (ประเทศไทย)
-    
+
     // Helper function to get current date and time adjusted for user timezone
     std::string getCurrentDateTime() {
         auto now = std::chrono::system_clock::now();
         auto time_t_now = std::chrono::system_clock::to_time_t(now);
-        
+
         // ปรับเวลาตาม timezone ของผู้ใช้
         time_t_now += userTimezoneOffset * 3600; // ปรับเวลาตาม offset (ชั่วโมง)
-        
+
         std::stringstream ss;
         ss << std::put_time(std::gmtime(&time_t_now), "%Y-%m-%d %H:%M:%S");
         return ss.str();
@@ -183,6 +183,9 @@ public:
                     return;
                 }
 
+                if (hasCreatedModel) {
+                    std::cerr << YELLOW << "คำเตือน: กำลังแทนที่โมเดลเดิม (" << modelType << ") ด้วยโมเดลใหม่" << RESET << std::endl;
+                }
                 modelType = tokens[2];
                 hasCreatedModel = true;
                 hasTrainedModel = false;
@@ -223,6 +226,14 @@ public:
                     filename = filename.substr(1, filename.size() - 2);
                 }
 
+                // ตรวจสอบการมีอยู่ของไฟล์
+                std::ifstream file(filename);
+                if (!file) {
+                    std::cerr << RED << "ข้อผิดพลาด: ไฟล์ " << filename << " ไม่พบ" << RESET << std::endl;
+                    return;
+                }
+                file.close();
+
                 datasetPath = filename;
                 hasLoadedData = true;
                 hasCreatedModel = false;
@@ -249,9 +260,17 @@ public:
                     filename = filename.substr(1, filename.size() - 2);
                 }
 
+                // ตรวจสอบการมีอยู่ของไฟล์
+                std::ifstream file(filename);
+                if (!file) {
+                    std::cerr << RED << "ข้อผิดพลาด: ไฟล์โมเดล " << filename << " ไม่พบ" << RESET << std::endl;
+                    return;
+                }
+                file.close();
+
                 modelType = "LoadedModel";
                 hasCreatedModel = true;
-                hasTrainedModel = false;
+                hasTrainedModel = true; // Assuming loaded models are trained
                 hasShowedAccuracy = false;
                 hasSavedModel = false;
 
