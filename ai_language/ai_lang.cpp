@@ -313,7 +313,8 @@ int main(int argc, char* argv[]) {
         }
 
         // ทดสอบคำสั่งพื้นฐาน
-        runDemo("start create ML");
+        runDemo("start");
+        runDemo("create ML");
         runDemo("load dataset \"data.csv\"");
         runDemo("create model LinearRegression");
         runDemo("train model");
@@ -323,13 +324,15 @@ int main(int argc, char* argv[]) {
         if (!isTesting) {
             // ทดสอบคำสั่งสำหรับ Deep Learning
             std::cout << "\n=== Deep Learning ===\n";
-            runDemo("start create DL");
+            runDemo("start");
+            runDemo("create DL");
             runDemo("create neural_network with layers 3 nodes 128 activation \"relu\"");
             runDemo("train model for epochs 50");
 
             // ทดสอบคำสั่งสำหรับ Reinforcement Learning
             std::cout << "\n=== Reinforcement Learning ===\n";
-            runDemo("start create RL");
+            runDemo("start");
+            runDemo("create RL");
             runDemo("create agent with policy \"DQN\"");
             runDemo("train agent for episodes 1000");
 
