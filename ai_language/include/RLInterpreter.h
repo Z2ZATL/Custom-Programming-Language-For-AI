@@ -10,13 +10,16 @@ private:
     // ตัวแปรสำหรับเก็บประเภทโมเดล
     std::string modelType;
     std::string datasetFilename; // เพิ่มตัวแปรสำหรับเก็บชื่อไฟล์ข้อมูล
+    
+    // Utility methods
+    std::vector<std::string> tokenizeLine(const std::string& line);
 
 public:
     RLInterpreter();
     ~RLInterpreter() override;
 
     // Override methods from BaseInterpreter
-    void interpretLine(const std::string& line) override;
+    void interpretLine(const std::string& line);
 
     // เมธอดสำหรับการตั้งค่าพารามิเตอร์เริ่มต้น
     void setDefaultParameters() override;
@@ -29,7 +32,7 @@ public:
     void handleTrainCommand(const std::vector<std::string>& args) override;
     void handleSaveCommand(const std::vector<std::string>& args) override;
     void handleShowCommand(const std::vector<std::string>& args) override;
-    void handleVisualizeCommand(const std::vector<std::string>& args) override;
+    void handleVisualizeCommand(const std::vector<std::string>& args);
     void handleHelpCommand() override;
     void handleRunSimulationCommand(const std::vector<std::string>& args);
     void handleEvaluateCommand(const std::vector<std::string>& args);
