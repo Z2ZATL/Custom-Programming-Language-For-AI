@@ -435,10 +435,10 @@ public:
 
     // แปลง token เป็น AST และคืนค่าเป็นโครงสร้างต้นไม้
     std::shared_ptr<Program> parse(const std::vector<Token>& tokens);
-    
+
     // รีเซ็ตสถานะข้อผิดพลาด
     void resetError();
-
+    
 private:
 };
 
