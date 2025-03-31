@@ -348,7 +348,7 @@ private:
     std::shared_ptr<Statement> trainStatement();
     std::shared_ptr<Statement> evaluateStatement();
     std::shared_ptr<Statement> showStatement();
-    std::shared_ptr<Statement> visualizeStatement();
+    // Removed duplicate declaration of visualizeStatement()
     std::shared_ptr<Statement> plotStatement();
     std::shared_ptr<Statement> predictStatement();
     std::shared_ptr<Statement> saveStatement();
