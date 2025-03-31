@@ -57,12 +57,19 @@ private:
         }
     }
 
-    // Helper function to get current date and time
+    // เวลาของ timezone ของผู้ใช้ (ชั่วโมง)
+    int userTimezoneOffset = 7; // ค่าเริ่มต้นคือ UTC+7 (ประเทศไทย)
+    
+    // Helper function to get current date and time adjusted for user timezone
     std::string getCurrentDateTime() {
         auto now = std::chrono::system_clock::now();
         auto time_t_now = std::chrono::system_clock::to_time_t(now);
+        
+        // ปรับเวลาตาม timezone ของผู้ใช้
+        time_t_now += userTimezoneOffset * 3600; // ปรับเวลาตาม offset (ชั่วโมง)
+        
         std::stringstream ss;
-        ss << std::put_time(std::localtime(&time_t_now), "%Y-%m-%d %H:%M:%S");
+        ss << std::put_time(std::gmtime(&time_t_now), "%Y-%m-%d %H:%M:%S");
         return ss.str();
     }
 
@@ -715,6 +722,19 @@ public:
             double prediction = dis(gen);
 
             std::cout << GREEN << "Prediction: " << std::fixed << std::setprecision(2) << prediction << RESET << std::endl;
+        } else if (command == "set" && tokens.size() > 2 && tokens[1] == "timezone") {
+            // คำสั่ง set timezone
+            try {
+                int timezone = std::stoi(tokens[2]);
+                if (timezone >= -12 && timezone <= 14) {
+                    userTimezoneOffset = timezone;
+                    std::cout << GREEN << "ตั้งค่า timezone เป็น UTC" << (timezone >= 0 ? "+" : "") << timezone << " สำเร็จ" << RESET << std::endl;
+                } else {
+                    std::cerr << RED << "ข้อผิดพลาด: timezone ต้องอยู่ระหว่าง -12 ถึง 14" << RESET << std::endl;
+                }
+            } catch (const std::invalid_argument&) {
+                std::cerr << RED << "ข้อผิดพลาด: รูปแบบ timezone ไม่ถูกต้อง" << RESET << std::endl;
+            }
         } else if (command == "help") {
             // คำสั่ง help
             std::cout << CYAN << "คำสั่งที่ใช้ได้:" << RESET << std::endl;
@@ -723,6 +743,7 @@ public:
             std::cout << "  load dataset \"[filename]\"    - โหลดข้อมูล" << std::endl;
             std::cout << "  create model [model_name]   - สร้างโมเดล" << std::endl;
             std::cout << "  set [parameter] [value]     - ตั้งค่าพารามิเตอร์" << std::endl;
+            std::cout << "  set timezone [value]        - ตั้งค่าเขตเวลา (UTC-12 ถึง UTC+14)" << std::endl;
             std::cout << "  train model                 - ฝึกโมเดเดล" << std::endl;
             std::cout << "  show accuracy/loss/graph    - แสดงผลลัพธ์" << std::endl;
             std::cout << "  save model \"[filename]\"     - บันทึกโมเดล" << std::endl;
