@@ -33,14 +33,14 @@ public:
  */
 class Statement {
 public:
-    Token keyword;  // คำสำคัญที่เริ่มต้นคำสั่ง
+    Token token; // Token ที่เกี่ยวข้องกับคำสั่งนี้
 
-    // เพิ่ม constructor แบบว่างเปล่าเพื่อแก้ปัญหา "deleted function"
-    Statement() : keyword(TokenType::UNKNOWN, "", 0, 0) {}
+    Statement() : token(TokenType::IDENTIFIER, "", 0, 0) {}
+    Statement(const Token& token) : token(token) {}
 
     virtual ~Statement() = default;
-
-    // ตอนนี้ไม่มีดำเนินการร่วม ให้คลาสลูกเป็นผู้จัดการ
+    virtual std::string toString() const = 0;
+    virtual void execute() const = 0;
 };
 
 /**
@@ -128,19 +128,6 @@ private:
     std::map<std::string, std::string> params;  ///< พารามิเตอร์เพิ่มเติม
 };
 
-/**
- * @class PredictStatement
- * @brief คลาสสำหรับคำสั่ง predict
- */
-class PredictStatement : public Statement {
-public:
-    PredictStatement(const std::map<std::string, std::string>& params = {});
-    std::string toString() const override;
-    void execute() const override;
-
-private:
-    std::map<std::string, std::string> params;  ///< พารามิเตอร์เพิ่มเติม
-};
 
 /**
  * @class SaveStatement
@@ -302,15 +289,21 @@ public:
     void execute() const override;
 };
 
-// คำสั่ง add layer <layer_type> <parameters...>
+/**
+ * @class AddLayerStatement
+ * @brief คลาสสำหรับคำสั่ง add layer
+ */
 class AddLayerStatement : public Statement {
 public:
-    std::string layerType;
-    std::unordered_map<std::string, std::string> parameters;
-    std::vector<std::string> orderedParams;  // สำหรับพารามิเตอร์ที่ไม่มีชื่อ
+    AddLayerStatement(const std::string& layerType, const std::map<std::string, std::string>& params);
     std::string toString() const override;
     void execute() const override;
+
+private:
+    std::string layerType;  ///< ประเภทของเลเยอร์
+    std::map<std::string, std::string> params;  ///< พารามิเตอร์สำหรับตั้งค่าเลเยอร์
 };
+
 
 // คำสั่ง predict <input>
 class PredictStatement : public Statement {

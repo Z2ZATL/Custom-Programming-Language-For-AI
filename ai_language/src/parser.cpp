@@ -18,7 +18,7 @@ namespace ai_language {
 // Implementation of Statement classes
 
 StartStatement::StartStatement(const std::string& learningType) 
-    : learningType(learningType) {}
+    : Statement(), learningType(learningType) {}
 
 std::string StartStatement::toString() const {
     return "StartStatement(" + learningType + ")";
@@ -39,7 +39,7 @@ void StartStatement::execute() const {
 }
 
 LoadStatement::LoadStatement(const std::string& filename, const std::string& fileType) 
-    : filename(filename), fileType(fileType) {}
+    : Statement(), filename(filename), fileType(fileType) {}
 
 std::string LoadStatement::toString() const {
     return "LoadStatement(filename=" + filename + ", type=" + fileType + ")";
@@ -51,7 +51,7 @@ void LoadStatement::execute() const {
 }
 
 CleanStatement::CleanStatement(const std::map<std::string, std::string>& params) 
-    : params(params) {}
+    : Statement(), params(params) {}
 
 std::string CleanStatement::toString() const {
     std::stringstream ss;
@@ -75,7 +75,7 @@ void CleanStatement::execute() const {
 }
 
 SplitStatement::SplitStatement(const std::map<std::string, std::string>& params) 
-    : params(params) {}
+    : Statement(), params(params) {}
 
 std::string SplitStatement::toString() const {
     std::stringstream ss;
@@ -99,7 +99,7 @@ void SplitStatement::execute() const {
 }
 
 TrainStatement::TrainStatement(const std::map<std::string, std::string>& params) 
-    : params(params) {}
+    : Statement(), params(params) {}
 
 std::string TrainStatement::toString() const {
     std::stringstream ss;
@@ -131,7 +131,7 @@ void TrainStatement::execute() const {
 }
 
 EvaluateStatement::EvaluateStatement(const std::map<std::string, std::string>& params) 
-    : params(params) {}
+    : Statement(), params(params) {}
 
 std::string EvaluateStatement::toString() const {
     std::stringstream ss;
@@ -155,7 +155,7 @@ void EvaluateStatement::execute() const {
 }
 
 PredictStatement::PredictStatement(const std::map<std::string, std::string>& params) 
-    : params(params) {}
+    : Statement(), params(params) {}
 
 std::string PredictStatement::toString() const {
     std::stringstream ss;
@@ -179,7 +179,7 @@ void PredictStatement::execute() const {
 }
 
 SaveStatement::SaveStatement(const std::map<std::string, std::string>& params) 
-    : params(params) {}
+    : Statement(), params(params) {}
 
 std::string SaveStatement::toString() const {
     std::stringstream ss;
@@ -210,7 +210,7 @@ void SaveStatement::execute() const {
 }
 
 ShowStatement::ShowStatement(const std::string& target, const std::map<std::string, std::string>& params) 
-    : target(target), params(params) {}
+    : Statement(), target(target), params(params) {}
 
 std::string ShowStatement::toString() const {
     std::stringstream ss;
