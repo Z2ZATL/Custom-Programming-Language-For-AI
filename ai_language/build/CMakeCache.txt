@@ -23,7 +23,7 @@ AILanguage_IS_TOP_LEVEL:STATIC=ON
 //Value Computed by CMake
 AILanguage_SOURCE_DIR:STATIC=/home/runner/workspace/ai_language
 
-//Build the tests
+//Build test programs
 BUILD_TESTS:BOOL=OFF
 
 //Path to a program.

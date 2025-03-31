@@ -1,0 +1,51 @@
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/runner/workspace/ai_language/build
+[ 12%] Building CXX object CMakeFiles/ai_language_lib.dir/src/DLInterpreter.cpp./home/runner/workspace/ai_language/src/DLInterpreter.cpp:196:6: error: no declaration matches ‘void ai_language::DLInterpreter::handleAddLayerCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+  196 | void DLInterpreter::handleAddLayerCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/DLInterpreter.cpp:196:6: note: no functions named ‘void ai_language::DLInterpreter::handleAddLayerCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+In file included from /home/runner/workspace/ai_language/src/DLInterpreter.cpp:2:
+/home/runner/workspace/ai_language/src/../include/DLInterpreter.h:19:7: note: ‘class ai_language::DLInterpreter’ defined here
+   19 | class DLInterpreter : public BaseInterpreter {
+      |       ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/DLInterpreter.cpp: In member function ‘virtual void ai_language::DLInterpreter::handleLoadCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/DLInterpreter.cpp:323:9: error: ‘datasetFilename’ was not declared in this scope
+  323 |         datasetFilename = filename;
+      |         ^~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/DLInterpreter.cpp: In member function ‘virtual void ai_language::DLInterpreter::handleSaveCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/DLInterpreter.cpp:566:28: error: ‘datasetFilename’ was not declared in this scope
+  566 |     file << "Dataset: " << datasetFilename << std::endl;
+      |                            ^~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/DLInterpreter.cpp: At global scope:
+/home/runner/workspace/ai_language/src/DLInterpreter.cpp:573:6: error: no declaration matches ‘void ai_language::DLInterpreter::handlePlotCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+  573 | void DLInterpreter::handlePlotCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/DLInterpreter.cpp:573:6: note: no functions named ‘void ai_language::DLInterpreter::handlePlotCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+/home/runner/workspace/ai_language/src/../include/DLInterpreter.h:19:7: note: ‘class ai_language::DLInterpreter’ defined here
+   19 | class DLInterpreter : public BaseInterpreter {
+      |       ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/DLInterpreter.cpp:618:6: error: no declaration matches ‘void ai_language::DLInterpreter::handleEvaluateCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+  618 | void DLInterpreter::handleEvaluateCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/DLInterpreter.cpp:618:6: note: no functions named ‘void ai_language::DLInterpreter::handleEvaluateCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+/home/runner/workspace/ai_language/src/../include/DLInterpreter.h:19:7: note: ‘class ai_language::DLInterpreter’ defined here
+   19 | class DLInterpreter : public BaseInterpreter {
+      |       ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/DLInterpreter.cpp:671:6: error: no declaration matches ‘void ai_language::DLInterpreter::handleVisualizeCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+  671 | void DLInterpreter::handleVisualizeCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/DLInterpreter.cpp:671:6: note: no functions named ‘void ai_language::DLInterpreter::handleVisualizeCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+/home/runner/workspace/ai_language/src/../include/DLInterpreter.h:19:7: note: ‘class ai_language::DLInterpreter’ defined here
+   19 | class DLInterpreter : public BaseInterpreter {
+      |       ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/DLInterpreter.cpp:708:6: error: no declaration matches ‘void ai_language::DLInterpreter::interpretLine(const std::string&)’
+  708 | void DLInterpreter::interpretLine(const std::string& line) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/DLInterpreter.cpp:708:6: note: no functions named ‘void ai_language::DLInterpreter::interpretLine(const std::string&)’
+/home/runner/workspace/ai_language/src/../include/DLInterpreter.h:19:7: note: ‘class ai_language::DLInterpreter’ defined here
+   19 | class DLInterpreter : public BaseInterpreter {
+      |       ^~~~~~~~~~~~~
+make[2]: *** [CMakeFiles/ai_language_lib.dir/build.make:104: CMakeFiles/ai_language_lib.dir/src/DLInterpreter.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:86: CMakeFiles/ai_language_lib.dir/all] Error 2
+make: *** [Makefile:91: all] Error 2
