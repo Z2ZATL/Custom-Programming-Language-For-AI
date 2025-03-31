@@ -1,0 +1,208 @@
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/runner/w[ 16%] Building CXX object CMakeFiles/ai_language_lib.dir/src/lexer.cpp.o
+[ 33%] Building CXX object CMakeFiles/ai_language_lib.dir/src/parser.cpp.o
+/home/runner/workspace/ai_language/src/parser.cpp:762:1: error: no declaration matches ‘ai_language::Parser::Parser(const std::vector<ai_language::Token>&)’
+  762 | Parser::Parser(const std::vector<Token>& tokens)
+      | ^~~~~~
+In file included from /home/runner/workspace/ai_language/src/parser.cpp:12:
+/home/runner/workspace/ai_language/include/parser.h:215:7: note: candidates are: ‘ai_language::Parser::Parser(ai_language::Parser&&)’
+  215 | class Parser {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/include/parser.h:215:7: note:                 ‘ai_language::Parser::Parser(const ai_language::Parser&)’
+/home/runner/workspace/ai_language/src/parser.cpp:302:1: note:                 ‘ai_language::Parser::Parser()’
+  302 | Parser::Parser()
+      | ^~~~~~
+/home/runner/workspace/ai_language/include/parser.h:215:7: note: ‘class ai_language::Parser’ defined here
+  215 | class Parser {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:766:6: error: redefinition of ‘void ai_language::Parser::setErrorHandler(std::function<void(const std::__cxx11::basic_string<char>&)>)’
+  766 | void Parser::setErrorHandler(std::function<void(const std::string&)> handler) {
+      |      ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:310:6: note: ‘void ai_language::Parser::setErrorHandler(std::function<void(const std::__cxx11::basic_string<char>&)>)’ previously defined here
+  310 | void Parser::setErrorHandler(std::function<void(const std::string&)> handler) {
+      |      ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:770:6: error: redefinition of ‘bool ai_language::Parser::hasError() const’
+  770 | bool Parser::hasError() const {
+      |      ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:345:6: note: ‘bool ai_language::Parser::hasError() const’ previously defined here
+  345 | bool Parser::hasError() const {
+      |      ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:774:13: error: no declaration matches ‘std::string ai_language::Parser::getErrorMessage() const’
+  774 | std::string Parser::getErrorMessage() const {
+      |             ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:774:13: note: no functions named ‘std::string ai_language::Parser::getErrorMessage() const’
+/home/runner/workspace/ai_language/include/parser.h:215:7: note: ‘class ai_language::Parser’ defined here
+  215 | class Parser {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:778:41: error: no declaration matches ‘std::vector<std::unique_ptr<ai_language::Statement> > ai_language::Parser::parse()’
+  778 | or<std::unique_ptr<Statement>> Parser::parse() {
+      |                                ^~~~~~
+
+/home/runner/workspace/ai_language/src/parser.cpp:314:26: note: candidate is: ‘std::shared_ptr<ai_language::Program> ai_language::Parser::parse(const std::vector<ai_language::Token>&)’
+  314 | std::shared_ptr<Program> Parser::parse(const std::vector<Token>& tokens) {
+      |                          ^~~~~~
+/home/runner/workspace/ai_language/include/parser.h:215:7: note: ‘class ai_language::Parser’ defined here
+  215 | class Parser {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:803:28: error: no declaration matches ‘std::unique_ptr<ai_language::Statement> ai_language::Parser::parseStatement()’
+  803 | std::unique_ptr<Statement> Parser::parseStatement() {
+      |                            ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:803:28: note: no functions named ‘std::unique_ptr<ai_language::Statement> ai_language::Parser::parseStatement()’
+/home/runner/workspace/ai_language/include/parser.h:215:7: note: ‘class ai_language::Parser’ defined here
+  215 | class Parser {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:833:28: error: no declaration matches ‘std::unique_ptr<ai_language::Statement> ai_language::Parser::parseStartStatement()’
+  833 | std::unique_ptr<Statement> Parser::parseStartStatement() {
+      |                            ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:833:28: note: no functions named ‘std::unique_ptr<ai_language::Statement> ai_language::Parser::parseStartStatement()’
+/home/runner/workspace/ai_language/include/parser.h:215:7: note: ‘class ai_language::Parser’ defined here
+  215 | class Parser {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:841:28: error: no declaration matches ‘std::unique_ptr<ai_language::Statement> ai_language::Parser::parseCreateStatement()’
+  841 | std::unique_ptr<Statement> Parser::parseCreateStatement() {
+      |                            ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:841:28: note: no functions named ‘std::unique_ptr<ai_language::Statement> ai_language::Parser::parseCreateStatement()’
+/home/runner/workspace/ai_language/include/parser.h:215:7: note: ‘class ai_language::Parser’ defined here
+  215 | class Parser {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:904:28: error: no declaration matches ‘std::unique_ptr<ai_language::Statement> ai_language::Parser::parseLoadStatement()’
+  904 | std::unique_ptr<Statement> Parser::parseLoadStatement() {
+      |                            ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:904:28: note: no functions named ‘std::unique_ptr<ai_language::Statement> ai_language::Parser::parseLoadStatement()’
+/home/runner/workspace/ai_language/include/parser.h:215:7: note: ‘class ai_language::Parser’ defined here
+  215 | class Parser {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:975:28: error: no declaration matches ‘std::unique_ptr<ai_language::Statement> ai_language::Parser::parseSetStatement()’
+  975 | std::unique_ptr<Statement> Parser::parseSetStatement() {
+      |                            ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:975:28: note: no functions named ‘std::unique_ptr<ai_language::Statement> ai_language::Parser::parseSetStatement()’
+/home/runner/workspace/ai_language/include/parser.h:215:7: note: ‘class ai_language::Parser’ defined here
+  215 | class Parser {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:1007:28: error: no declaration matches ‘std::unique_ptr<ai_language::Statement> ai_language::Parser::parseTrainStatement()’
+ 1007 | std::unique_ptr<Statement> Parser::parseTrainStatement() {
+      |                            ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:1007:28: note: no functions named ‘std::unique_ptr<ai_language::Statement> ai_language::Parser::parseTrainStatement()’
+/home/runner/workspace/ai_language/include/parser.h:215:7: note: ‘class ai_language::Parser’ defined here
+  215 | class Parser {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:1024:28: error: no declaration matches ‘std::unique_ptr<ai_language::Statement> ai_language::Parser::parseEvaluateStatement()’
+ 1024 | std::unique_ptr<Statement> Parser::parseEvaluateStatement() {
+      |                            ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:1024:28: note: no functions named ‘std::unique_ptr<ai_language::Statement> ai_language::Parser::parseEvaluateStatement()’
+/home/runner/workspace/ai_language/include/parser.h:215:7: note: ‘class ai_language::Parser’ defined here
+  215 | class Parser {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:1041:28: error: no declaration matches ‘std::unique_ptr<ai_language::Statement> ai_language::Parser::parseShowStatement()’
+ 1041 | std::unique_ptr<Statement> Parser::parseShowStatement() {
+      |                            ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:1041:28: note: no functions named ‘std::unique_ptr<ai_language::Statement> ai_language::Parser::parseShowStatement()’
+/home/runner/workspace/ai_language/include/parser.h:215:7: note: ‘class ai_language::Parser’ defined here
+  215 | class Parser {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:1064:28: error: no declaration matches ‘std::unique_ptr<ai_language::Statement> ai_language::Parser::parseSaveStatement()’
+ 1064 | std::unique_ptr<Statement> Parser::parseSaveStatement() {
+      |                            ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:1064:28: note: no functions named ‘std::unique_ptr<ai_language::Statement> ai_language::Parser::parseSaveStatement()’
+/home/runner/workspace/ai_language/include/parser.h:215:7: note: ‘class ai_language::Parser’ defined here
+  215 | class Parser {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:1088:28: error: no declaration matches ‘std::unique_ptr<ai_language::Statement> ai_language::Parser::parseAddLayerStatement()’
+ 1088 | std::unique_ptr<Statement> Parser::parseAddLayerStatement() {
+      |                            ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:1088:28: note: no functions named ‘std::unique_ptr<ai_language::Statement> ai_language::Parser::parseAddLayerStatement()’
+/home/runner/workspace/ai_language/include/parser.h:215:7: note: ‘class ai_language::Parser’ defined here
+  215 | class Parser {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:1133:28: error: no declaration matches ‘std::unique_ptr<ai_language::Statement> ai_language::Parser::parsePredictStatement()’
+ 1133 | std::unique_ptr<Statement> Parser::parsePredictStatement() {
+      |                            ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:1133:28: note: no functions named ‘std::unique_ptr<ai_language::Statement> ai_language::Parser::parsePredictStatement()’
+/home/runner/workspace/ai_language/include/parser.h:215:7: note: ‘class ai_language::Parser’ defined here
+  215 | class Parser {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:1164:28: error: no declaration matches ‘std::unique_ptr<ai_language::Statement> ai_language::Parser::parseEndStatement()’
+ 1164 | std::unique_ptr<Statement> Parser::parseEndStatement() {
+      |                            ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:1164:28: note: no functions named ‘std::unique_ptr<ai_language::Statement> ai_language::Parser::parseEndStatement()’
+/home/runner/workspace/ai_language/include/parser.h:215:7: note: ‘class ai_language::Parser’ defined here
+  215 | class Parser {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:1175:7: error: redefinition of ‘ai_language::Token ai_language::Parser::consume(ai_language::TokenType, const std::string&)’
+ 1175 | Token Parser::consume(TokenType type, const std::string& message) {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:401:7: note: ‘ai_language::Token ai_language::Parser::consume(ai_language::TokenType, const std::string&)’ previously defined here
+  401 | Token Parser::consume(TokenType type, const std::string& message) {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:1183:6: error: no declaration matches ‘void ai_language::Parser::consumeEndOfStatement()’
+ 1183 | void Parser::consumeEndOfStatement() {
+      |      ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:1183:6: note: no functions named ‘void ai_language::Parser::consumeEndOfStatement()’
+/home/runner/workspace/ai_language/include/parser.h:215:7: note: ‘class ai_language::Parser’ defined here
+  215 | class Parser {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:1188:6: error: redefinition of ‘bool ai_language::Parser::match(ai_language::TokenType)’
+ 1188 | bool Parser::match(TokenType type) {
+      |      ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:375:6: note: ‘bool ai_language::Parser::match(ai_language::TokenType)’ previously defined here
+  375 | bool Parser::match(TokenType type) {
+      |      ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:1196:6: error: no declaration matches ‘bool ai_language::Parser::check(ai_language::TokenType)’
+ 1196 | bool Parser::check(TokenType type) {
+      |      ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:370:6: note: candidate is: ‘bool ai_language::Parser::check(ai_language::TokenType) const’
+  370 | bool Parser::check(TokenType type) const {
+      |      ^~~~~~
+/home/runner/workspace/ai_language/include/parser.h:215:7: note: ‘class ai_language::Parser’ defined here
+  215 | class Parser {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:1203:7: error: redefinition of ‘ai_language::Token ai_language::Parser::advance()’
+ 1203 | Token Parser::advance() {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:365:7: note: ‘ai_language::Token ai_language::Parser::advance()’ previously defined here
+  365 | Token Parser::advance() {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:1210:6: error: no declaration matches ‘bool ai_language::Parser::isAtEnd()’
+ 1210 | bool Parser::isAtEnd() {
+      |      ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:353:6: note: candidate is: ‘bool ai_language::Parser::isAtEnd() const’
+  353 | bool Parser::isAtEnd() const {
+      |      ^~~~~~
+/home/runner/workspace/ai_language/include/parser.h:215:7: note: ‘class ai_language::Parser’ defined here
+  215 | class Parser {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:1214:6: error: no declaration matches ‘bool ai_language::Parser::isAtEndOfStatement()’
+ 1214 | bool Parser::isAtEndOfStatement() {
+      |      ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:1214:6: note: no functions named ‘bool ai_language::Parser::isAtEndOfStatement()’
+/home/runner/workspace/ai_language/include/parser.h:215:7: note: ‘class ai_language::Parser’ defined here
+  215 | class Parser {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:1218:7: error: no declaration matches ‘ai_language::Token ai_language::Parser::peek()’
+ 1218 | Token Parser::peek() {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:357:7: note: candidate is: ‘ai_language::Token ai_language::Parser::peek() const’
+  357 | Token Parser::peek() const {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/include/parser.h:215:7: note: ‘class ai_language::Parser’ defined here
+  215 | class Parser {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:1231:7: error: no declaration matches ‘ai_language::Token ai_language::Parser::previous()’
+ 1231 | Token Parser::previous() {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:361:7: note: candidate is: ‘ai_language::Token ai_language::Parser::previous() const’
+  361 | Token Parser::previous() const {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/include/parser.h:215:7: note: ‘class ai_language::Parser’ defined here
+  215 | class Parser {
+      |       ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:1236:6: error: redefinition of ‘void ai_language::Parser::synchronize()’
+ 1236 | void Parser::synchronize() {
+      |      ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:698:6: note: ‘void ai_language::Parser::synchronize()’ previously defined here
+  698 | void Parser::synchronize() {
+      |      ^~~~~~
+make[2]: *** [CMakeFiles/ai_language_lib.dir/build.make:90: CMakeFiles/ai_language_lib.dir/src/parser.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:86: CMakeFiles/ai_language_lib.dir/all] Error 2
+make: *** [Makefile:91: all] Error 2
