@@ -1,4 +1,3 @@
-
 #include "../include/DLInterpreter.h"
 #include <random>
 #include <iomanip>
@@ -17,7 +16,7 @@ std::vector<std::string> DLInterpreter::tokenizeLine(const std::string& line) {
     std::vector<std::string> tokens;
     std::string currentToken;
     bool inQuotes = false;
-    
+
     for (char c : line) {
         if (c == '"') {
             inQuotes = !inQuotes;
@@ -31,11 +30,11 @@ std::vector<std::string> DLInterpreter::tokenizeLine(const std::string& line) {
             currentToken += c;
         }
     }
-    
+
     if (!currentToken.empty()) {
         tokens.push_back(currentToken);
     }
-    
+
     return tokens;
 }
 
@@ -47,7 +46,7 @@ DLInterpreter::~DLInterpreter() {
 void DLInterpreter::setDefaultParameters() {
     // ล้างค่าเดิม
     parameters.clear();
-    
+
     // กำหนดค่าเริ่มต้นสำหรับ DL
     parameters["learning_rate"] = 0.001;
     parameters["epochs"] = 100;
@@ -135,7 +134,7 @@ void DLInterpreter::handleModelCreation(const std::string& modelName) {
 
     hasCreatedModel = true;
     hasTrainedModel = false;
-    
+
     std::cout << GREEN << "Model created: " << modelType << RESET << std::endl;
 }
 
@@ -350,7 +349,7 @@ void DLInterpreter::handleLoadCommand(const std::vector<std::string>& args) {
 
         datasetFilename = filename;
         hasLoadedData = true;
-        
+
         std::cout << GREEN << "Dataset loaded successfully" << RESET << std::endl;
     } else if (args[0] == "model") {
         if (args.size() < 2) {
@@ -375,7 +374,7 @@ void DLInterpreter::handleLoadCommand(const std::vector<std::string>& args) {
         hasCreatedModel = true;
         hasTrainedModel = true;
         modelType = "LoadedModel";
-        
+
         std::cout << GREEN << "Model loaded successfully" << RESET << std::endl;
     } else {
         std::cerr << RED << "ข้อผิดพลาด: คำสั่ง 'load' ต้องตามด้วย 'dataset' หรือ 'model'" << RESET << std::endl;
@@ -507,7 +506,7 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
         std::uniform_real_distribution<> acc_dis(0.7, 0.99);
         std::uniform_real_distribution<> loss_dis(0.01, 0.5);
         std::uniform_real_distribution<> time_dis(10.0, 100.0);
-        
+
         double accuracy = acc_dis(gen);
         double loss = loss_dis(gen);
         double training_time = time_dis(gen);
@@ -677,7 +676,7 @@ void DLInterpreter::handleEvaluateCommand(const std::vector<std::string>& args) 
     std::uniform_real_distribution<> f1_dis(0.65, 0.98);
     std::uniform_real_distribution<> recall_dis(0.6, 0.95);
     std::uniform_real_distribution<> precision_dis(0.7, 0.98);
-    
+
     double accuracy = acc_dis(gen);
     double loss = loss_dis(gen);
     double f1_score = f1_dis(gen);
@@ -773,42 +772,24 @@ void DLInterpreter::interpretLine(const std::string& line) {
     } else if (command == "visualize") {
         handleVisualizeCommand(args);
     } else if (command == "help") {
-        std::cout << "คำสั่งที่รองรับสำหรับ Deep Learning:" << std::endl;
-        std::cout << "  start                          - เริ่มใช้งานระบบ" << std::endl;
-        std::cout << "  create DL                      - สร้างโปรเจค Deep Learning" << std::endl;
-        std::cout << "  load dataset \"[filename]\"      - โหลดไฟล์ข้อมูล" << std::endl;
-        std::cout << "  create model [model_type]      - สร้างโมเดล (NeuralNetwork, CNN, RNN, LSTM, GRU, Transformer)" << std::endl;
-        std::cout << "  add layer input [units]        - เพิ่มเลเยอร์อินพุต" << std::endl;
-        std::cout << "  add layer hidden [units] activation \"[activation]\"  - เพิ่มเลเยอร์ซ่อน พร้อม activation function" << std::endl;
-        std::cout << "  add layer dropout [rate]       - เพิ่มเลเยอร์ dropout" << std::endl;
-        std::cout << "  add layer output [units] activation \"[activation]\"  - เพิ่มเลเยอร์เอาต์พุต พร้อม activation function" << std::endl;
-        std::cout << "  set [parameter] [value]        - ตั้งค่าพารามิเตอร์ (learning_rate, epochs, batch_size)" << std::endl;
-        std::cout << "  train model                    - ฝึกโมเดล" << std::endl;
-        std::cout << "  evaluate model                 - ประเมินโมเดล" << std::endl;
-        std::cout << "  show accuracy                  - แสดงความแม่นยำของโมเดล" << std::endl;
-        std::cout << "  show loss                      - แสดงค่า loss ของโมเดล" << std::endl;
-        std::cout << "  show performance               - แสดงประสิทธิภาพทั้งหมดของโมเดล" << std::endl;
-        std::cout << "  plot model                     - แสดงโครงสร้างโมเดล" << std::endl;
-        std::cout << "  visualize data                 - แสดงข้อมูลในรูปแบบกราฟ" << std::endl;
-        std::cout << "  save model \"[filename]\"        - บันทึกโมเดล" << std::endl;
-        std::cout << "  load model \"[filename]\"        - โหลดโมเดลที่บันทึกไว้" << std::endl;
+        handleHelpCommand();
     } else {
         std::cerr << RED << "ข้อผิดพลาด: ไม่รู้จักคำสั่ง '" << command << "'" << RESET << std::endl;
     }
+}
+
 void DLInterpreter::handleHelpCommand() {
     std::cout << BLUE << "\n=== DL คำสั่งที่ใช้งานได้ ===" << RESET << std::endl;
     std::cout << GREEN << "start" << RESET << " - เริ่มต้นการใช้งานโปรเจค" << std::endl;
-    std::cout << GREEN << "create DL" << RESET << " - สร้างโปรเจค Deep Learning" << std::endl;
+    std::cout << GREEN << "create DL" << RESET << " - สร้างโปรเจคใหม่สำหรับ Deep Learning" << std::endl;
     std::cout << GREEN << "load dataset \"[filename]\"" << RESET << " - โหลดข้อมูลจากไฟล์" << std::endl;
-    std::cout << GREEN << "create model [model_name]" << RESET << " - สร้างโมเดล Deep Learning" << std::endl;
-    std::cout << GREEN << "add layer [layer_type] [units] [options]" << RESET << " - เพิ่มเลเยอร์ (input, hidden, output)" << std::endl;
-    std::cout << GREEN << "set [parameter] [value]" << RESET << " - ตั้งค่าพารามิเตอร์การฝึก (learning_rate, epochs, batch_size)" << std::endl;
+    std::cout << GREEN << "create model [model_name]" << RESET << " - สร้างโมเดล" << std::endl;
+    std::cout << GREEN << "add layer [layer_type] [options]" << RESET << " - เพิ่มเลเยอร์ให้กับโมเดล" << std::endl;
     std::cout << GREEN << "train model" << RESET << " - ฝึกโมเดล" << std::endl;
-    std::cout << GREEN << "evaluate model" << RESET << " - ประเมินโมเดล" << std::endl;
-    std::cout << GREEN << "predict [data]" << RESET << " - ทำนายผลลัพธ์จากข้อมูลที่ระบุ" << std::endl;
-    std::cout << GREEN << "save model \"[filename]\"" << RESET << " - บันทึกโมเดลลงไฟล์" << std::endl;
-    std::cout << GREEN << "load model \"[filename]\"" << RESET << " - โหลดโมเดลจากไฟล์" << std::endl;
-    std::cout << GREEN << "plot [metric]" << RESET << " - แสดงกราฟข้อมูล (accuracy, loss)" << std::endl;
+    std::cout << GREEN << "evaluate model" << RESET << " - ประเมินผลโมเดล" << std::endl;
+    std::cout << GREEN << "predict [input_values]" << RESET << " - ทำนายผลลัพธ์" << std::endl;
+    std::cout << GREEN << "visualize [option]" << RESET << " - แสดงผลข้อมูลหรือโมเดล" << std::endl;
+    std::cout << GREEN << "save model \"[filename]\"" << RESET << " - บันทึกโมเดล" << std::endl;
     std::cout << GREEN << "help" << RESET << " - แสดงรายการคำสั่งที่ใช้งานได้" << std::endl;
     std::cout << GREEN << "exit" << RESET << " - ออกจากโปรแกรม" << std::endl;
 }
