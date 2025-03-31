@@ -15,3 +15,15 @@ train model
 evaluate model
 show accuracy
 save model "neural_network_model.dat"
+# ตัวอย่างการใช้ Neural Network
+start
+create DL
+load dataset "datasets/iris.csv"
+create model NeuralNetwork
+set learning_rate 0.001
+set epochs 200
+set batch_size 64
+train model
+show accuracy
+show loss
+save model "neural_model.ml"

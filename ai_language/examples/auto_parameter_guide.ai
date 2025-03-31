@@ -26,3 +26,43 @@ set learning_rate 0.005  # ปรับแต่งเฉพาะ learning_rate
 train model
 show accuracy
 end
+# ตัวอย่างการใช้ค่าพารามิเตอร์อัตโนมัติ
+
+# ตัวอย่าง ML - ใช้ค่าอัตโนมัติ
+start
+create ML
+load dataset "datasets/linear_data.csv"
+create model LinearRegression
+# ไม่มีการตั้งค่า โปรแกรมจะใช้:
+# - learning_rate = 0.01
+# - epochs = 50
+# - batch_size = 32
+train model
+show accuracy
+save model "auto_ml_model.ml"
+
+# ตัวอย่าง DL - ใช้ค่าอัตโนมัติ
+# start
+# create DL
+# load dataset "datasets/iris.csv"
+# create model NeuralNetwork
+# ไม่มีการตั้งค่า โปรแกรมจะใช้:
+# - learning_rate = 0.001
+# - epochs = 100
+# - batch_size = 32
+# train model
+# show accuracy
+# save model "auto_dl_model.ml"
+
+# ตัวอย่าง RL - ใช้ค่าอัตโนมัติ
+# start
+# create RL
+# load dataset "datasets/environment.json"
+# create model QLearning
+# ไม่มีการตั้งค่า โปรแกรมจะใช้:
+# - learning_rate = 0.1
+# - episodes = 1000
+# - discount_factor = 0.9
+# train model
+# show performance
+# save model "auto_rl_model.ml"

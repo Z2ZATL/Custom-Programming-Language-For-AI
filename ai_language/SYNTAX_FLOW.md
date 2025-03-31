@@ -3,50 +3,128 @@
 
 ## ขั้นตอนการใช้งาน
 
-1. **คำสั่งเริ่มต้น: `start`**
-   - เริ่มต้นการทำงานของโปรแกรม
-   - ต้องเป็นคำสั่งแรกเสมอ
+### **1. คำสั่งเริ่มต้น: `start`**
+- **ความหมาย**: เริ่มต้นการทำงานของโปรแกรม
+- **เงื่อนไข**: ต้องเป็นคำสั่งแรกและอยู่บรรทัดแรกเสมอ
+- **ตัวอย่าง**:
+  ```
+  start
+  ```
 
-2. **คำสั่งสร้างโปรเจกต์: `create [type]`**
-   - กำหนดประเภทของ AI: `ML`, `DL`, `RL`
-   - ต้องเป็นคำสั่งที่สองหลังจาก `start`
+### **2. คำสั่งสร้างโปรเจกต์: `create [type]`**
+- **ความหมาย**: กำหนดประเภทของ AI เช่น `ML` (Machine Learning), `DL` (Deep Learning), `RL` (Reinforcement Learning)
+- **เงื่อนไข**: ต้องเป็นคำสั่งที่สองและอยู่ในบรรทัดที่สอง
+- **ตัวอย่าง**:
+  ```
+  start
+  create ML
+  ```
 
-3. **คำสั่งโหลดข้อมูล: `load dataset "[filename]" type "[type]"`**
-   - โหลดข้อมูลจากไฟล์
-   - ต้องใช้หลังจาก `create [type]`
+### **3. คำสั่งโหลดข้อมูล: `load dataset "[filename]"`**
+- **ความหมาย**: โหลดข้อมูลจากไฟล์ เช่น CSV หรือโฟลเดอร์ภาพ
+- **เงื่อนไข**: ต้องใช้หลังจาก `create [type]`
+- **ตัวอย่าง**:
+  ```
+  start
+  create ML
+  load dataset "data.csv"
+  ```
 
-4. **คำสั่งสร้างโมเดล: `create model [model_name]`**
-   - สร้างโมเดล AI ตามประเภทที่กำหนด
-   - ต้องใช้หลังจาก `load dataset`
+### **4. คำสั่งสร้างโมเดล: `create model [model_name]`**
+- **ความหมาย**: สร้างโมเดล AI ตามประเภทที่กำหนด เช่น `LinearRegression`, `NeuralNetwork`
+- **เงื่อนไข**: ต้องใช้หลังจาก `load dataset`
+- **ตัวอย่าง**:
+  ```
+  start
+  create ML
+  load dataset "data.csv"
+  create model LinearRegression
+  ```
 
-5. **คำสั่งปรับแต่งการเทรน (ไม่บังคับ): `set [parameter] [value]`**
-   - ปรับแต่งพารามิเตอร์การเทรน
-   - ใช้ได้หลังจาก `create model` และก่อน `train model`
-   - หากไม่ใช้ โปรแกรมจะตั้งค่าอัตโนมัติตามประเภท AI
+### **5. คำสั่งปรับแต่งการเทรน (ไม่บังคับ): `set [parameter] [value]`**
+- **ความหมาย**: ปรับแต่งพารามิเตอร์การเทรน เช่น `learning_rate`, `epochs`, `batch_size`
+- **เงื่อนไข**: ใช้ได้หลังจาก `create model` และก่อน `train model`
+- **ตัวอย่าง**:
+  ```
+  start
+  create ML
+  load dataset "data.csv"
+  create model LinearRegression
+  set learning_rate 0.01
+  set epochs 100
+  set batch_size 32
+  ```
 
-6. **คำสั่งเทรนโมเดล: `train model`**
-   - เริ่มกระบวนการฝึกโมเดล
-   - ต้องใช้หลังจาก `create model`
+### **6. คำสั่งเทรนโมเดล: `train model`**
+- **ความหมาย**: เริ่มกระบวนการฝึกโมเดลด้วยข้อมูลและพารามิเตอร์ที่กำหนด
+- **เงื่อนไข**: ต้องใช้หลังจาก `create model` (และ `set [parameter]` หากมี)
+- **ตัวอย่าง**:
+  ```
+  start
+  create ML
+  load dataset "data.csv"
+  create model LinearRegression
+  train model
+  ```
 
-7. **คำสั่งแสดงผลลัพธ์: `show [result_type]`**
-   - แสดงผลลัพธ์ เช่น `show accuracy`, `show loss`, `show graph`
-   - ต้องใช้หลังจาก `train model`
+### **7. คำสั่งแสดงผลลัพธ์: `show [result_type]`**
+- **ความหมาย**: แสดงผลลัพธ์ เช่น ความแม่นยำ, ค่า loss หรือกราฟ
+- **เงื่อนไข**: ต้องใช้หลังจาก `train model`
+- **ตัวเลือก**:
+  - `show accuracy`: แสดงความแม่นยำ
+  - `show loss`: แสดงค่า loss
+  - `show graph`: แสดงกราฟการเทรน
+- **ตัวอย่าง**:
+  ```
+  start
+  create ML
+  load dataset "data.csv"
+  create model LinearRegression
+  train model
+  show accuracy
+  ```
 
-8. **คำสั่งบันทึกโมเดล: `save model "[filename]"`**
-   - บันทึกโมเดลที่ฝึกแล้วลงไฟล์
-   - ต้องใช้หลังจาก `train model`
+### **8. คำสั่งบันทึกโมเดล: `save model "[filename]"`**
+- **ความหมาย**: บันทึกโมเดลที่ฝึกแล้วลงไฟล์
+- **เงื่อนไข**: ต้องใช้หลังจาก `train model`
+- **ตัวอย่าง**:
+  ```
+  start
+  create ML
+  load dataset "data.csv"
+  create model LinearRegression
+  train model
+  save model "trained_model.ml"
+  ```
 
-9. **คำสั่งโหลดโมเดล: `load model "[filename]"`**
-   - โหลดโมเดลที่บันทึกไว้
-   - ใช้แทน `create model` ได้หลังจาก `load dataset`
+### **9. คำสั่งโหลดโมเดล: `load model "[filename]"`**
+- **ความหมาย**: โหลดโมเดลที่บันทึกไว้เพื่อใช้งานหรือเทรนต่อ
+- **เงื่อนไข**: ใช้แทน `create model` ได้หลังจาก `load dataset`
+- **ตัวอย่าง**:
+  ```
+  start
+  create ML
+  load dataset "new_data.csv"
+  load model "trained_model.ml"
+  train model
+  ```
 
-10. **คำสั่งสิ้นสุด: `end`** (ไม่บังคับในโหมดโต้ตอบ)
-    - สิ้นสุดการทำงานของโปรแกรม
-    - เป็นคำสั่งสุดท้าย
+### **10. คำสั่งสิ้นสุด: `end`**
+- **ความหมาย**: สิ้นสุดการทำงานของโปรแกรม
+- **เงื่อนไข**: ต้องเป็นคำสั่งสุดท้าย
+- **ตัวอย่าง**:
+  ```
+  start
+  create ML
+  load dataset "data.csv"
+  create model LinearRegression
+  train model
+  end
+  ```
 
 ## การตั้งค่าอัตโนมัติ
 
-หากไม่ใช้คำสั่ง `set [parameter]` โปรแกรมจะตั้งค่าอัตโนมัติดังนี้:
+หากผู้ใช้ไม่ใช้คำสั่ง `set [parameter]` โปรแกรมจะตั้งค่าพารามิเตอร์การเทรนอัตโนมัติตามประเภท AI ดังนี้:
 
 | AI Type | Learning Rate | Epochs | Batch Size | อื่นๆ |
 |---------|--------------|--------|------------|-----|
@@ -55,6 +133,45 @@
 | RL | 0.1 | - | - | episodes: 1000, discount_factor: 0.9 |
 
 ## ตัวอย่างการใช้งาน
+
+### ตัวอย่าง 1: ปรับแต่งทุกอย่าง
+```
+start
+create DL
+load dataset "images.csv"
+create model NeuralNetwork
+set learning_rate 0.001
+set epochs 200
+set batch_size 64
+train model
+show accuracy
+show loss
+save model "dl_model.dl"
+end
+```
+
+### ตัวอย่าง 2: ใช้ค่าอัตโนมัติ
+```
+start
+create ML
+load dataset "data.csv"
+create model LinearRegression
+train model
+show accuracy
+end
+```
+
+### ตัวอย่าง 3: โหลดโมเดลและเทรนต่อ
+```
+start
+create DL
+load dataset "new_images.csv"
+load model "dl_model.dl"
+set epochs 50
+train model
+show accuracy
+end
+```
 
 ดูตัวอย่างเพิ่มเติมได้ในไฟล์:
 - `examples/syntax_guide.ai`

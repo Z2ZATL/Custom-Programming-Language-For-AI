@@ -2,15 +2,13 @@
 # ตัวอย่างการใช้ Q-Learning
 start
 create RL
-load environment "datasets/environment.json"
-load config "datasets/config.json"
+load dataset "datasets/environment.json"
 create model QLearning
 set learning_rate 0.1
 set discount_factor 0.9
 set exploration_rate 0.3
 set episodes 1000
 train model
-visualize environment
-evaluate model
 show performance
-save model "q_learning_model.dat"
+show graph
+save model "q_learning_model.ml"

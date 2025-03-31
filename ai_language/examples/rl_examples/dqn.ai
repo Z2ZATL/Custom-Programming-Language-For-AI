@@ -1,0 +1,19 @@
+
+# ตัวอย่างการใช้ Deep Q-Network
+start
+create RL
+load dataset "datasets/environment.json"
+create model DQN
+add layer input 4
+add layer hidden 24 activation "relu"
+add layer hidden 24 activation "relu"
+add layer output 2 activation "linear"
+set learning_rate 0.001
+set discount_factor 0.99
+set exploration_rate 0.1
+set target_update 10
+set episodes 500
+set memory_size 10000
+train model
+show performance
+save model "dqn_model.ml"

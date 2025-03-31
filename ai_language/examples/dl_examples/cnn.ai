@@ -20,3 +20,24 @@ train model
 evaluate model
 show accuracy
 save model "cnn_model.dat"
+# ตัวอย่างการใช้ Convolutional Neural Network
+start
+create DL
+load dataset "datasets/mnist" type "image"
+create model CNN
+add layer input 28 28 1
+add layer conv 32 kernel 3 activation "relu"
+add layer pool 2
+add layer conv 64 kernel 3 activation "relu"
+add layer pool 2
+add layer flatten
+add layer hidden 128 activation "relu"
+add layer dropout 0.2
+add layer output 10 activation "softmax"
+set learning_rate 0.001
+set epochs 10
+set batch_size 64
+train model
+show accuracy
+show loss
+save model "cnn_model.ml"

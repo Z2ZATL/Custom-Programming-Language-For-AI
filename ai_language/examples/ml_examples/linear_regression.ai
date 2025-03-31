@@ -1,12 +1,12 @@
+
 # ตัวอย่างการใช้ Linear Regression
 start
 create ML
-load dataset "datasets/linear_data.csv" type "csv"
+load dataset "datasets/linear_data.csv"
 create model LinearRegression
 set learning_rate 0.01
 set epochs 100
 train model
-plot model
-evaluate model
 show accuracy
-save model "linear_model.dat"
+show graph
+save model "linear_model.ml"
