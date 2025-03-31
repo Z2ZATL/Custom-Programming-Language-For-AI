@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -9,6 +8,7 @@
 #include <iomanip>
 #include <thread>
 #include <chrono>
+#include <sys/stat.h> // for stat
 
 // กำหนดสีสำหรับข้อความในคอนโซล
 const std::string RESET = "\033[0m";
@@ -29,7 +29,7 @@ private:
     bool hasLoadedData = false;
     std::string datasetPath = "";
     bool hasCreatedModel = false;
-    std::string modelType = "";
+    std::string modelType = ""; // Added modelName to store model name
     bool hasTrainedModel = false;
     bool hasShowedAccuracy = false;
     bool hasSavedModel = false;
@@ -57,6 +57,16 @@ private:
         }
     }
 
+    // Helper function to get current date and time
+    std::string getCurrentDateTime() {
+        auto now = std::chrono::system_clock::now();
+        auto time_t_now = std::chrono::system_clock::to_time_t(now);
+        std::stringstream ss;
+        ss << std::put_time(std::localtime(&time_t_now), "%Y-%m-%d %H:%M:%S");
+        return ss.str();
+    }
+
+
 public:
     void interpretFile(const std::string& filename) {
         std::ifstream file(filename);
@@ -71,7 +81,7 @@ public:
             if (line.empty() || line[0] == '#') {
                 continue;
             }
-            
+
             interpretLine(line);
         }
     }
@@ -271,7 +281,7 @@ public:
 
             std::string paramName = tokens[1];
             double paramValue;
-            
+
             try {
                 paramValue = std::stod(tokens[2]);
             } catch (const std::invalid_argument&) {
@@ -382,7 +392,7 @@ public:
                 std::cout << GREEN << "Loss: " << std::fixed << std::setprecision(4) << loss << RESET << std::endl;
             } else if (resultType == "graph" || resultType == "data") {
                 std::cout << GREEN << "Visualization displayed." << RESET << std::endl;
-                
+
                 // แสดง ASCII art graph ง่ายๆ
                 std::cout << BLUE << "    ^" << std::endl;
                 std::cout << "    |" << std::endl;
@@ -429,15 +439,71 @@ public:
                 return;
             }
 
-            // แยกชื่อไฟล์จากเครื่องหมายคำพูด
             std::string filename = tokens[2];
-            if (filename.size() >= 2 && filename.front() == '"' && filename.back() == '"') {
-                filename = filename.substr(1, filename.size() - 2);
+
+            // ลบเครื่องหมายคำพูดออก
+            if (filename.front() == '"' && filename.back() == '"') {
+                filename = filename.substr(1, filename.length() - 2);
             }
 
-            hasSavedModel = true;
+            // ตรวจสอบและเพิ่มนามสกุลไฟล์ตามประเภทโมเดลถ้าไม่มี
+            std::string extension;
+            size_t dotPos = filename.find_last_of('.');
+            if (dotPos == std::string::npos) {
+                // ถ้าไม่มีนามสกุล ให้เพิ่มตามประเภทโมเดล
+                if (projectType == "ML") {
+                    extension = ".mlmodel";
+                } else if (projectType == "DL") {
+                    extension = ".dlmodel";
+                } else if (projectType == "RL") {
+                    extension = ".rlmodel";
+                } else if (modelType.find("NLP") != std::string::npos) {
+                    extension = ".nlpmodel";
+                } else if (modelType.find("CNN") != std::string::npos || 
+                           modelType.find("Vision") != std::string::npos) {
+                    extension = ".cvmodel";
+                } else {
+                    extension = ".model";
+                }
+                filename += extension;
+            }
 
-            std::cout << GREEN << "Model saved to: " << filename << RESET << std::endl;
+            // สร้างโฟลเดอร์ models ถ้ายังไม่มี
+            std::string modelsDir = "models";
+            struct stat st;
+            if (stat(modelsDir.c_str(), &st) != 0) {
+                // สร้างโฟลเดอร์ถ้าไม่มี
+                #ifdef _WIN32
+                system("mkdir models");
+                #else
+                system("mkdir -p models");
+                #endif
+            }
+
+            // จัดการเส้นทางไฟล์
+            if (filename.find('/') == std::string::npos && filename.find('\\') == std::string::npos) {
+                // ถ้าไม่ได้ระบุเส้นทาง ให้เก็บในโฟลเดอร์ models
+                filename = modelsDir + "/" + filename;
+            }
+
+            // เขียนไฟล์จริง (เติมข้อมูลจำลอง)
+            std::ofstream outfile(filename);
+            if (outfile.is_open()) {
+                outfile << "// " << projectType << " Model: " << modelType << std::endl;
+                outfile << "// Created: " << getCurrentDateTime() << std::endl;
+                outfile << "// Parameters:" << std::endl;
+                for (const auto& param : parameters) {
+                    outfile << "//   " << param.first << ": " << param.second << std::endl;
+                }
+                outfile << std::endl;
+                outfile << "// Model data (binary/serialized) would be here in a real implementation" << std::endl;
+                outfile.close();
+
+                std::cout << GREEN << "บันทึกโมเดลไปที่ " << filename << " สำเร็จ" << RESET << std::endl;
+                hasSavedModel = true;
+            } else {
+                std::cerr << RED << "ข้อผิดพลาด: ไม่สามารถเขียนไฟล์ " << filename << " ได้" << RESET << std::endl;
+            }
         } else if (command == "visualize") {
             // คำสั่ง visualize
             if (!hasStarted) {
@@ -456,7 +522,7 @@ public:
             }
 
             std::cout << GREEN << "Visualization:" << RESET << std::endl;
-            
+
             // แสดง ASCII art scatter plot ง่ายๆ
             std::cout << BLUE << "    ^" << std::endl;
             std::cout << "    |  * *" << std::endl;
@@ -506,7 +572,7 @@ public:
             std::uniform_real_distribution<> acc_dis(80.0, 99.9);
             std::uniform_real_distribution<> loss_dis(0.01, 0.5);
             std::uniform_real_distribution<> f1_dis(0.7, 0.99);
-            
+
             double accuracy = acc_dis(gen);
             double loss = loss_dis(gen);
             double precision = acc_dis(gen);
@@ -516,13 +582,13 @@ public:
             std::cout << GREEN << "Model Evaluation:" << RESET << std::endl;
             std::cout << BLUE << "  Accuracy: " << std::fixed << std::setprecision(2) << accuracy << "%" << RESET << std::endl;
             std::cout << BLUE << "  Loss: " << std::fixed << std::setprecision(4) << loss << RESET << std::endl;
-            
+
             if (projectType == "ML" || projectType == "DL") {
                 std::cout << BLUE << "  Precision: " << std::fixed << std::setprecision(2) << precision << "%" << RESET << std::endl;
                 std::cout << BLUE << "  Recall: " << std::fixed << std::setprecision(2) << recall << "%" << RESET << std::endl;
                 std::cout << BLUE << "  F1 Score: " << std::fixed << std::setprecision(2) << f1_score << RESET << std::endl;
             }
-            
+
             if (projectType == "RL") {
                 std::cout << BLUE << "  Average Reward: " << std::fixed << std::setprecision(2) << precision << RESET << std::endl;
                 std::cout << BLUE << "  Episodes Completed: 1000" << RESET << std::endl;
@@ -546,7 +612,7 @@ public:
             }
 
             std::cout << GREEN << "Plotting:" << RESET << std::endl;
-            
+
             // แสดง ASCII art graph ง่ายๆ
             std::cout << CYAN << "    ^" << std::endl;
             std::cout << "    |            ****" << std::endl;
@@ -657,7 +723,7 @@ public:
             std::cout << "  show accuracy/loss/graph    - แสดงผลลัพธ์" << std::endl;
             std::cout << "  save model \"[filename]\"     - บันทึกโมเดล" << std::endl;
             std::cout << "  load model \"[filename]\"     - โหลดโมเดล" << std::endl;
-            std::cout << "  end                         - สิ้นสุดโปรแกรม" << std::endl;
+            stdcout << "  end                         - สิ้นสุดโปรแกรม" << std::endl;
         } else {
             // คำสั่งไม่รองรับ
             std::cerr << RED << "ข้อผิดพลาด: คำสั่ง '" << command << "' ไม่รองรับ" << RESET << std::endl;
@@ -728,13 +794,13 @@ void runInteractiveMode() {
         } else {
             std::cout << "... ";
         }
-        
+
         std::getline(std::cin, line);
-        
+
         if (line == "exit" && multiline.empty()) {
             break;
         }
-        
+
         // ตรวจสอบการป้อนหลายบรรทัด
         if (!line.empty() && line.back() == '\\') {
             // ลบเครื่องหมาย \ และเก็บคำสั่งไว้
@@ -742,10 +808,10 @@ void runInteractiveMode() {
             multiline += line + "\n";
             continue;
         }
-        
+
         // เพิ่มบรรทัดปัจจุบันเข้าไปในคำสั่งหลายบรรทัด
         multiline += line;
-        
+
         // ตรวจสอบว่าเป็นการสิ้นสุดคำสั่งหลายบรรทัดหรือไม่
         if (multiline.find(";;") != std::string::npos || line.find(";;") != std::string::npos) {
             // ลบเครื่องหมาย ;; ออก
@@ -753,17 +819,17 @@ void runInteractiveMode() {
             if (pos != std::string::npos) {
                 multiline.erase(pos, 2);
             }
-            
+
             // แยกคำสั่งและประมวลผลทีละคำสั่ง
             std::istringstream stream(multiline);
             std::string command;
-            
+
             while (std::getline(stream, command)) {
                 if (!command.empty() && command.front() != '#') {
                     interpreter.interpretLine(command);
                 }
             }
-            
+
             multiline = "";
         } else if (multiline.find(";;") == std::string::npos && line.find(";;") == std::string::npos) {
             // ถ้าไม่มีเครื่องหมาย ;; ในบรรทัดเดียว ให้ประมวลผลทันที
