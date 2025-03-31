@@ -1,12 +1,24 @@
+
 # ตัวอย่างการใช้ Classification
-start
-create ML
+start create ML
+
+# โหลดข้อมูล
 load dataset "datasets/classification_data.csv" type "csv"
+
+# สร้างโมเดล
 create model RandomForest
+
+# ตั้งค่าพารามิเตอร์
 set trees 100
 set max_depth 5
+
+# ฝึกโมเดล
 train model
+
+# แสดงผลลัพธ์
 visualize data
 evaluate model
-show accuracy
-save model "classification_model.dat"
+show metric "accuracy"
+
+# บันทึกโมเดล
+save model to "classification_model.pkl"
