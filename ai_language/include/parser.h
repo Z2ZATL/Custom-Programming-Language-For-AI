@@ -415,7 +415,6 @@ private:
     void consumeNewlines();
 
     // เพิ่มประกาศฟังก์ชันที่ใช้ในไฟล์ parser.cpp แต่ไม่ได้ประกาศใน parser.h
-    void resetError();
     std::shared_ptr<Statement> cleanStatement();
     std::shared_ptr<Statement> visualizeStatement();
 
@@ -436,6 +435,9 @@ public:
 
     // แปลง token เป็น AST และคืนค่าเป็นโครงสร้างต้นไม้
     std::shared_ptr<Program> parse(const std::vector<Token>& tokens);
+    
+    // รีเซ็ตสถานะข้อผิดพลาด
+    void resetError();
 
 private:
 };
