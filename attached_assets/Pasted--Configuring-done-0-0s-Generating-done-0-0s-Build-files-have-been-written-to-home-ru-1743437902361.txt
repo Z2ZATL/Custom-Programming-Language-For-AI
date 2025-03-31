@@ -1,0 +1,59 @@
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/runner/w[ 16%] Building CXX object CMakeFiles/ai_language_lib.dir/src/parser.cpp.o
+In file included from /home/runner/workspace/ai_language/src/parser.cpp:12:
+/home/runner/workspace/ai_language/include/parser.h:415:32: error: ‘std::shared_ptr<ai_language::Statement> ai_language::Parser::visualizeStatement()’ cannot be overloaded with ‘std::shared_ptr<ai_language::Statement> ai_language::Parser::visualizeStatement()’
+  415 |     std::shared_ptr<Statement> visualizeStatement();
+      |                                ^~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:351:32: note: previous declaration ‘std::shared_ptr<ai_language::Statement> ai_language::Parser::visualizeStatement()’
+  351 |     std::shared_ptr<Statement> visualizeStatement();
+      |                                ^~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp:157:1: error: no declaration matches ‘ai_language::PredictStatement::PredictStatement(const std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >&)’
+  157 | PredictStatement::PredictStatement(const std::map<std::string, std::string>& params)
+      | ^~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:309:7: note: candidates are: ‘ai_language::PredictStatement::PredictStatement(ai_language::PredictStatement&&)’
+  309 | class PredictStatement : public Statement {
+      |       ^~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:309:7: note:                 ‘ai_language::PredictStatement::PredictStatement(const ai_language::PredictStatement&)’
+/home/runner/workspace/ai_language/include/parser.h:309:7: note:                 ‘ai_language::PredictStatement::PredictStatement()’
+/home/runner/workspace/ai_language/include/parser.h:309:7: note: ‘class ai_language::PredictStatement’ defined here
+/home/runner/workspace/ai_language/src/parser.cpp: In member function ‘virtual std::string ai_language::PredictStatement::toString() const’:
+/home/runner/workspace/ai_language/src/parser.cpp:164:29: error: ‘params’ was not declared in this scope
+  164 |     for (const auto& pair : params) {
+      |                             ^~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: In member function ‘virtual void ai_language::PredictStatement::execute() const’:
+/home/runner/workspace/ai_language/src/parser.cpp:176:29: error: ‘params’ was not declared in this scope
+  176 |     for (const auto& pair : params) {
+      |                             ^~~~~~
+In file included from /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/alloc_traits.h:33,
+                 from /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/ext/alloc_traits.h:34,
+                 from /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/basic_string.h:39,
+                 from /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/string:54,
+                 from /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/locale_classes.h:40,
+                 from /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/ios_base.h:41,
+                 from /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/ios:44,
+                 from /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/ostream:40,
+                 from /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/iostream:41,
+                 from /home/runner/workspace/ai_language/src/parser.cpp:6:
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/stl_construct.h: In instantiation of ‘void std::_Construct(_Tp*, _Args&& ...) [with _Tp = ai_language::PredictStatement; _Args = {map<__cxx11::basic_string<char, char_traits<char>, allocator<char> >, __cxx11::basic_string<char, char_traits<char>, allocator<char> >, less<__cxx11::basic_string<char, char_traits<char>, allocator<char> > >, allocator<pair<const __cxx11::basic_string<char, char_traits<char>, allocator<char> >, __cxx11::basic_string<char, char_traits<char>, allocator<char> > > > >&}]’:
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/alloc_traits.h:660:19:   required from ‘static void std::allocator_traits<std::allocator<void> >::construct(allocator_type&, _Up*, _Args&& ...) [with _Up = ai_language::PredictStatement; _Args = {std::map<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >&}; allocator_type = std::allocator<void>]’
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr_base.h:604:39:   required from ‘std::_Sp_counted_ptr_inplace<_Tp, _Alloc, _Lp>::_Sp_counted_ptr_inplace(_Alloc, _Args&& ...) [with _Args = {std::map<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >&}; _Tp = ai_language::PredictStatement; _Alloc = std::allocator<void>; __gnu_cxx::_Lock_policy _Lp = __gnu_cxx::_S_atomic]’
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr_base.h:971:16:   required from ‘std::__shared_count<_Lp>::__shared_count(_Tp*&, std::_Sp_alloc_shared_tag<_Alloc>, _Args&& ...) [with _Tp = ai_language::PredictStatement; _Alloc = std::allocator<void>; _Args = {std::map<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >&}; __gnu_cxx::_Lock_policy _Lp = __gnu_cxx::_S_atomic]’
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr_base.h:1712:14:   required from ‘std::__shared_ptr<_Tp, _Lp>::__shared_ptr(std::_Sp_alloc_shared_tag<_Tp>, _Args&& ...) [with _Alloc = std::allocator<void>; _Args = {std::map<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >&}; _Tp = ai_language::PredictStatement; __gnu_cxx::_Lock_policy _Lp = __gnu_cxx::_S_atomic]’
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:464:59:   required from ‘std::shared_ptr<_Tp>::shared_ptr(std::_Sp_alloc_shared_tag<_Tp>, _Args&& ...) [with _Alloc = std::allocator<void>; _Args = {std::map<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<const std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >&}; _Tp = ai_language::PredictStatement]’
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/shared_ptr.h:1009:14:   required from ‘std::shared_ptr<typename std::enable_if<(! std::is_array< <template-parameter-1-1> >::value), _Tp>::type> std::make_shared(_Args&& ...) [with _Tp = ai_language::PredictStatement; _Args = {map<__cxx11::basic_string<char, char_traits<char>, allocator<char> >, __cxx11::basic_string<char, char_traits<char>, allocator<char> >, less<__cxx11::basic_string<char, char_traits<char>, allocator<char> > >, allocator<pair<const __cxx11::basic_string<char, char_traits<char>, allocator<char> >, __cxx11::basic_string<char, char_traits<char>, allocator<char> > > > >&}; typename enable_if<(! is_array< <template-parameter-1-1> >::value), _Tp>::type = ai_language::PredictStatement]’
+/home/runner/workspace/ai_language/src/parser.cpp:555:46:   required from here
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/stl_construct.h:119:7: error: no matching function for call to ‘ai_language::PredictStatement::PredictStatement(std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >&)’
+  119 |       ::new((void*)__p) _Tp(std::forward<_Args>(__args)...);
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:309:7: note: candidate: ‘ai_language::PredictStatement::PredictStatement()’
+  309 | class PredictStatement : public Statement {
+      |       ^~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:309:7: note:   candidate expects 0 arguments, 1 provided
+/home/runner/workspace/ai_language/include/parser.h:309:7: note: candidate: ‘ai_language::PredictStatement::PredictStatement(const ai_language::PredictStatement&)’
+/home/runner/workspace/ai_language/include/parser.h:309:7: note:   no known conversion for argument 1 from ‘std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >’ to ‘const ai_language::PredictStatement&’
+/home/runner/workspace/ai_language/include/parser.h:309:7: note: candidate: ‘ai_language::PredictStatement::PredictStatement(ai_language::PredictStatement&&)’
+/home/runner/workspace/ai_language/include/parser.h:309:7: note:   no known conversion for argument 1 from ‘std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >’ to ‘ai_language::PredictStatement&&’
+make[2]: *** [CMakeFiles/ai_language_lib.dir/build.make:90: CMakeFiles/ai_language_lib.dir/src/parser.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:86: CMakeFiles/ai_language_lib.dir/all] Error 2
+make: *** [Makefile:91: all] Error 2
