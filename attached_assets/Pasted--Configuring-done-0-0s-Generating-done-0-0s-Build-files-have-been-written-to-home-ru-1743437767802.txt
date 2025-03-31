@@ -1,0 +1,167 @@
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/runner/w[ 16%] Building CXX object CMakeFiles/ai_language_lib.dir/src/parser.cpp.o
+In file included from /home/runner/workspace/ai_language/src/parser.cpp:12:
+/home/runner/workspace/ai_language/include/parser.h: In constructor ‘ai_language::Statement::Statement()’:
+/home/runner/workspace/ai_language/include/parser.h:39:38: error: ‘UNKNOWN’ is not a member of ‘ai_language::TokenType’
+   39 | atement() : keyword(TokenType::UNKNOWN, "", 0, 0) {}
+      |                                ^~~~~~~
+
+/home/runner/workspace/ai_language/include/parser.h: At global scope:
+/home/runner/workspace/ai_language/include/parser.h:53:17: error: ‘std::string ai_language::StartStatement::toString() const’ marked ‘override’, but does not override
+   53 |     std::string toString() const override;
+      |                 ^~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:54:10: error: ‘void ai_language::StartStatement::execute() const’ marked ‘override’, but does not override
+   54 |     void execute() const override;
+      |          ^~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:67:17: error: ‘std::string ai_language::LoadStatement::toString() const’ marked ‘override’, but does not override
+   67 |     std::string toString() const override;
+      |                 ^~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:68:10: error: ‘void ai_language::LoadStatement::execute() const’ marked ‘override’, but does not override
+   68 |     void execute() const override;
+      |          ^~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:82:17: error: ‘std::string ai_language::CleanStatement::toString() const’ marked ‘override’, but does not override
+   82 |     std::string toString() const override;
+      |                 ^~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:83:10: error: ‘void ai_language::CleanStatement::execute() const’ marked ‘override’, but does not override
+   83 |     void execute() const override;
+      |          ^~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:96:17: error: ‘std::string ai_language::SplitStatement::toString() const’ marked ‘override’, but does not override
+   96 |     std::string toString() const override;
+      |                 ^~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:97:10: error: ‘void ai_language::SplitStatement::execute() const’ marked ‘override’, but does not override
+   97 |     void execute() const override;
+      |          ^~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:110:17: error: ‘std::string ai_language::TrainStatement::toString() const’ marked ‘override’, but does not override
+  110 |     std::string toString() const override;
+      |                 ^~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:111:10: error: ‘void ai_language::TrainStatement::execute() const’ marked ‘override’, but does not override
+  111 |     void execute() const override;
+      |          ^~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:124:17: error: ‘std::string ai_language::EvaluateStatement::toString() const’ marked ‘override’, but does not override
+  124 |     std::string toString() const override;
+      |                 ^~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:125:10: error: ‘void ai_language::EvaluateStatement::execute() const’ marked ‘override’, but does not override
+  125 |     void execute() const override;
+      |          ^~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:138:17: error: ‘std::string ai_language::PredictStatement::toString() const’ marked ‘override’, but does not override
+  138 |     std::string toString() const override;
+      |                 ^~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:139:10: error: ‘void ai_language::PredictStatement::execute() const’ marked ‘override’, but does not override
+  139 |     void execute() const override;
+      |          ^~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:152:17: error: ‘std::string ai_language::SaveStatement::toString() const’ marked ‘override’, but does not override
+  152 |     std::string toString() const override;
+      |                 ^~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:153:10: error: ‘void ai_language::SaveStatement::execute() const’ marked ‘override’, but does not override
+  153 |     void execute() const override;
+      |          ^~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:166:17: error: ‘std::string ai_language::ShowStatement::toString() const’ marked ‘override’, but does not override
+  166 |     std::string toString() const override;
+      |                 ^~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:167:10: error: ‘void ai_language::ShowStatement::execute() const’ marked ‘override’, but does not override
+  167 |     void execute() const override;
+      |          ^~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:181:17: error: ‘std::string ai_language::VisualizeStatement::toString() const’ marked ‘override’, but does not override
+  181 |     std::string toString() const override;
+      |                 ^~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:182:10: error: ‘void ai_language::VisualizeStatement::execute() const’ marked ‘override’, but does not override
+  182 |     void execute() const override;
+      |          ^~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:196:17: error: ‘std::string ai_language::PlotStatement::toString() const’ marked ‘override’, but does not override
+  196 |     std::string toString() const override;
+      |                 ^~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:197:10: error: ‘void ai_language::PlotStatement::execute() const’ marked ‘override’, but does not override
+  197 |     void execute() const override;
+      |          ^~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:228:17: error: ‘std::string ai_language::CreateProjectStatement::toString() const’ marked ‘override’, but does not override
+  228 |     std::string toString() const override;
+      |                 ^~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:229:10: error: ‘void ai_language::CreateProjectStatement::execute() const’ marked ‘override’, but does not override
+  229 |     void execute() const override;
+      |          ^~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:237:17: error: ‘std::string ai_language::CreateModelStatement::toString() const’ marked ‘override’, but does not override
+  237 |     std::string toString() const override;
+      |                 ^~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:238:10: error: ‘void ai_language::CreateModelStatement::execute() const’ marked ‘override’, but does not override
+  238 |     void execute() const override;
+      |          ^~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:246:17: error: ‘std::string ai_language::LoadDatasetStatement::toString() const’ marked ‘override’, but does not override
+  246 |     std::string toString() const override;
+      |                 ^~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:247:10: error: ‘void ai_language::LoadDatasetStatement::execute() const’ marked ‘override’, but does not override
+  247 |     void execute() const override;
+      |          ^~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:254:17: error: ‘std::string ai_language::LoadModelStatement::toString() const’ marked ‘override’, but does not override
+  254 |     std::string toString() const override;
+      |                 ^~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:255:10: error: ‘void ai_language::LoadModelStatement::execute() const’ marked ‘override’, but does not override
+  255 |     void execute() const override;
+      |          ^~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:262:17: error: ‘std::string ai_language::LoadEnvironmentStatement::toString() const’ marked ‘override’, but does not override
+  262 |     std::string toString() const override;
+      |                 ^~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:263:10: error: ‘void ai_language::LoadEnvironmentStatement::execute() const’ marked ‘override’, but does not override
+  263 |     void execute() const override;
+      |          ^~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:271:17: error: ‘std::string ai_language::SetParameterStatement::toString() const’ marked ‘override’, but does not override
+  271 |     std::string toString() const override;
+      |                 ^~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:272:10: error: ‘void ai_language::SetParameterStatement::execute() const’ marked ‘override’, but does not override
+  272 |     void execute() const override;
+      |          ^~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:278:17: error: ‘std::string ai_language::TrainModelStatement::toString() const’ marked ‘override’, but does not override
+  278 |     std::string toString() const override;
+      |                 ^~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:279:10: error: ‘void ai_language::TrainModelStatement::execute() const’ marked ‘override’, but does not override
+  279 |     void execute() const override;
+      |          ^~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:285:17: error: ‘std::string ai_language::EvaluateModelStatement::toString() const’ marked ‘override’, but does not override
+  285 |     std::string toString() const override;
+      |                 ^~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:286:10: error: ‘void ai_language::EvaluateModelStatement::execute() const’ marked ‘override’, but does not override
+  286 |     void execute() const override;
+      |          ^~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:293:17: error: ‘std::string ai_language::ShowMetricStatement::toString() const’ marked ‘override’, but does not override
+  293 |     std::string toString() const override;
+      |                 ^~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:294:10: error: ‘void ai_language::ShowMetricStatement::execute() const’ marked ‘override’, but does not override
+  294 |     void execute() const override;
+      |          ^~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:301:17: error: ‘std::string ai_language::SaveModelStatement::toString() const’ marked ‘override’, but does not override
+  301 |     std::string toString() const override;
+      |                 ^~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:302:10: error: ‘void ai_language::SaveModelStatement::execute() const’ marked ‘override’, but does not override
+  302 |     void execute() const override;
+      |          ^~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:311:17: error: ‘std::string ai_language::AddLayerStatement::toString() const’ marked ‘override’, but does not override
+  311 |     std::string toString() const override;
+      |                 ^~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:312:10: error: ‘void ai_language::AddLayerStatement::execute() const’ marked ‘override’, but does not override
+  312 |     void execute() const override;
+      |          ^~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:316:7: error: redefinition of ‘class ai_language::PredictStatement’
+  316 | class PredictStatement : public Statement {
+      |       ^~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:135:7: note: previous definition of ‘class ai_language::PredictStatement’
+  135 | class PredictStatement : public Statement {
+      |       ^~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:327:17: error: ‘std::string ai_language::EndStatement::toString() const’ marked ‘override’, but does not override
+  327 |     std::string toString() const override;
+      |                 ^~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:328:10: error: ‘void ai_language::EndStatement::execute() const’ marked ‘override’, but does not override
+  328 |     void execute() const override;
+      |          ^~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:422:32: error: ‘std::shared_ptr<ai_language::Statement> ai_language::Parser::visualizeStatement()’ cannot be overloaded with ‘std::shared_ptr<ai_language::Statement> ai_language::Parser::visualizeStatement()’
+  422 |     std::shared_ptr<Statement> visualizeStatement();
+      |                                ^~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/include/parser.h:358:32: note: previous declaration ‘std::shared_ptr<ai_language::Statement> ai_language::Parser::visualizeStatement()’
+  358 |     std::shared_ptr<Statement> visualizeStatement();
+      |                                ^~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/parser.cpp: In member function ‘void ai_language::Program::execute() const’:
+/home/runner/workspace/ai_language/src/parser.cpp:296:20: error: ‘using std::__shared_ptr_access<ai_language::Statement, __gnu_cxx::_S_atomic, false, false>::element_type = class ai_language::Statement’ {aka ‘class ai_language::Statement’} has no member named ‘execute’
+  296 |         statement->execute();
+      |                    ^~~~~~~
+make[2]: *** [CMakeFiles/ai_language_lib.dir/build.make:90: CMakeFiles/ai_language_lib.dir/src/parser.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:86: CMakeFiles/ai_language_lib.dir/all] Error 2
+make: *** [Makefile:91: all] Error 2
