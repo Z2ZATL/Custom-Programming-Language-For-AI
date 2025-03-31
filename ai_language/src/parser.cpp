@@ -748,3 +748,517 @@ std::map<std::string, std::string> parseParams(const std::string& paramString) {
 }
 
 } // namespace ai_language
+/**
+ * @file parser.cpp
+ * @brief การทำงานของ Parser สำหรับแปลงความหมายของ Token เป็นโครงสร้างข้อมูล AST
+ */
+
+#include "../include/parser.h"
+#include <iostream>
+#include <cassert>
+
+namespace ai_language {
+
+Parser::Parser(const std::vector<Token>& tokens)
+    : m_tokens(tokens), m_current(0), m_hasError(false), m_errorMsg("") {
+}
+
+void Parser::setErrorHandler(std::function<void(const std::string&)> handler) {
+    m_errorHandler = handler;
+}
+
+bool Parser::hasError() const {
+    return m_hasError;
+}
+
+std::string Parser::getErrorMessage() const {
+    return m_errorMsg;
+}
+
+std::vector<std::unique_ptr<Statement>> Parser::parse() {
+    std::vector<std::unique_ptr<Statement>> statements;
+    
+    while (!isAtEnd()) {
+        try {
+            auto stmt = parseStatement();
+            if (stmt) {
+                statements.push_back(std::move(stmt));
+            }
+        } catch (const ParserError& e) {
+            m_hasError = true;
+            m_errorMsg = e.what();
+            
+            if (m_errorHandler) {
+                m_errorHandler(e.what());
+            }
+            
+            // ข้ามไปถึงคำสั่งถัดไปเพื่อดำเนินการต่อ
+            synchronize();
+        }
+    }
+    
+    return statements;
+}
+
+std::unique_ptr<Statement> Parser::parseStatement() {
+    if (match(TokenType::START)) {
+        return parseStartStatement();
+    } else if (match(TokenType::CREATE)) {
+        return parseCreateStatement();
+    } else if (match(TokenType::LOAD)) {
+        return parseLoadStatement();
+    } else if (match(TokenType::SET)) {
+        return parseSetStatement();
+    } else if (match(TokenType::TRAIN)) {
+        return parseTrainStatement();
+    } else if (match(TokenType::EVALUATE)) {
+        return parseEvaluateStatement();
+    } else if (match(TokenType::SHOW)) {
+        return parseShowStatement();
+    } else if (match(TokenType::SAVE)) {
+        return parseSaveStatement();
+    } else if (match(TokenType::ADD)) {
+        return parseAddLayerStatement();
+    } else if (match(TokenType::PREDICT)) {
+        return parsePredictStatement();
+    } else if (match(TokenType::END_KEYWORD)) {
+        return parseEndStatement();
+    } else {
+        throw ParserError("คำสั่งไม่รองรับ: " + peek().value + " ที่บรรทัด " + std::to_string(peek().line));
+    }
+    
+    return nullptr;
+}
+
+std::unique_ptr<Statement> Parser::parseStartStatement() {
+    // start คำสั่งไม่ต้องมีพารามิเตอร์เพิ่มเติม
+    auto stmt = std::make_unique<StartStatement>();
+    stmt->token = previous();
+    consumeEndOfStatement();
+    return stmt;
+}
+
+std::unique_ptr<Statement> Parser::parseCreateStatement() {
+    if (match(TokenType::MODEL)) {
+        // create model <model_name>
+        auto token = previous();
+        std::string modelName;
+        
+        if (match(TokenType::IDENTIFIER)) {
+            modelName = previous().value;
+        } else {
+            throw ParserError("คาดว่าจะเป็นชื่อโมเดล ที่บรรทัด " + std::to_string(peek().line));
+        }
+        
+        auto stmt = std::make_unique<CreateModelStatement>();
+        stmt->token = token;
+        stmt->modelName = modelName;
+        
+        // พารามิเตอร์เพิ่มเติมของโมเดล (ถ้ามี)
+        while (!isAtEndOfStatement() && !isAtEnd()) {
+            if (match(TokenType::IDENTIFIER)) {
+                std::string paramName = previous().value;
+                std::string paramValue;
+                
+                if (match(TokenType::IDENTIFIER) || match(TokenType::NUMBER) || match(TokenType::STRING)) {
+                    paramValue = previous().value;
+                } else {
+                    throw ParserError("คาดว่าจะเป็นค่าพารามิเตอร์ ที่บรรทัด " + std::to_string(peek().line));
+                }
+                
+                stmt->parameters[paramName] = paramValue;
+            } else {
+                // ถ้าไม่ใช่ identifier ก็ถือว่าจบพารามิเตอร์
+                break;
+            }
+        }
+        
+        consumeEndOfStatement();
+        return stmt;
+    } else if (match(TokenType::ML_TYPE) || match(TokenType::DL_TYPE) || match(TokenType::RL_TYPE) || 
+              (peek().type == TokenType::IDENTIFIER && 
+              (peek().value == "ML" || peek().value == "DL" || peek().value == "RL"))) {
+        // create ML|DL|RL
+        auto token = previous();
+        std::string projectType;
+        
+        if (token.type == TokenType::IDENTIFIER) {
+            projectType = token.value;
+        } else {
+            projectType = token.value;
+        }
+        
+        auto stmt = std::make_unique<CreateProjectStatement>();
+        stmt->token = token;
+        stmt->projectType = projectType;
+        
+        consumeEndOfStatement();
+        return stmt;
+    } else {
+        throw ParserError("คำสั่ง 'create' ไม่ถูกต้อง ต้องตามด้วย 'model', 'ML', 'DL', หรือ 'RL' ที่บรรทัด " + std::to_string(peek().line));
+    }
+    
+    return nullptr;
+}
+
+std::unique_ptr<Statement> Parser::parseLoadStatement() {
+    if (match(TokenType::DATASET) || match(TokenType::IDENTIFIER)) {
+        // load dataset "path/to/data.csv" [type "csv"]
+        auto token = previous();
+        std::string dataPath;
+        
+        if (!match(TokenType::STRING)) {
+            throw ParserError("คาดว่าจะเป็นพาธของข้อมูลในรูปแบบสตริง ที่บรรทัด " + std::to_string(peek().line));
+        }
+        
+        dataPath = previous().value;
+        
+        auto stmt = std::make_unique<LoadDatasetStatement>();
+        stmt->token = token;
+        stmt->dataPath = dataPath;
+        
+        // พารามิเตอร์เพิ่มเติม เช่น type
+        while (!isAtEndOfStatement() && !isAtEnd()) {
+            if (match(TokenType::TYPE) || (match(TokenType::IDENTIFIER) && previous().value == "type")) {
+                if (!match(TokenType::STRING)) {
+                    throw ParserError("คาดว่าจะเป็นประเภทข้อมูลในรูปแบบสตริง ที่บรรทัด " + std::to_string(peek().line));
+                }
+                stmt->dataType = previous().value;
+            } else {
+                // ถ้าไม่ใช่พารามิเตอร์ที่รองรับ ให้ข้ามไป
+                advance();
+            }
+        }
+        
+        consumeEndOfStatement();
+        return stmt;
+    } else if (match(TokenType::MODEL)) {
+        // load model "path/to/model.dat"
+        auto token = previous();
+        
+        if (!match(TokenType::STRING)) {
+            throw ParserError("คาดว่าจะเป็นพาธของโมเดลในรูปแบบสตริง ที่บรรทัด " + std::to_string(peek().line));
+        }
+        
+        std::string modelPath = previous().value;
+        
+        auto stmt = std::make_unique<LoadModelStatement>();
+        stmt->token = token;
+        stmt->modelPath = modelPath;
+        
+        consumeEndOfStatement();
+        return stmt;
+    } else if (match(TokenType::ENVIRONMENT) || 
+              (match(TokenType::IDENTIFIER) && previous().value == "environment")) {
+        // load environment "path/to/env.json"
+        auto token = previous();
+        
+        if (!match(TokenType::STRING)) {
+            throw ParserError("คาดว่าจะเป็นพาธของสภาพแวดล้อมในรูปแบบสตริง ที่บรรทัด " + std::to_string(peek().line));
+        }
+        
+        std::string envPath = previous().value;
+        
+        auto stmt = std::make_unique<LoadEnvironmentStatement>();
+        stmt->token = token;
+        stmt->environmentPath = envPath;
+        
+        consumeEndOfStatement();
+        return stmt;
+    } else {
+        throw ParserError("คำสั่ง 'load' ไม่ถูกต้อง ต้องตามด้วย 'dataset', 'model', หรือ 'environment' ที่บรรทัด " + std::to_string(peek().line));
+    }
+    
+    return nullptr;
+}
+
+std::unique_ptr<Statement> Parser::parseSetStatement() {
+    auto token = previous();
+    std::string paramName;
+    
+    if (match(TokenType::IDENTIFIER) || 
+        match(TokenType::LEARNING_RATE) || 
+        match(TokenType::BATCH_SIZE) || 
+        match(TokenType::EPOCHS) || 
+        match(TokenType::TIMEZONE) ||
+        match(TokenType::DISCOUNT_FACTOR)) {
+        
+        paramName = previous().value;
+    } else {
+        throw ParserError("คาดว่าจะเป็นชื่อพารามิเตอร์ ที่บรรทัด " + std::to_string(peek().line));
+    }
+    
+    // รับค่าพารามิเตอร์
+    if (!match(TokenType::NUMBER) && !match(TokenType::STRING) && !match(TokenType::IDENTIFIER)) {
+        throw ParserError("คาดว่าจะเป็นค่าพารามิเตอร์ ที่บรรทัด " + std::to_string(peek().line));
+    }
+    
+    std::string paramValue = previous().value;
+    
+    auto stmt = std::make_unique<SetParameterStatement>();
+    stmt->token = token;
+    stmt->paramName = paramName;
+    stmt->paramValue = paramValue;
+    
+    consumeEndOfStatement();
+    return stmt;
+}
+
+std::unique_ptr<Statement> Parser::parseTrainStatement() {
+    if (match(TokenType::MODEL) || (match(TokenType::IDENTIFIER) && previous().value == "model")) {
+        // train model
+        auto token = previous();
+        
+        auto stmt = std::make_unique<TrainModelStatement>();
+        stmt->token = token;
+        
+        consumeEndOfStatement();
+        return stmt;
+    } else {
+        throw ParserError("คำสั่ง 'train' ไม่ถูกต้อง ต้องตามด้วย 'model' ที่บรรทัด " + std::to_string(peek().line));
+    }
+    
+    return nullptr;
+}
+
+std::unique_ptr<Statement> Parser::parseEvaluateStatement() {
+    if (match(TokenType::MODEL) || (match(TokenType::IDENTIFIER) && previous().value == "model")) {
+        // evaluate model
+        auto token = previous();
+        
+        auto stmt = std::make_unique<EvaluateModelStatement>();
+        stmt->token = token;
+        
+        consumeEndOfStatement();
+        return stmt;
+    } else {
+        throw ParserError("คำสั่ง 'evaluate' ไม่ถูกต้อง ต้องตามด้วย 'model' ที่บรรทัด " + std::to_string(peek().line));
+    }
+    
+    return nullptr;
+}
+
+std::unique_ptr<Statement> Parser::parseShowStatement() {
+    auto token = previous();
+    std::string metricType;
+    
+    if (match(TokenType::ACCURACY) || match(TokenType::LOSS) || 
+        match(TokenType::PERFORMANCE) || match(TokenType::GRAPH) ||
+        (match(TokenType::IDENTIFIER) && 
+         (previous().value == "accuracy" || previous().value == "loss" ||
+          previous().value == "performance" || previous().value == "graph"))) {
+        
+        metricType = previous().value;
+    } else {
+        throw ParserError("คำสั่ง 'show' ไม่ถูกต้อง ต้องตามด้วย 'accuracy', 'loss', 'performance', หรือ 'graph' ที่บรรทัด " + std::to_string(peek().line));
+    }
+    
+    auto stmt = std::make_unique<ShowMetricStatement>();
+    stmt->token = token;
+    stmt->metricType = metricType;
+    
+    consumeEndOfStatement();
+    return stmt;
+}
+
+std::unique_ptr<Statement> Parser::parseSaveStatement() {
+    if (match(TokenType::MODEL) || (match(TokenType::IDENTIFIER) && previous().value == "model")) {
+        // save model "path/to/save.dat"
+        auto token = previous();
+        
+        if (!match(TokenType::STRING)) {
+            throw ParserError("คาดว่าจะเป็นพาธสำหรับบันทึกโมเดลในรูปแบบสตริง ที่บรรทัด " + std::to_string(peek().line));
+        }
+        
+        std::string savePath = previous().value;
+        
+        auto stmt = std::make_unique<SaveModelStatement>();
+        stmt->token = token;
+        stmt->savePath = savePath;
+        
+        consumeEndOfStatement();
+        return stmt;
+    } else {
+        throw ParserError("คำสั่ง 'save' ไม่ถูกต้อง ต้องตามด้วย 'model' ที่บรรทัด " + std::to_string(peek().line));
+    }
+    
+    return nullptr;
+}
+
+std::unique_ptr<Statement> Parser::parseAddLayerStatement() {
+    if (match(TokenType::LAYER) || (match(TokenType::IDENTIFIER) && previous().value == "layer")) {
+        // add layer [layer_type] [parameters...]
+        auto token = previous();
+        
+        if (!match(TokenType::IDENTIFIER)) {
+            throw ParserError("คาดว่าจะเป็นประเภทของเลเยอร์ ที่บรรทัด " + std::to_string(peek().line));
+        }
+        
+        std::string layerType = previous().value;
+        
+        auto stmt = std::make_unique<AddLayerStatement>();
+        stmt->token = token;
+        stmt->layerType = layerType;
+        
+        // พารามิเตอร์ของเลเยอร์
+        while (!isAtEndOfStatement() && !isAtEnd()) {
+            if (match(TokenType::IDENTIFIER)) {
+                std::string paramName = previous().value;
+                
+                if (!match(TokenType::NUMBER) && !match(TokenType::STRING) && !match(TokenType::IDENTIFIER)) {
+                    throw ParserError("คาดว่าจะเป็นค่าพารามิเตอร์สำหรับเลเยอร์ ที่บรรทัด " + std::to_string(peek().line));
+                }
+                
+                std::string paramValue = previous().value;
+                stmt->parameters[paramName] = paramValue;
+            } else if (match(TokenType::NUMBER) || match(TokenType::STRING)) {
+                // กรณีที่ไม่มีชื่อพารามิเตอร์ แต่มีค่าโดยตรง
+                std::string value = previous().value;
+                stmt->orderedParams.push_back(value);
+            } else {
+                // ถ้าไม่ใช่ identifier, number หรือ string ก็ถือว่าจบพารามิเตอร์
+                break;
+            }
+        }
+        
+        consumeEndOfStatement();
+        return stmt;
+    } else {
+        throw ParserError("คำสั่ง 'add' ไม่ถูกต้อง ต้องตามด้วย 'layer' ที่บรรทัด " + std::to_string(peek().line));
+    }
+    
+    return nullptr;
+}
+
+std::unique_ptr<Statement> Parser::parsePredictStatement() {
+    // predict [parameters...]
+    auto token = previous();
+    
+    auto stmt = std::make_unique<PredictStatement>();
+    stmt->token = token;
+    
+    // พารามิเตอร์สำหรับการทำนาย
+    while (!isAtEndOfStatement() && !isAtEnd()) {
+        if (match(TokenType::IDENTIFIER)) {
+            std::string paramName = previous().value;
+            
+            if (!match(TokenType::NUMBER) && !match(TokenType::STRING) && !match(TokenType::IDENTIFIER)) {
+                throw ParserError("คาดว่าจะเป็นค่าพารามิเตอร์สำหรับการทำนาย ที่บรรทัด " + std::to_string(peek().line));
+            }
+            
+            std::string paramValue = previous().value;
+            stmt->parameters[paramName] = paramValue;
+        } else if (match(TokenType::STRING)) {
+            // กรณีที่เป็นข้อความสำหรับทำนายโดยตรง
+            stmt->predictInput = previous().value;
+        } else {
+            // ถ้าไม่ใช่ identifier หรือ string ก็ถือว่าจบพารามิเตอร์
+            break;
+        }
+    }
+    
+    consumeEndOfStatement();
+    return stmt;
+}
+
+std::unique_ptr<Statement> Parser::parseEndStatement() {
+    // end
+    auto token = previous();
+    
+    auto stmt = std::make_unique<EndStatement>();
+    stmt->token = token;
+    
+    consumeEndOfStatement();
+    return stmt;
+}
+
+Token Parser::consume(TokenType type, const std::string& message) {
+    if (check(type)) {
+        return advance();
+    }
+    
+    throw ParserError(message + " ที่บรรทัด " + std::to_string(peek().line));
+}
+
+void Parser::consumeEndOfStatement() {
+    // ในภาษา AI Language แต่ละคำสั่งจบด้วยการขึ้นบรรทัดใหม่หรือสิ้นสุดไฟล์
+    // ไม่ต้องทำอะไรเพิ่มเติม เพราะเราแยกคำสั่งตามบรรทัดอยู่แล้ว
+}
+
+bool Parser::match(TokenType type) {
+    if (check(type)) {
+        advance();
+        return true;
+    }
+    return false;
+}
+
+bool Parser::check(TokenType type) {
+    if (isAtEnd()) {
+        return false;
+    }
+    return peek().type == type;
+}
+
+Token Parser::advance() {
+    if (!isAtEnd()) {
+        m_current++;
+    }
+    return previous();
+}
+
+bool Parser::isAtEnd() {
+    return peek().type == TokenType::END || m_current >= m_tokens.size();
+}
+
+bool Parser::isAtEndOfStatement() {
+    return isAtEnd() || peek().type == TokenType::NEWLINE;
+}
+
+Token Parser::peek() {
+    if (m_current >= m_tokens.size()) {
+        // สร้าง token ปลอมเป็น END ถ้าเกินขอบเขต
+        Token endToken;
+        endToken.type = TokenType::END;
+        endToken.value = "END";
+        endToken.line = m_tokens.empty() ? 1 : m_tokens.back().line;
+        endToken.column = m_tokens.empty() ? 1 : m_tokens.back().column;
+        return endToken;
+    }
+    return m_tokens[m_current];
+}
+
+Token Parser::previous() {
+    assert(m_current > 0);
+    return m_tokens[m_current - 1];
+}
+
+void Parser::synchronize() {
+    advance();
+    
+    while (!isAtEnd()) {
+        // ข้ามไปจนกว่าจะเจอคำสั่งสำคัญ (เช่น start, create, load, ฯลฯ)
+        if (previous().type == TokenType::NEWLINE) {
+            return;
+        }
+        
+        switch (peek().type) {
+            case TokenType::START:
+            case TokenType::CREATE:
+            case TokenType::LOAD:
+            case TokenType::SET:
+            case TokenType::TRAIN:
+            case TokenType::EVALUATE:
+            case TokenType::SHOW:
+            case TokenType::SAVE:
+            case TokenType::ADD:
+                return;
+            default:
+                break;
+        }
+        
+        advance();
+    }
+}
+
+} // namespace ai_language

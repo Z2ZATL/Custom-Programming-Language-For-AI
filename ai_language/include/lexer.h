@@ -19,6 +19,7 @@ namespace ai_language {
 enum class TokenType {
     // คำสำคัญ
     START,      ///< start
+    END_KEYWORD,      ///< end
     LOAD,       ///< load
     CLEAN,      ///< clean
     SPLIT,      ///< split
@@ -38,6 +39,26 @@ enum class TokenType {
     DATA,       ///< data
     VISUALIZE,  ///< visualize
     PLOT,       ///< plot
+    PREDICT,    ///< predict
+    SET,        ///< set
+    TIMEZONE,   ///< timezone
+    LEARNING_RATE, ///< learning_rate
+    BATCH_SIZE,  ///< batch_size
+    EPISODES,   ///< episodes
+    DISCOUNT_FACTOR,///< discount_factor
+    ADD,        ///< add
+    LAYER,      ///< layer
+    ENVIRONMENT,///< environment
+    ML_TYPE,    ///< ML
+    DL_TYPE,    ///< DL
+    RL_TYPE,    ///< RL
+    ACCURACY,   ///< accuracy
+    LOSS,       ///< loss
+    PERFORMANCE,///< performance
+    GRAPH,      ///< graph
+    DATASET,    ///< dataset
+    CONFIG,     ///< config
+
 
     // ตัวดำเนินการ
     EQUAL,      ///< =
@@ -210,6 +231,49 @@ private:
      * @return true ถ้าตัวอักษรถูกต้อง
      */
     bool isValidChar(char c) const;
+};
+
+std::unordered_map<std::string, TokenType> Lexer::_keywords = {
+    {"start", TokenType::START},
+    {"end", TokenType::END_KEYWORD},
+    {"load", TokenType::LOAD},
+    {"clean", TokenType::CLEAN},
+    {"split", TokenType::SPLIT},
+    {"train", TokenType::TRAIN},
+    {"evaluate", TokenType::EVALUATE},
+    {"show", TokenType::SHOW},
+    {"save", TokenType::SAVE},
+    {"create", TokenType::CREATE},
+    {"with", TokenType::WITH},
+    {"into", TokenType::INTO},
+    {"ratio", TokenType::RATIO},
+    {"path", TokenType::PATH},
+    {"metric", TokenType::METRIC},
+    {"epochs", TokenType::EPOCHS},
+    {"type", TokenType::TYPE},
+    {"model", TokenType::MODEL},
+    {"data", TokenType::DATA},
+    {"visualize", TokenType::VISUALIZE},
+    {"plot", TokenType::PLOT},
+    {"predict", TokenType::PREDICT},
+    {"set", TokenType::SET},
+    {"timezone", TokenType::TIMEZONE},
+    {"learning_rate", TokenType::LEARNING_RATE},
+    {"batch_size", TokenType::BATCH_SIZE},
+    {"episodes", TokenType::EPISODES},
+    {"discount_factor", TokenType::DISCOUNT_FACTOR},
+    {"add", TokenType::ADD},
+    {"layer", TokenType::LAYER},
+    {"environment", TokenType::ENVIRONMENT},
+    {"ML", TokenType::ML_TYPE},
+    {"DL", TokenType::DL_TYPE},
+    {"RL", TokenType::RL_TYPE},
+    {"accuracy", TokenType::ACCURACY},
+    {"loss", TokenType::LOSS},
+    {"performance", TokenType::PERFORMANCE},
+    {"graph", TokenType::GRAPH},
+    {"dataset", TokenType::DATASET},
+    {"config", TokenType::CONFIG}
 };
 
 } // namespace ai_language

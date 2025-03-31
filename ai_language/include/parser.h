@@ -293,3 +293,168 @@ std::map<std::string, std::string> parseParams(const std::string& paramString);
 } // namespace ai_language
 
 #endif // AI_LANGUAGE_PARSER_H
+/**
+ * @file parser.h
+ * @brief Parser สำหรับภาษา AI ที่แปลง Token เป็นคำสั่งที่เข้าใจได้
+ */
+
+#ifndef AI_LANGUAGE_PARSER_H
+#define AI_LANGUAGE_PARSER_H
+
+#include "lexer.h"
+#include <vector>
+#include <memory>
+#include <string>
+#include <functional>
+#include <unordered_map>
+#include <stdexcept>
+
+namespace ai_language {
+
+// ข้อยกเว้นสำหรับการแจ้งข้อผิดพลาดในการแปลความหมาย
+class ParserError : public std::runtime_error {
+public:
+    explicit ParserError(const std::string& message) : std::runtime_error(message) {}
+};
+
+// คลาสฐานสำหรับคำสั่งทั้งหมด
+class Statement {
+public:
+    Token token;  // Token ที่เกี่ยวข้องกับคำสั่งนี้
+    virtual ~Statement() = default;
+};
+
+// คำสั่ง start
+class StartStatement : public Statement {
+};
+
+// คำสั่ง create <project_type>
+class CreateProjectStatement : public Statement {
+public:
+    std::string projectType;  // ML, DL, หรือ RL
+};
+
+// คำสั่ง create model <model_name>
+class CreateModelStatement : public Statement {
+public:
+    std::string modelName;
+    std::unordered_map<std::string, std::string> parameters;
+};
+
+// คำสั่ง load dataset <dataset_path>
+class LoadDatasetStatement : public Statement {
+public:
+    std::string dataPath;
+    std::string dataType;
+};
+
+// คำสั่ง load model <model_path>
+class LoadModelStatement : public Statement {
+public:
+    std::string modelPath;
+};
+
+// คำสั่ง load environment <environment_path>
+class LoadEnvironmentStatement : public Statement {
+public:
+    std::string environmentPath;
+};
+
+// คำสั่ง set <param_name> <param_value>
+class SetParameterStatement : public Statement {
+public:
+    std::string paramName;
+    std::string paramValue;
+};
+
+// คำสั่ง train model
+class TrainModelStatement : public Statement {
+};
+
+// คำสั่ง evaluate model
+class EvaluateModelStatement : public Statement {
+};
+
+// คำสั่ง show <metric_type>
+class ShowMetricStatement : public Statement {
+public:
+    std::string metricType;  // accuracy, loss, performance, หรือ graph
+};
+
+// คำสั่ง save model <save_path>
+class SaveModelStatement : public Statement {
+public:
+    std::string savePath;
+};
+
+// คำสั่ง add layer <layer_type> <parameters...>
+class AddLayerStatement : public Statement {
+public:
+    std::string layerType;
+    std::unordered_map<std::string, std::string> parameters;
+    std::vector<std::string> orderedParams;  // สำหรับพารามิเตอร์ที่ไม่มีชื่อ
+};
+
+// คำสั่ง predict <input>
+class PredictStatement : public Statement {
+public:
+    std::string predictInput;
+    std::unordered_map<std::string, std::string> parameters;
+};
+
+// คำสั่ง end
+class EndStatement : public Statement {
+};
+
+// Parser หลัก
+class Parser {
+public:
+    explicit Parser(const std::vector<Token>& tokens);
+    
+    // แปลง Token เป็นคำสั่ง
+    std::vector<std::unique_ptr<Statement>> parse();
+    
+    // ข้อผิดพลาด
+    bool hasError() const;
+    std::string getErrorMessage() const;
+    
+    // ตั้งค่าฟังก์ชันสำหรับจัดการข้อผิดพลาด
+    void setErrorHandler(std::function<void(const std::string&)> handler);
+    
+private:
+    std::vector<Token> m_tokens;
+    size_t m_current;
+    bool m_hasError;
+    std::string m_errorMsg;
+    std::function<void(const std::string&)> m_errorHandler;
+    
+    // วิธีการแปลความหมายของคำสั่งต่างๆ
+    std::unique_ptr<Statement> parseStatement();
+    std::unique_ptr<Statement> parseStartStatement();
+    std::unique_ptr<Statement> parseCreateStatement();
+    std::unique_ptr<Statement> parseLoadStatement();
+    std::unique_ptr<Statement> parseSetStatement();
+    std::unique_ptr<Statement> parseTrainStatement();
+    std::unique_ptr<Statement> parseEvaluateStatement();
+    std::unique_ptr<Statement> parseShowStatement();
+    std::unique_ptr<Statement> parseSaveStatement();
+    std::unique_ptr<Statement> parseAddLayerStatement();
+    std::unique_ptr<Statement> parsePredictStatement();
+    std::unique_ptr<Statement> parseEndStatement();
+    
+    // ฟังก์ชันช่วยเหลือ
+    Token consume(TokenType type, const std::string& message);
+    void consumeEndOfStatement();
+    bool match(TokenType type);
+    bool check(TokenType type);
+    Token advance();
+    bool isAtEnd();
+    bool isAtEndOfStatement();
+    Token peek();
+    Token previous();
+    void synchronize();
+};
+
+} // namespace ai_language
+
+#endif // AI_LANGUAGE_PARSER_H
