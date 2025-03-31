@@ -309,7 +309,7 @@ private:
 class PredictStatement : public Statement {
 private:
     std::map<std::string, std::string> params;
-    
+
 public:
     PredictStatement(const std::map<std::string, std::string>& params);
 public:
@@ -436,6 +436,9 @@ public:
 
     // แปลง token เป็น AST และคืนค่าเป็นโครงสร้างต้นไม้
     std::shared_ptr<Program> parse(const std::vector<Token>& tokens);
+    public:
+    void resetError();
+private:
 };
 
 /**
