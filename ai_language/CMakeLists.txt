@@ -49,3 +49,33 @@ add_custom_target(run
     DEPENDS ai_lang
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
+cmake_minimum_required(VERSION 3.10)
+project(ai_language)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
+
+# เพิ่มไฟล์ source ทั้งหมด
+set(SOURCES
+    src/BaseInterpreter.cpp
+    src/MLInterpreter.cpp
+    src/DLInterpreter.cpp
+    src/RLInterpreter.cpp
+    src/InterpreterFactory.cpp
+)
+
+# สร้าง library
+add_library(ai_language_lib STATIC ${SOURCES})
+target_include_directories(ai_language_lib PUBLIC include)
+
+# สร้าง executable
+add_executable(ai_lang ai_lang.cpp)
+target_link_libraries(ai_lang ai_language_lib)
+
+# เพิ่ม test targets (ถ้ามี)
+option(BUILD_TESTS "Build the tests" OFF)
+if(BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
