@@ -41,11 +41,12 @@ void runInteractiveMode() {
 
     // แสดงคำแนะนำสำหรับการใช้งาน
     std::cout << "ตัวอย่างคำสั่ง:\n";
-    std::cout << "  start create ML\n";
+    std::cout << "  start\n";
+    std::cout << "  create ML\n";
     std::cout << "  load dataset \"data.csv\" type \"csv\"\n";
-    std::cout << "  clean\n";
-    std::cout << "  split\n";
-    std::cout << "  train epochs 100\n\n";
+    std::cout << "  clean data\n";
+    std::cout << "  split data\n";
+    std::cout << "  train model epochs 100\n\n";
 
     bool hasStarted = false;
     bool hasLoadedData = false;
