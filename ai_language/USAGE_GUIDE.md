@@ -77,6 +77,7 @@ set max_depth 5
 set episodes 1000
 set discount_factor 0.9
 set exploration_rate 0.3
+set timezone 7     # ตั้งค่าเขตเวลา UTC+7 (ประเทศไทย)
 ```
 
 ### คำสั่งเกี่ยวกับ Neural Network

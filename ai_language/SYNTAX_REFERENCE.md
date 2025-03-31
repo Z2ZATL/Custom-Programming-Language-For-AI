@@ -128,3 +128,18 @@ end
 - `examples/ml_examples/linear_regression.ai`
 - `examples/dl_examples/neural_network.ai`
 - `examples/rl_examples/q_learning.ai`
+
+## การตั้งค่าเขตเวลา (Timezone)
+
+สามารถตั้งค่าเขตเวลาที่จะใช้ในการบันทึกโมเดลได้ดังนี้:
+```
+set timezone <ค่า>
+```
+
+ค่าที่ใส่คือตัวเลขบวกหรือลบที่แสดงค่า offset จาก UTC 
+- ประเทศไทย: `set timezone 7`
+- ญี่ปุ่น: `set timezone 9`
+- สหราชอาณาจักร: `set timezone 0`
+- นิวยอร์ก: `set timezone -5`
+
+ค่านี้จะมีผลในการบันทึกเวลาลงในไฟล์โมเดลเมื่อใช้คำสั่ง `save model`

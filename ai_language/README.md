@@ -22,57 +22,78 @@
 
 ```
 # เริ่มต้นด้วยการระบุประเภทของโปรเจกต์
-start create ML
+start
+create ML
 
 # โหลดและเตรียมข้อมูล
-load dataset "data.csv" type "csv"
-clean data with drop_na true
-split data into train, test with ratio 0.8, 0.2
+load dataset "datasets/linear_data.csv" type "csv"
 
 # สร้างโมเดล
-create model LinearRegression with normalize true
-train model on train_data with epochs 100
+create model LinearRegression
+set learning_rate 0.01
+set epochs 100
 
-# ประเมินโมเดล
-evaluate model on test_data
-show r2_score
+# ฝึกโมเดลและประเมินผล
+train model
+evaluate model
+show accuracy
+
+# บันทึกโมเดล
+save model "models/linear_model.mlmodel"
 ```
 
 ### Deep Learning
 
 ```
 # เริ่มต้นโปรเจกต์ Deep Learning
-start create DL
+start
+create DL
 
 # โหลดข้อมูลรูปภาพ
-load dataset "images/" type "image"
+load dataset "datasets/images/" type "image"
 
 # สร้างโครงข่ายประสาทเทียม
-create neural_network CNN
-add layer convolutional filters 32 kernel_size 3x3 activation "relu"
-add layer max_pooling size 2x2
+create model CNN
+add layer input 28 28 3
+add layer convolutional 32 3 3 activation "relu"
+add layer max_pooling 2 2
 add layer flatten
-add layer dense nodes 128 activation "relu"
-add layer dense nodes 10 activation "softmax"
+add layer hidden 128 activation "relu" 
+add layer output 10 activation "softmax"
 
-# คอมไพล์และฝึกโมเดล
-compile model with optimizer "adam" loss "categorical_crossentropy"
-train model with epochs 10 batch_size 32
+# ตั้งค่าและฝึกโมเดล
+set learning_rate 0.001
+set epochs 10
+set batch_size 32
+train model
+show accuracy
+
+# บันทึกโมเดล
+save model "models/cnn_model.dlmodel"
 ```
 
 ### Reinforcement Learning
 
 ```
 # เริ่มต้นโปรเจกต์ Reinforcement Learning
-start create RL
+start
+create RL
 
-# สร้างสภาพแวดล้อมและ agent
-create environment "CartPole-v1"
-create agent DQN
+# โหลดสภาพแวดล้อมและตั้งค่า
+load dataset "datasets/environment.json"
 
-# ตั้งค่าและฝึก agent
-configure agent with gamma 0.99 epsilon 1.0
-train agent for episodes 1000
+# สร้างโมเดล Q-Learning
+create model QLearning
+set discount_factor 0.9
+set episodes 1000
+set exploration_rate 0.3
+
+# ฝึกและประเมินโมเดล
+train model
+show performance
+
+# บันทึกโมเดล
+save model "models/q_learning_model.rlmodel"
 ```
 
 ## เอกสารอ้างอิง

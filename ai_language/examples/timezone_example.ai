@@ -1,0 +1,37 @@
+
+# ตัวอย่างการใช้งานการตั้งค่าเขตเวลา (Timezone)
+# ไฟล์นี้แสดงวิธีการตั้งค่าเขตเวลาที่มีผลต่อเวลาที่บันทึกในไฟล์โมเดล
+
+start
+create ML
+
+# โหลดข้อมูล
+load dataset "datasets/linear_data.csv"
+
+# สร้างโมเดล
+create model LinearRegression
+
+# ตั้งค่าพารามิเตอร์
+set learning_rate 0.01
+set epochs 100
+set batch_size 32
+
+# ตั้งค่าเขตเวลาเป็น UTC+7 (ประเทศไทย)
+set timezone 7
+
+# ฝึกโมเดล
+train model
+show accuracy
+
+# บันทึกโมเดล (เวลาที่บันทึกจะเป็นเวลาตามเขตเวลา UTC+7)
+save model "models/linear_model_thailand_time.mlmodel"
+
+# เปลี่ยนเขตเวลาเป็น UTC+9 (ญี่ปุ่น)
+set timezone 9
+
+# บันทึกโมเดลอีกครั้ง (เวลาที่บันทึกจะเป็นเวลาตามเขตเวลา UTC+9)
+save model "models/linear_model_japan_time.mlmodel"
+
+# แสดงข้อความสรุป
+# หลังจากรันไฟล์นี้ ให้ตรวจสอบเวลาในไฟล์โมเดลทั้งสองที่บันทึกไว้
+# คุณจะเห็นความแตกต่างของเวลาที่บันทึกตามเขตเวลาที่กำหนด
