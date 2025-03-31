@@ -1,4 +1,3 @@
-
 #ifndef DL_INTERPRETER_H
 #define DL_INTERPRETER_H
 
@@ -17,15 +16,20 @@ struct Layer {
 };
 
 class DLInterpreter : public BaseInterpreter {
-protected:
-    std::vector<Layer> layers;
-    void setDefaultParameters() override;
+private:
+    // ตัวแปรสำหรับเก็บประเภทโมเดล
+    std::string modelType;
+    std::string datasetFilename; // เพิ่มตัวแปรสำหรับเก็บชื่อไฟล์ข้อมูล
 
 public:
     DLInterpreter();
     ~DLInterpreter() override;
 
-    // ฟังก์ชันสำหรับคำสั่งพื้นฐาน
+    // เมธอดสำหรับการประมวลผลไฟล์และคำสั่ง
+    void interpretFile(const std::string& filename) override;
+    void interpretLine(const std::string& line) override;
+
+    // เมธอดสำหรับการดำเนินการตามประเภทของคำสั่ง
     void handleStartCommand() override;
     void handleCreateCommand(const std::vector<std::string>& args) override;
     void handleLoadCommand(const std::vector<std::string>& args) override;
@@ -33,9 +37,15 @@ public:
     void handleTrainCommand(const std::vector<std::string>& args) override;
     void handleShowCommand(const std::vector<std::string>& args) override;
     void handleSaveCommand(const std::vector<std::string>& args) override;
-    void handleHelpCommand() override;
 
-    // ฟังก์ชันเฉพาะสำหรับ Deep Learning
+    // เมธอดเพิ่มเติมสำหรับ DL
+    void handleAddLayerCommand(const std::vector<std::string>& args);
+    void handlePlotCommand(const std::vector<std::string>& args);
+    void handleEvaluateCommand(const std::vector<std::string>& args);
+    void handleVisualizeCommand(const std::vector<std::string>& args);
+
+    // เมธอดเฉพาะสำหรับ DL
+    void setDefaultParameters();
     void handleModelCreation(const std::string& modelName);
     void handleAddLayer(const std::vector<std::string>& args);
     void handleDataVisualization();
