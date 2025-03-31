@@ -418,8 +418,8 @@ public:
             std::stringstream warningMsg;
 
             if (parameters.count("learning_rate") && parameters["learning_rate"] < 0) {
-                warningMsg << "  - learning_rate ติดลบ (" << parameters["learning_rate"] << ") อาจทำให้โมเดลไม่ลู่เข้า" << std::endl;
-                hasWarning = true;
+                std::cerr << RED << "ข้อผิดพลาด: ค่า learning_rate ติดลบ (" << parameters["learning_rate"] << ") ไม่สามารถใช้ค่าติดลบได้" << RESET << std::endl;
+                return;
             } else if (parameters.count("learning_rate") && parameters["learning_rate"] > 1.0) {
                 warningMsg << "  - learning_rate มีค่าสูง (" << parameters["learning_rate"] << ") อาจทำให้โมเดลไม่ลู่เข้า" << std::endl;
                 hasWarning = true;
