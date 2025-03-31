@@ -233,49 +233,6 @@ private:
     bool isValidChar(char c) const;
 };
 
-std::unordered_map<std::string, TokenType> Lexer::_keywords = {
-    {"start", TokenType::START},
-    {"end", TokenType::END_KEYWORD},
-    {"load", TokenType::LOAD},
-    {"clean", TokenType::CLEAN},
-    {"split", TokenType::SPLIT},
-    {"train", TokenType::TRAIN},
-    {"evaluate", TokenType::EVALUATE},
-    {"show", TokenType::SHOW},
-    {"save", TokenType::SAVE},
-    {"create", TokenType::CREATE},
-    {"with", TokenType::WITH},
-    {"into", TokenType::INTO},
-    {"ratio", TokenType::RATIO},
-    {"path", TokenType::PATH},
-    {"metric", TokenType::METRIC},
-    {"epochs", TokenType::EPOCHS},
-    {"type", TokenType::TYPE},
-    {"model", TokenType::MODEL},
-    {"data", TokenType::DATA},
-    {"visualize", TokenType::VISUALIZE},
-    {"plot", TokenType::PLOT},
-    {"predict", TokenType::PREDICT},
-    {"set", TokenType::SET},
-    {"timezone", TokenType::TIMEZONE},
-    {"learning_rate", TokenType::LEARNING_RATE},
-    {"batch_size", TokenType::BATCH_SIZE},
-    {"episodes", TokenType::EPISODES},
-    {"discount_factor", TokenType::DISCOUNT_FACTOR},
-    {"add", TokenType::ADD},
-    {"layer", TokenType::LAYER},
-    {"environment", TokenType::ENVIRONMENT},
-    {"ML", TokenType::ML_TYPE},
-    {"DL", TokenType::DL_TYPE},
-    {"RL", TokenType::RL_TYPE},
-    {"accuracy", TokenType::ACCURACY},
-    {"loss", TokenType::LOSS},
-    {"performance", TokenType::PERFORMANCE},
-    {"graph", TokenType::GRAPH},
-    {"dataset", TokenType::DATASET},
-    {"config", TokenType::CONFIG}
-};
-
 } // namespace ai_language
 
 #endif // AI_LANGUAGE_LEXER_H
