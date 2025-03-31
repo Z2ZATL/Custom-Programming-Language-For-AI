@@ -1,26 +1,34 @@
 
-# บันทึก Output จากโปรแกรม AI Language
+# คู่มือการบันทึกและจัดการโมเดล AI
 
-ไฟล์ในโฟลเดอร์นี้จะเก็บผลลัพธ์จากการใช้งานโปรแกรม AI Language ในโหมดโต้ตอบ
+## นามสกุลไฟล์สำหรับโมเดล AI แต่ละประเภท
 
-## วิธีใช้งาน
+โมเดล AI ที่เทรนแล้วแต่ละประเภทควรมีนามสกุลไฟล์ที่สะท้อนถึงลักษณะของโมเดลและช่วยให้จัดการได้ง่าย ดังนี้:
 
-1. รันสคริปต์ `save_interaction.sh` เพื่อบันทึก output:
-   ```
-   bash "Program test/save_interaction.sh"
-   ```
+| ประเภท | นามสกุลไฟล์ | คำอธิบาย |
+|--------|------------|----------|
+| **Machine Learning (ML)** | `.mlmodel` | เหมาะสำหรับโมเดลอย่าง Linear Regression หรือ Decision Trees ที่เก็บพารามิเตอร์หรือโครงสร้างพื้นฐานของโมเดล |
+| **Deep Learning (DL)** | `.dlmodel` | ใช้กับโมเดล Neural Networks ที่มีโครงสร้างซับซ้อนและน้ำหนัก (weights) จำนวนมาก |
+| **Reinforcement Learning (RL)** | `.rlmodel` | เหมาะสำหรับโมเดลเช่น Q-Learning หรือ DQN ที่เก็บสถานะของ agent หรือตาราง Q-values |
+| **Natural Language Processing (NLP)** | `.nlpmodel` | ใช้กับโมเดลอย่าง Transformers หรือ BERT ที่มีขนาดใหญ่และพารามิเตอร์มาก |
+| **Computer Vision (CV)** | `.cvmodel` | เหมาะสำหรับโมเดลเช่น CNN ที่ใช้ในการรู้จำภาพและมีโครงสร้างซับซ้อน |
 
-2. ไฟล์ output จะถูกสร้างในรูปแบบ `interaction_output_YYYYMMDD_HHMMSS.txt`
+## การใช้งานกับ AI Language
 
-3. เมื่อใช้งานโปรแกรมเสร็จสิ้น สามารถพิมพ์ `exit` เพื่อออกจากโหมดโต้ตอบ
-
-## ตัวอย่างคำสั่ง
+เมื่อบันทึกโมเดลในโปรแกรม AI Language สามารถระบุนามสกุลไฟล์ที่เหมาะสมได้ผ่านคำสั่ง `save model`:
 
 ```
-start
-create RL
-load dataset "datasets/environment.json" type "json"
-create model QLearning
-train model
-save model "my_model.ml"
+# สำหรับ Machine Learning
+save model "my_linear_regression.mlmodel"
+
+# สำหรับ Deep Learning
+save model "my_neural_network.dlmodel"
+
+# สำหรับ Reinforcement Learning
+save model "my_qlearning.rlmodel"
 ```
+
+## การบันทึก Output การโต้ตอบ
+
+สคริปต์ `save_interaction.sh` ใช้สำหรับบันทึก output ของการโต้ตอบกับโปรแกรม AI Language
+เพื่อเก็บประวัติการทำงานและผลลัพธ์
