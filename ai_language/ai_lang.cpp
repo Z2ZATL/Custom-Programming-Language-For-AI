@@ -124,6 +124,12 @@ public:
         // ประมวลผลคำสั่ง
         std::string command = tokens[0];
 
+        std::vector<std::string> args;
+        for (size_t i = 1; i < tokens.size(); ++i) {
+            args.push_back(tokens[i]);
+        }
+
+
         if (command == "start") {
             // คำสั่ง start
             hasStarted = true;
@@ -138,18 +144,18 @@ public:
                 return;
             }
 
-            if (tokens.size() < 2) {
+            if (args.size() < 1) {
                 std::cerr << RED << "ข้อผิดพลาด: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'create [type]' หรือ 'create model [model_name]'" << RESET << std::endl;
                 return;
             }
 
-            if (tokens[1] == "ML" || tokens[1] == "DL" || tokens[1] == "RL") {
+            if (args[0] == "ML" || args[0] == "DL" || args[0] == "RL") {
                 // สร้างโปรเจค
                 if (hasCreatedProject) {
                     std::cerr << YELLOW << "คำเตือน: กำลังสร้างโปรเจคใหม่ ข้อมูลเดิมจะถูกรีเซ็ต" << RESET << std::endl;
                 }
 
-                projectType = tokens[1];
+                projectType = args[0];
                 hasCreatedProject = true;
                 hasLoadedData = false;
                 hasCreatedModel = false;
@@ -166,7 +172,7 @@ public:
                 else if (projectType == "RL") projectTypeText = "Reinforcement Learning";
 
                 std::cout << GREEN << "Project created: " << projectTypeText << RESET << std::endl;
-            } else if (tokens[1] == "model") {
+            } else if (args[0] == "model") {
                 // สร้างโมเดล
                 if (!hasCreatedProject) {
                     std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create [type]' ก่อน" << RESET << std::endl;
@@ -178,7 +184,7 @@ public:
                     return;
                 }
 
-                if (tokens.size() < 3) {
+                if (args.size() < 2) {
                     std::cerr << RED << "ข้อผิดพลาด: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'create model [model_name]'" << RESET << std::endl;
                     return;
                 }
@@ -186,7 +192,44 @@ public:
                 if (hasCreatedModel) {
                     std::cerr << YELLOW << "คำเตือน: กำลังแทนที่โมเดลเดิม (" << modelType << ") ด้วยโมเดลใหม่" << RESET << std::endl;
                 }
-                modelType = tokens[2];
+                modelType = args[1];
+
+                // ตรวจสอบชื่อโมเดลที่มีวงเล็บหรือเครื่องหมายพิเศษ
+                bool hasInvalidChars = false;
+                for (char c : modelType) {
+                    if (c == '(' || c == ')' || c == '!' || c == '@' || c == '#' || c == '$' || 
+                        c == '%' || c == '^' || c == '&' || c == '*' || c == '+' || c == '=') {
+                        hasInvalidChars = true;
+                        break;
+                    }
+                }
+
+                if (hasInvalidChars) {
+                    std::cerr << YELLOW << "คำเตือน: ชื่อโมเดลมีอักขระพิเศษที่อาจทำให้เกิดปัญหา" << RESET << std::endl;
+                }
+
+                // ตรวจสอบชื่อโมเดลที่รองรับ
+                std::vector<std::string> supportedModels;
+                if (projectType == "ML") {
+                    supportedModels = {"LinearRegression", "LogisticRegression", "RandomForest", "SVM", "DecisionTree", "KNN"};
+                } else if (projectType == "DL") {
+                    supportedModels = {"NeuralNetwork", "CNN", "RNN", "LSTM", "Transformer", "GAN"};
+                } else if (projectType == "RL") {
+                    supportedModels = {"QLearning", "DQN", "PolicyGradient", "ActorCritic", "DDPG", "A3C"};
+                }
+
+                bool isSupported = false;
+                for (const auto& model : supportedModels) {
+                    if (modelType == model) {
+                        isSupported = true;
+                        break;
+                    }
+                }
+
+                if (!isSupported) {
+                    std::cerr << YELLOW << "คำเตือน: โมเดล '" << modelType << "' อาจไม่รองรับในโปรเจค " << projectType << RESET << std::endl;
+                }
+
                 hasCreatedModel = true;
                 hasTrainedModel = false;
                 hasShowedAccuracy = false;
@@ -194,7 +237,7 @@ public:
 
                 std::cout << GREEN << "Model created: " << modelType << RESET << std::endl;
             } else {
-                std::cerr << RED << "ข้อผิดพลาด: ประเภท '" << tokens[1] << "' ไม่ถูกต้อง ต้องเป็น 'ML', 'DL', 'RL' หรือ 'model'" << RESET << std::endl;
+                std::cerr << RED << "ข้อผิดพลาด: ประเภท '" << args[0] << "' ไม่ถูกต้อง ต้องเป็น 'ML', 'DL', 'RL' หรือ 'model'" << RESET << std::endl;
             }
         } else if (command == "load") {
             // คำสั่ง load
@@ -208,20 +251,20 @@ public:
                 return;
             }
 
-            if (tokens.size() < 3) {
+            if (args.size() < 2) {
                 std::cerr << RED << "ข้อผิดพลาด: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'load dataset \"[filename]\"' หรือ 'load model \"[filename]\"'" << RESET << std::endl;
                 return;
             }
 
-            if (tokens[1] == "dataset") {
+            if (args[0] == "dataset") {
                 // โหลดข้อมูล
-                if (tokens.size() < 3) {
+                if (args.size() < 2) {
                     std::cerr << RED << "ข้อผิดพลาด: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'load dataset \"[filename]\"'" << RESET << std::endl;
                     return;
                 }
 
                 // แยกชื่อไฟล์จากเครื่องหมายคำพูด
-                std::string filename = tokens[2];
+                std::string filename = args[1];
                 if (filename.size() >= 2 && filename.front() == '"' && filename.back() == '"') {
                     filename = filename.substr(1, filename.size() - 2);
                 }
@@ -241,20 +284,20 @@ public:
                 hasSavedModel = false;
 
                 std::cout << GREEN << "Dataset loaded successfully" << RESET << std::endl;
-            } else if (tokens[1] == "model") {
+            } else if (args[0] == "model") {
                 // โหลดโมเดล
                 if (!hasLoadedData) {
                     std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'load dataset' ก่อน" << RESET << std::endl;
                     return;
                 }
 
-                if (tokens.size() < 3) {
+                if (args.size() < 2) {
                     std::cerr << RED << "ข้อผิดพลาด: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'load model \"[filename]\"'" << RESET << std::endl;
                     return;
                 }
 
                 // แยกชื่อไฟล์จากเครื่องหมายคำพูด
-                std::string filename = tokens[2];
+                std::string filename = args[1];
                 if (filename.size() >= 2 && filename.front() == '"' && filename.back() == '"') {
                     filename = filename.substr(1, filename.size() - 2);
                 }
@@ -275,7 +318,7 @@ public:
 
                 std::cout << GREEN << "Model loaded successfully: " << filename << RESET << std::endl;
             } else {
-                std::cerr << RED << "ข้อผิดพลาด: ประเภทข้อมูล '" << tokens[1] << "' ไม่ถูกต้อง ต้องเป็น 'dataset' หรือ 'model'" << RESET << std::endl;
+                std::cerr << RED << "ข้อผิดพลาด: ประเภทข้อมูล '" << args[0] << "' ไม่ถูกต้อง ต้องเป็น 'dataset' หรือ 'model'" << RESET << std::endl;
             }
         } else if (command == "set") {
             // คำสั่ง set
@@ -294,33 +337,42 @@ public:
                 return;
             }
 
-            if (hasTrainedModel) {
-                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'train model'" << RESET << std::endl;
-                return;
-            }
-
-            if (tokens.size() < 3) {
+            if (args.size() < 2) {
                 std::cerr << RED << "ข้อผิดพลาด: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'set [parameter] [value]'" << RESET << std::endl;
                 return;
             }
 
-            std::string paramName = tokens[1];
-            double paramValue;
+            std::string paramName = args[0];
+            std::string paramValue = args[1];
 
             try {
-                paramValue = std::stod(tokens[2]);
+                double numericValue = std::stod(paramValue);
+
+                // ตรวจสอบค่าลบหรือค่าไม่ถูกต้อง
+                if (paramName == "learning_rate" && numericValue < 0) {
+                    std::cerr << YELLOW << "คำเตือน: ค่า learning_rate ติดลบ (-" << std::abs(numericValue) 
+                             << ") อาจทำให้โมเดลไม่ลู่เข้า" << RESET << std::endl;
+                } else if (paramName == "epochs" && numericValue <= 0) {
+                    std::cerr << YELLOW << "คำเตือน: จำนวน epochs ควรมากกว่า 0" << RESET << std::endl;
+                } else if (paramName == "batch_size" && numericValue <= 0) {
+                    std::cerr << YELLOW << "คำเตือน: ค่า batch_size ควรมากกว่า 0" << RESET << std::endl;
+                }
+
+                // ตั้งค่าพารามิเตอร์
+                parameters[paramName] = numericValue;
+
+                std::cout << GREEN << "Parameter set: " << paramName << " = " << numericValue << RESET << std::endl;
             } catch (const std::invalid_argument&) {
-                std::cerr << RED << "ข้อผิดพลาด: ค่า '" << tokens[2] << "' ไม่ใช่ตัวเลข" << RESET << std::endl;
-                return;
+                // กรณีค่าไม่ใช่ตัวเลข แต่เป็นพารามิเตอร์พิเศษ
+                if (paramName == "timezone" && paramValue.substr(0, 3) == "UTC") {
+                    std::cerr << RED << "ข้อผิดพลาด: ไม่รองรับการตั้งค่า timezone ด้วยคำสั่งนี้" << RESET << std::endl;
+                    return;
+                } else {
+                    std::cerr << RED << "ข้อผิดพลาด: ค่า '" << paramValue << "' ไม่ใช่ตัวเลข" << RESET << std::endl;
+                }
             } catch (const std::out_of_range&) {
-                std::cerr << RED << "ข้อผิดพลาด: ค่า '" << tokens[2] << "' เกินขอบเขต" << RESET << std::endl;
-                return;
+                std::cerr << RED << "ข้อผิดพลาด: ค่า '" << paramValue << "' ใหญ่เกินไป" << RESET << std::endl;
             }
-
-            // กำหนดค่าพารามิเตอร์
-            parameters[paramName] = paramValue;
-
-            std::cout << GREEN << "Parameter set: " << paramName << " = " << paramValue << RESET << std::endl;
         } else if (command == "train") {
             // คำสั่ง train
             if (!hasStarted) {
@@ -338,14 +390,42 @@ public:
                 return;
             }
 
+            if (args.size() < 1 || args[0] != "model") {
+                std::cerr << RED << "ข้อผิดพลาด: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'train model'" << RESET << std::endl;
+                return;
+            }
+
             if (!hasCreatedModel) {
                 std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create model' ก่อน" << RESET << std::endl;
                 return;
             }
 
-            if (tokens.size() < 2 || tokens[1] != "model") {
-                std::cerr << RED << "ข้อผิดพลาด: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'train model'" << RESET << std::endl;
-                return;
+            // ตรวจสอบค่าพารามิเตอร์ที่ไม่เหมาะสม
+            bool hasWarning = false;
+            std::stringstream warningMsg;
+
+            if (parameters.count("learning_rate") && parameters["learning_rate"] < 0) {
+                warningMsg << "  - learning_rate ติดลบ (" << parameters["learning_rate"] << ") อาจทำให้โมเดลไม่ลู่เข้า" << std::endl;
+                hasWarning = true;
+            } else if (parameters.count("learning_rate") && parameters["learning_rate"] > 1.0) {
+                warningMsg << "  - learning_rate มีค่าสูง (" << parameters["learning_rate"] << ") อาจทำให้โมเดลไม่ลู่เข้า" << std::endl;
+                hasWarning = true;
+            }
+
+            if (parameters.count("epochs") && parameters["epochs"] <= 0) {
+                warningMsg << "  - epochs มีค่าไม่ถูกต้อง (" << parameters["epochs"] << ") ใช้ค่าเริ่มต้น 50" << std::endl;
+                parameters["epochs"] = 50;
+                hasWarning = true;
+            }
+
+            if (parameters.count("batch_size") && parameters["batch_size"] <= 0) {
+                warningMsg << "  - batch_size มีค่าไม่ถูกต้อง (" << parameters["batch_size"] << ") ใช้ค่าเริ่มต้น 32" << std::endl;
+                parameters["batch_size"] = 32;
+                hasWarning = true;
+            }
+
+            if (hasWarning) {
+                std::cerr << YELLOW << "คำเตือนการฝึกโมเดล:" << std::endl << warningMsg.str() << RESET;
             }
 
             // แสดงการฝึกโมเดล
@@ -391,12 +471,12 @@ public:
                 return;
             }
 
-            if (tokens.size() < 2) {
+            if (args.size() < 1) {
                 std::cerr << RED << "ข้อผิดพลาด: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'show [result_type]'" << RESET << std::endl;
                 return;
             }
 
-            std::string resultType = tokens[1];
+            std::string resultType = args[0];
 
             if (resultType == "accuracy") {
                 // สุ่มค่าความแม่นยำระหว่าง 80.0 - 99.9
@@ -459,12 +539,12 @@ public:
                 return;
             }
 
-            if (tokens.size() < 3 || tokens[1] != "model") {
+            if (args.size() < 2 || args[0] != "model") {
                 std::cerr << RED << "ข้อผิดพลาด: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'save model \"[filename]\"'" << RESET << std::endl;
                 return;
             }
 
-            std::string filename = tokens[2];
+            std::string filename = args[1];
 
             // ลบเครื่องหมายคำพูดออก
             if (filename.front() == '"' && filename.back() == '"') {
@@ -590,7 +670,7 @@ public:
                 return;
             }
 
-            if (tokens.size() < 2 || tokens[1] != "model") {
+            if (args.size() < 1 || args[0] != "model") {
                 std::cerr << RED << "ข้อผิดพลาด: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'evaluate model'" << RESET << std::endl;
                 return;
             }
@@ -636,7 +716,7 @@ public:
             }
 
             if (!hasTrainedModel) {
-                std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'train model' ก่อน" << RESET << std::endl;
+                std::cerr << RED<< RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'train model' ก่อน" << RESET << std::endl;
                 return;
             }
 
@@ -675,13 +755,13 @@ public:
                 return;
             }
 
-            if (tokens.size() < 4 || tokens[1] != "layer") {
+            if (args.size() < 2 || args[0] != "layer") {
                 std::cerr << RED << "ข้อผิดพลาด: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'add layer [layer_type] [parameters]'" << RESET << std::endl;
                 return;
             }
 
-            std::string layerType = tokens[2];
-            std::string layerSize = tokens.size() > 3 ? tokens[3] : "0";
+            std::string layerType = args[1];
+            std::string layerSize = args.size() > 2 ? args[2] : "0";
 
             std::cout << GREEN << "Layer added: " << layerType << " with size " << layerSize << RESET << std::endl;
         } else if (command == "clean" || command == "split") {
@@ -740,10 +820,10 @@ public:
             double prediction = dis(gen);
 
             std::cout << GREEN << "Prediction: " << std::fixed << std::setprecision(2) << prediction << RESET << std::endl;
-        } else if (command == "set" && tokens.size() > 2 && tokens[1] == "timezone") {
+        } else if (command == "set" && args.size() > 1 && args[0] == "timezone") {
             // คำสั่ง set timezone
             try {
-                int timezone = std::stoi(tokens[2]);
+                int timezone = std::stoi(args[1]);
                 if (timezone >= -12 && timezone <= 14) {
                     userTimezoneOffset = timezone;
                     std::cout << GREEN << "ตั้งค่า timezone เป็น UTC" << (timezone >= 0 ? "+" : "") << timezone << " สำเร็จ" << RESET << std::endl;
