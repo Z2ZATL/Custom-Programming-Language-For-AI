@@ -54,6 +54,7 @@ start \
 create ML \
 load dataset "datasets/linear_data.csv" \
 create model LinearRegression! ;;
+
 # ไฟล์ทดสอบขั้นสูงสำหรับการจัดการข้อผิดพลาดของภาษา AI (ส่วนที่ 2)
 
 # 1. ทดสอบการทำงานกับไฟล์ที่ไม่มีอยู่จริง (ควรแสดงข้อผิดพลาด: ไฟล์ไม่พบ)
