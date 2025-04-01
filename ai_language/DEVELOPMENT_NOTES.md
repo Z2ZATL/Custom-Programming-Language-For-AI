@@ -5,29 +5,70 @@
 
 ```
 ai_language/
-├── include/            # ไฟล์ header สำหรับ library
-│   ├── lexer.h
-│   ├── parser.h
-│   └── interpreter.h
-├── src/                # ไฟล์ source code
-│   ├── lexer.cpp
-│   ├── parser.cpp
-│   └── interpreter.cpp
-├── examples/           # ตัวอย่างโค้ด
-│   ├── ml_examples/    # ตัวอย่างสำหรับ Machine Learning
-│   ├── dl_examples/    # ตัวอย่างสำหรับ Deep Learning
-│   ├── rl_examples/    # ตัวอย่างสำหรับ Reinforcement Learning
-│   └── timezone_example.ai  # ตัวอย่างการใช้ timezone
-├── tests/              # ไฟล์ทดสอบ
-│   ├── lexer_test.cpp
-│   ├── parser_test.cpp
-│   └── interpreter_test.cpp
-├── ai_lang.cpp         # โปรแกรมหลัก
-├── CMakeLists.txt      # ไฟล์ build
-├── README.md           # คำอธิบายโปรเจกต์
-├── SYNTAX_REFERENCE.md # เอกสารอ้างอิงไวยากรณ์
-├── USAGE_GUIDE.md      # คู่มือการใช้งาน
-└── organize_examples.sh # สคริปต์จัดระเบียบตัวอย่าง
+├── include/              # ไฟล์ header สำหรับ library
+│   ├── BaseInterpreter.h # คลาสพื้นฐานสำหรับ Interpreter
+│   ├── DLInterpreter.h   # Interpreter สำหรับ Deep Learning
+│   ├── InterpreterFactory.h # Factory สำหรับสร้าง Interpreter ตามประเภท
+│   ├── MLInterpreter.h   # Interpreter สำหรับ Machine Learning
+│   ├── RLInterpreter.h   # Interpreter สำหรับ Reinforcement Learning
+│   ├── interpreter.h     # Interpreter หลัก
+│   ├── lexer.h           # Lexer สำหรับแยกโทเค็น
+│   ├── parser.h          # Parser สำหรับแปลง tokens เป็นคำสั่ง
+│   └── token_types.h     # นิยามประเภทโทเค็นต่างๆ
+├── src/                  # ไฟล์ source code
+│   ├── BaseInterpreter.cpp # การทำงานของ Interpreter พื้นฐาน
+│   ├── DLInterpreter.cpp # การทำงานของ DL Interpreter
+│   ├── InterpreterFactory.cpp # การสร้าง Interpreter ตามประเภท
+│   ├── MLInterpreter.cpp # การทำงานของ ML Interpreter
+│   ├── RLInterpreter.cpp # การทำงานของ RL Interpreter
+│   ├── interpreter.cpp   # การทำงานของ Interpreter หลัก
+│   ├── lexer.cpp         # การทำงานของ Lexer
+│   └── parser.cpp        # การทำงานของ Parser
+├── examples/             # ตัวอย่างโค้ด
+│   ├── dl_examples/      # ตัวอย่างสำหรับ Deep Learning
+│   │   ├── cnn.ai        # ตัวอย่าง CNN
+│   │   └── neural_network.ai # ตัวอย่าง Neural Network
+│   ├── ml_examples/      # ตัวอย่างสำหรับ Machine Learning
+│   │   ├── classification.ai # ตัวอย่างการจำแนกประเภท
+│   │   └── linear_regression.ai # ตัวอย่าง Linear Regression
+│   ├── rl_examples/      # ตัวอย่างสำหรับ Reinforcement Learning
+│   │   ├── basic_rl_example.ai # ตัวอย่าง RL พื้นฐาน
+│   │   ├── dqn.ai        # ตัวอย่าง Deep Q-Network
+│   │   └── q_learning.ai # ตัวอย่าง Q-Learning
+│   ├── README.md         # คำอธิบายตัวอย่าง
+│   ├── auto_parameter_guide.ai # คู่มือการตั้งค่าพารามิเตอร์อัตโนมัติ
+│   ├── multiline_syntax_test.ai # ตัวอย่างการใช้ไวยากรณ์หลายบรรทัด
+│   ├── syntax_guide.ai   # คู่มือไวยากรณ์
+│   └── timezone_example.ai # ตัวอย่างการใช้ timezone
+├── tests/                # ไฟล์ทดสอบ
+│   ├── CMakeLists.txt    # ไฟล์ build สำหรับทดสอบ
+│   ├── advanced_error_handling_test.ai # ทดสอบการจัดการข้อผิดพลาดขั้นสูง
+│   ├── error_handling_test.ai # ทดสอบการจัดการข้อผิดพลาดพื้นฐาน
+│   ├── interpreter_test.cpp # ทดสอบ Interpreter
+│   ├── lexer_test.cpp    # ทดสอบ Lexer
+│   └── parser_test.cpp   # ทดสอบ Parser
+├── datasets/             # ข้อมูลตัวอย่างสำหรับทดสอบ
+│   ├── images/           # ข้อมูลรูปภาพสำหรับ CNN
+│   ├── classification_data.csv # ข้อมูลสำหรับการจำแนกประเภท
+│   ├── config.json       # ไฟล์การตั้งค่า
+│   ├── environment.json  # สภาพแวดล้อมสำหรับ RL
+│   ├── iris.csv          # ชุดข้อมูล Iris สำหรับ Neural Network
+│   └── linear_data.csv   # ข้อมูลสำหรับ Linear Regression
+├── build/                # โฟลเดอร์สำหรับไฟล์ที่คอมไพล์
+│   ├── ai_lang           # ไฟล์ executable ที่คอมไพล์แล้ว
+│   └── libai_language_lib.a # ไลบรารีที่คอมไพล์แล้ว
+├── ai_lang               # ไฟล์ executable ในระดับโปรเจกต์
+├── ai_lang.cpp           # โปรแกรมหลัก
+├── CMakeLists.txt        # ไฟล์ build
+├── README.md             # คำอธิบายโปรเจกต์
+├── DEVELOPMENT_NOTES.md  # บันทึกการพัฒนา
+├── SYNTAX_FLOW.md        # เอกสารแสดงการไหลของไวยากรณ์
+├── SYNTAX_REFERENCE.md   # เอกสารอ้างอิงไวยากรณ์
+├── USAGE_GUIDE.md        # คู่มือการใช้งาน
+├── organize_examples.sh  # สคริปต์จัดระเบียบตัวอย่าง
+├── run_example.sh        # สคริปต์รันตัวอย่าง
+├── show_time             # โปรแกรมแสดงเวลา
+└── show_time.cpp         # ซอร์สโค้ดโปรแกรมแสดงเวลา
 ```
 
 ## ส่วนประกอบหลักของภาษา
