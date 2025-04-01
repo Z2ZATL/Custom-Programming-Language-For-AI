@@ -1,0 +1,68 @@
+
+# ตัวอย่างการใช้งานนามสกุลไฟล์โมเดลต่างๆ
+
+# ตัวอย่างที่ 1: บันทึกโมเดล ML ในรูปแบบต่างๆ
+start
+create ML
+load dataset "datasets/linear_data.csv"
+create model LinearRegression
+set learning_rate 0.01
+train model
+# บันทึกโมเดลในรูปแบบต่างๆ
+save model "linear_model.mlmodel"  # นามสกุลเริ่มต้นของ AI Language
+save model "linear_model.pkl"      # นามสกุลของ scikit-learn
+save model "linear_model.joblib"   # นามสกุลทางเลือกสำหรับโมเดลขนาดใหญ่
+save model "linear_model.model"    # นามสกุลทั่วไป
+end
+
+# ตัวอย่างที่ 2: บันทึกโมเดล DL ในรูปแบบต่างๆ
+start
+create DL
+load dataset "datasets/iris.csv"
+create model NeuralNetwork
+add layer input 4
+add layer hidden 8 activation "relu"
+add layer output 3 activation "softmax"
+set learning_rate 0.001
+train model
+# บันทึกโมเดลในรูปแบบต่างๆ
+save model "neural_network.dlmodel" # นามสกุลเริ่มต้นของ AI Language
+save model "neural_network.h5"      # นามสกุลของ Keras/TensorFlow
+save model "neural_network.pt"      # นามสกุลของ PyTorch
+save model "neural_network.onnx"    # นามสกุลที่ใช้ได้กับหลายเฟรมเวิร์ก
+end
+
+# ตัวอย่างที่ 3: บันทึกโมเดล RL ในรูปแบบต่างๆ
+start
+create RL
+load dataset "datasets/environment.json"
+create model QLearning
+set learning_rate 0.1
+set discount_factor 0.9
+train model
+# บันทึกโมเดลในรูปแบบต่างๆ
+save model "q_learning.rlmodel"    # นามสกุลเริ่มต้นของ AI Language
+save model "q_learning.pkl"        # นามสกุลทั่วไปสำหรับ RL แบบพื้นฐาน
+end
+
+# ตัวอย่างที่ 4: โหลดโมเดลจากไฟล์ที่มีนามสกุลต่างๆ
+start
+create ML
+load dataset "datasets/linear_data.csv"
+# โหลดโมเดลจากไฟล์ที่มีนามสกุลต่างๆ
+load model "linear_model.pkl"
+predict [5.0, 2.0, 3.0, 1.0]
+end
+
+# ตัวอย่างที่ 5: ไม่ระบุนามสกุล (ระบบจะเลือกนามสกุลเริ่มต้นให้โดยอัตโนมัติ)
+start
+create DL
+load dataset "datasets/iris.csv" 
+create model NeuralNetwork
+add layer input 4
+add layer hidden 8 activation "relu"
+add layer output 3 activation "softmax"
+train model
+# ไม่ระบุนามสกุล จะใช้นามสกุลเริ่มต้นโดยอัตโนมัติ (.dlmodel)
+save model "auto_extension_model"
+end
