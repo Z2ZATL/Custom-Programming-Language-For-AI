@@ -29,7 +29,7 @@ create ML \
 load dataset "datasets/linear_data.csv"\
 create model LinearRegression\
 train model\
-predict data ;;
+Nomodule data ;;
 
 # 5. ทดสอบการใช้ timezone ที่ไม่ถูกต้อง
 start \
