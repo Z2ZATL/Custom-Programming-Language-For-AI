@@ -6,7 +6,7 @@
 
 namespace ai_language {
 
-void generateLearningCurves(int epochs, const std::string& outputPath = "Program test/Picture");
+void generateLearningCurves(int epochs, const std::string& outputPath = "Program test/Data");
 
 } // namespace ai_language
 
