@@ -592,6 +592,51 @@ void RLInterpreter::handleRunSimulationCommand(const std::vector<std::string>& a
 }
 
 void RLInterpreter::handleEvaluateCommand(const std::vector<std::string>& args) {
+    if (!hasStarted) {
+        std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'start' ก่อน" << RESET << std::endl;
+        return;
+    }
+
+    if (!hasCreatedProject) {
+        std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create RL' ก่อน" << RESET << std::endl;
+        return;
+    }
+
+    if (!hasCreatedModel) {
+        std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create model' ก่อน" << RESET << std::endl;
+        return;
+    }
+
+    if (!hasTrainedModel) {
+        std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'train model' ก่อน" << RESET << std::endl;
+        return;
+    }
+
+    if (args.size() < 1|| args[0] != "model") {
+        std::cerr << RED << "ข้อผิดพลาด: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'evaluate model'" << RESET << std::endl;
+        return;
+    }
+
+    // สร้างค่าสุ่มสำหรับการประเมิน
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> reward_dis(50.0, 500.0);
+    std::uniform_int_distribution<> step_dis(50, 150);
+    std::uniform_real_distribution<> success_dis(0.6, 0.95);
+
+    double avg_reward = reward_dis(gen);
+    int avg_steps = step_dis(gen);
+    double success_rate = success_dis(gen);
+
+    std::cout << BLUE << "Model Evaluation Results:" << RESET << std::endl;
+    std::cout << "┌───────────────────────────┬─────────────┐" << std::endl;
+    std::cout << "│ " << std::setw(25) << std::left << "Metric" << " │ " << std::setw(11) << std::right << "Value" << " │" << std::endl;
+    std::cout << "├───────────────────────────┼─────────────┤" << std::endl;
+    std::cout << "│ " << std::setw(25) << std::left << "Average Reward" << " │ " << std::setw(11) << std::right << std::fixed << std::setprecision(2) << avg_reward << " │" << std::endl;
+    std::cout << "│ " << std::setw(25) << std::left << "Average Steps" << " │ " << std::setw(11) << std::right << avg_steps << " │" << std::endl;
+    std::cout << "│ " << std::setw(25) << std::left << "Success Rate" << " │ " << std::setw(9) << std::right << std::fixed << std::setprecision(2) << (success_rate * 100) << " % │" << std::endl;
+    std::cout << "└───────────────────────────┴─────────────┘" << std::endl;
+}
 
 void RLInterpreter::handleVisualizeCommand(const std::vector<std::string>& args) {
     if (!hasStarted) {
@@ -707,52 +752,6 @@ void RLInterpreter::handleVisualizeCommand(const std::vector<std::string>& args)
         std::cerr << RED << "ข้อผิดพลาด: ประเภทการแสดงผล '" << type << "' ไม่รองรับ" << RESET << std::endl;
         std::cerr << RED << "ประเภทการแสดงผลที่รองรับ: policy, value_function, learning_curve, environment" << RESET << std::endl;
     }
-}
-
-    if (!hasStarted) {
-        std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'start' ก่อน" << RESET << std::endl;
-        return;
-    }
-
-    if (!hasCreatedProject) {
-        std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create RL' ก่อน" << RESET << std::endl;
-        return;
-    }
-
-    if (!hasCreatedModel) {
-        std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create model' ก่อน" << RESET << std::endl;
-        return;
-    }
-
-    if (!hasTrainedModel) {
-        std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'train model' ก่อน" << RESET << std::endl;
-        return;
-    }
-
-    if (args.size() < 1|| args[0] != "model") {
-        std::cerr << RED << "ข้อผิดพลาด: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'evaluate model'" << RESET << std::endl;
-        return;
-    }
-
-    // สร้างค่าสุ่มสำหรับการประเมิน
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<> reward_dis(50.0, 500.0);
-    std::uniform_int_distribution<> step_dis(50, 150);
-    std::uniform_real_distribution<> success_dis(0.6, 0.95);
-
-    double avg_reward = reward_dis(gen);
-    int avg_steps = step_dis(gen);
-    double success_rate = success_dis(gen);
-
-    std::cout << BLUE << "Model Evaluation Results:" << RESET << std::endl;
-    std::cout << "┌───────────────────────────┬─────────────┐" << std::endl;
-    std::cout << "│ " << std::setw(25) << std::left << "Metric" << " │ " << std::setw(11) << std::right << "Value" << " │" << std::endl;
-    std::cout << "├───────────────────────────┼─────────────┤" << std::endl;
-    std::cout << "│ " << std::setw(25) << std::left << "Average Reward" << " │ " << std::setw(11) << std::right << std::fixed << std::setprecision(2) << avg_reward << " │" << std::endl;
-    std::cout << "│ " << std::setw(25) << std::left << "Average Steps" << " │ " << std::setw(11) << std::right << avg_steps << " │" << std::endl;
-    std::cout << "│ " << std::setw(25) << std::left << "Success Rate" << " │ " << std::setw(9) << std::right << std::fixed << std::setprecision(2) << (success_rate * 100) << " % │" << std::endl;
-    std::cout << "└───────────────────────────┴─────────────┘" << std::endl;
 }
 
 std::vector<std::string> RLInterpreter::tokenizeLine(const std::string& line) {
