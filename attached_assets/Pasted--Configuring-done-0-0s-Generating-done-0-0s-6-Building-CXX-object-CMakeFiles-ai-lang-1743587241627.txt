@@ -1,0 +1,35 @@
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+[  6%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/InterpreterFactory.cpp.o
+In file included from /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/std_thread.h:43,
+                 from /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/thread:45,
+                 from /home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:12,
+                 from /home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/InterpreterFactory.h:5,
+                 from /home/runner/workspace/ai_language/src/interpreters/InterpreterFactory.cpp:2:
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/unique_ptr.h: In instantiation of ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = ai_language::MLInterpreter; _Args = {}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<ai_language::MLInterpreter>]’:
+/home/runner/workspace/ai_language/src/interpreters/InterpreterFactory.cpp:13:47:   required from here
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/unique_ptr.h:1070:30: error: invalid new-expression of abstract class type ‘ai_language::MLInterpreter’
+ 1070 |     { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
+      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/runner/workspace/ai_language/src/interpreters/InterpreterFactory.cpp:3:
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/MLInterpreter.h:11:7: note:   because the following virtual functions are pure within ‘ai_language::MLInterpreter’:
+   11 | class MLInterpreter : public BaseInterpreter {
+      |       ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:64:18: note:     ‘virtual void ai_language::BaseInterpreter::handleAddCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+   64 |     virtual void handleAddCommand(const std::vector<std::string>& args) = 0;
+      |                  ^~~~~~~~~~~~~~~~
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/unique_ptr.h: In instantiation of ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = ai_language::RLInterpreter; _Args = {}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<ai_language::RLInterpreter>]’:
+/home/runner/workspace/ai_language/src/interpreters/InterpreterFactory.cpp:17:47:   required from here
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/unique_ptr.h:1070:30: error: invalid new-expression of abstract class type ‘ai_language::RLInterpreter’
+ 1070 |     { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
+      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/runner/workspace/ai_language/src/interpreters/InterpreterFactory.cpp:5:
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/RLInterpreter.h:19:7: note:   because the following virtual functions are pure within ‘ai_language::RLInterpreter’:
+   19 | class RLInterpreter : public BaseInterpreter {
+      |       ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:64:18: note:     ‘virtual void ai_language::BaseInterpreter::handleAddCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+   64 |     virtual void handleAddCommand(const std::vector<std::string>& args) = 0;
+      |                  ^~~~~~~~~~~~~~~~
+make[2]: *** [CMakeFiles/ai_language_lib.dir/build.make:132: CMakeFiles/ai_language_lib.dir/src/interpreters/InterpreterFactory.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:88: CMakeFiles/ai_language_lib.dir/all] Error 2
+make: *** [Makefile:91: all] Error 2
