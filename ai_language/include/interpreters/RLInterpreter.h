@@ -1,55 +1,61 @@
-// interpreters/BaseInterpreter.h
-#ifndef BASEINTERPRETER_H
-#define BASEINTERPRETER_H
 
-class BaseInterpreter {
+/**
+ * @file RLInterpreter.h
+ * @brief Interpreter สำหรับ Reinforcement Learning
+ */
+
+#ifndef AI_LANGUAGE_RL_INTERPRETER_H
+#define AI_LANGUAGE_RL_INTERPRETER_H
+
+#include "BaseInterpreter.h"
+#include <string>
+
+namespace ai_language {
+
+/**
+ * @class RLInterpreter
+ * @brief Interpreter สำหรับแปลและทำงานตามคำสั่ง Reinforcement Learning
+ */
+class RLInterpreter : public BaseInterpreter {
 public:
-  virtual ~BaseInterpreter() {}
-  virtual void interpret() = 0;
+    /**
+     * @brief Constructor
+     */
+    RLInterpreter();
+    
+    /**
+     * @brief Destructor
+     */
+    ~RLInterpreter() override;
+    
+    /**
+     * @brief ฟังก์ชันหลักสำหรับแปลและทำงานตามคำสั่ง
+     */
+    void interpret() override;
+    
+    /**
+     * @brief โหลดโมเดล RL จากไฟล์
+     * @param modelPath พาธของไฟล์โมเดล
+     */
+    void loadModel(const std::string& modelPath);
+    
+    /**
+     * @brief ฝึกโมเดล RL
+     */
+    void trainModel();
+    
+    /**
+     * @brief ประเมินประสิทธิภาพของโมเดล RL
+     */
+    void evaluateModel();
+    
+    /**
+     * @brief บันทึกโมเดล RL ลงไฟล์
+     * @param modelPath พาธของไฟล์โมเดลที่ต้องการบันทึก
+     */
+    void saveModel(const std::string& modelPath);
 };
 
-#endif
+} // namespace ai_language
 
-
-// connectors/BaseConnector.h
-#ifndef BASECONNECTOR_H
-#define BASECONNECTOR_H
-
-class BaseConnector {
-public:
-  virtual ~BaseConnector() {}
-  virtual void connect() = 0;
-};
-
-#endif
-
-
-// main.cpp
-#include "interpreters/BaseInterpreter.h"
-#include "connectors/BaseConnector.h"
-#include <iostream>
-
-class MyInterpreter : public BaseInterpreter {
-public:
-  void interpret() override {
-    std::cout << "Interpreting...\n";
-  }
-};
-
-class MyConnector : public BaseConnector {
-public:
-  void connect() override {
-    std::cout << "Connecting...\n";
-  }
-};
-
-
-int main() {
-  MyInterpreter interpreter;
-  MyConnector connector;
-
-  interpreter.interpret();
-  connector.connect();
-
-  return 0;
-}
+#endif // AI_LANGUAGE_RL_INTERPRETER_H
