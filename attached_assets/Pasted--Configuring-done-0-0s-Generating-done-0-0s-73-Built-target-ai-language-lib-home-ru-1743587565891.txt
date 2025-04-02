@@ -1,0 +1,92 @@
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+[ 73%] Built target ai_language_lib: /home/runner/workspace/ai_language/build
+[ 86%] Built target show_time
+[100%] Built target ai_lang
+DEBUG: Starting ai_lang with 2 arguments
+DEBUG: First argument is -i
+DEBUG: About to enter interactive mode
+DEBUG: Starting interactive mode
+=== โหมดโต้ตอบของภาษา AI ===
+พิมพ์คำสั่งและกด Enter เพื่อดำเนินการ (พิมพ์ 'exit' เพื่อออก)
+รองรับคำสั่งหลายบรรทัด - พิมพ์ '\' แล้วกด Enter เพื่อพิมพ์ต่อในบรรทัดถัดไป
+พิมพ์ ';;' เพื่อดำเนินการทั้งหมด
+
+ตัวอย่างคำสั่ง:
+  start
+  create ML                        # สร้างโปรเจค Machine Learning
+  create DL                        # สร้างโปรเจค Deep Learning
+  create RL                        # สร้างโปรเจค Reinforcement Learning
+  load dataset "datasets/linear_data.csv" type "csv"  # โหลดข้อมูลสำหรับ ML
+  load dataset "datasets/iris.csv" type "csv"         # โหลดข้อมูลสำหรับ DL
+  load environment "datasets/environment.json"         # โหลดสภาพแวดล้อมสำหรับ RL
+  create model LinearRegression    # สร้างโมเดล LinearRegression
+  create model NeuralNetwork       # สร้างโมเดล Neural Network
+  create model QLearning           # สร้างโมเดล Q-Learning
+  set learning_rate 0.01           # ตั้งค่า learning rate
+  set epochs 100                   # ตั้งค่าจำนวนรอบการเรียนรู้
+  train model                      # ฝึกโมเดล
+  evaluate model                   # ประเมินประสิทธิภาพโมเดล
+  show accuracy                    # แสดงความแม่นยำของโมเดล
+  save model "model_name.dat"      # บันทึกโมเดล
+
+ตัวอย่างคำสั่งหลายบรรทัด:
+  start \
+  create ML \
+  load dataset "datasets/linear_data.csv" \
+  create model LinearRegression ;;
+
+คำแนะนำเพิ่มเติม: ดูไฟล์ USAGE_GUIDE.md สำหรับรายละเอียดเพิ่มเติม
+หรือดูตัวอย่างไฟล์ในโฟลเดอร์ examples/
+
+ข้อมูลตัวอย่างอยู่ในโฟลเดอร์ datasets/
+  - linear_data.csv      # สำหรับ Linear Regression
+  - classification_data.csv # สำหรับ Classification
+  - iris.csv             # สำหรับ Neural Network
+  - images/              # สำหรับ CNN
+  - environment.json     # สำหรับ Reinforcement Learning
+  - config.json          # สำหรับการตั้งค่า RL
+
+AI> start \
+create DL \
+load dataset "datasets/iris.csv" type "csv" \
+create model NeuralNetwork \
+add layer input 4 \
+add layer hidden 8 activation "relu" \
+add layer hidden 6 activation "relu" \
+add layer output 3 activation "softmax" \
+set...  learning_rate 0.001 \
+set epochs 100 \
+set batch_size 16 \
+train model \
+evaluate model \
+show accuracy \
+save model "model/dl_test_model.dat" ;;
+... ... ... ... ... ... ... ... ... ... ... ... ... เริ่มต้นการใช้งาน Deep Learning Interpreter...
+กำลังสร้างโมเดล Deep Learning ประเภท: DL
+สร้างโมเดล Neural Network ทั่วไป
+กำลังโหลดข้อมูลจาก: dataset
+กำลังเตรียมข้อมูลสำหรับ Deep Learning...
+กำลังทำ Data Preprocessing...
+กำลังทำ Data Augmentation...
+กำลังสร้างโมเดล Deep Learning ประเภท: model
+สร้างโมเดล Neural Network ทั่วไป
+ไม่รู้จักคำสั่ง: add
+ไม่รู้จักคำสั่ง: add
+ไม่รู้จักคำสั่ง: add
+ไม่รู้จักคำสั่ง: add
+ตั้งค่า learning_rate = 0.001
+ตั้งค่า epochs = 100
+ตั้งค่า batch_size = 16
+กำลังเทรนโมเดล model...
+จำนวน Epochs: 100
+Learning Rate: 0.001
+Batch Size: 16
+Epoch 1/100 - Loss: 0.5 - Accuracy: 0.8
+Epoch 2/100 - Loss: 0.25 - Accuracy: 0.9
+Epoch 3/100 - Loss: 0.166667 - Accuracy: 1
+กำลังประเมินผลโมเดล model...
+ความแม่นยำบนชุดข้อมูลทดสอบ: 0.92
+ค่า Loss บนชุดข้อมูลทดสอบ: 0.08
+ความแม่นยำของโมเดล: 0.89
+กำลังบันทึกโมเดล model ไปที่ model
