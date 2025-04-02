@@ -1,0 +1,106 @@
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/runner/workspace/ai_language/build
+[  6%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/DLInterpreter
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:127:7: error: expected unqualified-id before ‘else’
+  127 |     } else {
+      |       ^~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:132:6: error: ‘DLInterpreter’ has not been declared
+  132 | void DLInterpreter::handleLoadCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: In function ‘void handleLoadCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:133:10: error: ‘hasStarted’ was not declared in this scope
+  133 |     if (!hasStarted) {
+      |          ^~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:143:5: error: ‘datasetPath’ was not declared in this scope
+  143 |     datasetPath = args[0];
+      |     ^~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:151:5: error: ‘hasLoadedData’ was not declared in this scope
+  151 |     hasLoadedData = true;
+      |     ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: At global scope:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:154:6: error: ‘DLInterpreter’ has not been declared
+  154 | void DLInterpreter::handleSetCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: In function ‘void handleSetCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:155:10: error: ‘hasCreatedModel’ was not declared in this scope
+  155 |     if (!hasCreatedModel) {
+      |          ^~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:175:5: error: ‘parameters’ was not declared in this scope
+  175 |     parameters[paramName] = paramValue;
+      |     ^~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: At global scope:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:179:6: error: ‘DLInterpreter’ has not been declared
+  179 | void DLInterpreter::handleTrainCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: In function ‘void handleTrainCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:180:10: error: ‘hasCreatedModel’ was not declared in this scope
+  180 |     if (!hasCreatedModel) {
+      |          ^~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:185:10: error: ‘hasLoadedData’ was not declared in this scope
+  185 |     if (!hasLoadedData) {
+      |          ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:190:47: error: ‘modelType’ was not declared in this scope
+  190 |     std::cout << GREEN << "กำลังเทรนโมเดล " << modelType << "..." << RESET << std::endl;
+      |                                               ^~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:191:46: error: ‘parameters’ was not declared in this scope
+  191 |     std::cout << BLUE << "จำนวน Epochs: " << parameters["epochs"] << RESET << std::endl;
+      |                                              ^~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:201:5: error: ‘hasTrainedModel’ was not declared in this scope
+  201 |     hasTrainedModel = true;
+      |     ^~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: At global scope:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:204:6: error: ‘DLInterpreter’ has not been declared
+  204 | void DLInterpreter::handleEvaluateCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: In function ‘void handleEvaluateCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:205:10: error: ‘hasTrainedModel’ was not declared in this scope
+  205 |     if (!hasTrainedModel) {
+      |          ^~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:211:55: error: ‘modelType’ was not declared in this scope
+  211 |         std::cout << GREEN << "กำลังประเมินผลโมเดล " << modelType << "..." << RESET << std::endl;
+      |                                                       ^~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: At global scope:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:219:6: error: ‘DLInterpreter’ has not been declared
+  219 | void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: In function ‘void handleShowCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:220:10: error: ‘hasTrainedModel’ was not declared in this scope
+  220 |     if (!hasTrainedModel) {
+      |          ^~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:237:51: error: ‘modelType’ was not declared in this scope
+  237 |         std::cout << GREEN << "โครงสร้างโมเดล " << modelType << ":" << RESET << std::endl;
+      |                                                   ^~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:239:13: error: ‘layers’ was not declared in this scope
+  239 |         if (layers.empty()) {
+      |             ^~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:242:58: error: ‘parameters’ was not declared in this scope
+  242 |             std::cout << BLUE << "- Hidden Layer 1: " << parameters["neurons_per_layer"] << " neurons, Activation: ReLU" << RESET << std::endl;
+      |                                                          ^~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:278:5: error: ‘hasShowedAccuracy’ was not declared in this scope
+  278 |     hasShowedAccuracy = true;
+      |     ^~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: At global scope:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:281:6: error: ‘DLInterpreter’ has not been declared
+  281 | void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: In function ‘void handleSaveCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:282:10: error: ‘hasTrainedModel’ was not declared in this scope
+  282 |     if (!hasTrainedModel) {
+      |          ^~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:292:47: error: ‘modelType’ was not declared in this scope
+  292 |     std::cout << GREEN << "กำลังบันทึกโมเดล " << modelType << " ไปที่ " << savePath << RESET << std::endl;
+      |                                               ^~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:293:5: error: ‘hasSavedModel’ was not declared in this scope
+  293 |     hasSavedModel = true;
+      |     ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: At global scope:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:296:6: error: ‘DLInterpreter’ has not been declared
+  296 | void DLInterpreter::handleHelpCommand() {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:309:1: error: expected declaration before ‘}’ token
+  309 | } // namespace ai_language
+      | ^
+make[2]: *** [CMakeFiles/ai_language_lib.dir/build.make:104: CMakeFiles/ai_language_lib.dir/src/interpreters/DLInterpreter.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:88: CMakeFiles/ai_language_lib.dir/all] Error 2
+make: *** [Makefile:91: all] Error 2
