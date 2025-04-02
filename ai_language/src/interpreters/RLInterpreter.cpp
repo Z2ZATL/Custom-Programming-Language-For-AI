@@ -46,7 +46,42 @@ void RLInterpreter::evaluateModel() {
 
 void RLInterpreter::saveModel(const std::string& modelPath) {
     std::cout << "Saving RL model to: " << modelPath << std::endl;
-    // Implementation for saving RL model
+    
+    // ตรวจสอบและสร้างโฟลเดอร์ให้แน่ใจว่ามีอยู่
+    std::string directory = "Program test/model/";
+    struct stat info;
+    if (stat(directory.c_str(), &info) != 0 || !(info.st_mode & S_IFDIR)) {
+        std::string mkdirCmd = "mkdir -p \"" + directory + "\"";
+        system(mkdirCmd.c_str());
+    }
+    
+    // สร้างเส้นทางเต็มสำหรับไฟล์
+    std::string fullPath = directory + modelPath;
+    if (fullPath.find(".rlmodel") == std::string::npos) {
+        fullPath += ".rlmodel";
+    }
+
+    // Get current time for timestamp
+    auto now = std::chrono::system_clock::now();
+    auto time_t_now = std::chrono::system_clock::to_time_t(now);
+    std::string timestamp = std::ctime(&time_t_now);
+    timestamp.pop_back(); // Remove trailing newline
+
+    // บันทึกโมเดลลงไฟล์
+    std::ofstream modelFile(fullPath);
+    if (modelFile.is_open()) {
+        modelFile << "# RL Model saved from AI Language\n";
+        modelFile << "model_type: " << modelType << "\n";
+        modelFile << "discount_factor: " << parameters["gamma"] << "\n";
+        modelFile << "episodes: " << parameters["episodes"] << "\n";
+        modelFile << "exploration_rate: " << parameters["epsilon"] << "\n";
+        modelFile << "create_time: " << timestamp << "\n";
+        modelFile.close();
+        std::cout << "Model successfully saved to: " << fullPath << std::endl;
+        std::cout << "โมเดลถูกบันทึกไปที่ '" << "ai_language/" << fullPath << "'" << std::endl;
+    } else {
+        std::cout << "Error: Could not create model file at: " << fullPath << std::endl;
+    }
 }
 
 // Implement the required virtual functions from BaseInterpreter
