@@ -26,11 +26,11 @@ void printUsage() {
 }
 
 void runInteractiveMode() {
-    std::cout << "DEBUG: Starting interactive mode" << std::endl;
-    std::cout << "=== โหมดโต้ตอบของภาษา AI ===" << std::endl;
-    std::cout << "พิมพ์คำสั่งและกด Enter เพื่อดำเนินการ (พิมพ์ 'exit' เพื่อออก)" << std::endl;
-    std::cout << "รองรับคำสั่งหลายบรรทัด - พิมพ์ '\\' แล้วกด Enter เพื่อพิมพ์ต่อในบรรทัดถัดไป" << std::endl;
-    std::cout << "พิมพ์ ';;' เพื่อดำเนินการทั้งหมด" << std::endl << std::endl;
+    std::cout << "DEBUG: Starting interactive mode" << std::endl << std::flush;
+    std::cout << "=== โหมดโต้ตอบของภาษา AI ===" << std::endl << std::flush;
+    std::cout << "พิมพ์คำสั่งและกด Enter เพื่อดำเนินการ (พิมพ์ 'exit' เพื่อออก)" << std::endl << std::flush;
+    std::cout << "รองรับคำสั่งหลายบรรทัด - พิมพ์ '\\' แล้วกด Enter เพื่อพิมพ์ต่อในบรรทัดถัดไป" << std::endl << std::flush;
+    std::cout << "พิมพ์ ';;' เพื่อดำเนินการทั้งหมด" << std::endl << std::endl << std::flush;
 
     // แสดงคำแนะนำหรือตัวอย่างคำสั่ง
     std::cout << "ตัวอย่างคำสั่ง:" << std::endl;
@@ -77,9 +77,9 @@ void runInteractiveMode() {
     // รับคำสั่งจากผู้ใช้จนกว่าจะพิมพ์ 'exit'
     while (true) {
         if (multiline.empty()) {
-            std::cout << "AI> ";
+            std::cout << "AI> " << std::flush;
         } else {
-            std::cout << "... ";
+            std::cout << "... " << std::flush;
         }
 
         std::getline(std::cin, line);
@@ -140,6 +140,8 @@ void runInteractiveMode() {
     }
 }
 
+} // end namespace ai_language
+
 int main(int argc, char* argv[]) {
     std::cout << "DEBUG: Starting ai_lang with " << argc << " arguments" << std::endl;
     
@@ -153,21 +155,19 @@ int main(int argc, char* argv[]) {
     std::cout << "DEBUG: First argument is " << arg << std::endl;
     
     if (arg == "-h" || arg == "--help") {
-        printUsage();
+        ai_language::printUsage();
         return 0;
     } else if (arg == "-i" || arg == "--interactive") {
-        std::cout << "DEBUG: About to enter interactive mode" << std::endl;
-        runInteractiveMode();
+        std::cout << "DEBUG: About to enter interactive mode" << std::endl << std::flush;
+        ai_language::runInteractiveMode();
         std::cout << "DEBUG: Interactive mode completed" << std::endl;
         return 0;
     } else {
         // ประมวลผลไฟล์
         // สร้าง interpreter ตามประเภทที่พบในไฟล์
-        std::unique_ptr<BaseInterpreter> interpreter = InterpreterFactory::createInterpreterFromFile(arg);
+        std::unique_ptr<ai_language::BaseInterpreter> interpreter = ai_language::InterpreterFactory::createInterpreterFromFile(arg);
         interpreter->interpretFile(arg);
     }
 
     return 0;
 }
-
-} // namespace ai_language
