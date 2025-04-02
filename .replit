@@ -135,3 +135,12 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "cd ai_language && mkdir -p build && cd build && cmake .. && make && cd .. && ./ai_lang examples/rl_examples/dqn.ai"
+
+[[workflows.workflow]]
+name = "Debug Interactive Mode"
+author = 41079146
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd ai_language && mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && cd .. && ./ai_lang -i"
