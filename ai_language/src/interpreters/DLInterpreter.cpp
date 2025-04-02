@@ -306,7 +306,7 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
         pclose(pipe);
 
         if (scriptOutput.find("Error") != std::string::npos) {
-            std::cout << RED << result << RESET << std::endl;
+            std::cout << RED << scriptOutput << RESET << std::endl;
         } else {
             std::cout << BLUE << "ข้อมูลสรุปการเทรนโมเดล:" << RESET << std::endl;
             std::cout << BLUE << "------------------------" << RESET << std::endl;
