@@ -68,6 +68,8 @@ void BaseInterpreter::interpretLine(const std::string& line) {
         handleSetCommand(args);
     } else if (command == "train") {
         handleTrainCommand(args);
+    } else if (command == "evaluate") {
+        handleEvaluateCommand(args);
     } else if (command == "show") {
         handleShowCommand(args);
     } else if (command == "save") {
