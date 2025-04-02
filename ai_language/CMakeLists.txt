@@ -7,12 +7,15 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 # เพิ่มไฟล์ source ทั้งหมด
 set(SOURCES
-    src/BaseInterpreter.cpp
-    src/MLInterpreter.cpp
-    src/DLInterpreter.cpp
-    src/RLInterpreter.cpp
+    src/interpreters/BaseInterpreter.cpp
+    src/interpreters/MLInterpreter.cpp
+    src/interpreters/DLInterpreter.cpp
+    src/interpreters/RLInterpreter.cpp
     src/InterpreterFactory.cpp
-    src/ScikitLearnConnector.cpp
+    src/connectors/ScikitLearnConnector.cpp
+    src/interpreter.cpp
+    src/lexer.cpp
+    src/parser.cpp
 )
 
 # สร้าง library
