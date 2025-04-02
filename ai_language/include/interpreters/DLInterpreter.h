@@ -13,7 +13,16 @@ public:
     
     void interpret();
     
-    // เพิ่มฟังก์ชันที่จำเป็นสำหรับการทำงานกับ Deep Learning
+    // Override virtual functions from BaseInterpreter
+    void setDefaultParameters() override;
+    void handleStartCommand() override;
+    void handleCreateCommand(const std::vector<std::string>& args) override;
+    void handleLoadCommand(const std::vector<std::string>& args) override;
+    void handleSetCommand(const std::vector<std::string>& args) override;
+    void handleTrainCommand(const std::vector<std::string>& args) override;
+    void handleShowCommand(const std::vector<std::string>& args) override;
+    void handleSaveCommand(const std::vector<std::string>& args) override;
+    void handleHelpCommand() override;
 };
 
 } // namespace ai_language
