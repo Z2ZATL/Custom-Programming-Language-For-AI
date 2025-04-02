@@ -5,6 +5,7 @@
 #include <thread>
 #include <chrono>
 #include <sys/stat.h>
+#include <sstream>
 
 namespace ai_language {
 
@@ -96,7 +97,7 @@ void RLInterpreter::handleModelCreation(const std::string& modelName) {
     }
 
     // ตรวจสอบว่ารองรับโมเดลหรือไม่
-    if (modelName != "QLearning" && modelName != "SARSA" && modelName != "DQN" && 
+    if (modelName != "QLearning" && modelName != "SARSA" && modelName != "DQN" &&
         modelName != "A3C" && modelName != "PPO" && modelName != "DDPG") {
         std::cerr << RED << "ข้อผิดพลาด: ไม่รองรับโมเดล '" << modelName << "' สำหรับ Reinforcement Learning" << RESET << std::endl;
         std::cerr << RED << "โมเดลที่รองรับ: QLearning, SARSA, DQN, A3C, PPO, DDPG" << RESET << std::endl;
@@ -134,7 +135,7 @@ void RLInterpreter::handleSetCommand(const std::vector<std::string>& args) {
     std::string valueStr = args[1];
 
     // ตรวจสอบชนิดพารามิเตอร์
-    if (parameter == "learning_rate" || parameter == "discount_factor" || 
+    if (parameter == "learning_rate" || parameter == "discount_factor" ||
         parameter == "exploration_rate" || parameter == "episodes") {
         try {
             double value = std::stod(valueStr);
@@ -329,10 +330,13 @@ void RLInterpreter::handleTrainCommand(const std::vector<std::string>& args) {
     }
 
     // จำลองการฝึกโมเดล RL
-    std::cout << "Training";
-    for (int i = 0; i < 20; i++) { // RL ใช้เวลานานที่สุด
-        std::cout << "." << std::flush;
-        std::this_thread::sleep_for(std::chrono::milliseconds(300));
+    int totalEpisodes = parameters["episodes"];
+    for (int i = 1; i <= totalEpisodes; ++i) {
+        // Simulate training process...replace with actual training loop
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        double reward = (double)i * 10; //Simulate reward
+        double avgReward = (double)i * 5; //Simulate average reward
+        displayTrainingProgress(i, totalEpisodes, reward, avgReward);
     }
     std::cout << std::endl;
 
@@ -578,12 +582,12 @@ void RLInterpreter::handleRunSimulationCommand(const std::vector<std::string>& a
             double reward = reward_dis(gen);
             total_reward += reward;
 
-            std::cout << "  Step " << s << ": State " << state 
-                      << " -> Action " << action 
+            std::cout << "  Step " << s << ": State " << state
+                      << " -> Action " << action
                       << " -> Reward " << std::fixed << std::setprecision(2) << reward << std::endl;
         }
 
-        std::cout << GREEN << "  Episode " << e << " complete. Total steps: " << steps 
+        std::cout << GREEN << "  Episode " << e << " complete. Total steps: " << steps
                   << ", Total reward: " << std::fixed << std::setprecision(2) << total_reward << RESET << std::endl;
         std::cout << std::endl;
     }
@@ -665,7 +669,7 @@ void RLInterpreter::handleVisualizeCommand(const std::vector<std::string>& args)
     }
 
     std::string type = args[0];
-    
+
     if (type == "policy") {
         std::cout << BLUE << "Policy Visualization for " << modelType << ":" << RESET << std::endl;
         std::cout << "┌─────────────────────────────────────────────────────┐" << std::endl;
@@ -733,11 +737,11 @@ void RLInterpreter::handleVisualizeCommand(const std::vector<std::string>& args)
         std::cout << "│   │     │     │     │     │     │                  │" << std::endl;
         std::cout << "│   ├─────┼─────┼─────┼─────┼─────┤                  │" << std::endl;
         std::cout << "│   │     │     │     │     │     │                  │" << std::endl;
-        std::cout << "│   │     │     │  " << RED << "X" << RESET << "  │     │     │                  │" << std::endl;
+        std::cout << "│   │     │  " << RED << "X" << RESET << "  │     │     │     │                  │" << std::endl;
         std::cout << "│   │     │     │     │     │     │                  │" << std::endl;
         std::cout << "│   ├─────┼─────┼─────┼─────┼─────┤                  │" << std::endl;
         std::cout << "│   │     │     │     │     │     │                  │" << std::endl;
-        std::cout << "│   │     │     │     │  " << RED << "X" << RESET << "  │     │                  │" << std::endl;
+        std::cout << "│   │     │     │  " << RED << "X" << RESET << "  │     │     │                  │" << std::endl;
         std::cout << "│   │     │     │     │     │     │                  │" << std::endl;
         std::cout << "│   ├─────┼─────┼─────┼─────┼─────┤                  │" << std::endl;
         std::cout << "│   │     │     │     │     │     │                  │" << std::endl;
@@ -835,6 +839,37 @@ void RLInterpreter::interpretLine(const std::string& line) {
     } else {
         std::cerr << RED << "ข้อผิดพลาด: ไม่รู้จักคำสั่ง '" << command << "'" << RESET << std::endl;
     }
+}
+
+void RLInterpreter::displayTrainingProgress(int episode, int totalEpisodes, double reward, double avgReward) {
+    // คำนวณเปอร์เซ็นต์ความคืบหน้า
+    const int progress = static_cast<int>((static_cast<double>(episode) / totalEpisodes) * 100);
+    const int barPosition = progress / 2;
+
+    // ใช้ stringstream เพื่อลดการเรียก I/O หลายครั้ง
+    std::stringstream progressBar;
+    progressBar << "\rTraining progress: [";
+
+    // สร้างแถบความคืบหน้าที่มีประสิทธิภาพมากขึ้น
+    for (int i = 0; i < 50; i++) {
+        if (i < barPosition) {
+            progressBar << "=";
+        } else if (i == barPosition) {
+            progressBar << ">";
+        } else {
+            progressBar << " ";
+        }
+    }
+
+    // ตั้งค่าความละเอียดตัวเลขเพียงครั้งเดียว
+    progressBar << "] " << progress << "% ";
+    progressBar << "Episode: " << episode << "/" << totalEpisodes << " ";
+    progressBar << std::fixed << std::setprecision(2);
+    progressBar << "Reward: " << reward << " ";
+    progressBar << "Avg Reward: " << avgReward;
+
+    // แสดงผลเพียงครั้งเดียว
+    std::cout << progressBar.str() << std::flush;
 }
 
 } // namespace ai_language

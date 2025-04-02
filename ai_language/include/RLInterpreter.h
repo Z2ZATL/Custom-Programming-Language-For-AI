@@ -40,7 +40,7 @@ public:
     // เมธอดเพิ่มเติมสำหรับ RL
     void handleModelCreation(const std::string& modelName);
     void displayTrainingProgress(int episode, int totalEpisodes, double reward, double avgReward);
-    void displayModel(const std::string& metric);
+    void displayModel(const std::string& metric) const;
 };
 
 } // namespace ai_language
