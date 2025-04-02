@@ -1,6 +1,5 @@
 #include "../../include/interpreters/BaseInterpreter.h"
 #include "../../include/interpreters/InterpreterFactory.h"
-
 // ... rest of the code (assuming it exists and needs appropriate include path adjustments) ...
 #include "../../include/interpreters/BaseInterpreter.h"
 #include "../../include/interpreters/InterpreterFactory.h"
@@ -13,10 +12,10 @@ std::string BaseInterpreter::getCurrentDateTime() const {
     // Get current time
     auto now = std::chrono::system_clock::now();
     auto time = std::chrono::system_clock::to_time_t(now);
-    
+
     // Add timezone offset
     time += userTimezoneOffset * 3600;
-    
+
     // Format time
     std::stringstream ss;
     ss << std::put_time(std::localtime(&time), "%Y-%m-%d %H:%M:%S");
@@ -36,7 +35,7 @@ void BaseInterpreter::interpretFile(const std::string& filename) {
         if (line.empty() || line[0] == '#') {
             continue;
         }
-        
+
         interpretLine(line);
     }
 }
@@ -76,6 +75,8 @@ void BaseInterpreter::interpretLine(const std::string& line) {
         handleSaveCommand(args);
     } else if (command == "help") {
         handleHelpCommand();
+    } else if (command == "add") {
+        handleAddCommand(args);
     } else {
         std::cout << RED << "ไม่รู้จักคำสั่ง: " << command << RESET << std::endl;
     }
