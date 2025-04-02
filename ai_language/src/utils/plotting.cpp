@@ -146,26 +146,20 @@ void generateLearningCurves(int epochs, const std::string& outputPath) {
     
     htmlFile.close();
     
-    // สร้างไฟล์ PNG (อาจใช้คำสั่ง Chrome headless หรือเครื่องมืออื่นในการแปลง HTML เป็น PNG)
+    // สร้างไฟล์ PNG ด้วย ImageMagick
     std::string pngPath = outputPath + "/learning_curves.png";
     
-    // ตรวจสอบว่ามี wkhtmltoimage หรือ ImageMagick หรือไม่
-    std::string convert_cmd = "which wkhtmltoimage > /dev/null 2>&1 && wkhtmltoimage " + htmlPath + " " + pngPath;
-    int wk_result = system(convert_cmd.c_str());
+    // ใช้ ImageMagick เพื่อแปลง HTML เป็น PNG
+    std::string convert_cmd = "which convert > /dev/null 2>&1 && convert -quality 100 -resize 1200x800 " + htmlPath + " " + pngPath;
+    int img_result = system(convert_cmd.c_str());
     
-    // ถ้าไม่มี wkhtmltoimage ลองใช้ ImageMagick
-    if (wk_result != 0) {
-        convert_cmd = "which convert > /dev/null 2>&1 && convert -size 1000x600 " + htmlPath + " " + pngPath;
-        int img_result = system(convert_cmd.c_str());
-        
-        if (img_result != 0) {
-            // ถ้าไม่มีทั้ง wkhtmltoimage และ ImageMagick ให้สร้างไฟล์ PNG ง่ายๆ
-            std::ofstream pngFile(pngPath);
-            if (pngFile.is_open()) {
-                pngFile << "<This is a placeholder for PNG image. Please open the HTML file for the actual graph.>";
-                pngFile.close();
-                std::cout << "Created placeholder PNG file. For actual graph, please view the HTML file." << std::endl;
-            }
+    if (img_result != 0) {
+        // ถ้าไม่มี ImageMagick ให้สร้างไฟล์ PNG ง่ายๆ
+        std::ofstream pngFile(pngPath);
+        if (pngFile.is_open()) {
+            pngFile << "<This is a placeholder for PNG image. Please open the HTML file for the actual graph.>";
+            pngFile.close();
+            std::cout << "ImageMagick not found. Created placeholder PNG file. For actual graph, please view the HTML file." << std::endl;
         }
     }
     
