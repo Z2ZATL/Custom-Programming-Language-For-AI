@@ -147,9 +147,9 @@ void RLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
     std::string showType = args[0];
 
     if (showType == "parameters") {
-        std::cout << "Episodes: " << episodes << std::endl;
-        std::cout << "Discount factor: " << discountFactor << std::endl;
-        std::cout << "Exploration rate: " << explorationRate << std::endl;
+        std::cout << "Episodes: " << parameters["episodes"] << std::endl;
+        std::cout << "Discount factor: " << parameters["gamma"] << std::endl;
+        std::cout << "Exploration rate: " << parameters["epsilon"] << std::endl;
         // Display other parameters as needed
     } else if (showType == "performance") {
         if (!hasTrained) {

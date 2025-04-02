@@ -71,6 +71,8 @@ private:
     std::map<std::string, double> parameters;
     bool hasLoadedData;
     bool hasCreatedModel;
+    bool hasTrained;
+    bool hasEvaluated;
 };
 
 } // namespace ai_language
