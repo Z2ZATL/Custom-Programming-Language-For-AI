@@ -235,15 +235,10 @@ void MLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
             // เรียกใช้ฟังก์ชัน generateLearningCurves จาก plotting.h
             int epochs = static_cast<int>(parameters["epochs"]);
             ai_language::generateLearningCurves(epochs, "Program test/Picture");
-            std::cout << "Graph generated successfully." << std::endl;
-        } catch (const std::exception& e) {
-            std::cerr << "Error generating graph: " << e.what() << std::endl;
-        }ียกใช้ฟังก์ชันสร้างกราฟด้วย C++
-            ai_language::generateLearningCurves(parameters["epochs"], "Program test/Picture");
             std::cout << "Graph saved as 'Program test/Picture/learning_curves.png'" << std::endl;
             std::cout << "To view the graph, open the file in a image viewer or web browser" << std::endl;
         } catch (const std::exception& e) {
-            std::cout << "Error: Failed to create graph: " << e.what() << std::endl;
+            std::cerr << "Error generating graph: " << e.what() << std::endl;
         }
     } else {
         std::cout << "Unknown show type: " << showType << std::endl;
