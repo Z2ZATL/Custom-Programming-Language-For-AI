@@ -266,8 +266,15 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
     } else if (showType == "graph") {
         std::cout << GREEN << "กำลังสร้างกราฟผลการเทรนโมเดล " << modelType << "..." << RESET << std::endl;
 
-        // กำหนดเส้นทางสำหรับเก็บไฟล์กราฟ (ใช้โฟลเดอร์ที่มีอยู่แล้ว)
+        // กำหนดเส้นทางสำหรับเก็บไฟล์กราฟและสร้างไดเรกทอรีถ้ายังไม่มี
         std::string dataDir = "ai_language/Program test/Data";
+        
+        // สร้างไดเรกทอรีถ้ายังไม่มี
+        std::string mkdirCmd = "mkdir -p \"" + dataDir + "\"";
+        int dirResult = system(mkdirCmd.c_str());
+        if (dirResult != 0) {
+            std::cout << YELLOW << "คำเตือน: ไม่สามารถสร้างไดเรกทอรี " << dataDir << ". กราฟอาจไม่ถูกบันทึก." << RESET << std::endl;
+        }
 
         // จำลองข้อมูลการเทรนสำหรับสร้างกราฟ
         std::string csvPath = dataDir + "/dl_learning_curves_data.csv";
