@@ -372,13 +372,19 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
         return;
     }
 
-    std::string savePath = "Program test/model/model.dlmodel";
+    std::string savePath = "Program test/model/dl_model.dlmodel";
     if (args.size() >= 1) {
+        std::string fileName = args[0];
         // ถ้ามีการระบุเส้นทางที่ไม่ได้ขึ้นต้นด้วย / หรือ ./ ให้เพิ่มเส้นทาง default
-        if (args[0][0] != '/' && (args[0].size() < 2 || args[0].substr(0, 2) != "./")) {
-            savePath = "Program test/model/" + args[0];
+        if (fileName[0] != '/' && (fileName.size() < 2 || fileName.substr(0, 2) != "./")) {
+            savePath = "Program test/model/" + fileName;
         } else {
-            savePath = args[0];
+            savePath = fileName;
+        }
+        
+        // เพิ่มนามสกุลไฟล์ .dlmodel ถ้าไม่มีการระบุนามสกุล
+        if (savePath.find('.') == std::string::npos) {
+            savePath += ".dlmodel";
         }
     }
 
