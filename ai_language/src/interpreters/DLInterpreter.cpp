@@ -264,14 +264,8 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
     } else if (showType == "graph") {
         std::cout << GREEN << "กำลังสร้างกราฟผลการเทรนโมเดล " << modelType << "..." << RESET << std::endl;
         
-        // สร้างโฟลเดอร์สำหรับเก็บไฟล์กราฟ
+        // กำหนดเส้นทางสำหรับเก็บไฟล์กราฟ (ใช้โฟลเดอร์ที่มีอยู่แล้ว)
         std::string dataDir = "ai_language/Program test/Data";
-        std::string command = "mkdir -p \"" + dataDir + "\"";
-        int mkdirResult = system(command.c_str());
-        if (mkdirResult != 0) {
-            std::cout << RED << "เกิดข้อผิดพลาดในการสร้างโฟลเดอร์: " << dataDir << RESET << std::endl;
-            return;
-        }
 
         // จำลองข้อมูลการเทรนสำหรับสร้างกราฟ
         std::string csvPath = dataDir + "/dl_learning_curves_data.csv";
@@ -386,16 +380,11 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
         }
     }
     
-    // สร้างโฟลเดอร์สำหรับบันทึกโมเดล (ถ้ามีการระบุ path ที่มี directory)
+    // ตรวจสอบว่าโฟลเดอร์มีอยู่หรือไม่ แต่ไม่สร้างใหม่
     size_t lastSlash = savePath.find_last_of("/\\");
     if (lastSlash != std::string::npos) {
         std::string directory = savePath.substr(0, lastSlash);
-        std::string command = "mkdir -p \"" + directory + "\"";
-        int result = system(command.c_str());
-        if (result != 0) {
-            std::cout << RED << "เกิดข้อผิดพลาดในการสร้างโฟลเดอร์: " << directory << RESET << std::endl;
-            return;
-        }
+        // ไม่ต้องสร้างโฟลเดอร์ใหม่เนื่องจากมีอยู่แล้ว
     }
 
     std::cout << GREEN << "กำลังบันทึกโมเดล " << modelType << " ไปที่ " << savePath << RESET << std::endl;
