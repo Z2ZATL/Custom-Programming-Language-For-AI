@@ -42,46 +42,12 @@ void generateLearningCurves(int epochs, const std::string& outputPath) {
         dataFile << x[i] << "," << loss[i] << "," << accuracy[i] << std::endl;
     }
     dataFile.close();
-
-    // สร้างไฟล์ Python script สำหรับสร้างกราฟ
-    std::string pythonScriptPath = outputPath + "/generate_plot.py";
-    std::ofstream pythonScript(pythonScriptPath);
     
-    if (!pythonScript.is_open()) {
-        std::cerr << "Error: Could not create Python script for plotting" << std::endl;
-        std::cout << "ข้อมูลได้รับการบันทึกเป็นไฟล์ CSV: " << dataPath << std::endl;
-        return;
-    }
+    // ใช้ไฟล์ plot_generator.py ที่มีอยู่แล้วในการสร้างกราฟ
+    std::string scriptPath = "./src/utils/plot_generator.py";
     
-    // เขียนโค้ด Python สำหรับสร้างกราฟ
-    pythonScript << "import matplotlib.pyplot as plt\n";
-    pythonScript << "import pandas as pd\n";
-    pythonScript << "import os\n\n";
-    pythonScript << "# อ่านข้อมูลจากไฟล์ CSV\n";
-    pythonScript << "data = pd.read_csv('" << dataPath << "')\n\n";
-    pythonScript << "# สร้างกราฟ\n";
-    pythonScript << "plt.figure(figsize=(10, 6))\n";
-    pythonScript << "plt.subplot(2, 1, 1)\n";
-    pythonScript << "plt.plot(data['Epoch'], data['Loss'], 'r-', label='Loss')\n";
-    pythonScript << "plt.title('Learning Curves')\n";
-    pythonScript << "plt.ylabel('Loss')\n";
-    pythonScript << "plt.grid(True)\n";
-    pythonScript << "plt.legend()\n\n";
-    pythonScript << "plt.subplot(2, 1, 2)\n";
-    pythonScript << "plt.plot(data['Epoch'], data['Accuracy'], 'b-', label='Accuracy')\n";
-    pythonScript << "plt.xlabel('Epoch')\n";
-    pythonScript << "plt.ylabel('Accuracy')\n";
-    pythonScript << "plt.grid(True)\n";
-    pythonScript << "plt.legend()\n\n";
-    pythonScript << "# บันทึกกราฟเป็นไฟล์ PNG\n";
-    pythonScript << "plt.tight_layout()\n";
-    pythonScript << "plt.savefig('" << outputPath << "/learning_curves.png')\n";
-    pythonScript << "print('Plot saved as " << outputPath << "/learning_curves.png')\n";
-    
-    pythonScript.close();
-    
-    // รันไฟล์ Python script
-    std::string command = "python3 " + pythonScriptPath;
+    // รันคำสั่ง Python เพื่อสร้างกราฟ
+    std::string command = "python3 " + scriptPath + " \"" + dataPath + "\" \"" + outputPath + "\"";
     int result = system(command.c_str());
     
     if (result == 0) {
