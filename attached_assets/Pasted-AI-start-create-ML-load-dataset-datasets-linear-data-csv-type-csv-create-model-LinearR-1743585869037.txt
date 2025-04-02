@@ -1,0 +1,163 @@
+AI> start \
+create ML \
+load dataset "datasets/linear_data.csv" type "csv" \
+create model LinearRegression \
+set learning_rate 0.01 \
+set epochs 50 \
+set batch_size 32 \
+train model \
+evaluate model \
+show accuracy \
+show loss \
+save model "model/ml_test_model.dat" ;;... ... ... ... ... ... ... ... ... ... ... 
+Starting Machine Learning interpreter...
+Creating ML environment
+Loading dataset from: "datasets/linear_data.csv"
+Creating ML model: LinearRegression
+Set learning_rate = 0.01
+Set epochs = 50
+Set batch_size = 32
+Training ML model...
+Evaluating ML model performance...
+Model accuracy: 0.95
+Model loss: 0.05
+Saving ML model to: "model/ml_test_model.dat"
+AI> start \
+create DL \
+load dataset "datasets/iris.csv" type "csv" \
+create model NeuralNetwork \
+add layer input 4 \
+add layer hidden 8 activation "relu" \
+add layer hidden 6 activation "relu" \
+add layer output 3 activation "softmax" \
+set...  learning_rate 0.001 \
+set epochs 100 \
+set batch_size 16 \
+train model \
+evaluate model \
+show accuracy \
+save model "model/dl_test_model.dat" ;;
+... ... ... ... ... ... ... ... ... ... ... ... ... เริ่มต้นการใช้งาน Deep Learning Interpreter...
+กำลังสร้างโมเดล Deep Learning ประเภท: DL
+สร้างโมเดล Neural Network ทั่วไป
+กำลังโหลดข้อมูลจาก: dataset
+กำลังเตรียมข้อมูลสำหรับ Deep Learning...
+กำลังทำ Data Preprocessing...
+กำลังทำ Data Augmentation...
+กำลังสร้างโมเดล Deep Learning ประเภท: model
+สร้างโมเดล Neural Network ทั่วไป
+ไม่รู้จักคำสั่ง: add
+ไม่รู้จักคำสั่ง: add
+ไม่รู้จักคำสั่ง: add
+ไม่รู้จักคำสั่ง: add
+ตั้งค่า learning_rate = 0.001
+ตั้งค่า epochs = 100
+ตั้งค่า batch_size = 16
+กำลังเทรนโมเดล model...
+จำนวน Epochs: 100
+Learning Rate: 0.001
+Batch Size: 16
+Epoch 1/100 - Loss: 0.5 - Accuracy: 0.8
+Epoch 2/100 - Loss: 0.25 - Accuracy: 0.9
+Epoch 3/100 - Loss: 0.166667 - Accuracy: 1
+กำลังประเมินผลโมเดล model...
+ความแม่นยำบนชุดข้อมูลทดสอบ: 0.92
+ค่า Loss บนชุดข้อมูลทดสอบ: 0.08
+ความแม่นยำของโมเดล: 0.89
+กำลังบันทึกโมเดล model ไปที่ model
+AI> start \
+create RL \
+load dataset "datasets/environment.json" \
+create model QLearning \
+set episodes 500 \
+set discount_factor 0.9 \
+set exploration_rate 0.3 \
+train model \
+evaluate model \
+show performance \
+save model "model/rl_tes... t_model.dat" ;;
+... ... ... ... ... ... ... ... ... Starting Reinforcement Learning interpreter...
+Creating RL model: RL
+Loading dataset from: "datasets/environment.json"
+Creating RL model: model
+Set episodes = 500
+Set discount_factor = 0.9
+Set exploration_rate = 0.3
+Training RL model...
+Evaluating RL model performance...
+Evaluating RL model performance...
+Average reward: 85.2
+Success rate: 0.78
+Saving RL model to: "model/rl_test_model.dat"
+AI> start \
+create ML \
+load dataset "datasets/linear_data.csv" type "csv" \
+create model LinearRegression \
+set learning_rate 0.01 \
+train model \
+show accuracy \
+save model "model/test_model_1.dat" ;;
+start \
+create DL \
+load dataset "da... tasets/iris.csv" type "csv" \
+create model NeuralNetwork \
+add layer input 4 \
+add layer hidden 8 activation "relu" \
+add layer output 3 activation "softmax" \
+set learning_ra... te 0.001 \
+set epochs 50 \
+train model \
+show accuracy \
+show loss \
+save model "model/test_model_2.dat" ;;
+start \
+create RL \
+load dataset "datasets/en... vironment.json" \
+create model QLearning \
+set epis... odes 300 \
+train model \
+show performance \
+... save model "model/test_model_3.dat" ;;... ... Starting Machine Learning interpreter...
+Creating ML environment
+Loading dataset from: "datasets/linear_data.csv"
+Creating ML model: LinearRegression
+Set learning_rate = 0.01
+Training ML model...
+Model accuracy: 0.95
+Saving ML model to: "model/test_model_1.dat"
+AI> ... ... ... ... ... ... ... ... ... ... ... ... เริ่มต้นการใช้งาน Deep Learning Interpreter...
+กำลังสร้างโมเดล Deep Learning ประเภท: DL
+สร้างโมเดล Neural Network ทั่วไป
+กำลังโหลดข้อมูลจาก: dataset
+กำลังเตรียมข้อมูลสำหรับ Deep Learning...
+กำลังทำ Data Preprocessing...
+กำลังทำ Data Augmentation...
+กำลังสร้างโมเดล Deep Learning ประเภท: model
+สร้างโมเดล Neural Network ทั่วไป
+ไม่รู้จักคำสั่ง: add
+ไม่รู้จักคำสั่ง: add
+ไม่รู้จักคำสั่ง: add
+ตั้งค่า learning_rate = 0.001
+ตั้งค่า epochs = 50
+กำลังเทรนโมเดล model...
+จำนวน Epochs: 50
+Learning Rate: 0.001
+Batch Size: 0
+Epoch 1/50 - Loss: 0.5 - Accuracy: 0.8
+Epoch 2/50 - Loss: 0.25 - Accuracy: 0.9
+Epoch 3/50 - Loss: 0.166667 - Accuracy: 1
+ความแม่นยำของโมเดล: 0.89
+ค่า Loss: 0.134
+กำลังบันทึกโมเดล model ไปที่ model
+AI> ... ... ... ... ... ... ... 
+Starting Reinforcement Learning interpreter...
+Creating RL model: RL
+Loading dataset from: "datasets/environment.json"
+Creating RL model: model
+Set episodes = 300
+Training RL model...
+Evaluating RL model performance...
+Average reward: 85.2
+Success rate: 0.78
+Saving RL model to: "model/test_model_3.dat"
+AI> 
