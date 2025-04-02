@@ -167,6 +167,12 @@ private:
      * @param params พารามิเตอร์ของคำสั่ง
      */
     void handlePlotCommand(const std::map<std::string, std::string>& params);
+    
+    /**
+     * @brief ดำเนินการเมื่อต้องการเพิ่มองค์ประกอบ เช่น layer
+     * @param params พารามิเตอร์ของคำสั่ง
+     */
+    void handleAddCommand(const std::map<std::string, std::string>& params);
 };
 
 } // namespace ai_language
