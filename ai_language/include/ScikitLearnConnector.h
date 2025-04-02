@@ -24,7 +24,7 @@ private:
     // สร้างไฟล์ Python ชั่วคราวสำหรับการเทรนโมเดล
     std::string createTemporaryPythonScript(const std::string& modelType, 
                                           const std::string& datasetPath, 
-                                          const std::map<std::string, double>& parameters);
+                                          const std::map<std::string, double>& parameters) const;
 };
 
 } // namespace ai_language
