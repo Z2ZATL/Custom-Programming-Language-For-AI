@@ -146,27 +146,74 @@ void generateLearningCurves(int epochs, const std::string& outputPath) {
     
     htmlFile.close();
     
-    // สร้างไฟล์ PNG
+    // สร้างไฟล์ PNG โดยตรงด้วย GNUPlot
     std::string pngPath = outputPath + "/learning_curves.png";
+    std::string gnuplotDataPath = outputPath + "/gnuplot_data.dat";
     
-    // ลองใช้ wkhtmltoimage ก่อน (ถ้ามี)
-    std::string wkhtmltoimage_cmd = "mkdir -p \"" + outputPath + "\" && which wkhtmltoimage > /dev/null 2>&1 && wkhtmltoimage --quality 100 \"" + htmlPath + "\" \"" + pngPath + "\"";
-    int wk_result = system(wkhtmltoimage_cmd.c_str());
-    
-    // ถ้าไม่มี wkhtmltoimage ลองใช้ ImageMagick
-    if (wk_result != 0) {
-        std::string convert_cmd = "which convert > /dev/null 2>&1 && convert -quality 100 \"" + htmlPath + "\" \"" + pngPath + "\"";
-        int img_result = system(convert_cmd.c_str());
+    // สร้างไฟล์ข้อมูลสำหรับ GNUPlot
+    std::ofstream gnuplotDataFile(gnuplotDataPath);
+    if (!gnuplotDataFile.is_open()) {
+        std::cerr << "Error: Could not create GNUPlot data file." << std::endl;
+    } else {
+        // เขียนข้อมูลสำหรับ GNUPlot
+        gnuplotDataFile << "# Epoch Loss Accuracy" << std::endl;
+        for (int i = 0; i < epochs; i++) {
+            gnuplotDataFile << (i+1) << " " << loss[i] << " " << accuracy[i] << std::endl;
+        }
+        gnuplotDataFile.close();
         
-        // ถ้าไม่มีทั้ง wkhtmltoimage และ ImageMagick ให้สร้างไฟล์ PNG ง่ายๆ
-        if (img_result != 0) {
-            std::ofstream pngFile(pngPath);
-            if (pngFile.is_open()) {
-                pngFile << "<This is a placeholder for PNG image. Please open the HTML file for the actual graph.>";
-                pngFile.close();
-                std::cout << "Image converters not found. Created placeholder PNG file. For actual graph, please view the HTML file." << std::endl;
-            } else {
-                std::cerr << "Error: Could not create placeholder PNG file at " << pngPath << std::endl;
+        // สร้างไฟล์สคริปต์ GNUPlot
+        std::string gnuplotScriptPath = outputPath + "/gnuplot_script.plt";
+        std::ofstream gnuplotScript(gnuplotScriptPath);
+        
+        if (!gnuplotScript.is_open()) {
+            std::cerr << "Error: Could not create GNUPlot script file." << std::endl;
+        } else {
+            // เขียนสคริปต์ GNUPlot
+            gnuplotScript << "set terminal pngcairo size 1000,600 enhanced font 'Verdana,10'" << std::endl;
+            gnuplotScript << "set output '" << pngPath << "'" << std::endl;
+            gnuplotScript << "set multiplot layout 1,2 title 'Learning Curves'" << std::endl;
+            gnuplotScript << "set grid" << std::endl;
+            
+            // กราฟแรก (Loss)
+            gnuplotScript << "set title 'Loss vs Epochs'" << std::endl;
+            gnuplotScript << "set xlabel 'Epochs'" << std::endl;
+            gnuplotScript << "set ylabel 'Loss'" << std::endl;
+            gnuplotScript << "plot '" << gnuplotDataPath << "' using 1:2 with lines lw 2 lt rgb 'red' title 'Loss'" << std::endl;
+            
+            // กราฟที่สอง (Accuracy)
+            gnuplotScript << "set title 'Accuracy vs Epochs'" << std::endl;
+            gnuplotScript << "set xlabel 'Epochs'" << std::endl;
+            gnuplotScript << "set ylabel 'Accuracy'" << std::endl;
+            gnuplotScript << "plot '" << gnuplotDataPath << "' using 1:3 with lines lw 2 lt rgb 'blue' title 'Accuracy'" << std::endl;
+            
+            gnuplotScript << "unset multiplot" << std::endl;
+            gnuplotScript.close();
+            
+            // รันสคริปต์ GNUPlot
+            std::string gnuplot_cmd = "which gnuplot > /dev/null 2>&1 && gnuplot \"" + gnuplotScriptPath + "\"";
+            int gnuplot_result = system(gnuplot_cmd.c_str());
+            
+            if (gnuplot_result != 0) {
+                // ถ้าไม่มี GNUPlot ลองใช้ wkhtmltoimage หรือ ImageMagick เหมือนเดิม
+                std::string wkhtmltoimage_cmd = "which wkhtmltoimage > /dev/null 2>&1 && wkhtmltoimage --quality 100 \"" + htmlPath + "\" \"" + pngPath + "\"";
+                int wk_result = system(wkhtmltoimage_cmd.c_str());
+                
+                if (wk_result != 0) {
+                    std::string convert_cmd = "which convert > /dev/null 2>&1 && convert -quality 100 \"" + htmlPath + "\" \"" + pngPath + "\"";
+                    int img_result = system(convert_cmd.c_str());
+                    
+                    if (img_result != 0) {
+                        std::ofstream pngFile(pngPath);
+                        if (pngFile.is_open()) {
+                            pngFile << "<This is a placeholder for PNG image. Please open the HTML file for the actual graph.>";
+                            pngFile.close();
+                            std::cout << "Image converters not found. Created placeholder PNG file. For actual graph, please view the HTML file." << std::endl;
+                        } else {
+                            std::cerr << "Error: Could not create placeholder PNG file at " << pngPath << std::endl;
+                        }
+                    }
+                }
             }
         }
     }
