@@ -69,28 +69,28 @@ include CMakeFiles/ai_lang.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/ai_lang.dir/flags.make
 
-CMakeFiles/ai_lang.dir/ai_lang.cpp.o: CMakeFiles/ai_lang.dir/flags.make
-CMakeFiles/ai_lang.dir/ai_lang.cpp.o: /home/runner/workspace/ai_language/ai_lang.cpp
-CMakeFiles/ai_lang.dir/ai_lang.cpp.o: CMakeFiles/ai_lang.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/workspace/ai_language/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/ai_lang.dir/ai_lang.cpp.o"
-	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ai_lang.dir/ai_lang.cpp.o -MF CMakeFiles/ai_lang.dir/ai_lang.cpp.o.d -o CMakeFiles/ai_lang.dir/ai_lang.cpp.o -c /home/runner/workspace/ai_language/ai_lang.cpp
+CMakeFiles/ai_lang.dir/src/ai_lang.cpp.o: CMakeFiles/ai_lang.dir/flags.make
+CMakeFiles/ai_lang.dir/src/ai_lang.cpp.o: /home/runner/workspace/ai_language/src/ai_lang.cpp
+CMakeFiles/ai_lang.dir/src/ai_lang.cpp.o: CMakeFiles/ai_lang.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/workspace/ai_language/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/ai_lang.dir/src/ai_lang.cpp.o"
+	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ai_lang.dir/src/ai_lang.cpp.o -MF CMakeFiles/ai_lang.dir/src/ai_lang.cpp.o.d -o CMakeFiles/ai_lang.dir/src/ai_lang.cpp.o -c /home/runner/workspace/ai_language/src/ai_lang.cpp
 
-CMakeFiles/ai_lang.dir/ai_lang.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/ai_lang.dir/ai_lang.cpp.i"
-	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/runner/workspace/ai_language/ai_lang.cpp > CMakeFiles/ai_lang.dir/ai_lang.cpp.i
+CMakeFiles/ai_lang.dir/src/ai_lang.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/ai_lang.dir/src/ai_lang.cpp.i"
+	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/runner/workspace/ai_language/src/ai_lang.cpp > CMakeFiles/ai_lang.dir/src/ai_lang.cpp.i
 
-CMakeFiles/ai_lang.dir/ai_lang.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/ai_lang.dir/ai_lang.cpp.s"
-	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/runner/workspace/ai_language/ai_lang.cpp -o CMakeFiles/ai_lang.dir/ai_lang.cpp.s
+CMakeFiles/ai_lang.dir/src/ai_lang.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/ai_lang.dir/src/ai_lang.cpp.s"
+	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/runner/workspace/ai_language/src/ai_lang.cpp -o CMakeFiles/ai_lang.dir/src/ai_lang.cpp.s
 
 # Object files for target ai_lang
 ai_lang_OBJECTS = \
-"CMakeFiles/ai_lang.dir/ai_lang.cpp.o"
+"CMakeFiles/ai_lang.dir/src/ai_lang.cpp.o"
 
 # External object files for target ai_lang
 ai_lang_EXTERNAL_OBJECTS =
 
-/home/runner/workspace/ai_language/ai_lang: CMakeFiles/ai_lang.dir/ai_lang.cpp.o
+/home/runner/workspace/ai_language/ai_lang: CMakeFiles/ai_lang.dir/src/ai_lang.cpp.o
 /home/runner/workspace/ai_language/ai_lang: CMakeFiles/ai_lang.dir/build.make
 /home/runner/workspace/ai_language/ai_lang: libai_language_lib.a
 /home/runner/workspace/ai_language/ai_lang: CMakeFiles/ai_lang.dir/link.txt

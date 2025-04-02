@@ -130,6 +130,19 @@ ai_language_lib/fast:
 .PHONY : ai_language_lib/fast
 
 #=============================================================================
+# Target rules for targets named show_time
+
+# Build rule for target.
+show_time: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 show_time
+.PHONY : show_time
+
+# fast build rule for target.
+show_time/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/show_time.dir/build.make CMakeFiles/show_time.dir/build
+.PHONY : show_time/fast
+
+#=============================================================================
 # Target rules for targets named ai_lang
 
 # Build rule for target.
@@ -155,29 +168,29 @@ run/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/run.dir/build.make CMakeFiles/run.dir/build
 .PHONY : run/fast
 
-ai_lang.o: ai_lang.cpp.o
-.PHONY : ai_lang.o
+src/ai_lang.o: src/ai_lang.cpp.o
+.PHONY : src/ai_lang.o
 
 # target to build an object file
-ai_lang.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_lang.dir/build.make CMakeFiles/ai_lang.dir/ai_lang.cpp.o
-.PHONY : ai_lang.cpp.o
+src/ai_lang.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_lang.dir/build.make CMakeFiles/ai_lang.dir/src/ai_lang.cpp.o
+.PHONY : src/ai_lang.cpp.o
 
-ai_lang.i: ai_lang.cpp.i
-.PHONY : ai_lang.i
+src/ai_lang.i: src/ai_lang.cpp.i
+.PHONY : src/ai_lang.i
 
 # target to preprocess a source file
-ai_lang.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_lang.dir/build.make CMakeFiles/ai_lang.dir/ai_lang.cpp.i
-.PHONY : ai_lang.cpp.i
+src/ai_lang.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_lang.dir/build.make CMakeFiles/ai_lang.dir/src/ai_lang.cpp.i
+.PHONY : src/ai_lang.cpp.i
 
-ai_lang.s: ai_lang.cpp.s
-.PHONY : ai_lang.s
+src/ai_lang.s: src/ai_lang.cpp.s
+.PHONY : src/ai_lang.s
 
 # target to generate assembly for a file
-ai_lang.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_lang.dir/build.make CMakeFiles/ai_lang.dir/ai_lang.cpp.s
-.PHONY : ai_lang.cpp.s
+src/ai_lang.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_lang.dir/build.make CMakeFiles/ai_lang.dir/src/ai_lang.cpp.s
+.PHONY : src/ai_lang.cpp.s
 
 src/connectors/ScikitLearnConnector.o: src/connectors/ScikitLearnConnector.cpp.o
 .PHONY : src/connectors/ScikitLearnConnector.o
@@ -395,6 +408,30 @@ src/parser.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/parser.cpp.s
 .PHONY : src/parser.cpp.s
 
+src/utils/show_time.o: src/utils/show_time.cpp.o
+.PHONY : src/utils/show_time.o
+
+# target to build an object file
+src/utils/show_time.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/show_time.dir/build.make CMakeFiles/show_time.dir/src/utils/show_time.cpp.o
+.PHONY : src/utils/show_time.cpp.o
+
+src/utils/show_time.i: src/utils/show_time.cpp.i
+.PHONY : src/utils/show_time.i
+
+# target to preprocess a source file
+src/utils/show_time.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/show_time.dir/build.make CMakeFiles/show_time.dir/src/utils/show_time.cpp.i
+.PHONY : src/utils/show_time.cpp.i
+
+src/utils/show_time.s: src/utils/show_time.cpp.s
+.PHONY : src/utils/show_time.s
+
+# target to generate assembly for a file
+src/utils/show_time.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/show_time.dir/build.make CMakeFiles/show_time.dir/src/utils/show_time.cpp.s
+.PHONY : src/utils/show_time.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -406,9 +443,10 @@ help:
 	@echo "... run"
 	@echo "... ai_lang"
 	@echo "... ai_language_lib"
-	@echo "... ai_lang.o"
-	@echo "... ai_lang.i"
-	@echo "... ai_lang.s"
+	@echo "... show_time"
+	@echo "... src/ai_lang.o"
+	@echo "... src/ai_lang.i"
+	@echo "... src/ai_lang.s"
 	@echo "... src/connectors/ScikitLearnConnector.o"
 	@echo "... src/connectors/ScikitLearnConnector.i"
 	@echo "... src/connectors/ScikitLearnConnector.s"
@@ -436,6 +474,9 @@ help:
 	@echo "... src/parser.o"
 	@echo "... src/parser.i"
 	@echo "... src/parser.s"
+	@echo "... src/utils/show_time.o"
+	@echo "... src/utils/show_time.i"
+	@echo "... src/utils/show_time.s"
 .PHONY : help
 
 

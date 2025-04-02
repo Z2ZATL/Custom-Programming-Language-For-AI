@@ -64,6 +64,7 @@ CMAKE_BINARY_DIR = /home/runner/workspace/ai_language/build
 
 # The main recursive "all" target.
 all: CMakeFiles/ai_language_lib.dir/all
+all: CMakeFiles/show_time.dir/all
 all: CMakeFiles/ai_lang.dir/all
 .PHONY : all
 
@@ -73,6 +74,7 @@ preinstall:
 
 # The main recursive "clean" target.
 clean: CMakeFiles/ai_language_lib.dir/clean
+clean: CMakeFiles/show_time.dir/clean
 clean: CMakeFiles/ai_lang.dir/clean
 clean: CMakeFiles/run.dir/clean
 .PHONY : clean
@@ -102,6 +104,32 @@ ai_language_lib: CMakeFiles/ai_language_lib.dir/rule
 CMakeFiles/ai_language_lib.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/clean
 .PHONY : CMakeFiles/ai_language_lib.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/show_time.dir
+
+# All Build rule for target.
+CMakeFiles/show_time.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/show_time.dir/build.make CMakeFiles/show_time.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/show_time.dir/build.make CMakeFiles/show_time.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/runner/workspace/ai_language/build/CMakeFiles --progress-num=13,14 "Built target show_time"
+.PHONY : CMakeFiles/show_time.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/show_time.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/workspace/ai_language/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/show_time.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/runner/workspace/ai_language/build/CMakeFiles 0
+.PHONY : CMakeFiles/show_time.dir/rule
+
+# Convenience name for target.
+show_time: CMakeFiles/show_time.dir/rule
+.PHONY : show_time
+
+# clean rule for target.
+CMakeFiles/show_time.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/show_time.dir/build.make CMakeFiles/show_time.dir/clean
+.PHONY : CMakeFiles/show_time.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/ai_lang.dir

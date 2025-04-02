@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/runner/workspace/ai_language/src/ai_lang.cpp" "CMakeFiles/ai_lang.dir/src/ai_lang.cpp.o" "gcc" "CMakeFiles/ai_lang.dir/src/ai_lang.cpp.o.d"
+  "/home/runner/workspace/ai_language/src/utils/show_time.cpp" "CMakeFiles/show_time.dir/src/utils/show_time.cpp.o" "gcc" "CMakeFiles/show_time.dir/src/utils/show_time.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.
