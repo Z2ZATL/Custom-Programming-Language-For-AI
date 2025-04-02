@@ -255,8 +255,14 @@ void MLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
             graphFile << "plt.xlabel('Epochs')\n";
             graphFile << "plt.ylabel('Accuracy')\n";
             graphFile << "plt.grid(True)\n\n";
+            // สร้างโฟลเดอร์สำหรับเก็บรูปภาพ
+            int mkdir_result = system("mkdir -p 'Program test/Picture'");
+            if (mkdir_result != 0) {
+                std::cout << "Warning: Could not create directory for pictures." << std::endl;
+            }
+            
             graphFile << "plt.tight_layout()\n";
-            graphFile << "plt.savefig('learning_curves.png')\n";
+            graphFile << "plt.savefig('Program test/Picture/learning_curves.png')\n";
             graphFile << "plt.close()\n";
             
             graphFile.close();
@@ -265,7 +271,7 @@ void MLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
             std::cout << "Creating graphical visualization..." << std::endl;
             int result = system("python3 ml_learning_curves.py");
             if (result == 0) {
-                std::cout << "Graph saved as 'learning_curves.png'" << std::endl;
+                std::cout << "Graph saved as 'Program test/Picture/learning_curves.png'" << std::endl;
                 std::cout << "To view the graph, open the file in a image viewer or web browser" << std::endl;
             } else {
                 std::cout << "Error: Failed to create graph. Make sure matplotlib is installed." << std::endl;
