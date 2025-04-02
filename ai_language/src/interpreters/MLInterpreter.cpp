@@ -52,18 +52,18 @@ void MLInterpreter::evaluateModel() {
 void MLInterpreter::saveModel(const std::string& modelPath) {
     // สร้างเส้นทางสำหรับบันทึกโมเดล
     std::string fullPath = "Program test/model/";
-    
+
     // สร้างโฟลเดอร์ถ้ายังไม่มี
     int mkdir_result = system("mkdir -p 'Program test/model'");
     if (mkdir_result != 0) {
         std::cout << "Warning: Could not create directory structure. Model might not save correctly." << std::endl;
     }
-    
+
     // เพิ่มชื่อไฟล์เข้าไปที่เส้นทาง
     fullPath += modelPath;
-    
+
     std::cout << "Saving ML model to: " << fullPath << std::endl;
-    
+
     // สร้างข้อมูลเวลาปัจจุบัน
     auto now = std::chrono::system_clock::now();
     std::time_t current_time = std::chrono::system_clock::to_time_t(now);
@@ -72,7 +72,7 @@ void MLInterpreter::saveModel(const std::string& modelPath) {
     if (!timestamp.empty() && timestamp[timestamp.length()-1] == '\n') {
         timestamp.erase(timestamp.length()-1);
     }
-    
+
     // สร้างไฟล์ตัวอย่างในโฟลเดอร์นั้น
     std::ofstream modelFile(fullPath);
     if (modelFile.is_open()) {
@@ -219,7 +219,7 @@ void MLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
             std::cout << "Warning: Model not trained yet, no graph to show." << std::endl;
             return;
         }
-        
+
         std::cout << "Displaying learning curve graph for model " << modelType << std::endl;
         std::cout << "Epoch vs. Loss Graph:" << std::endl;
         std::cout << "------------------------" << std::endl;
@@ -227,16 +227,16 @@ void MLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
         std::cout << "Epoch vs. Accuracy Graph:" << std::endl;
         std::cout << "------------------------" << std::endl;
         std::cout << "Accuracy increases from 0.65 to 0.95 over " << parameters["epochs"] << " epochs" << std::endl;
-        
+
         // ใช้ฟังก์ชัน C++ สร้างกราฟโดยตรง
-        std::cout << "Creating graphical visualization..." << std::endl;
-        
+        std::cout << "Creating HTML visualization..." << std::endl;
+
         try {
-            // เรียกใช้ฟังก์ชัน generateLearningCurves จาก plotting.h
-            int epochs = static_cast<int>(parameters["epochs"]);
-            ai_language::generateLearningCurves(epochs, "Program test/Picture");
-            std::cout << "Graph saved as 'Program test/Picture/learning_curves.png'" << std::endl;
-            std::cout << "To view the graph, open the file in a image viewer or web browser" << std::endl;
+            // เรียกใช้ฟังก์ชัน generateLearningCurves 
+            generateLearningCurves(parameters["epochs"]);
+
+            // แจ้งผู้ใช้ว่าสามารถดูกราฟได้จากไฟล์ HTML ที่สร้างขึ้น
+            std::cout << "To view the graph, open the HTML file in a web browser" << std::endl;
         } catch (const std::exception& e) {
             std::cerr << "Error generating graph: " << e.what() << std::endl;
         }
@@ -255,10 +255,10 @@ void MLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
         if (!hasTrained) {
             std::cout << "Warning: Saving untrained model." << std::endl;
         }
-        
+
         // บันทึกโมเดล
         saveModel(args[1]);
-        
+
         std::cout << "โมเดลถูกบันทึกไปที่ 'Program test/model/" << args[1] << "'" << std::endl;
     } else {
         std::cout << "Unknown save type: " << args[0] << std::endl;
@@ -285,7 +285,7 @@ void MLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
         std::cout << "Error: Missing argument for add command" << std::endl;
         return;
     }
-    
+
     if (args[0] == "feature") {
         if (args.size() < 2) {
             std::cout << "Error: Missing feature name. Usage: add feature <feature_name>" << std::endl;
