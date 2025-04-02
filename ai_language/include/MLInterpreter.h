@@ -1,14 +1,18 @@
-
 #ifndef ML_INTERPRETER_H
 #define ML_INTERPRETER_H
 
 #include "BaseInterpreter.h"
+#include "ScikitLearnConnector.h"
 
 namespace ai_language {
 
 class MLInterpreter : public BaseInterpreter {
 protected:
     void setDefaultParameters() override;
+
+    // เชื่อมต่อกับ scikit-learn
+    ScikitLearnConnector scikitConnector;
+    bool useScikitLearn = false;
 
 public:
     MLInterpreter();

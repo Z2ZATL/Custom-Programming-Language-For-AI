@@ -1,4 +1,4 @@
-modules = ["cpp-clang14", "c-clang14", "bash"]
+modules = ["bash", "c-clang14", "cpp-clang14", "python-3.11"]
 run = "cd ai_language && mkdir -p build && cd build && cmake .. && make && cd .. && ./ai_lang -i"
 
 [nix]
@@ -117,3 +117,12 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "cd ai_language && mkdir -p build && cd build && cmake .. && make && cd .. && ./ai_lang tests/advanced_error_handling_test.ai"
+
+[[workflows.workflow]]
+name = "Run scikit-learn Example"
+author = 41033354
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd ai_language && mkdir -p build && cd build && cmake .. && make && cd .. && ./ai_lang examples/ml_examples/scikit_integration.ai"

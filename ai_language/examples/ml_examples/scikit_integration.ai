@@ -1,0 +1,28 @@
+
+# ตัวอย่างการเชื่อมต่อกับ scikit-learn
+start create ML
+
+# โหลดข้อมูล
+load dataset "datasets/classification_data.csv" type "csv"
+
+# สร้างโมเดล scikit-learn
+create model RandomForest
+
+# ตั้งค่าพารามิเตอร์
+set trees 100
+set max_depth 5
+set use_scikit true
+
+# ฝึกโมเดล
+train model
+
+# แสดงผลลัพธ์
+visualize data
+evaluate model
+show metric "accuracy"
+show metric "precision"
+show metric "recall"
+show metric "f1"
+
+# บันทึกโมเดล
+save model to "scikit_rf_model.pkl"

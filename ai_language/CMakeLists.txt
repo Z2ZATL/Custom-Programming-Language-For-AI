@@ -12,6 +12,7 @@ set(SOURCES
     src/DLInterpreter.cpp
     src/RLInterpreter.cpp
     src/InterpreterFactory.cpp
+    src/ScikitLearnConnector.cpp
 )
 
 # สร้าง library

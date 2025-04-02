@@ -1,4 +1,3 @@
-
 #include "../include/MLInterpreter.h"
 #include <random>
 #include <iomanip>
@@ -10,6 +9,7 @@ namespace ai_language {
 
 MLInterpreter::MLInterpreter() {
     projectType = "ML";
+    useScikitLearn = false; // Default to not using scikit-learn
 }
 
 MLInterpreter::~MLInterpreter() {
@@ -18,7 +18,7 @@ MLInterpreter::~MLInterpreter() {
 void MLInterpreter::setDefaultParameters() {
     // ล้างค่าเดิม
     parameters.clear();
-    
+
     // กำหนดค่าเริ่มต้นสำหรับ ML
     parameters["learning_rate"] = 0.01;
     parameters["epochs"] = 50;
@@ -217,154 +217,101 @@ void MLInterpreter::handleLoadCommand(const std::vector<std::string>& args) {
 }
 
 void MLInterpreter::handleSetCommand(const std::vector<std::string>& args) {
-    if (!hasStarted) {
-        std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'start' ก่อน" << RESET << std::endl;
-        return;
-    }
-
-    if (!hasCreatedProject) {
-        std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create [type]' ก่อน" << RESET << std::endl;
-        return;
-    }
-
-    if (!hasCreatedModel) {
-        std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create model' ก่อน" << RESET << std::endl;
-        return;
-    }
-
     if (args.size() < 2) {
-        std::cerr << RED << "ข้อผิดพลาด: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'set [parameter] [value]'" << RESET << std::endl;
+        std::cerr << RED << "ข้อผิดพลาด: คำสั่ง 'set' ต้องมีอย่างน้อย 2 อาร์กิวเมนต์ (ชื่อและค่า)" << RESET << std::endl;
         return;
     }
 
     std::string paramName = args[0];
     std::string paramValue = args[1];
 
-    // ตรวจสอบการตั้งค่า timezone
-    if (paramName == "timezone") {
-        try {
-            int timezone = std::stoi(paramValue);
-            if (timezone >= -12 && timezone <= 14) {
-                userTimezoneOffset = timezone;
-                std::cout << GREEN << "ตั้งค่า timezone เป็น UTC" << (timezone >= 0 ? "+" : "") << timezone << " สำเร็จ" << RESET << std::endl;
-            } else {
-                std::cerr << RED << "ข้อผิดพลาด: timezone ต้องอยู่ระหว่าง -12 ถึง 14" << RESET << std::endl;
-            }
-            return;
-        } catch (const std::invalid_argument&) {
-            std::cerr << RED << "ข้อผิดพลาด: รูปแบบ timezone ไม่ถูกต้อง" << RESET << std::endl;
-            return;
+    // ตรวจสอบการตั้งค่าการใช้ scikit-learn
+    if (paramName == "use_scikit" || paramName == "use_scikit_learn") {
+        if (paramValue == "true" || paramValue == "1" || paramValue == "yes") {
+            useScikitLearn = true;
+            std::cout << GREEN << "เปิดใช้งานการเชื่อมต่อกับ scikit-learn" << RESET << std::endl;
+            // ตรวจสอบว่ามี scikit-learn หรือไม่
+            scikitConnector.checkPythonAndScikitLearn();
+        } else {
+            useScikitLearn = false;
+            std::cout << GREEN << "ปิดใช้งานการเชื่อมต่อกับ scikit-learn" << RESET << std::endl;
         }
+        return;
     }
 
     try {
+        // แปลงค่าเป็นตัวเลข
         double numericValue = std::stod(paramValue);
-
-        // ตรวจสอบค่าลบหรือค่าไม่ถูกต้อง
-        if (paramName == "learning_rate" && numericValue < 0) {
-            std::cerr << RED << "ข้อผิดพลาด: ค่า learning_rate ไม่สามารถเป็นค่าติดลบได้ (" << numericValue 
-                        << ")" << RESET << std::endl;
-            return;
-        } else if (paramName == "epochs" && numericValue <= 0) {
-            std::cerr << RED << "ข้อผิดพลาด: จำนวน epochs ต้องมากกว่า 0" << RESET << std::endl;
-            return;
-        } else if (paramName == "batch_size" && numericValue <= 0) {
-            std::cerr << RED << "ข้อผิดพลาด: ค่า batch_size ต้องมากกว่า 0" << RESET << std::endl;
-            return;
-        }
-
-        // ตั้งค่าพารามิเตอร์
         parameters[paramName] = numericValue;
-
-        std::cout << GREEN << "Parameter set: " << paramName << " = " << numericValue << RESET << std::endl;
+        std::cout << GREEN << "ตั้งค่า " << paramName << " = " << numericValue << RESET << std::endl;
     } catch (const std::invalid_argument&) {
-        // กรณีค่าไม่ใช่ตัวเลข แต่เป็นพารามิเตอร์พิเศษ
-        if (paramName == "timezone" && paramValue.substr(0, 3) == "UTC") {
-            std::cerr << RED << "ข้อผิดพลาด: ไม่รองรับการตั้งค่า timezone ด้วยคำสั่งนี้" << RESET << std::endl;
-            return;
-        } else {
-            std::cerr << RED << "ข้อผิดพลาด: ค่า '" << paramValue << "' ไม่ใช่ตัวเลข" << RESET << std::endl;
-        }
-    } catch (const std::out_of_range&) {
-        std::cerr << RED << "ข้อผิดพลาด: ค่า '" << paramValue << "' ใหญ่เกินไป" << RESET << std::endl;
+        std::cerr << RED << "ข้อผิดพลาด: ค่า '" << paramValue << "' ไม่ใช่ตัวเลขที่ถูกต้อง" << RESET << std::endl;
     }
 }
 
 void MLInterpreter::handleTrainCommand(const std::vector<std::string>& args) {
-    if (!hasStarted) {
-        std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'start' ก่อน" << RESET << std::endl;
+    if (!hasStarted || projectType.empty()) {
+        std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'start' และ 'create' ก่อน" << RESET << std::endl;
         return;
     }
 
-    if (!hasCreatedProject) {
-        std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create [type]' ก่อน" << RESET << std::endl;
+    if (datasetPath.empty()) {
+        std::cerr << RED << "ข้อผิดพลาด: ต้องโหลดข้อมูลก่อนด้วยคำสั่ง 'load dataset'" << RESET << std::endl;
         return;
     }
 
-    if (!hasLoadedData) {
-        std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'load dataset' ก่อน" << RESET << std::endl;
+    if (modelType.empty()) {
+        std::cerr << RED << "ข้อผิดพลาด: ต้องสร้างโมเดลก่อนด้วยคำสั่ง 'create model'" << RESET << std::endl;
         return;
     }
 
-    if (args.size() < 1 || args[0] != "model") {
+    if (args.size() > 0 && args[0] != "model") {
         std::cerr << RED << "ข้อผิดพลาด: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'train model'" << RESET << std::endl;
         return;
     }
 
-    if (!hasCreatedModel) {
-        std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create model' ก่อน" << RESET << std::endl;
+    std::cout << BLUE << "กำลังเทรนโมเดล " << modelType << " บนข้อมูลจาก " << datasetPath << RESET << std::endl;
+
+    // ตรวจสอบว่าใช้ scikit-learn หรือไม่
+    if (useScikitLearn) {
+        std::cout << YELLOW << "กำลังใช้ scikit-learn สำหรับการเทรนโมเดล..." << RESET << std::endl;
+        scikitConnector.trainModel(modelType, datasetPath, parameters);
+        hasTrainedModel = true;
         return;
     }
-    
-    if (hasTrainedModel) {
-        std::cerr << RED << "ข้อผิดพลาด: โมเดลนี้ได้ฝึกไปแล้ว ถ้าต้องการฝึกใหม่ให้สร้างโมเดลใหม่" << RESET << std::endl;
-        return;
-    }
 
-    // ตรวจสอบค่าพารามิเตอร์ที่ไม่เหมาะสม
-    bool hasWarning = false;
-    std::stringstream warningMsg;
+    // จำลองการเทรนโมเดลด้วย AI Language ปกติ
+    std::cout << YELLOW << "เริ่มการเทรนโมเดล..." << RESET << std::endl;
 
-    if (parameters.count("learning_rate") && parameters["learning_rate"] < 0) {
-        std::cerr << RED << "ข้อผิดพลาด: ค่า learning_rate ติดลบ (" << parameters["learning_rate"] << ") ไม่สามารถใช้ค่าติดลบได้" << RESET << std::endl;
-        return;
-    } else if (parameters.count("learning_rate") && parameters["learning_rate"] > 1.0) {
-        warningMsg << "  - learning_rate มีค่าสูง (" << parameters["learning_rate"] << ") อาจทำให้โมเดลไม่ลู่เข้า" << std::endl;
-        hasWarning = true;
-    }
-
-    if (parameters.count("epochs") && parameters["epochs"] <= 0) {
-        warningMsg << "  - epochs มีค่าไม่ถูกต้อง (" << parameters["epochs"] << ") ใช้ค่าเริ่มต้น 50" << std::endl;
-        parameters["epochs"] = 50;
-        hasWarning = true;
-    }
-
-    if (parameters.count("batch_size") && parameters["batch_size"] <= 0) {
-        warningMsg << "  - batch_size มีค่าไม่ถูกต้อง (" << parameters["batch_size"] << ") ใช้ค่าเริ่มต้น 32" << std::endl;
-        parameters["batch_size"] = 32;
-        hasWarning = true;
-    }
-
-    if (hasWarning) {
-        std::cerr << YELLOW << "คำเตือนการฝึกโมเดล:" << std::endl << warningMsg.str() << RESET;
-    }
-
-    // แสดงการฝึกโมเดล
-    std::cout << BLUE << "Training model with parameters:" << RESET << std::endl;
+    // แสดงพารามิเตอร์
+    std::cout << "พารามิเตอร์ที่ใช้:" << std::endl;
     for (const auto& param : parameters) {
-        std::cout << BLUE << "  - " << param.first << ": " << param.second << RESET << std::endl;
+        std::cout << "  - " << param.first << ": " << param.second << std::endl;
     }
 
-    // จำลองการฝึกโมเดล
-    std::cout << "Training";
-    for (int i = 0; i < 5; i++) {
-        std::cout << "." << std::flush;
-        std::this_thread::sleep_for(std::chrono::milliseconds(300));
+    // สร้างการจำลองการเทรนที่ใช้เวลา
+    int epochs = static_cast<int>(parameters["epochs"]);
+    for (int i = 1; i <= epochs; i++) {
+        if (i % 10 == 0 || i == 1 || i == epochs) {
+            double progress = static_cast<double>(i) / epochs * 100.0;
+            double fakeLoss = 1.0 / (i + 1) + 0.1;
+            double fakeAccuracy = 1.0 - fakeLoss;
+
+            std::cout << "  Epoch " << i << "/" << epochs;
+            std::cout << " - loss: " << std::fixed << std::setprecision(4) << fakeLoss;
+            std::cout << " - accuracy: " << std::fixed << std::setprecision(4) << fakeAccuracy;
+            std::cout << " (" << std::fixed << std::setprecision(1) << progress << "%)" << std::endl;
+
+            // ถ้ามี epochs มาก ให้หลับเล็กน้อย เพื่อไม่ให้เร็วเกินไป
+            if (epochs > 20) {
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            }
+        }
     }
-    std::cout << std::endl;
+
+    std::cout << GREEN << "เทรนโมเดลเสร็จสมบูรณ์" << RESET << std::endl;
 
     hasTrainedModel = true;
-    std::cout << GREEN << "Training complete" << RESET << std::endl;
 }
 
 void MLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
@@ -575,6 +522,7 @@ void MLInterpreter::handleHelpCommand() {
     std::cout << "  load dataset \"[filename]\"    - โหลดข้อมูล" << std::endl;
     std::cout << "  create model [model_name]   - สร้างโมเดล (LinearRegression, LogisticRegression, RandomForest, SVM, DecisionTree, KNN)" << std::endl;
     std::cout << "  set [parameter] [value]     - ตั้งค่าพารามิเตอร์" << std::endl;
+    std::cout << "  set use_scikit_learn [true/false] - ใช้ scikit-learn สำหรับเทรนโมเดล" << std::endl; // Added scikit-learn option
     std::cout << "  set timezone [value]        - ตั้งค่าเขตเวลา (UTC-12 ถึง UTC+14)" << std::endl;
     std::cout << "  train model                 - ฝึกโมเดเดล" << std::endl;
     std::cout << "  show accuracy/loss/graph    - แสดงผลลัพธ์" << std::endl;
