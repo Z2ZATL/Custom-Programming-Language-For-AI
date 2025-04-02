@@ -59,13 +59,13 @@ void ScikitLearnConnector::connect() {
 
 // main.cpp
 #include "../../include/interpreters/DLInterpreter.h"
-#include "../connectors/ScikitLearnConnector.h" 
+// #include "../connectors/ScikitLearnConnector.h"  Removed unnecessary include
 
 int main() {
   ai_language::DLInterpreter interpreter;
-  ScikitLearnConnector connector;
+  // ScikitLearnConnector connector; Removed unnecessary instantiation
+  // connector.connect(); Removed unnecessary function call
 
-  connector.connect();
   interpreter.interpret();
 
   return 0;
