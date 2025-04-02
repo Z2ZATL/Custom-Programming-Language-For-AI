@@ -1,0 +1,37 @@
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+[  6%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/MLInterpreter.cpp.o
+/home/runner/workspace/ai_language/src/interpreters/MLInterpreter.cpp: In member function ‘virtual void ai_language::MLInterpreter::handleShowCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/MLInterpreter.cpp:241:10: error: ‘ียกใช้ฟังก์ชันสร้างกราฟด้วย’ was not declared in this scope
+  241 |         }ียกใช้ฟังก์ชันสร้างกราฟด้วย C++
+      |          ^~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/MLInterpreter.cpp:245:11: error: expected primary-expression before ‘catch’
+  245 |         } catch (const std::exception& e) {
+      |           ^~~~~
+/home/runner/workspace/ai_language/src/interpreters/MLInterpreter.cpp: At global scope:
+/home/runner/workspace/ai_language/src/interpreters/MLInterpreter.cpp:248:7: error: expected unqualified-id before ‘else’
+  248 |     } else {
+      |       ^~~~
+/home/runner/workspace/ai_language/src/interpreters/MLInterpreter.cpp:253:6: error: ‘MLInterpreter’ has not been declared
+  253 | void MLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/MLInterpreter.cpp: In function ‘void handleSaveCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/MLInterpreter.cpp:260:14: error: ‘hasTrained’ was not declared in this scope
+  260 |         if (!hasTrained) {
+      |              ^~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/MLInterpreter.cpp:265:9: error: ‘saveModel’ was not declared in this scope
+  265 |         saveModel(args[1]);
+      |         ^~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/MLInterpreter.cpp: At global scope:
+/home/runner/workspace/ai_language/src/interpreters/MLInterpreter.cpp:273:6: error: ‘MLInterpreter’ has not been declared
+  273 | void MLInterpreter::handleHelpCommand() {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/MLInterpreter.cpp:288:6: error: ‘MLInterpreter’ has not been declared
+  288 | void MLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/MLInterpreter.cpp:306:1: error: expected declaration before ‘}’ token
+  306 | } // namespace ai_language
+      | ^
+make[2]: *** [CMakeFiles/ai_language_lib.dir/build.make:90: CMakeFiles/ai_language_lib.dir/src/interpreters/MLInterpreter.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:88: CMakeFiles/ai_language_lib.dir/all] Error 2
+make: *** [Makefile:91: all] Error 2
