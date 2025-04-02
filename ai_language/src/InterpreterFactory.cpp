@@ -1,8 +1,8 @@
 
 #include "../include/InterpreterFactory.h"
-#include "../include/MLInterpreter.h"
-#include "../include/DLInterpreter.h"
-#include "../include/RLInterpreter.h"
+#include "../include/interpreters/MLInterpreter.h"
+#include "../include/interpreters/DLInterpreter.h"
+#include "../include/interpreters/RLInterpreter.h"
 #include <fstream>
 #include <regex>
 

@@ -2,7 +2,7 @@
 #ifndef INTERPRETER_FACTORY_H
 #define INTERPRETER_FACTORY_H
 
-#include "BaseInterpreter.h"
+#include "interpreters/BaseInterpreter.h"
 #include <memory>
 #include <string>
 
