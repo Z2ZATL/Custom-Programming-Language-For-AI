@@ -299,6 +299,30 @@ src/RLInterpreter.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/RLInterpreter.cpp.s
 .PHONY : src/RLInterpreter.cpp.s
 
+src/ScikitLearnConnector.o: src/ScikitLearnConnector.cpp.o
+.PHONY : src/ScikitLearnConnector.o
+
+# target to build an object file
+src/ScikitLearnConnector.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/ScikitLearnConnector.cpp.o
+.PHONY : src/ScikitLearnConnector.cpp.o
+
+src/ScikitLearnConnector.i: src/ScikitLearnConnector.cpp.i
+.PHONY : src/ScikitLearnConnector.i
+
+# target to preprocess a source file
+src/ScikitLearnConnector.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/ScikitLearnConnector.cpp.i
+.PHONY : src/ScikitLearnConnector.cpp.i
+
+src/ScikitLearnConnector.s: src/ScikitLearnConnector.cpp.s
+.PHONY : src/ScikitLearnConnector.s
+
+# target to generate assembly for a file
+src/ScikitLearnConnector.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/ScikitLearnConnector.cpp.s
+.PHONY : src/ScikitLearnConnector.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -328,6 +352,9 @@ help:
 	@echo "... src/RLInterpreter.o"
 	@echo "... src/RLInterpreter.i"
 	@echo "... src/RLInterpreter.s"
+	@echo "... src/ScikitLearnConnector.o"
+	@echo "... src/ScikitLearnConnector.i"
+	@echo "... src/ScikitLearnConnector.s"
 .PHONY : help
 
 

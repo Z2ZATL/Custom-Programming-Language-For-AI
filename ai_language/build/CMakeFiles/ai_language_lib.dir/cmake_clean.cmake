@@ -9,6 +9,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/ai_language_lib.dir/src/MLInterpreter.cpp.o.d"
   "CMakeFiles/ai_language_lib.dir/src/RLInterpreter.cpp.o"
   "CMakeFiles/ai_language_lib.dir/src/RLInterpreter.cpp.o.d"
+  "CMakeFiles/ai_language_lib.dir/src/ScikitLearnConnector.cpp.o"
+  "CMakeFiles/ai_language_lib.dir/src/ScikitLearnConnector.cpp.o.d"
   "libai_language_lib.a"
   "libai_language_lib.pdb"
 )
