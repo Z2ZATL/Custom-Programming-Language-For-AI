@@ -209,6 +209,20 @@ CMakeFiles/ai_language_lib.dir/src/parser.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/ai_language_lib.dir/src/parser.cpp.s"
 	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/runner/workspace/ai_language/src/parser.cpp -o CMakeFiles/ai_language_lib.dir/src/parser.cpp.s
 
+CMakeFiles/ai_language_lib.dir/src/utils/plotting.cpp.o: CMakeFiles/ai_language_lib.dir/flags.make
+CMakeFiles/ai_language_lib.dir/src/utils/plotting.cpp.o: /home/runner/workspace/ai_language/src/utils/plotting.cpp
+CMakeFiles/ai_language_lib.dir/src/utils/plotting.cpp.o: CMakeFiles/ai_language_lib.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/workspace/ai_language/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/ai_language_lib.dir/src/utils/plotting.cpp.o"
+	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ai_language_lib.dir/src/utils/plotting.cpp.o -MF CMakeFiles/ai_language_lib.dir/src/utils/plotting.cpp.o.d -o CMakeFiles/ai_language_lib.dir/src/utils/plotting.cpp.o -c /home/runner/workspace/ai_language/src/utils/plotting.cpp
+
+CMakeFiles/ai_language_lib.dir/src/utils/plotting.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/ai_language_lib.dir/src/utils/plotting.cpp.i"
+	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/runner/workspace/ai_language/src/utils/plotting.cpp > CMakeFiles/ai_language_lib.dir/src/utils/plotting.cpp.i
+
+CMakeFiles/ai_language_lib.dir/src/utils/plotting.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/ai_language_lib.dir/src/utils/plotting.cpp.s"
+	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/runner/workspace/ai_language/src/utils/plotting.cpp -o CMakeFiles/ai_language_lib.dir/src/utils/plotting.cpp.s
+
 # Object files for target ai_language_lib
 ai_language_lib_OBJECTS = \
 "CMakeFiles/ai_language_lib.dir/src/interpreters/BaseInterpreter.cpp.o" \
@@ -220,7 +234,8 @@ ai_language_lib_OBJECTS = \
 "CMakeFiles/ai_language_lib.dir/src/connectors/Connector.cpp.o" \
 "CMakeFiles/ai_language_lib.dir/src/interpreters/interpreter.cpp.o" \
 "CMakeFiles/ai_language_lib.dir/src/lexer.cpp.o" \
-"CMakeFiles/ai_language_lib.dir/src/parser.cpp.o"
+"CMakeFiles/ai_language_lib.dir/src/parser.cpp.o" \
+"CMakeFiles/ai_language_lib.dir/src/utils/plotting.cpp.o"
 
 # External object files for target ai_language_lib
 ai_language_lib_EXTERNAL_OBJECTS =
@@ -235,9 +250,10 @@ libai_language_lib.a: CMakeFiles/ai_language_lib.dir/src/connectors/Connector.cp
 libai_language_lib.a: CMakeFiles/ai_language_lib.dir/src/interpreters/interpreter.cpp.o
 libai_language_lib.a: CMakeFiles/ai_language_lib.dir/src/lexer.cpp.o
 libai_language_lib.a: CMakeFiles/ai_language_lib.dir/src/parser.cpp.o
+libai_language_lib.a: CMakeFiles/ai_language_lib.dir/src/utils/plotting.cpp.o
 libai_language_lib.a: CMakeFiles/ai_language_lib.dir/build.make
 libai_language_lib.a: CMakeFiles/ai_language_lib.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/runner/workspace/ai_language/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking CXX static library libai_language_lib.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/runner/workspace/ai_language/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Linking CXX static library libai_language_lib.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/ai_language_lib.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/ai_language_lib.dir/link.txt --verbose=$(VERBOSE)
 

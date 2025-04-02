@@ -432,6 +432,30 @@ src/parser.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/parser.cpp.s
 .PHONY : src/parser.cpp.s
 
+src/utils/plotting.o: src/utils/plotting.cpp.o
+.PHONY : src/utils/plotting.o
+
+# target to build an object file
+src/utils/plotting.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/utils/plotting.cpp.o
+.PHONY : src/utils/plotting.cpp.o
+
+src/utils/plotting.i: src/utils/plotting.cpp.i
+.PHONY : src/utils/plotting.i
+
+# target to preprocess a source file
+src/utils/plotting.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/utils/plotting.cpp.i
+.PHONY : src/utils/plotting.cpp.i
+
+src/utils/plotting.s: src/utils/plotting.cpp.s
+.PHONY : src/utils/plotting.s
+
+# target to generate assembly for a file
+src/utils/plotting.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/utils/plotting.cpp.s
+.PHONY : src/utils/plotting.cpp.s
+
 src/utils/show_time.o: src/utils/show_time.cpp.o
 .PHONY : src/utils/show_time.o
 
@@ -501,6 +525,9 @@ help:
 	@echo "... src/parser.o"
 	@echo "... src/parser.i"
 	@echo "... src/parser.s"
+	@echo "... src/utils/plotting.o"
+	@echo "... src/utils/plotting.i"
+	@echo "... src/utils/plotting.s"
 	@echo "... src/utils/show_time.o"
 	@echo "... src/utils/show_time.i"
 	@echo "... src/utils/show_time.s"

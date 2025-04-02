@@ -4,7 +4,7 @@
 # compile CXX with /nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/runner/workspace/ai_language/include
+CXX_INCLUDES = -I/home/runner/workspace/ai_language -I/usr/include/python3.10 -I/home/runner/workspace/ai_language/include
 
 CXX_FLAGS = -std=gnu++17
 

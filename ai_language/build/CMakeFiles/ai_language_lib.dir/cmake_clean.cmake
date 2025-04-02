@@ -19,6 +19,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/ai_language_lib.dir/src/lexer.cpp.o.d"
   "CMakeFiles/ai_language_lib.dir/src/parser.cpp.o"
   "CMakeFiles/ai_language_lib.dir/src/parser.cpp.o.d"
+  "CMakeFiles/ai_language_lib.dir/src/utils/plotting.cpp.o"
+  "CMakeFiles/ai_language_lib.dir/src/utils/plotting.cpp.o.d"
   "libai_language_lib.a"
   "libai_language_lib.pdb"
 )
