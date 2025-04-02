@@ -25,32 +25,69 @@ def main():
         # อ่านข้อมูล CSV
         df = pd.read_csv(csv_path)
 
-        # สร้างกราฟ
-        plt.figure(figsize=(10, 6))
+        # สร้างกราฟที่สมบูรณ์ยิ่งขึ้น
+        plt.figure(figsize=(12, 8), dpi=100)
+        plt.style.use('ggplot')  # ใช้สไตล์ที่มีความสวยงามมากขึ้น
 
         # ตรวจสอบคอลัมน์ที่มีในข้อมูล และเก็บค่าว่ามีการวาดกราฟหรือไม่
         has_plots = False
         
         if 'epoch' in df.columns and 'accuracy' in df.columns:
-            plt.plot(df['epoch'], df['accuracy'], 'b-', label='Accuracy')
+            plt.plot(df['epoch'], df['accuracy'], 'b-o', linewidth=2, markersize=4, label='Accuracy')
             has_plots = True
         if 'epoch' in df.columns and 'loss' in df.columns:
-            plt.plot(df['epoch'], df['loss'], 'r-', label='Loss')
+            plt.plot(df['epoch'], df['loss'], 'r-^', linewidth=2, markersize=4, label='Loss')
             has_plots = True
 
-        plt.title(title)
-        plt.xlabel('Epochs')
-        plt.ylabel('Value')
+        # เพิ่มรายละเอียดให้กราฟ
+        plt.title(title, fontsize=16, fontweight='bold')
+        plt.xlabel('Epochs', fontsize=12)
+        plt.ylabel('Value', fontsize=12)
         
         # แสดง legend เฉพาะเมื่อมีการวาดกราฟแล้ว
         if has_plots:
-            plt.legend()
+            plt.legend(loc='best', fontsize=10, frameon=True, facecolor='white', edgecolor='gray')
         
-        plt.grid(True)
+        # เพิ่มเติมการตกแต่งกราฟ
+        plt.grid(True, linestyle='--', alpha=0.7)
+        plt.tight_layout()
+        
+        # เพิ่มข้อมูลเพิ่มเติมในกราฟ
+        if has_plots:
+            if 'accuracy' in df.columns:
+                max_acc = df['accuracy'].max()
+                max_acc_epoch = df['epoch'][df['accuracy'].idxmax()]
+                plt.annotate(f'Max: {max_acc:.3f}', 
+                            xy=(max_acc_epoch, max_acc),
+                            xytext=(max_acc_epoch+5, max_acc+0.02),
+                            arrowprops=dict(facecolor='blue', shrink=0.05, width=1.5),
+                            fontsize=9)
+            
+            if 'loss' in df.columns:
+                min_loss = df['loss'].min()
+                min_loss_epoch = df['epoch'][df['loss'].idxmin()]
+                plt.annotate(f'Min: {min_loss:.3f}', 
+                            xy=(min_loss_epoch, min_loss),
+                            xytext=(min_loss_epoch+5, min_loss+0.02),
+                            arrowprops=dict(facecolor='red', shrink=0.05, width=1.5),
+                            fontsize=9)
 
-        # บันทึกกราฟเป็นไฟล์ PNG - บันทึกไปยังตำแหน่งที่ถูกต้อง
-        output_file = f"{output_png_path}/learning_curves.png"
-        plt.savefig(output_file)
+        # บันทึกกราฟเป็นไฟล์ PNG ที่มีคุณภาพสูง
+        output_file_png = f"{output_png_path}/learning_curves.png"
+        plt.savefig(output_file_png, dpi=300, bbox_inches='tight')
+        
+        # สร้างไฟล์ HTML แบบโต้ตอบด้วย matplotlib
+        try:
+            import mpld3
+            # สร้างไฟล์ HTML ที่โต้ตอบได้
+            html_file = f"{output_png_path}/learning_curves_interactive.html"
+            mpld3.save_html(plt.gcf(), html_file)
+            print(f"Interactive HTML graph created at: {html_file}")
+        except ImportError:
+            # ถ้าไม่มี mpld3 ให้แสดงคำเตือน
+            print("Note: mpld3 package not found. Interactive HTML graph not created.")
+            print("To enable interactive graphs, install mpld3 with: pip install mpld3")
+        
         print(f"Graph saved successfully to {output_png_path}")
         return 0
 
