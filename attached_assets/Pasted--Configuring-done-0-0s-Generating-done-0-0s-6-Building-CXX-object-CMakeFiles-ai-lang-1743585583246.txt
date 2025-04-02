@@ -1,0 +1,43 @@
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+[  6%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/MLInterpreter.cpp.o
+[ 13%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/DLInterpreter.cpp.o
+[ 20%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/RLInterpreter.cpp.o
+/home/runner/workspace/ai_language/src/interpreters/RLInterpreter.cpp: In constructor ‘ai_language::RLInterpreter::RLInterpreter()’:
+/home/runner/workspace/ai_language/src/interpreters/RLInterpreter.cpp:11:5: error: ‘hasTrained’ was not declared in this scope
+   11 |     hasTrained = false;
+      |     ^~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/RLInterpreter.cpp:12:5: error: ‘hasEvaluated’ was not declared in this scope
+   12 |     hasEvaluated = false;
+      |     ^~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/RLInterpreter.cpp: In member function ‘void ai_language::RLInterpreter::trainModel()’:
+/home/runner/workspace/ai_language/src/interpreters/RLInterpreter.cpp:37:5: error: ‘hasTrained’ was not declared in this scope
+   37 |     hasTrained = true;
+      |     ^~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/RLInterpreter.cpp: In member function ‘void ai_language::RLInterpreter::evaluateModel()’:
+/home/runner/workspace/ai_language/src/interpreters/RLInterpreter.cpp:43:5: error: ‘hasEvaluated’ was not declared in this scope
+   43 |     hasEvaluated = true;
+      |     ^~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/RLInterpreter.cpp: In member function ‘virtual void ai_language::RLInterpreter::handleEvaluateCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/RLInterpreter.cpp:127:10: error: ‘hasTrained’ was not declared in this scope
+  127 |     if (!hasTrained) {
+      |          ^~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/RLInterpreter.cpp:135:9: error: ‘hasEvaluated’ was not declared in this scope
+  135 |         hasEvaluated = true;
+      |         ^~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/RLInterpreter.cpp: In member function ‘virtual void ai_language::RLInterpreter::handleShowCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/RLInterpreter.cpp:150:38: error: ‘episodes’ was not declared in this scope
+  150 |         std::cout << "Episodes: " << episodes << std::endl;
+      |                                      ^~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/RLInterpreter.cpp:151:45: error: ‘discountFactor’ was not declared in this scope
+  151 |         std::cout << "Discount factor: " << discountFactor << std::endl;
+      |                                             ^~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/RLInterpreter.cpp:152:46: error: ‘explorationRate’ was not declared in this scope
+  152 |         std::cout << "Exploration rate: " << explorationRate << std::endl;
+      |                                              ^~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/RLInterpreter.cpp:155:14: error: ‘hasTrained’ was not declared in this scope
+  155 |         if (!hasTrained) {
+      |              ^~~~~~~~~~
+make[2]: *** [CMakeFiles/ai_language_lib.dir/build.make:118: CMakeFiles/ai_language_lib.dir/src/interpreters/RLInterpreter.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:88: CMakeFiles/ai_language_lib.dir/all] Error 2
+make: *** [Makefile:91: all] Error 2
