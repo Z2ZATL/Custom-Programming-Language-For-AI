@@ -592,6 +592,123 @@ void RLInterpreter::handleRunSimulationCommand(const std::vector<std::string>& a
 }
 
 void RLInterpreter::handleEvaluateCommand(const std::vector<std::string>& args) {
+
+void RLInterpreter::handleVisualizeCommand(const std::vector<std::string>& args) {
+    if (!hasStarted) {
+        std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'start' ก่อน" << RESET << std::endl;
+        return;
+    }
+
+    if (!hasCreatedProject) {
+        std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create RL' ก่อน" << RESET << std::endl;
+        return;
+    }
+
+    if (!hasCreatedModel) {
+        std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'create model' ก่อน" << RESET << std::endl;
+        return;
+    }
+
+    if (!hasTrainedModel) {
+        std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'train model' ก่อน" << RESET << std::endl;
+        return;
+    }
+
+    if (args.size() < 1) {
+        std::cerr << RED << "ข้อผิดพลาด: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'visualize [type]'" << RESET << std::endl;
+        return;
+    }
+
+    std::string type = args[0];
+    
+    if (type == "policy") {
+        std::cout << BLUE << "Policy Visualization for " << modelType << ":" << RESET << std::endl;
+        std::cout << "┌─────────────────────────────────────────────────────┐" << std::endl;
+        std::cout << "│                                                     │" << std::endl;
+        std::cout << "│  " << MAGENTA << "State-Action Policy Map" << RESET << "                         │" << std::endl;
+        std::cout << "│                                                     │" << std::endl;
+        std::cout << "│  " << CYAN << "State 1:  Action 3 (0.78)  Action 1 (0.15)  Action 2 (0.07)" << RESET << " │" << std::endl;
+        std::cout << "│  " << CYAN << "State 2:  Action 2 (0.65)  Action 3 (0.25)  Action 1 (0.10)" << RESET << " │" << std::endl;
+        std::cout << "│  " << CYAN << "State 3:  Action 1 (0.90)  Action 2 (0.07)  Action 3 (0.03)" << RESET << " │" << std::endl;
+        std::cout << "│  " << CYAN << "State 4:  Action 3 (0.55)  Action 1 (0.30)  Action 2 (0.15)" << RESET << " │" << std::endl;
+        std::cout << "│  " << CYAN << "State 5:  Action 2 (0.45)  Action 1 (0.40)  Action 3 (0.15)" << RESET << " │" << std::endl;
+        std::cout << "│                                                     │" << std::endl;
+        std::cout << "└─────────────────────────────────────────────────────┘" << std::endl;
+    } else if (type == "value_function") {
+        std::cout << BLUE << "Value Function Visualization for " << modelType << ":" << RESET << std::endl;
+        std::cout << "┌─────────────────────────────────────────────────────┐" << std::endl;
+        std::cout << "│                                                     │" << std::endl;
+        std::cout << "│  " << MAGENTA << "State Value Map" << RESET << "                                  │" << std::endl;
+        std::cout << "│                                                     │" << std::endl;
+        std::cout << "│  100 │                                     " << CYAN << "****" << RESET << "   │" << std::endl;
+        std::cout << "│      │                               " << CYAN << "***" << RESET << "        │" << std::endl;
+        std::cout << "│   80 │                          " << CYAN << "***" << RESET << "             │" << std::endl;
+        std::cout << "│      │                     " << CYAN << "***" << RESET << "                  │" << std::endl;
+        std::cout << "│   60 │               " << CYAN << "****" << RESET << "                       │" << std::endl;
+        std::cout << "│      │         " << CYAN << "****" << RESET << "                             │" << std::endl;
+        std::cout << "│   40 │    " << CYAN << "***" << RESET << "                                   │" << std::endl;
+        std::cout << "│      │" << CYAN << "***" << RESET << "                                       │" << std::endl;
+        std::cout << "│   20 │────────────────────────────────────────     │" << std::endl;
+        std::cout << "│       1     2     3     4     5     6     7        │" << std::endl;
+        std::cout << "│                       States                        │" << std::endl;
+        std::cout << "│                                                     │" << std::endl;
+        std::cout << "└─────────────────────────────────────────────────────┘" << std::endl;
+    } else if (type == "learning_curve") {
+        std::cout << BLUE << "Learning Curve Visualization for " << modelType << ":" << RESET << std::endl;
+        std::cout << "┌─────────────────────────────────────────────────────┐" << std::endl;
+        std::cout << "│                                                     │" << std::endl;
+        std::cout << "│  " << MAGENTA << "Learning Curve (Reward vs Episodes)" << RESET << "              │" << std::endl;
+        std::cout << "│                                                     │" << std::endl;
+        std::cout << "│  500 │                                   " << CYAN << "········" << RESET << " │" << std::endl;
+        std::cout << "│      │                           " << CYAN << "······" << RESET << "          │" << std::endl;
+        std::cout << "│  400 │                      " << CYAN << "·····" << RESET << "                │" << std::endl;
+        std::cout << "│      │                 " << CYAN << "·····" << RESET << "                     │" << std::endl;
+        std::cout << "│  300 │            " << CYAN << "·····" << RESET << "                          │" << std::endl;
+        std::cout << "│      │        " << CYAN << "····" << RESET << "                               │" << std::endl;
+        std::cout << "│  200 │     " << CYAN << "···" << RESET << "                                   │" << std::endl;
+        std::cout << "│      │  " << CYAN << "···" << RESET << "                                      │" << std::endl;
+        std::cout << "│  100 │" << CYAN << "··" << RESET << "                                         │" << std::endl;
+        std::cout << "│       0     200    400    600    800    1000        │" << std::endl;
+        std::cout << "│                       Episodes                      │" << std::endl;
+        std::cout << "│                                                     │" << std::endl;
+        std::cout << "└─────────────────────────────────────────────────────┘" << std::endl;
+    } else if (type == "environment") {
+        std::cout << BLUE << "Environment Visualization for " << modelType << ":" << RESET << std::endl;
+        std::cout << "┌─────────────────────────────────────────────────────┐" << std::endl;
+        std::cout << "│                                                     │" << std::endl;
+        std::cout << "│  " << MAGENTA << "Environment Grid Map" << RESET << "                             │" << std::endl;
+        std::cout << "│                                                     │" << std::endl;
+        std::cout << "│   ┌─────┬─────┬─────┬─────┬─────┐                  │" << std::endl;
+        std::cout << "│   │     │     │     │     │     │                  │" << std::endl;
+        std::cout << "│   │  S  │     │     │     │  G  │                  │" << std::endl;
+        std::cout << "│   │     │     │     │     │     │                  │" << std::endl;
+        std::cout << "│   ├─────┼─────┼─────┼─────┼─────┤                  │" << std::endl;
+        std::cout << "│   │     │     │     │     │     │                  │" << std::endl;
+        std::cout << "│   │     │  " << RED << "X" << RESET << "  │     │     │     │                  │" << std::endl;
+        std::cout << "│   │     │     │     │     │     │                  │" << std::endl;
+        std::cout << "│   ├─────┼─────┼─────┼─────┼─────┤                  │" << std::endl;
+        std::cout << "│   │     │     │     │     │     │                  │" << std::endl;
+        std::cout << "│   │     │     │  " << RED << "X" << RESET << "  │     │     │                  │" << std::endl;
+        std::cout << "│   │     │     │     │     │     │                  │" << std::endl;
+        std::cout << "│   ├─────┼─────┼─────┼─────┼─────┤                  │" << std::endl;
+        std::cout << "│   │     │     │     │     │     │                  │" << std::endl;
+        std::cout << "│   │     │     │     │  " << RED << "X" << RESET << "  │     │                  │" << std::endl;
+        std::cout << "│   │     │     │     │     │     │                  │" << std::endl;
+        std::cout << "│   ├─────┼─────┼─────┼─────┼─────┤                  │" << std::endl;
+        std::cout << "│   │     │     │     │     │     │                  │" << std::endl;
+        std::cout << "│   │     │     │     │     │     │                  │" << std::endl;
+        std::cout << "│   │     │     │     │     │     │                  │" << std::endl;
+        std::cout << "│   └─────┴─────┴─────┴─────┴─────┘                  │" << std::endl;
+        std::cout << "│                                                     │" << std::endl;
+        std::cout << "│   Legend:  S = Start  G = Goal  " << RED << "X" << RESET << " = Obstacle        │" << std::endl;
+        std::cout << "│                                                     │" << std::endl;
+        std::cout << "└─────────────────────────────────────────────────────┘" << std::endl;
+    } else {
+        std::cerr << RED << "ข้อผิดพลาด: ประเภทการแสดงผล '" << type << "' ไม่รองรับ" << RESET << std::endl;
+        std::cerr << RED << "ประเภทการแสดงผลที่รองรับ: policy, value_function, learning_curve, environment" << RESET << std::endl;
+    }
+}
+
     if (!hasStarted) {
         std::cerr << RED << "ข้อผิดพลาด: ต้องใช้คำสั่ง 'start' ก่อน" << RESET << std::endl;
         return;
@@ -696,6 +813,8 @@ void RLInterpreter::interpretLine(const std::string& line) {
     } else if (command == "run" && args.size() > 0 && args[0] == "simulation") {
         std::vector<std::string> simArgs(args.begin() + 1, args.end());
         handleRunSimulationCommand(simArgs);
+    } else if (command == "visualize") {
+        handleVisualizeCommand(args);
     } else if (command == "help") {
         std::cout << "คำสั่งที่รองรับสำหรับ Reinforcement Learning:" << std::endl;
         std::cout << "  start                          - เริ่มใช้งานระบบ" << std::endl;
@@ -713,6 +832,7 @@ void RLInterpreter::interpretLine(const std::string& line) {
         std::cout << "  run simulation [episodes]      - จำลองการเล่นเกม" << std::endl;
         std::cout << "  save model \"[filename]\"        - บันทึกโมเดล" << std::endl;
         std::cout << "  load model \"[filename]\"        - โหลดโมเดลที่บันทึกไว้" << std::endl;
+        std::cout << "  visualize [type]               - แสดงผลเชิงภาพ (policy, value_function, learning_curve, environment)" << std::endl;
     } else {
         std::cerr << RED << "ข้อผิดพลาด: ไม่รู้จักคำสั่ง '" << command << "'" << RESET << std::endl;
     }
