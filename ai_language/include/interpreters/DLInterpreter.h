@@ -5,7 +5,8 @@
 //  This includes updating include paths and potentially moving other files into the 'connectors' and 'interpreters' directories.
 
 // Example of additional code that might be needed (Illustrative only):
-#include "connectors/DatabaseConnector.h"
+// DatabaseConnector จะถูกเพิ่มเมื่อมีการพัฒนาต่อไป
+// #include "connectors/DatabaseConnector.h"
 
 int main() {
   BaseInterpreter* interpreter = new BaseInterpreter(); // Example usage

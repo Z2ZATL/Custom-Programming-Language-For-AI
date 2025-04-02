@@ -20,10 +20,13 @@ set(SOURCES
 
 # สร้าง library
 add_library(ai_language_lib STATIC ${SOURCES})
+
+# เพิ่ม utils
+add_executable(show_time src/utils/show_time.cpp)
 target_include_directories(ai_language_lib PUBLIC include)
 
 # สร้าง executable
-add_executable(ai_lang ai_lang.cpp)
+add_executable(ai_lang src/ai_lang.cpp)
 target_link_libraries(ai_lang PRIVATE ai_language_lib)
 
 # ตัวเลือกสำหรับ build ทดสอบ
