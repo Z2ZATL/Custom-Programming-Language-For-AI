@@ -758,7 +758,7 @@ std::vector<std::string> RLInterpreter::tokenizeLine(const std::string& line) {
     std::vector<std::string> tokens;
     std::string token;
     bool inQuotes = false;
-    for (char c : line) {
+    for (const char c : line) {
         if (c == '"') {
             inQuotes = !inQuotes;
             token += c;
