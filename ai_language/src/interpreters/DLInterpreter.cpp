@@ -270,8 +270,8 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
         std::string dataDir = "ai_language/Program test/Data";
         
         // ตรวจสอบว่าไดเรกทอรีมีอยู่แล้วหรือไม่ - ถ้าไม่มีให้สร้างเฉพาะเมื่อจำเป็น
-        struct stat buffer;
-        if (stat(dataDir.c_str(), &buffer) != 0) {
+        struct stat dirStat;
+        if (stat(dataDir.c_str(), &dirStat) != 0) {
             // ไดเรกทอรีไม่มีอยู่ ให้สร้าง
             std::string mkdirCmd = "mkdir -p \"" + dataDir + "\"";
             int dirResult = system(mkdirCmd.c_str());
@@ -304,11 +304,11 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
             return;
         }
 
-        char buffer[128];
+        char charBuffer[128];
         std::string scriptOutput = "";
         while (!feof(pipe)) {
-            if (fgets(buffer, 128, pipe) != NULL)
-                scriptOutput += buffer;
+            if (fgets(charBuffer, 128, pipe) != NULL)
+                scriptOutput += charBuffer;
         }
         pclose(pipe);
 
