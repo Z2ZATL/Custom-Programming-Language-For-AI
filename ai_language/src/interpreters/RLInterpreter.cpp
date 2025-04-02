@@ -52,7 +52,10 @@ void RLInterpreter::saveModel(const std::string& modelPath) {
     struct stat info;
     if (stat(directory.c_str(), &info) != 0 || !(info.st_mode & S_IFDIR)) {
         std::string mkdirCmd = "mkdir -p \"" + directory + "\"";
-        system(mkdirCmd.c_str());
+        int result = system(mkdirCmd.c_str());
+        if (result != 0) {
+            std::cout << "Warning: Failed to create directory: " << directory << std::endl;
+        }
     }
     
     // สร้างเส้นทางเต็มสำหรับไฟล์
