@@ -70,57 +70,81 @@ void DLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
         return;
     }
 
-    if (args.empty()) {
-        std::cout << RED << "รูปแบบคำสั่งไม่ถูกต้อง ตัวอย่าง: add layer input 784" << RESET << std::endl;
-        return;
-    }
-
-    // for debugging
-    std::cout << "DEBUG: Received add command with " << args.size() << " args: ";
-    for (const auto& arg : args) {
-        std::cout << "'" << arg << "' ";
-    }
-    std::cout << std::endl;
-
-    // สำหรับคำสั่ง 'add layer ...'
-    if (args.size() < 3) {
+    if (args.size() < 2 || args[0] != "layer") {
         std::cout << RED << "รูปแบบคำสั่งไม่ถูกต้อง ตัวอย่าง: add layer input 784" << RESET << std::endl;
         return;
     }
 
     std::string layerType = args[1];
-    int neurons = 0;
-    std::string activation = "linear";
+    std::string layerInfo;
 
-    if (args.size() >= 3) {
-        try {
-            neurons = std::stoi(args[2]);
-        } catch (const std::exception& e) {
-            std::cout << RED << "จำนวน neuron ต้องเป็นตัวเลข" << RESET << std::endl;
+    if (layerType == "input") {
+        if (args.size() < 5) {
+            std::cout << RED << "รูปแบบคำสั่งไม่ถูกต้อง สำหรับ input layer: add layer input width height channels" << RESET << std::endl;
             return;
         }
-    }
-
-    if (args.size() >= 5 && args[3] == "activation") {
-        activation = args[4];
-        // Remove quotes if present
-        if (activation.size() >= 2 && activation.front() == '"' && activation.back() == '"') {
-            activation = activation.substr(1, activation.size() - 2);
+        int width = std::stoi(args[2]);
+        int height = std::stoi(args[3]);
+        int channels = std::stoi(args[4]);
+        layerInfo = "input:" + std::to_string(width) + "x" + std::to_string(height) + "x" + std::to_string(channels);
+        
+    } else if (layerType == "convolutional" || layerType == "conv") {
+        if (args.size() < 5) {
+            std::cout << RED << "รูปแบบคำสั่งไม่ถูกต้อง สำหรับ convolutional layer: add layer conv filters kernel_size activation" << RESET << std::endl;
+            return;
         }
+        int filters = std::stoi(args[2]);
+        int kernelSize = std::stoi(args[3]);
+        std::string activation = args.size() > 5 && args[4] == "activation" ? args[5] : "relu";
+        if (activation.front() == '"') activation = activation.substr(1, activation.size()-2);
+        layerInfo = "conv:" + std::to_string(filters) + ":" + std::to_string(kernelSize) + ":" + activation;
+        
+    } else if (layerType == "max_pooling" || layerType == "pool") {
+        if (args.size() < 4) {
+            std::cout << RED << "รูปแบบคำสั่งไม่ถูกต้อง สำหรับ pooling layer: add layer pool size_x size_y" << RESET << std::endl;
+            return;
+        }
+        int sizeX = std::stoi(args[2]);
+        int sizeY = std::stoi(args[3]);
+        layerInfo = "pool:" + std::to_string(sizeX) + "x" + std::to_string(sizeY);
+        
+    } else if (layerType == "flatten") {
+        layerInfo = "flatten";
+        
+    } else if (layerType == "hidden" || layerType == "dense") {
+        if (args.size() < 3) {
+            std::cout << RED << "รูปแบบคำสั่งไม่ถูกต้อง สำหรับ hidden layer: add layer hidden neurons [activation function]" << RESET << std::endl;
+            return;
+        }
+        int neurons = std::stoi(args[2]);
+        std::string activation = args.size() > 4 && args[3] == "activation" ? args[4] : "relu";
+        if (activation.front() == '"') activation = activation.substr(1, activation.size()-2);
+        layerInfo = "hidden:" + std::to_string(neurons) + ":" + activation;
+        
+    } else if (layerType == "output") {
+        if (args.size() < 3) {
+            std::cout << RED << "รูปแบบคำสั่งไม่ถูกต้อง สำหรับ output layer: add layer output neurons [activation function]" << RESET << std::endl;
+            return;
+        }
+        int neurons = std::stoi(args[2]);
+        std::string activation = args.size() > 4 && args[3] == "activation" ? args[4] : "softmax";
+        if (activation.front() == '"') activation = activation.substr(1, activation.size()-2);
+        layerInfo = "output:" + std::to_string(neurons) + ":" + activation;
+        
+    } else if (layerType == "dropout") {
+        if (args.size() < 3) {
+            std::cout << RED << "รูปแบบคำสั่งไม่ถูกต้อง สำหรับ dropout layer: add layer dropout rate" << RESET << std::endl;
+            return;
+        }
+        float rate = std::stof(args[2]);
+        layerInfo = "dropout:" + std::to_string(rate);
+    } else {
+        std::cout << RED << "ไม่รู้จักประเภทของ layer: " << layerType << RESET << std::endl;
+        return;
     }
 
-    // เพิ่มข้อมูล Layer ลงในลิสต์ของ neural network
-    std::string layerInfo = layerType + ":" + std::to_string(neurons) + ":" + activation;
     layers.push_back(layerInfo);
-
-    std::cout << GREEN << "เพิ่ม Layer " << layerType;
-    if (neurons > 0) {
-        std::cout << " (" << neurons << " neurons)";
-    }
-    if (activation != "linear") {
-        std::cout << " พร้อม activation function: " << activation;
-    }
-    std::cout << RESET << std::endl;
+    std::cout << GREEN << "เพิ่ม " << layerType << " layer สำเร็จ" << RESET << std::endl;
 }
 
 void DLInterpreter::handleLoadCommand(const std::vector<std::string>& args) {
