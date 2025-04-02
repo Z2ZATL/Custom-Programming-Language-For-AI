@@ -1,0 +1,42 @@
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+[  7%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/DLInterpreter.cpp.o
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: In function ‘int main()’:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:65:30: error: cannot declare variable ‘interpreter’ to be of abstract type ‘ai_language::DLInterpreter’
+   65 |   ai_language::DLInterpreter interpreter;
+      |                              ^~~~~~~~~~~
+In file included from /home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:24:
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/DLInterpreter.h:9:7: note:   because the following virtual functions are pure within ‘ai_language::DLInterpreter’:
+    9 | class DLInterpreter : public BaseInterpreter {
+      |       ^~~~~~~~~~~~~
+In file included from /home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/DLInterpreter.h:5:
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:50:18: note:     ‘virtual void ai_language::BaseInterpreter::setDefaultParameters()’
+   50 |     virtual void setDefaultParameters() = 0;
+      |                  ^~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:60:18: note:     ‘virtual void ai_language::BaseInterpreter::handleStartCommand()’
+   60 |     virtual void handleStartCommand() = 0;
+      |                  ^~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:61:18: note:     ‘virtual void ai_language::BaseInterpreter::handleCreateCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+   61 |     virtual void handleCreateCommand(const std::vector<std::string>& args) = 0;
+      |                  ^~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:62:18: note:     ‘virtual void ai_language::BaseInterpreter::handleLoadCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+   62 |     virtual void handleLoadCommand(const std::vector<std::string>& args) = 0;
+      |                  ^~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:63:18: note:     ‘virtual void ai_language::BaseInterpreter::handleSetCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+   63 |     virtual void handleSetCommand(const std::vector<std::string>& args) = 0;
+      |                  ^~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:64:18: note:     ‘virtual void ai_language::BaseInterpreter::handleTrainCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+   64 |     virtual void handleTrainCommand(const std::vector<std::string>& args) = 0;
+      |                  ^~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:65:18: note:     ‘virtual void ai_language::BaseInterpreter::handleShowCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+   65 |     virtual void handleShowCommand(const std::vector<std::string>& args) = 0;
+      |                  ^~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:66:18: note:     ‘virtual void ai_language::BaseInterpreter::handleSaveCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+   66 |     virtual void handleSaveCommand(const std::vector<std::string>& args) = 0;
+      |                  ^~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:67:18: note:     ‘virtual void ai_language::BaseInterpreter::handleHelpCommand()’
+   67 |     virtual void handleHelpCommand() = 0;
+      |                  ^~~~~~~~~~~~~~~~~
+make[2]: *** [CMakeFiles/ai_language_lib.dir/build.make:104: CMakeFiles/ai_language_lib.dir/src/interpreters/DLInterpreter.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:88: CMakeFiles/ai_language_lib.dir/all] Error 2
+make: *** [Makefile:91: all] Error 
