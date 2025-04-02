@@ -36,26 +36,6 @@ void DLInterpreter::interpret() {
 } // namespace ai_language
 
 
-// connectors/MyConnector.h  
-#ifndef MYCONNECTOR_H
-#define MYCONNECTOR_H
-
-class MyConnector {
-public:
-  void connect();
-};
-
-#endif
-
-
-// connectors/MyConnector.cpp
-#include "MyConnector.h"
-
-void MyConnector::connect() {
-  // Connection logic here
-}
-
-
 // connectors/ScikitLearnConnector.h 
 #ifndef SCIKITLEARNCONNECTOR_H
 #define SCIKITLEARNCONNECTOR_H
