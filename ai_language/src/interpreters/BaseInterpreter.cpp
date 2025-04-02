@@ -9,6 +9,10 @@
 namespace ai_language {
 
 std::string BaseInterpreter::getCurrentDateTime() const {
+    // Set timezone to Thailand (UTC+7)
+    setenv("TZ", "Asia/Bangkok", 1);
+    tzset();
+
     // Get current time
     auto now = std::chrono::system_clock::now();
     auto time = std::chrono::system_clock::to_time_t(now);
@@ -16,9 +20,10 @@ std::string BaseInterpreter::getCurrentDateTime() const {
     // Add timezone offset
     time += userTimezoneOffset * 3600;
 
-    // Format time
+    // Format time with locale settings
+    std::tm* tm_info = localtime(&time);
     std::stringstream ss;
-    ss << std::put_time(std::localtime(&time), "%Y-%m-%d %H:%M:%S");
+    ss << std::put_time(tm_info, "%a %b %d %H:%M:%S %Y");
     return ss.str();
 }
 

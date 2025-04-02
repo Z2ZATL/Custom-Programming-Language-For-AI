@@ -65,11 +65,8 @@ void RLInterpreter::saveModel(const std::string& modelPath) {
         fullPath += ".rlmodel";
     }
 
-    // Get current time for timestamp
-    auto now = std::chrono::system_clock::now();
-    auto time_t_now = std::chrono::system_clock::to_time_t(now);
-    std::string timestamp = std::ctime(&time_t_now);
-    timestamp.pop_back(); // Remove trailing newline
+    // ใช้ฟังก์ชัน getCurrentDateTime จาก BaseInterpreter
+    std::string timestamp = getCurrentDateTime();
 
     // บันทึกโมเดลลงไฟล์
     std::ofstream modelFile(fullPath);

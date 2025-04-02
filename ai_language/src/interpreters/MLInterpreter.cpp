@@ -69,14 +69,8 @@ void MLInterpreter::saveModel(const std::string& modelPath) {
 
     std::cout << "Saving ML model to: " << fullPath << std::endl;
 
-    // สร้างข้อมูลเวลาปัจจุบัน
-    auto now = std::chrono::system_clock::now();
-    std::time_t current_time = std::chrono::system_clock::to_time_t(now);
-    std::string timestamp = std::ctime(&current_time);
-    // ลบ newline character ที่ ctime เพิ่มมาโดยอัตโนมัติ
-    if (!timestamp.empty() && timestamp[timestamp.length()-1] == '\n') {
-        timestamp.erase(timestamp.length()-1);
-    }
+    // ใช้ฟังก์ชัน getCurrentDateTime จาก BaseInterpreter
+    std::string timestamp = getCurrentDateTime();
 
     // สร้างไฟล์ตัวอย่างในโฟลเดอร์นั้น
     std::ofstream modelFile(fullPath);
