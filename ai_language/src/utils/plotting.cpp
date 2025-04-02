@@ -20,11 +20,11 @@ void generateLearningCurves(int epochs, const std::string& outputPath) {
         accuracy[i] = 0.65 + 0.3 * (1 - std::exp(-(i+1)/25.0));
     }
 
-    // สร้างโฟลเดอร์สำหรับรูปภาพ
+    // สร้างโฟลเดอร์สำหรับข้อมูล
     std::string mkdir_cmd = "mkdir -p '" + outputPath + "'";
     int mkdir_result = system(mkdir_cmd.c_str());
     if (mkdir_result != 0) {
-        std::cerr << "Warning: Could not create directory for pictures." << std::endl;
+        std::cerr << "Warning: Could not create directory for data." << std::endl;
     }
 
     // บันทึกข้อมูลเป็นไฟล์ CSV สำหรับการแสดงผลด้วย C++ ทั่วไป

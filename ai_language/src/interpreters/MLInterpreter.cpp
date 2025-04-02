@@ -233,7 +233,7 @@ void MLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
 
         try {
             // เรียกใช้ฟังก์ชัน generateLearningCurves 
-            generateLearningCurves(parameters["epochs"]);
+            generateLearningCurves(parameters["epochs"], "Program test/Data");
 
             // แจ้งผู้ใช้ว่าสามารถดูกราฟได้จากไฟล์ HTML ที่สร้างขึ้น
             std::cout << "To view the graph, open the HTML file in a web browser" << std::endl;
