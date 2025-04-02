@@ -76,11 +76,11 @@ void ScikitLearnConnector::connect() {
 
 // main.cpp
 #include "../interpreters/DLInterpreter.h"
-#include "../connectors/MyConnector.h" 
+#include "../connectors/ScikitLearnConnector.h" 
 
 int main() {
   ai_language::DLInterpreter interpreter;
-  MyConnector connector;
+  ScikitLearnConnector connector;
 
   connector.connect();
   interpreter.interpret();
