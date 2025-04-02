@@ -295,7 +295,7 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
         }
 
         // ใช้ Python script เพื่อสร้างกราฟโดยตรงไม่ต้อง cd
-        std::string pythonCommand = "python3 ai_language/src/utils/plot_generator.py \"" + csvPath + "\" \"" + dataDir + "/dl_learning_curves.png\" \"Learning Curves for " + modelType + " Model\" 2>&1";
+        std::string pythonCommand = "python3 src/utils/plot_generator.py \"" + csvPath + "\" \"" + dataDir + "\" \"Learning Curves for " + modelType + " Model\" 2>&1";
 
         // เรียกใช้ Python script เพื่อสร้างกราฟ
         FILE* pipe = popen(pythonCommand.c_str(), "r");
