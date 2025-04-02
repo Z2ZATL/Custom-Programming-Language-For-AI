@@ -3,4 +3,4 @@ model_type: LinearRegression
 learning_rate: 0.01
 epochs: 100
 accuracy: 0.95
-create_time: Wed Apr  2 15:59:23 2025
+create_time: Wed Apr  2 16:01:02 2025
