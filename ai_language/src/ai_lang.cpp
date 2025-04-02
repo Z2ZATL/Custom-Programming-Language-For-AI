@@ -26,6 +26,7 @@ void printUsage() {
 }
 
 void runInteractiveMode() {
+    std::cout << "DEBUG: Starting interactive mode" << std::endl;
     std::cout << "=== โหมดโต้ตอบของภาษา AI ===" << std::endl;
     std::cout << "พิมพ์คำสั่งและกด Enter เพื่อดำเนินการ (พิมพ์ 'exit' เพื่อออก)" << std::endl;
     std::cout << "รองรับคำสั่งหลายบรรทัด - พิมพ์ '\\' แล้วกด Enter เพื่อพิมพ์ต่อในบรรทัดถัดไป" << std::endl;
@@ -140,6 +141,8 @@ void runInteractiveMode() {
 }
 
 int main(int argc, char* argv[]) {
+    std::cout << "DEBUG: Starting ai_lang with " << argc << " arguments" << std::endl;
+    
     // ตรวจสอบ arguments
     if (argc == 1) {
         printUsage();
@@ -147,11 +150,15 @@ int main(int argc, char* argv[]) {
     }
 
     std::string arg = argv[1];
+    std::cout << "DEBUG: First argument is " << arg << std::endl;
+    
     if (arg == "-h" || arg == "--help") {
         printUsage();
         return 0;
     } else if (arg == "-i" || arg == "--interactive") {
+        std::cout << "DEBUG: About to enter interactive mode" << std::endl;
         runInteractiveMode();
+        std::cout << "DEBUG: Interactive mode completed" << std::endl;
         return 0;
     } else {
         // ประมวลผลไฟล์
