@@ -266,14 +266,18 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
     } else if (showType == "graph") {
         std::cout << GREEN << "กำลังสร้างกราฟผลการเทรนโมเดล " << modelType << "..." << RESET << std::endl;
 
-        // กำหนดเส้นทางสำหรับเก็บไฟล์กราฟและสร้างไดเรกทอรีถ้ายังไม่มี
+        // กำหนดเส้นทางสำหรับเก็บไฟล์กราฟ ใช้โฟลเดอร์ที่มีอยู่แล้ว
         std::string dataDir = "ai_language/Program test/Data";
         
-        // สร้างไดเรกทอรีถ้ายังไม่มี
-        std::string mkdirCmd = "mkdir -p \"" + dataDir + "\"";
-        int dirResult = system(mkdirCmd.c_str());
-        if (dirResult != 0) {
-            std::cout << YELLOW << "คำเตือน: ไม่สามารถสร้างไดเรกทอรี " << dataDir << ". กราฟอาจไม่ถูกบันทึก." << RESET << std::endl;
+        // ตรวจสอบว่าไดเรกทอรีมีอยู่แล้วหรือไม่ - ถ้าไม่มีให้สร้างเฉพาะเมื่อจำเป็น
+        struct stat buffer;
+        if (stat(dataDir.c_str(), &buffer) != 0) {
+            // ไดเรกทอรีไม่มีอยู่ ให้สร้าง
+            std::string mkdirCmd = "mkdir -p \"" + dataDir + "\"";
+            int dirResult = system(mkdirCmd.c_str());
+            if (dirResult != 0) {
+                std::cout << YELLOW << "คำเตือน: ไม่สามารถสร้างไดเรกทอรี " << dataDir << ". กราฟอาจไม่ถูกบันทึก." << RESET << std::endl;
+            }
         }
 
         // จำลองข้อมูลการเทรนสำหรับสร้างกราฟ
@@ -389,12 +393,12 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
         return;
     }
 
-    std::string savePath = "Program test/model/dl_model.dlmodel";
+    std::string savePath = "ai_language/Program test/model/dl_model.dlmodel";
     if (args.size() >= 1) {
         std::string fileName = args[0];
         // ถ้ามีการระบุเส้นทางที่ไม่ได้ขึ้นต้นด้วย / หรือ ./ ให้เพิ่มเส้นทาง default
         if (fileName[0] != '/' && (fileName.size() < 2 || fileName.substr(0, 2) != "./")) {
-            savePath = "Program test/model/" + fileName;
+            savePath = "ai_language/Program test/model/" + fileName;
         } else {
             savePath = fileName;
         }
@@ -405,7 +409,8 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
         }
     }
 
-    // ตรวจสอบเส้นทางว่ามีโฟลเดอร์หรือไม่
+    // ใช้โฟลเดอร์ที่มีอยู่แล้ว ไม่จำเป็นต้องสร้างโฟลเดอร์ใหม่ทุกครั้ง
+    // แต่ยังควรตรวจสอบและสร้างเฉพาะกรณีที่ไม่มีโฟลเดอร์
     size_t lastSlash = savePath.find_last_of("/\\");
     if (lastSlash != std::string::npos) {
         std::string directory = savePath.substr(0, lastSlash);
