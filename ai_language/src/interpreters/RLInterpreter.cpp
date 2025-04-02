@@ -94,6 +94,12 @@ void RLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
     }
 }
 
+void RLInterpreter::handleCreateCommand(const std::vector<std::string>& args) {
+    if (args.empty()) {
+        std::cout << "Error: Missing model type for create command" << std::endl;
+        return;
+    }
+
     std::string modelType = args[0];
     std::cout << "Creating RL model: " << modelType << std::endl;
 

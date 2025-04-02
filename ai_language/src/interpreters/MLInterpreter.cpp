@@ -211,7 +211,7 @@ void MLInterpreter::handleHelpCommand() {
     std::cout << "  save model <path>            # Save model to file" << std::endl;
     std::cout << "  help                         # Show this help message" << std::endl;
     std::cout << "  evaluate model               # Evaluate the trained model" << std::endl; // Added evaluate command to help
-
+}
 
 void MLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
     if (args.empty()) {
@@ -229,8 +229,6 @@ void MLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
     } else {
         std::cout << "Unknown add type: " << args[0] << std::endl;
     }
-}
-
 }
 
 } // namespace ai_language
