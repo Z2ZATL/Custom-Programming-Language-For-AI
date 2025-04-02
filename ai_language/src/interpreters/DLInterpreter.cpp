@@ -190,10 +190,3 @@ void DLInterpreter::handleHelpCommand() {
 }
 
 } // namespace ai_language
-
-int main() {
-    ai_language::DLInterpreter interpreter;
-    interpreter.handleStartCommand();
-    interpreter.handleHelpCommand();
-    return 0;
-}
