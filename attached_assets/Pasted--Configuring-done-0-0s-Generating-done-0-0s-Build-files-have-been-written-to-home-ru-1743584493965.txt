@@ -1,0 +1,25 @@
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/runner/workspace/ai_language/build
+[  6%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/BaseInterpret[ 13%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/MLInterpreter.cpp.o
+[ 20%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/DLInterpreter.cpp.o
+[ 26%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/RLInterpreter.cpp.o
+[ 33%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/InterpreterFactory.cpp.o
+[ 40%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/interpreter.cpp.o
+/home/runner/workspace/ai_language/src/interpreters/interpreter.cpp: In member function ‘void ai_language::Interpreter::executeCommand(const std::string&, const std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/interpreter.cpp:100:13: error: ‘handleAddCommand’ was not declared in this scope; did you mean ‘handleLoadCommand’?
+  100 |             handleAddCommand(params);
+      |             ^~~~~~~~~~~~~~~~
+      |             handleLoadCommand
+/home/runner/workspace/ai_language/src/interpreters/interpreter.cpp: At global scope:
+/home/runner/workspace/ai_language/src/interpreters/interpreter.cpp:241:6: error: no declaration matches ‘void ai_language::Interpreter::handleAddCommand(const std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >&)’
+  241 | void Interpreter::handleAddCommand(const std::map<std::string, std::string>& params) {
+      |      ^~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/interpreter.cpp:241:6: note: no functions named ‘void ai_language::Interpreter::handleAddCommand(const std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >&)’
+In file included from /home/runner/workspace/ai_language/src/interpreters/interpreter.cpp:6:
+/home/runner/workspace/ai_language/include/../include/interpreter.h:54:7: note: ‘class ai_language::Interpreter’ defined here
+   54 | class Interpreter {
+      |       ^~~~~~~~~~~
+make[2]: *** [CMakeFiles/ai_language_lib.dir/build.make:174: CMakeFiles/ai_language_lib.dir/src/interpreters/interpreter.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:88: CMakeFiles/ai_language_lib.dir/all] Error 2
+make: *** [Makefile:91: all] Error 2
