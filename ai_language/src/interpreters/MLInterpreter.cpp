@@ -226,7 +226,7 @@ void MLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
             
             // รันไฟล์ Python เพื่อสร้างกราฟ
             std::cout << "Creating graphical visualization..." << std::endl;
-            int result = system("python ml_learning_curves.py");
+            int result = system("python3 ml_learning_curves.py");
             if (result == 0) {
                 std::cout << "Graph saved as 'learning_curves.png'" << std::endl;
                 std::cout << "To view the graph, open the file in a image viewer or web browser" << std::endl;
