@@ -1,6 +1,7 @@
 
 # ตัวอย่างการใช้ Classification
-start create ML
+start
+create ML
 
 # โหลดข้อมูล
 load dataset "datasets/classification_data.csv" type "csv"
@@ -21,4 +22,4 @@ evaluate model
 show metric "accuracy"
 
 # บันทึกโมเดล
-save model to "classification_model.pkl"
+save model "classification_model.pkl"

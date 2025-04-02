@@ -1,7 +1,8 @@
 # ตัวอย่างภาษา AI สำหรับงาน Reinforcement Learning
 
 # เริ่มต้นโปรเจกต์แบบ Reinforcement Learning
-start create RL
+start
+create RL
 
 # สร้างสภาพแวดล้อม
 create environment "CartPole-v1"
@@ -31,7 +32,7 @@ configure agent with gamma 0.99 epsilon 1.0 epsilon_decay 0.995 epsilon_min 0.01
 train agent for episodes 1000 max_steps 500 batch_size 32
 
 # บันทึก agent
-save agent to "cartpole_dqn_agent.h5"
+save agent "cartpole_dqn_agent.h5"
 
 # ทดสอบ agent
 test agent on environment for episodes 10 render true
