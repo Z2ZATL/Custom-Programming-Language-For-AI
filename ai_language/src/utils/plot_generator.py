@@ -43,7 +43,7 @@ def main():
         # บันทึกกราฟเป็นไฟล์ PNG - บันทึกไปยังตำแหน่งที่ถูกต้อง
         output_file = f"{output_png_path}/learning_curves.png"
         plt.savefig(output_file)
-        print(f"Graph saved successfully to {output_png_path}")"Graph saved successfully to {output_png_path}")
+        print(f"Graph saved successfully to {output_png_path}")
         return 0
 
     except Exception as e:
