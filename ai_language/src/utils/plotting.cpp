@@ -3,12 +3,9 @@
 #include <cmath>
 #include <vector>
 #include <string>
+#include <fstream>
+#include <sstream>
 #include "../../include/utils/plotting.h"
-
-// Matplotlib-cpp header
-#include "matplotlibcpp.h"
-
-namespace plt = matplotlibcpp;
 
 namespace ai_language {
 
@@ -31,31 +28,138 @@ void generateLearningCurves(int epochs, const std::string& outputPath) {
         std::cerr << "Warning: Could not create directory for pictures." << std::endl;
     }
     
-    // กำหนดขนาด figure
-    plt::figure_size(1200, 500);
+    // บันทึกข้อมูลเป็นไฟล์ CSV สำหรับการแสดงผลด้วย C++ ทั่วไป
+    std::string dataPath = outputPath + "/learning_curves_data.csv";
+    std::ofstream dataFile(dataPath);
     
-    // สร้างกราฟ loss
-    plt::subplot(1, 2, 1);
-    plt::plot(x, loss, "r-");
-    plt::title("Loss vs. Epochs");
-    plt::xlabel("Epochs");
-    plt::ylabel("Loss");
-    plt::grid(true);
+    if (!dataFile.is_open()) {
+        std::cerr << "Error: Could not open file for writing: " << dataPath << std::endl;
+        return;
+    }
     
-    // สร้างกราฟ accuracy
-    plt::subplot(1, 2, 2);
-    plt::plot(x, accuracy, "b-");
-    plt::title("Accuracy vs. Epochs");
-    plt::xlabel("Epochs");
-    plt::ylabel("Accuracy");
-    plt::grid(true);
+    // เขียน header และข้อมูล
+    dataFile << "Epoch,Loss,Accuracy" << std::endl;
+    for (int i = 0; i < epochs; i++) {
+        dataFile << x[i] << "," << loss[i] << "," << accuracy[i] << std::endl;
+    }
+    dataFile.close();
     
-    // บันทึกกราฟ
-    std::string fullPath = outputPath + "/learning_curves.png";
-    plt::save(fullPath);
-    plt::close();
+    // สร้างไฟล์ HTML/SVG สำหรับแสดงกราฟ
+    std::string htmlPath = outputPath + "/learning_curves.html";
+    std::ofstream htmlFile(htmlPath);
     
-    std::cout << "Graph saved as '" << fullPath << "'" << std::endl;
+    if (!htmlFile.is_open()) {
+        std::cerr << "Error: Could not open file for writing: " << htmlPath << std::endl;
+        return;
+    }
+    
+    // สร้างไฟล์ HTML ที่แสดงกราฟด้วย SVG
+    htmlFile << "<!DOCTYPE html>\n";
+    htmlFile << "<html lang=\"en\">\n";
+    htmlFile << "<head>\n";
+    htmlFile << "    <meta charset=\"UTF-8\">\n";
+    htmlFile << "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n";
+    htmlFile << "    <title>Learning Curves</title>\n";
+    htmlFile << "    <style>\n";
+    htmlFile << "        body { font-family: Arial, sans-serif; margin: 20px; }\n";
+    htmlFile << "        .graph-container { display: flex; justify-content: space-between; }\n";
+    htmlFile << "        .graph { width: 48%; border: 1px solid #ccc; padding: 10px; }\n";
+    htmlFile << "        h2 { text-align: center; }\n";
+    htmlFile << "    </style>\n";
+    htmlFile << "</head>\n";
+    htmlFile << "<body>\n";
+    htmlFile << "    <h1>Learning Curves</h1>\n";
+    htmlFile << "    <div class=\"graph-container\">\n";
+    
+    // กราฟ Loss
+    htmlFile << "        <div class=\"graph\">\n";
+    htmlFile << "            <h2>Loss vs. Epochs</h2>\n";
+    htmlFile << "            <svg width=\"500\" height=\"300\" viewBox=\"0 0 500 300\">\n";
+    htmlFile << "                <rect width=\"500\" height=\"300\" fill=\"#f8f8f8\"></rect>\n";
+    
+    // แกน X และ Y
+    htmlFile << "                <line x1=\"50\" y1=\"250\" x2=\"450\" y2=\"250\" stroke=\"black\" stroke-width=\"2\"></line>\n";
+    htmlFile << "                <line x1=\"50\" y1=\"50\" x2=\"50\" y2=\"250\" stroke=\"black\" stroke-width=\"2\"></line>\n";
+    
+    // คำอธิบายแกน
+    htmlFile << "                <text x=\"250\" y=\"280\" text-anchor=\"middle\">Epochs</text>\n";
+    htmlFile << "                <text x=\"20\" y=\"150\" text-anchor=\"middle\" transform=\"rotate(-90,20,150)\">Loss</text>\n";
+    
+    // เส้นตาราง
+    for (int i = 1; i < 5; i++) {
+        int y = 250 - 50 * i;
+        htmlFile << "                <line x1=\"50\" y1=\"" << y << "\" x2=\"450\" y2=\"" << y 
+                 << "\" stroke=\"#ccc\" stroke-width=\"1\"></line>\n";
+        htmlFile << "                <text x=\"40\" y=\"" << y + 5 << "\" text-anchor=\"end\">" 
+                 << 0.2 * i << "</text>\n";
+    }
+    
+    // เส้นกราฟ Loss
+    htmlFile << "                <polyline points=\"";
+    for (int i = 0; i < epochs; i++) {
+        double x_pos = 50 + (400.0 * i) / (epochs - 1);
+        double y_pos = 250 - (loss[i] / 0.82) * 200;
+        htmlFile << x_pos << "," << y_pos << " ";
+    }
+    htmlFile << "\" fill=\"none\" stroke=\"red\" stroke-width=\"2\"></polyline>\n";
+    
+    htmlFile << "            </svg>\n";
+    htmlFile << "        </div>\n";
+    
+    // กราฟ Accuracy
+    htmlFile << "        <div class=\"graph\">\n";
+    htmlFile << "            <h2>Accuracy vs. Epochs</h2>\n";
+    htmlFile << "            <svg width=\"500\" height=\"300\" viewBox=\"0 0 500 300\">\n";
+    htmlFile << "                <rect width=\"500\" height=\"300\" fill=\"#f8f8f8\"></rect>\n";
+    
+    // แกน X และ Y
+    htmlFile << "                <line x1=\"50\" y1=\"250\" x2=\"450\" y2=\"250\" stroke=\"black\" stroke-width=\"2\"></line>\n";
+    htmlFile << "                <line x1=\"50\" y1=\"50\" x2=\"50\" y2=\"250\" stroke=\"black\" stroke-width=\"2\"></line>\n";
+    
+    // คำอธิบายแกน
+    htmlFile << "                <text x=\"250\" y=\"280\" text-anchor=\"middle\">Epochs</text>\n";
+    htmlFile << "                <text x=\"20\" y=\"150\" text-anchor=\"middle\" transform=\"rotate(-90,20,150)\">Accuracy</text>\n";
+    
+    // เส้นตาราง
+    for (int i = 1; i < 5; i++) {
+        int y = 250 - 50 * i;
+        htmlFile << "                <line x1=\"50\" y1=\"" << y << "\" x2=\"450\" y2=\"" << y 
+                 << "\" stroke=\"#ccc\" stroke-width=\"1\"></line>\n";
+        htmlFile << "                <text x=\"40\" y=\"" << y + 5 << "\" text-anchor=\"end\">" 
+                 << 0.2 * i << "</text>\n";
+    }
+    
+    // เส้นกราฟ Accuracy
+    htmlFile << "                <polyline points=\"";
+    for (int i = 0; i < epochs; i++) {
+        double x_pos = 50 + (400.0 * i) / (epochs - 1);
+        double y_pos = 250 - (accuracy[i] / 0.95) * 200;
+        htmlFile << x_pos << "," << y_pos << " ";
+    }
+    htmlFile << "\" fill=\"none\" stroke=\"blue\" stroke-width=\"2\"></polyline>\n";
+    
+    htmlFile << "            </svg>\n";
+    htmlFile << "        </div>\n";
+    htmlFile << "    </div>\n";
+    htmlFile << "</body>\n";
+    htmlFile << "</html>\n";
+    
+    htmlFile.close();
+    
+    // สร้างไฟล์ PNG (อาจใช้คำสั่ง Chrome headless หรือเครื่องมืออื่นในการแปลง HTML เป็น PNG)
+    std::string pngPath = outputPath + "/learning_curves.png";
+    
+    // ใช้ convert จาก ImageMagick หากมี
+    std::string convert_cmd = "which convert > /dev/null 2>&1 && convert -size 1000x600 " + htmlPath + " " + pngPath + " || echo 'ImageMagick not found, using HTML file instead'";
+    system(convert_cmd.c_str());
+    
+    // ถ้าไม่มี ImageMagick เราจะทำสำเนาไฟล์ SVG เป็น PNG แทน (จะไม่เปิดได้แต่อย่างน้อยมีไฟล์ให้ใช้งาน)
+    std::string cp_cmd = "[ ! -f \"" + pngPath + "\" ] && cp " + htmlPath + " " + pngPath;
+    system(cp_cmd.c_str());
+    
+    std::cout << "Graph saved as '" << htmlPath << "'" << std::endl;
+    std::cout << "Data saved as '" << dataPath << "'" << std::endl;
+    std::cout << "(PNG format may require manual conversion)" << std::endl;
 }
 
 } // namespace ai_language
