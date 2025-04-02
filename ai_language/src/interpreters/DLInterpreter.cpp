@@ -22,7 +22,7 @@ public:
 
 
 // interpreters/DLInterpreter.cpp
-#include "DLInterpreter.h"
+#include "../../include/interpreters/DLInterpreter.h"
 
 void DLInterpreter::interpret() {
   // Interpretation logic here
