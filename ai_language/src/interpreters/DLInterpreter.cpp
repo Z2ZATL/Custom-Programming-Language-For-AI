@@ -48,7 +48,7 @@ public:
 #endif
 
 // connectors/ScikitLearnConnector.cpp 
-#include "ScikitLearnConnector.h"
+#include "../../include/connectors/ScikitLearnConnector.h"
 
 void ScikitLearnConnector::connect() {
     // Scikit-learn connection logic here.
