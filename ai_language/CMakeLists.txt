@@ -13,6 +13,7 @@ set(SOURCES
     src/interpreters/RLInterpreter.cpp
     src/interpreters/InterpreterFactory.cpp
     src/connectors/ScikitLearnConnector.cpp
+    src/connectors/Connector.cpp
     src/interpreters/interpreter.cpp
     src/lexer.cpp
     src/parser.cpp
