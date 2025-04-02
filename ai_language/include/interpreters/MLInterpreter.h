@@ -15,6 +15,7 @@ private:
     bool hasCreatedModel;
     bool hasTrained;
     bool hasShowedAccuracy;
+    bool hasEvaluated;
     std::string modelType;
     std::map<std::string, double> parameters;
 

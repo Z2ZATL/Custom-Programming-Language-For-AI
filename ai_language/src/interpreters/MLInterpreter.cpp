@@ -158,9 +158,9 @@ void MLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
     std::string showType = args[0];
 
     if (showType == "parameters") {
-        std::cout << "Learning rate: " << learningRate << std::endl;
-        std::cout << "Epochs: " << epochs << std::endl;
-        std::cout << "Batch size: " << batchSize << std::endl;
+        std::cout << "Learning rate: " << parameters["learning_rate"] << std::endl;
+        std::cout << "Epochs: " << parameters["epochs"] << std::endl;
+        std::cout << "Batch size: " << parameters["batch_size"] << std::endl;
         // Display other parameters as needed
     } else if (showType == "accuracy") {
         if (!hasTrained) {
