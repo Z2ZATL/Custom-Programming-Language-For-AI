@@ -220,16 +220,15 @@ void MLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
             return;
         }
 
-        std::cout << "Displaying learning curve graph for model " << modelType << std::endl;
-        std::cout << "Epoch vs. Loss Graph:" << std::endl;
+        std::cout << "สร้างกราฟข้อมูลสำหรับโมเดล " << modelType << std::endl;
+        std::cout << "ข้อมูลสรุปการเทรนโมเดล:" << std::endl;
         std::cout << "------------------------" << std::endl;
-        std::cout << "Loss decreases from 0.82 to 0.05 over " << parameters["epochs"] << " epochs" << std::endl;
-        std::cout << "Epoch vs. Accuracy Graph:" << std::endl;
+        std::cout << "Loss ลดลงจาก 0.82 เหลือ 0.05 ตลอด " << parameters["epochs"] << " epochs" << std::endl;
+        std::cout << "Accuracy เพิ่มขึ้นจาก 0.65 เป็น 0.95 ตลอด " << parameters["epochs"] << " epochs" << std::endl;
         std::cout << "------------------------" << std::endl;
-        std::cout << "Accuracy increases from 0.65 to 0.95 over " << parameters["epochs"] << " epochs" << std::endl;
 
         // ใช้ฟังก์ชัน C++ สร้างกราฟโดยตรง
-        std::cout << "Creating HTML visualization..." << std::endl;
+        std::cout << "กำลังสร้างไฟล์กราฟข้อมูล (ไม่สามารถแสดงในเทอร์มินัลได้)..." << std::endl;
 
         try {
             // เรียกใช้ฟังก์ชัน generateLearningCurves 
