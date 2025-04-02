@@ -176,6 +176,18 @@ void MLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
         }
         double loss = 0.05;  // สมมติค่า loss
         std::cout << "Model loss: " << loss << std::endl;
+    } else if (showType == "graph") {
+        if (!hasTrained) {
+            std::cout << "Warning: Model not trained yet, no graph to show." << std::endl;
+            return;
+        }
+        std::cout << "Displaying learning curve graph for model " << modelType << std::endl;
+        std::cout << "Epoch vs. Loss Graph:" << std::endl;
+        std::cout << "------------------------" << std::endl;
+        std::cout << "Loss decreases from 0.82 to 0.05 over " << parameters["epochs"] << " epochs" << std::endl;
+        std::cout << "Epoch vs. Accuracy Graph:" << std::endl;
+        std::cout << "------------------------" << std::endl;
+        std::cout << "Accuracy increases from 0.65 to 0.95 over " << parameters["epochs"] << " epochs" << std::endl;
     } else {
         std::cout << "Unknown show type: " << showType << std::endl;
     }

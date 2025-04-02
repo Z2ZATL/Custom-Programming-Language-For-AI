@@ -261,6 +261,13 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
         std::cout << GREEN << "ความแม่นยำของโมเดล: 0.89" << RESET << std::endl;
     } else if (showType == "loss") {
         std::cout << GREEN << "ค่า Loss: 0.134" << RESET << std::endl;
+    } else if (showType == "performance" || showType == "metrics") {
+        std::cout << GREEN << "ผลการวัดประสิทธิภาพของโมเดล " << modelType << ":" << RESET << std::endl;
+        std::cout << BLUE << "ความแม่นยำ (Accuracy): 0.89" << RESET << std::endl;
+        std::cout << BLUE << "ค่า Loss: 0.134" << RESET << std::endl;
+        std::cout << BLUE << "Precision: 0.91" << RESET << std::endl;
+        std::cout << BLUE << "Recall: 0.87" << RESET << std::endl;
+        std::cout << BLUE << "F1 Score: 0.89" << RESET << std::endl;
     } else if (showType == "model") {
         std::cout << GREEN << "โครงสร้างโมเดล " << modelType << ":" << RESET << std::endl;
 
