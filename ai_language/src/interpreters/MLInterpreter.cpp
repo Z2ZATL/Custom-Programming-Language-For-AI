@@ -228,7 +228,7 @@ void MLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
         std::cout << "------------------------" << std::endl;
 
         // ใช้ฟังก์ชัน C++ สร้างกราฟโดยตรง
-        std::cout << "กำลังสร้างไฟล์กราฟข้อมูล (ไม่สามารถแสดงในเทอร์มินัลได้)..." << std::endl;
+        std::cout << "กำลังสร้างไฟล์กราฟข้อมูลทั้งในรูปแบบ HTML และ PNG (ไม่สามารถแสดงในเทอร์มินัลได้)..." << std::endl;
 
         try {
             // เรียกใช้ฟังก์ชัน generateLearningCurves 
