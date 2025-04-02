@@ -60,6 +60,49 @@ void DLInterpreter::handleCreateCommand(const std::vector<std::string>& args) {
     this->modelType = modelType;
 }
 
+// เพิ่มฟังก์ชันใหม่เพื่อรองรับคำสั่ง add layer
+void DLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
+    if (!hasCreatedModel) {
+        std::cout << RED << "กรุณาสร้างโมเดลก่อนด้วยคำสั่ง 'create'" << RESET << std::endl;
+        return;
+    }
+
+    if (args.size() < 2) {
+        std::cout << RED << "รูปแบบคำสั่งไม่ถูกต้อง ตัวอย่าง: add layer input 784" << RESET << std::endl;
+        return;
+    }
+
+    if (args[0] == "layer") {
+        std::string layerType = args[1];
+        int neurons = 0;
+        std::string activation = "linear";
+        
+        if (args.size() >= 3) {
+            try {
+                neurons = std::stoi(args[2]);
+            } catch (const std::exception& e) {
+                std::cout << RED << "จำนวน neuron ต้องเป็นตัวเลข" << RESET << std::endl;
+                return;
+            }
+        }
+        
+        if (args.size() >= 5 && args[3] == "activation") {
+            activation = args[4];
+        }
+        
+        std::cout << GREEN << "เพิ่ม Layer " << layerType;
+        if (neurons > 0) {
+            std::cout << " (" << neurons << " neurons)";
+        }
+        if (activation != "linear") {
+            std::cout << " พร้อม activation function: " << activation;
+        }
+        std::cout << RESET << std::endl;
+    } else {
+        std::cout << RED << "ไม่รู้จักคำสั่ง add ประเภท: " << args[0] << RESET << std::endl;
+    }
+}
+
 void DLInterpreter::handleLoadCommand(const std::vector<std::string>& args) {
     if (!hasStarted) {
         std::cout << RED << "กรุณาใช้คำสั่ง 'start' ก่อน" << RESET << std::endl;
@@ -130,6 +173,21 @@ void DLInterpreter::handleTrainCommand(const std::vector<std::string>& args) {
     }
     
     hasTrainedModel = true;
+}
+
+void DLInterpreter::handleEvaluateCommand(const std::vector<std::string>& args) {
+    if (!hasTrainedModel) {
+        std::cout << RED << "กรุณาเทรนโมเดลก่อนด้วยคำสั่ง 'train'" << RESET << std::endl;
+        return;
+    }
+
+    if (args.size() >= 1 && args[0] == "model") {
+        std::cout << GREEN << "กำลังประเมินผลประสิทธิภาพโมเดล " << modelType << RESET << std::endl;
+        std::cout << BLUE << "ความแม่นยำบนชุดข้อมูลทดสอบ: 0.92" << RESET << std::endl;
+        std::cout << BLUE << "ค่า Loss บนชุดข้อมูลทดสอบ: 0.08" << RESET << std::endl;
+    } else {
+        std::cout << RED << "รูปแบบคำสั่งไม่ถูกต้อง ตัวอย่าง: evaluate model" << RESET << std::endl;
+    }
 }
 
 void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {

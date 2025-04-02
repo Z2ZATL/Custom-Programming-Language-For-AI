@@ -96,6 +96,8 @@ void Interpreter::executeCommand(const std::string& command, const std::map<std:
             handleTrainCommand(params);
         } else if (command == "evaluate") {
             handleEvaluateCommand(params);
+        } else if (command == "add") {
+            handleAddCommand(params);
         } else if (command == "predict") {
             handlePredictCommand(params);
         } else if (command == "save") {
@@ -235,6 +237,18 @@ void Interpreter::handleEvaluateCommand(const std::map<std::string, std::string>
         m_outputHandler("  พารามิเตอร์: " + pair.first + " = " + pair.second);
     }
 }
+
+void Interpreter::handleAddCommand(const std::map<std::string, std::string>& params) {
+    if (params.find("type") == params.end()) {
+        m_errorHandler("ต้องระบุ type ของสิ่งที่จะเพิ่ม (เช่น layer)");
+        return;
+    }
+    std::string type = params.at("type");
+    m_outputHandler("กำลังเพิ่ม " + type);
+
+    //Add more specific handling based on the type here.
+}
+
 
 void Interpreter::handlePredictCommand(const std::map<std::string, std::string>& params) {
     // ตรวจสอบว่าได้ฝึกโมเดลแล้วหรือไม่

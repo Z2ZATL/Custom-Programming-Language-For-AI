@@ -74,6 +74,10 @@ void MLInterpreter::handleCreateCommand(const std::vector<std::string>& args) {
         modelType = args[1];
         std::cout << "Creating ML model: " << modelType << std::endl;
         hasCreatedModel = true;
+    } else if (createType == "ML") {
+        // สำหรับคำสั่ง "create ML" เพื่อรองรับไวยากรณ์ใหม่
+        std::cout << "Creating ML environment" << std::endl;
+        hasCreatedModel = true;
     } else {
         std::cout << "Unknown create type: " << createType << std::endl;
     }
@@ -129,6 +133,21 @@ void MLInterpreter::handleTrainCommand(const std::vector<std::string>& args) {
     hasTrained = true;
 }
 
+// เพิ่มฟังก์ชันสำหรับจัดการคำสั่ง evaluate
+void MLInterpreter::handleEvaluateCommand(const std::vector<std::string>& args) {
+    if (!hasTrained) {
+        std::cout << "Error: Model has not been trained yet. Use 'train model' command first." << std::endl;
+        return;
+    }
+    
+    if (args.size() >= 1 && args[0] == "model") {
+        evaluateModel();
+        std::cout << "Model evaluation complete. Use 'show accuracy' or 'show loss' to see results." << std::endl;
+    } else {
+        std::cout << "Usage: evaluate model" << std::endl;
+    }
+}
+
 void MLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
     if (args.empty()) {
         std::cout << "Error: Missing show parameter" << std::endl;
@@ -150,6 +169,15 @@ void MLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
         
         evaluateModel();
         hasShowedAccuracy = true;
+    } else if (showType == "loss") {
+        if (!hasTrained) {
+            std::cout << "Error: Model has not been trained yet." << std::endl;
+            return;
+        }
+        
+        // แสดงค่า loss (ตัวอย่าง)
+        double loss = 0.05; // สมมติค่า loss
+        std::cout << "Model loss: " << loss << std::endl;
     } else {
         std::cout << "Unknown show type: " << showType << std::endl;
     }

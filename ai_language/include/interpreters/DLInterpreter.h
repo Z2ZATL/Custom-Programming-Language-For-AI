@@ -19,7 +19,9 @@ public:
     void handleCreateCommand(const std::vector<std::string>& args) override;
     void handleLoadCommand(const std::vector<std::string>& args) override;
     void handleSetCommand(const std::vector<std::string>& args) override;
+    void handleAddCommand(const std::vector<std::string>& args) override;
     void handleTrainCommand(const std::vector<std::string>& args) override;
+    void handleEvaluateCommand(const std::vector<std::string>& args) override;
     void handleShowCommand(const std::vector<std::string>& args) override;
     void handleSaveCommand(const std::vector<std::string>& args) override;
     void handleHelpCommand() override;
