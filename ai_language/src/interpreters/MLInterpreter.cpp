@@ -261,6 +261,12 @@ void MLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
             std::cout << "Warning: Saving untrained model." << std::endl;
         }
 
+        // ลบเครื่องหมายคำพูดออกจากชื่อไฟล์ถ้ามี
+        std::string cleanPath = args[1];
+        if (cleanPath.front() == '"' && cleanPath.back() == '"') {
+            cleanPath = cleanPath.substr(1, cleanPath.size() - 2);
+        }
+
         // บันทึกโมเดล
         saveModel(args[1]);
 
