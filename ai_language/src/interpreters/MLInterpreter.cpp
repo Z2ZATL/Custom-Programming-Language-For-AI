@@ -264,7 +264,7 @@ void MLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
         // บันทึกโมเดล
         saveModel(args[1]);
 
-        std::cout << "โมเดลถูกบันทึกไปที่ 'Program test/model/" << args[1] << "'" << std::endl;
+        std::cout << "โมเดลถูกบันทึกไปที่ 'ai_language/Program test/model/" << cleanPath << "'" << std::endl;
     } else {
         std::cout << "Unknown save type: " << args[0] << std::endl;
     }

@@ -51,8 +51,8 @@ void generateLearningCurves(int epochs, const std::string& outputPath) {
     int result = system(command.c_str());
     
     if (result == 0) {
-        std::cout << "ข้อมูลได้รับการบันทึกเป็นไฟล์ CSV: " << dataPath << std::endl;
-        std::cout << "กราฟถูกสร้างและบันทึกเป็นไฟล์ PNG: " << outputPath << "/learning_curves.png" << std::endl;
+        std::cout << "ข้อมูลได้รับการบันทึกเป็นไฟล์ CSV: ai_language/" << dataPath << std::endl;
+        std::cout << "กราฟถูกสร้างและบันทึกเป็นไฟล์ PNG: ai_language/" << outputPath << "/learning_curves.png" << std::endl;
     } else {
         std::cerr << "Error: Failed to generate plot. Make sure matplotlib and pandas are installed." << std::endl;
         std::cout << "ข้อมูลได้รับการบันทึกเป็นไฟล์ CSV: " << dataPath << std::endl;
