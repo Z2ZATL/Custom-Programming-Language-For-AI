@@ -32,6 +32,9 @@ public:
     void handleModelCreation(const std::string& modelName);
     void handleDataVisualization() const;
     void handleModelEvaluation();
+    
+    // ฟังก์ชันสำหรับรับวันที่และเวลาปัจจุบัน
+    std::string getCurrentDateTime() const;
 };
 
 } // namespace ai_language
