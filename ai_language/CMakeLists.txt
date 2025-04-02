@@ -11,7 +11,7 @@ set(SOURCES
     src/interpreters/MLInterpreter.cpp
     src/interpreters/DLInterpreter.cpp
     src/interpreters/RLInterpreter.cpp
-    src/InterpreterFactory.cpp
+    src/interpreters/InterpreterFactory.cpp
     src/connectors/ScikitLearnConnector.cpp
     src/interpreter.cpp
     src/lexer.cpp
