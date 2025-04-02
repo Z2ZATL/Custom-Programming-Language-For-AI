@@ -277,16 +277,23 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
             return;
         }
         
-        // จำลองข้อมูลการเทรนสำหรับสร้างกราฟ
+        // จำลองข้อมูลการเทรนสำหรับสร้างกราฟ - เพิ่มข้อมูลเฉพาะ DL
         std::string csvPath = dataDir + "/learning_curves_data.csv";
         std::ofstream csvFile(csvPath);
         if (csvFile.is_open()) {
-            csvFile << "epoch,accuracy,loss\n";
+            // เพิ่มข้อมูล validation_accuracy และ validation_loss สำหรับ DL
+            csvFile << "epoch,accuracy,loss,validation_accuracy,validation_loss\n";
             for (int i = 1; i <= int(parameters["epochs"]); i++) {
                 float progress = i / float(parameters["epochs"]);
                 float accuracy = 0.65f + 0.3f * (1 - std::exp(-(i)/25.0));
                 float loss = 0.82f - 0.77f * (1 - std::exp(-(i)/30.0));
-                csvFile << i << "," << accuracy << "," << loss << "\n";
+                
+                // สร้างข้อมูล validation จำลองที่มีความแตกต่างเล็กน้อยกับข้อมูลเทรน
+                float validation_accuracy = accuracy - 0.05f * (1 - progress) * (float)rand() / RAND_MAX;
+                float validation_loss = loss + 0.08f * (1 - progress) * (float)rand() / RAND_MAX;
+                
+                csvFile << i << "," << accuracy << "," << loss << "," 
+                       << validation_accuracy << "," << validation_loss << "\n";
             }
             csvFile.close();
             std::cout << "กำลังบันทึกข้อมูลเป็นไฟล์ CSV เท่านั้น (ส่วนการสร้างกราฟกำลังปรับปรุง)..." << std::endl;
