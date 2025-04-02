@@ -1,4 +1,3 @@
-
 // interpreters/DLInterpreter.cpp
 #include "../../include/interpreters/DLInterpreter.h"
 #include <iostream>
@@ -43,7 +42,7 @@ void DLInterpreter::handleCreateCommand(const std::vector<std::string>& args) {
 
     std::string modelType = args[0];
     std::cout << GREEN << "กำลังสร้างโมเดล Deep Learning ประเภท: " << modelType << RESET << std::endl;
-    
+
     if (modelType == "CNN") {
         std::cout << BLUE << "สร้างโมเดล Convolutional Neural Network" << RESET << std::endl;
     } else if (modelType == "RNN") {
@@ -58,7 +57,7 @@ void DLInterpreter::handleCreateCommand(const std::vector<std::string>& args) {
 
     // เคลียร์ Layer เก่าเมื่อสร้างโมเดลใหม่
     layers.clear();
-    
+
     hasCreatedModel = true;
     this->modelType = modelType;
 }
@@ -85,7 +84,7 @@ void DLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
         std::string layerType = args[1];
         int neurons = 0;
         std::string activation = "linear";
-        
+
         if (args.size() >= 3) {
             try {
                 neurons = std::stoi(args[2]);
@@ -94,7 +93,7 @@ void DLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
                 return;
             }
         }
-        
+
         if (args.size() >= 5 && args[3] == "activation") {
             activation = args[4];
             // Remove quotes if present
@@ -102,11 +101,11 @@ void DLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
                 activation = activation.substr(1, activation.size() - 2);
             }
         }
-        
+
         // เพิ่มข้อมูล Layer ลงในลิสต์ของ neural network
         std::string layerInfo = layerType + ":" + std::to_string(neurons) + ":" + activation;
         layers.push_back(layerInfo);
-        
+
         std::cout << GREEN << "เพิ่ม Layer " << layerType;
         if (neurons > 0) {
             std::cout << " (" << neurons << " neurons)";
@@ -133,12 +132,12 @@ void DLInterpreter::handleLoadCommand(const std::vector<std::string>& args) {
 
     datasetPath = args[0];
     std::cout << GREEN << "กำลังโหลดข้อมูลจาก: " << datasetPath << RESET << std::endl;
-    
+
     // จำลองการโหลดข้อมูล
     std::cout << BLUE << "กำลังเตรียมข้อมูลสำหรับ Deep Learning..." << RESET << std::endl;
     std::cout << BLUE << "กำลังทำ Data Preprocessing..." << RESET << std::endl;
     std::cout << BLUE << "กำลังทำ Data Augmentation..." << RESET << std::endl;
-    
+
     hasLoadedData = true;
 }
 
@@ -155,7 +154,7 @@ void DLInterpreter::handleSetCommand(const std::vector<std::string>& args) {
 
     std::string paramName = args[0];
     double paramValue;
-    
+
     try {
         paramValue = std::stod(args[1]);
     } catch (const std::exception& e) {
@@ -182,13 +181,13 @@ void DLInterpreter::handleTrainCommand(const std::vector<std::string>& args) {
     std::cout << BLUE << "จำนวน Epochs: " << parameters["epochs"] << RESET << std::endl;
     std::cout << BLUE << "Learning Rate: " << parameters["learning_rate"] << RESET << std::endl;
     std::cout << BLUE << "Batch Size: " << parameters["batch_size"] << RESET << std::endl;
-    
+
     // จำลองการเทรนโมเดล
     for (int epoch = 1; epoch <= 3; epoch++) {
         std::cout << YELLOW << "Epoch " << epoch << "/" << parameters["epochs"] << " - ";
         std::cout << "Loss: " << 0.5 / epoch << " - Accuracy: " << 0.7 + epoch * 0.1 << RESET << std::endl;
     }
-    
+
     hasTrainedModel = true;
 }
 
@@ -197,7 +196,7 @@ void DLInterpreter::handleEvaluateCommand(const std::vector<std::string>& args) 
         std::cout << RED << "กรุณาเทรนโมเดลก่อนด้วยคำสั่ง 'train'" << RESET << std::endl;
         return;
     }
-    
+
     if (args.empty() || (args.size() >= 1 && args[0] == "model")) {
         std::cout << GREEN << "กำลังประเมินผลโมเดล " << modelType << "..." << RESET << std::endl;
         std::cout << BLUE << "ความแม่นยำบนชุดข้อมูลทดสอบ: 0.92" << RESET << std::endl;
@@ -219,14 +218,14 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
     }
 
     std::string showType = args[0];
-    
+
     if (showType == "accuracy") {
         std::cout << GREEN << "ความแม่นยำของโมเดล: 0.89" << RESET << std::endl;
     } else if (showType == "loss") {
         std::cout << GREEN << "ค่า Loss: 0.134" << RESET << std::endl;
     } else if (showType == "model") {
         std::cout << GREEN << "โครงสร้างโมเดล " << modelType << ":" << RESET << std::endl;
-        
+
         if (layers.empty()) {
             // ถ้ายังไม่มีการกำหนด layer ใช้ค่าเริ่มต้น
             std::cout << BLUE << "- Input Layer: 784 neurons" << RESET << std::endl;
@@ -239,11 +238,11 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
                 std::string layerInfo = layers[i];
                 size_t firstColon = layerInfo.find(':');
                 size_t secondColon = layerInfo.find(':', firstColon + 1);
-                
+
                 std::string layerType = layerInfo.substr(0, firstColon);
                 int neurons = std::stoi(layerInfo.substr(firstColon + 1, secondColon - firstColon - 1));
                 std::string activation = layerInfo.substr(secondColon + 1);
-                
+
                 std::cout << BLUE << "- ";
                 if (layerType == "input") {
                     std::cout << "Input Layer: ";
@@ -254,7 +253,7 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
                 } else {
                     std::cout << layerType << " Layer: ";
                 }
-                
+
                 std::cout << neurons << " neurons";
                 if (activation != "linear") {
                     std::cout << ", Activation: " << activation;
@@ -265,7 +264,7 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
     } else {
         std::cout << RED << "ไม่รู้จักคำสั่ง show ประเภท: " << showType << RESET << std::endl;
     }
-    
+
     hasShowedAccuracy = true;
 }
 
@@ -294,6 +293,7 @@ void DLInterpreter::handleHelpCommand() {
     std::cout << GREEN << "show [accuracy|loss|model]" << RESET << " - แสดงข้อมูลของโมเดล" << std::endl;
     std::cout << GREEN << "save [file_path]" << RESET << " - บันทึกโมเดล" << std::endl;
     std::cout << GREEN << "help" << RESET << " - แสดงคำสั่งที่รองรับ" << std::endl;
+    std::cout << GREEN << "add layer [layer_type] [neurons] [activation]" << RESET << " - เพิ่ม layer" << std::endl; // Added help for add command
 }
 
 } // namespace ai_language
