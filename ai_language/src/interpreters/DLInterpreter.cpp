@@ -267,7 +267,11 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
         // สร้างโฟลเดอร์สำหรับเก็บไฟล์กราฟ
         std::string dataDir = "Program test/Data";
         std::string command = "mkdir -p \"" + dataDir + "\"";
-        system(command.c_str());
+        int result = system(command.c_str());
+        if (result != 0) {
+            std::cout << RED << "เกิดข้อผิดพลาดในการสร้างโฟลเดอร์: " << dataDir << RESET << std::endl;
+            return;
+        }
 
         // จำลองข้อมูลการเทรนสำหรับสร้างกราฟ
         std::string csvPath = dataDir + "/dl_learning_curves_data.csv";
@@ -382,7 +386,11 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
     if (lastSlash != std::string::npos) {
         std::string directory = savePath.substr(0, lastSlash);
         std::string command = "mkdir -p \"" + directory + "\"";
-        system(command.c_str());
+        int result = system(command.c_str());
+        if (result != 0) {
+            std::cout << RED << "เกิดข้อผิดพลาดในการสร้างโฟลเดอร์: " << directory << RESET << std::endl;
+            return;
+        }
     }
 
     std::cout << GREEN << "กำลังบันทึกโมเดล " << modelType << " ไปที่ " << savePath << RESET << std::endl;
