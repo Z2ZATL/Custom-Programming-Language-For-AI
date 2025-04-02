@@ -1,3 +1,4 @@
+
 // interpreters/DLInterpreter.cpp
 #include "../../include/interpreters/DLInterpreter.h"
 #include <iostream>
@@ -82,51 +83,44 @@ void DLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
     std::cout << std::endl;
 
     // สำหรับคำสั่ง 'add layer ...'
-    if (args.empty()) {
+    if (args.size() < 3) {
         std::cout << RED << "รูปแบบคำสั่งไม่ถูกต้อง ตัวอย่าง: add layer input 784" << RESET << std::endl;
         return;
     }
-        if (args.size() < 3) {
-            std::cout << RED << "รูปแบบคำสั่งไม่ถูกต้อง ตัวอย่าง: add layer input 784" << RESET << std::endl;
+
+    std::string layerType = args[1];
+    int neurons = 0;
+    std::string activation = "linear";
+
+    if (args.size() >= 3) {
+        try {
+            neurons = std::stoi(args[2]);
+        } catch (const std::exception& e) {
+            std::cout << RED << "จำนวน neuron ต้องเป็นตัวเลข" << RESET << std::endl;
             return;
         }
-
-        std::string layerType = args[1];
-        int neurons = 0;
-        std::string activation = "linear";
-
-        if (args.size() >= 3) {
-            try {
-                neurons = std::stoi(args[2]);
-            } catch (const std::exception& e) {
-                std::cout << RED << "จำนวน neuron ต้องเป็นตัวเลข" << RESET << std::endl;
-                return;
-            }
-        }
-
-        if (args.size() >= 5 && args[3] == "activation") {
-            activation = args[4];
-            // Remove quotes if present
-            if (activation.size() >= 2 && activation.front() == '"' && activation.back() == '"') {
-                activation = activation.substr(1, activation.size() - 2);
-            }
-        }
-
-        // เพิ่มข้อมูล Layer ลงในลิสต์ของ neural network
-        std::string layerInfo = layerType + ":" + std::to_string(neurons) + ":" + activation;
-        layers.push_back(layerInfo);
-
-        std::cout << GREEN << "เพิ่ม Layer " << layerType;
-        if (neurons > 0) {
-            std::cout << " (" << neurons << " neurons)";
-        }
-        if (activation != "linear") {
-            std::cout << " พร้อม activation function: " << activation;
-        }
-        std::cout << RESET << std::endl;
-    } else {
-        std::cout << RED << "ไม่รู้จักคำสั่ง add ประเภท: " << args[0] << RESET << std::endl;
     }
+
+    if (args.size() >= 5 && args[3] == "activation") {
+        activation = args[4];
+        // Remove quotes if present
+        if (activation.size() >= 2 && activation.front() == '"' && activation.back() == '"') {
+            activation = activation.substr(1, activation.size() - 2);
+        }
+    }
+
+    // เพิ่มข้อมูล Layer ลงในลิสต์ของ neural network
+    std::string layerInfo = layerType + ":" + std::to_string(neurons) + ":" + activation;
+    layers.push_back(layerInfo);
+
+    std::cout << GREEN << "เพิ่ม Layer " << layerType;
+    if (neurons > 0) {
+        std::cout << " (" << neurons << " neurons)";
+    }
+    if (activation != "linear") {
+        std::cout << " พร้อม activation function: " << activation;
+    }
+    std::cout << RESET << std::endl;
 }
 
 void DLInterpreter::handleLoadCommand(const std::vector<std::string>& args) {
