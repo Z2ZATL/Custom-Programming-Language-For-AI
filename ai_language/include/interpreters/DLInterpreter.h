@@ -1,3 +1,4 @@
+
 #ifndef DL_INTERPRETER_H
 #define DL_INTERPRETER_H
 
@@ -8,6 +9,7 @@ namespace ai_language {
 class DLInterpreter : public BaseInterpreter {
 private:
     std::vector<std::string> layers; // Store neural network layers
+    std::map<std::string, double> parameters;
 
 public:
     DLInterpreter() = default;
@@ -32,10 +34,3 @@ public:
 } // namespace ai_language
 
 #endif // DL_INTERPRETER_H
-    void handleShowCommand(const std::vector<std::string>& args) override;
-    void handleSaveCommand(const std::vector<std::string>& args) override;
-    void handleHelpCommand() override;
-    void handleAddCommand(const std::vector<std::string>& args) override;
-
-private:
-    std::map<std::string, double> parameters;
