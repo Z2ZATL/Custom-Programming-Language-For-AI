@@ -57,7 +57,7 @@ void runInteractiveMode() {
     std::cout << "  load dataset \"datasets/linear_data.csv\" \\" << std::endl;
     std::cout << "  create model LinearRegression ;;" << std::endl << std::endl;
 
-    std::cout << "คำแนะนำเพิ่มเติม: ดูไฟล์ USAGE_GUIDE.md สำหรับรายละเอียดเพิ่มเติม" << std::endl;
+    std::cout << "คำแนะนำเพิ่มเติม: ดูไฟล์ docs/guides/USAGE_GUIDE.md สำหรับรายละเอียดเพิ่มเติม" << std::endl;
     std::cout << "หรือดูตัวอย่างไฟล์ในโฟลเดอร์ examples/" << std::endl << std::endl;
 
     std::cout << "ข้อมูลตัวอย่างอยู่ในโฟลเดอร์ datasets/" << std::endl;
