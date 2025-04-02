@@ -30,7 +30,7 @@ public:
 
     // ฟังก์ชันเฉพาะสำหรับ Machine Learning
     void handleModelCreation(const std::string& modelName);
-    void handleDataVisualization();
+    void handleDataVisualization() const;
     void handleModelEvaluation();
 };
 

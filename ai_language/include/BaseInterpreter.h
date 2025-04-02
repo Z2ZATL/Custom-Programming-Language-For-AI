@@ -1,4 +1,3 @@
-
 #ifndef BASE_INTERPRETER_H
 #define BASE_INTERPRETER_H
 
@@ -66,6 +65,10 @@ public:
     virtual void handleShowCommand(const std::vector<std::string>& args) = 0;
     virtual void handleSaveCommand(const std::vector<std::string>& args) = 0;
     virtual void handleHelpCommand() = 0;
+
+    // ฟังก์ชันสำหรับการตรวจสอบสถานะปัจจุบัน
+    virtual bool isProjectStarted() const { return hasStarted; }
+    virtual bool isProjectCreated() const { return hasCreatedProject; }
 };
 
 } // namespace ai_language

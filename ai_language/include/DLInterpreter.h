@@ -51,10 +51,10 @@ public:
     void setDefaultParameters();
     void handleModelCreation(const std::string& modelName);
     void handleAddLayer(const std::vector<std::string>& args);
-    void handleDataVisualization();
-    void handleModelPlotting();
+    void handleDataVisualization() const;
+    void handleModelPlotting() const;
     void handleModelEvaluation();
-    void handleHelpCommand(); // Added declaration
+    void handleHelpCommand() override; // Added declaration
 
 };
 

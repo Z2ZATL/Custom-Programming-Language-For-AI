@@ -17,7 +17,7 @@ std::vector<std::string> DLInterpreter::tokenizeLine(const std::string& line) {
     std::string currentToken;
     bool inQuotes = false;
 
-    for (char c : line) {
+    for (const char c : line) {
         if (c == '"') {
             inQuotes = !inQuotes;
             currentToken += c;

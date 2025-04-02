@@ -474,7 +474,7 @@ void MLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
     }
 }
 
-void MLInterpreter::handleDataVisualization() {
+void MLInterpreter::handleDataVisualization() const {
     std::cout << GREEN << "Visualization:" << RESET << std::endl;
 
     // แสดง ASCII art scatter plot ง่ายๆ
