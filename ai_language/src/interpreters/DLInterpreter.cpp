@@ -265,7 +265,7 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
         std::cout << GREEN << "กำลังสร้างกราฟผลการเทรนโมเดล " << modelType << "..." << RESET << std::endl;
         
         // สร้างโฟลเดอร์สำหรับเก็บไฟล์กราฟ
-        std::string dataDir = "Program test/Data";
+        std::string dataDir = "ai_language/Program test/Data";
         std::string command = "mkdir -p \"" + dataDir + "\"";
         int mkdirResult = system(command.c_str());
         if (mkdirResult != 0) {
@@ -376,9 +376,14 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
         return;
     }
 
-    std::string savePath = "model.h5";
+    std::string savePath = "ai_language/Program test/model/model.h5";
     if (args.size() >= 1) {
-        savePath = args[0];
+        // ถ้ามีการระบุเส้นทางที่ไม่ได้ขึ้นต้นด้วย / หรือ ./ ให้เพิ่มเส้นทาง default
+        if (args[0][0] != '/' && (args[0].size() < 2 || args[0].substr(0, 2) != "./")) {
+            savePath = "ai_language/Program test/model/" + args[0];
+        } else {
+            savePath = args[0];
+        }
     }
     
     // สร้างโฟลเดอร์สำหรับบันทึกโมเดล (ถ้ามีการระบุ path ที่มี directory)
