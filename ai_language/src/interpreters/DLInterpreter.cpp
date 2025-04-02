@@ -180,21 +180,6 @@ void DLInterpreter::handleEvaluateCommand(const std::vector<std::string>& args) 
         std::cout << RED << "กรุณาเทรนโมเดลก่อนด้วยคำสั่ง 'train'" << RESET << std::endl;
         return;
     }
-
-    if (args.size() >= 1 && args[0] == "model") {
-        std::cout << GREEN << "กำลังประเมินผลประสิทธิภาพโมเดล " << modelType << RESET << std::endl;
-        std::cout << BLUE << "ความแม่นยำบนชุดข้อมูลทดสอบ: 0.92" << RESET << std::endl;
-        std::cout << BLUE << "ค่า Loss บนชุดข้อมูลทดสอบ: 0.08" << RESET << std::endl;
-    } else {
-        std::cout << RED << "รูปแบบคำสั่งไม่ถูกต้อง ตัวอย่าง: evaluate model" << RESET << std::endl;
-    }
-}
-
-void DLInterpreter::handleEvaluateCommand(const std::vector<std::string>& args) {
-    if (!hasTrainedModel) {
-        std::cout << RED << "กรุณาเทรนโมเดลก่อนด้วยคำสั่ง 'train'" << RESET << std::endl;
-        return;
-    }
     
     if (args.empty() || (args.size() >= 1 && args[0] == "model")) {
         std::cout << GREEN << "กำลังประเมินผลโมเดล " << modelType << "..." << RESET << std::endl;
