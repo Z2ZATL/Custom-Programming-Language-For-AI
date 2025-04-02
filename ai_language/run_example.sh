@@ -28,7 +28,7 @@ if [ ! -f "./ai_lang" ]; then
         mkdir build
     fi
     
-    cd build
+    cd build || exit 1
     cmake ..
     make
     cp ai_lang ..
