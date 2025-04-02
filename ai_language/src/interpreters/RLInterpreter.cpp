@@ -59,8 +59,16 @@ void RLInterpreter::saveModel(const std::string& modelPath) {
         }
     }
 
+    // ทำความสะอาดชื่อไฟล์ (ลบเครื่องหมายคำพูดถ้ามี)
+    std::string cleanModelPath = modelPath;
+    if (cleanModelPath.size() >= 2) {
+        if (cleanModelPath.front() == '"' && cleanModelPath.back() == '"') {
+            cleanModelPath = cleanModelPath.substr(1, cleanModelPath.size() - 2);
+        }
+    }
+
     // สร้างเส้นทางเต็มสำหรับไฟล์
-    std::string fullPath = directory + modelPath;
+    std::string fullPath = directory + cleanModelPath;
     if (fullPath.find(".rlmodel") == std::string::npos) {
         fullPath += ".rlmodel";
     }
