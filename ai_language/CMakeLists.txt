@@ -17,6 +17,7 @@ set(SOURCES
     src/interpreters/interpreter.cpp
     src/lexer.cpp
     src/parser.cpp
+    src/utils/plotting.cpp
 )
 
 # สร้าง library
@@ -42,6 +43,11 @@ endif()
 # ตัวเลือกการ build
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -g")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
+
+# เพิ่ม include directories
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(/usr/include/python3.10)  # Adjust Python version if needed
+
 
 # สร้างเป้าหมายสำหรับรัน
 add_custom_target(run

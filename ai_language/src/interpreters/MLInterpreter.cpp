@@ -1,4 +1,5 @@
 #include "../../include/interpreters/MLInterpreter.h"
+#include "../../include/utils/plotting.h"
 #include <iostream>
 #include <chrono>
 #include <ctime>
@@ -227,57 +228,16 @@ void MLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
         std::cout << "------------------------" << std::endl;
         std::cout << "Accuracy increases from 0.65 to 0.95 over " << parameters["epochs"] << " epochs" << std::endl;
         
-        // สร้างไฟล์ Python สำหรับการสร้างกราฟ
-        std::string graphFilename = "ml_learning_curves.py";
-        std::ofstream graphFile(graphFilename);
+        // ใช้ฟังก์ชัน C++ สร้างกราฟโดยตรง
+        std::cout << "Creating graphical visualization..." << std::endl;
         
-        if (graphFile.is_open()) {
-            graphFile << "import matplotlib.pyplot as plt\n";
-            graphFile << "import numpy as np\n\n";
-            graphFile << "# สร้างข้อมูลจำลอง\n";
-            graphFile << "epochs = " << parameters["epochs"] << "\n";
-            graphFile << "x = np.arange(1, epochs + 1)\n";
-            graphFile << "loss = 0.82 - 0.77 * (1 - np.exp(-x/30))\n";
-            graphFile << "accuracy = 0.65 + 0.3 * (1 - np.exp(-x/25))\n\n";
-            graphFile << "# สร้างกราฟ\n";
-            graphFile << "plt.figure(figsize=(12, 5))\n\n";
-            graphFile << "# กราฟ Loss\n";
-            graphFile << "plt.subplot(1, 2, 1)\n";
-            graphFile << "plt.plot(x, loss, 'r-', linewidth=2)\n";
-            graphFile << "plt.title('Loss vs. Epochs')\n";
-            graphFile << "plt.xlabel('Epochs')\n";
-            graphFile << "plt.ylabel('Loss')\n";
-            graphFile << "plt.grid(True)\n\n";
-            graphFile << "# กราฟ Accuracy\n";
-            graphFile << "plt.subplot(1, 2, 2)\n";
-            graphFile << "plt.plot(x, accuracy, 'b-', linewidth=2)\n";
-            graphFile << "plt.title('Accuracy vs. Epochs')\n";
-            graphFile << "plt.xlabel('Epochs')\n";
-            graphFile << "plt.ylabel('Accuracy')\n";
-            graphFile << "plt.grid(True)\n\n";
-            // สร้างโฟลเดอร์สำหรับเก็บรูปภาพ
-            int mkdir_result = system("mkdir -p 'Program test/Picture'");
-            if (mkdir_result != 0) {
-                std::cout << "Warning: Could not create directory for pictures." << std::endl;
-            }
-            
-            graphFile << "plt.tight_layout()\n";
-            graphFile << "plt.savefig('Program test/Picture/learning_curves.png')\n";
-            graphFile << "plt.close()\n";
-            
-            graphFile.close();
-            
-            // รันไฟล์ Python เพื่อสร้างกราฟ
-            std::cout << "Creating graphical visualization..." << std::endl;
-            int result = system("python3 ml_learning_curves.py");
-            if (result == 0) {
-                std::cout << "Graph saved as 'Program test/Picture/learning_curves.png'" << std::endl;
-                std::cout << "To view the graph, open the file in a image viewer or web browser" << std::endl;
-            } else {
-                std::cout << "Error: Failed to create graph. Make sure matplotlib is installed." << std::endl;
-            }
-        } else {
-            std::cout << "Error: Could not create graph file." << std::endl;
+        try {
+            // เรียกใช้ฟังก์ชันสร้างกราฟด้วย C++
+            ai_language::generateLearningCurves(parameters["epochs"], "Program test/Picture");
+            std::cout << "Graph saved as 'Program test/Picture/learning_curves.png'" << std::endl;
+            std::cout << "To view the graph, open the file in a image viewer or web browser" << std::endl;
+        } catch (const std::exception& e) {
+            std::cout << "Error: Failed to create graph: " << e.what() << std::endl;
         }
     } else {
         std::cout << "Unknown show type: " << showType << std::endl;
