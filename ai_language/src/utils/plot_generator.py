@@ -50,9 +50,8 @@ def generate_learning_curves(csv_path, output_dir):
         
         # บันทึกกราฟเป็นไฟล์ PNG
         plt.tight_layout()
-        output_path = os.path.join(output_dir, 'learning_curves.png')
-        plt.savefig(output_path)
-        print(f"Plot saved as {output_path}")
+        plt.savefig(output_png_path)
+        print(f"Plot saved as {output_png_path}")
         
         return True
     except Exception as e:
@@ -71,6 +70,7 @@ if __name__ == "__main__":
     success = generate_learning_curves(csv_path, output_dir)
     sys.exit(0 if success else 1)
 #!/usr/bin/env python3
+#!/usr/bin/env python3
 import sys
 import os
 import pandas as pd
@@ -81,15 +81,15 @@ matplotlib.use('Agg')  # Use non-interactive backend
 def main():
     if len(sys.argv) < 3:
         print("Error: Not enough arguments")
-        print("Usage: python plot_generator.py <csv_data_path> <output_image_path> [<title>]")
+        print("Usage: python plot_generator.py <csv_data_path> <output_png_path> [<title>]")
         return 1
 
     csv_path = sys.argv[1]
-    output_path = sys.argv[2]
+    output_png_path = sys.argv[2]
     title = sys.argv[3] if len(sys.argv) > 3 else "Learning Curves"
     
     try:
-        # ตรวจสอบว่าไฟล์มีอยู่จริง
+        # ตรวจสอบว่าไฟล์ CSV มีอยู่จริง
         if not os.path.exists(csv_path):
             print(f"Error: CSV file does not exist: {csv_path}")
             return 1
@@ -98,7 +98,7 @@ def main():
         df = pd.read_csv(csv_path)
         
         # สร้างโฟลเดอร์สำหรับเก็บไฟล์ PNG ถ้ายังไม่มี
-        output_dir = os.path.dirname(output_path)
+        output_dir = os.path.dirname(output_png_path)
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
             

@@ -266,18 +266,15 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
     } else if (showType == "graph") {
         std::cout << GREEN << "กำลังสร้างกราฟผลการเทรนโมเดล " << modelType << "..." << RESET << std::endl;
 
-        // กำหนดเส้นทางสำหรับเก็บไฟล์กราฟ ใช้โฟลเดอร์ที่มีอยู่แล้ว
+        // กำหนดเส้นทางสำหรับเก็บไฟล์กราฟ
         std::string dataDir = "Program test/Data";
+        std::string graphsDir = dataDir + "/graphs";
         
-        // ตรวจสอบว่าไดเรกทอรีมีอยู่แล้วหรือไม่ - ถ้าไม่มีให้สร้างเฉพาะเมื่อจำเป็น
-        struct stat dirStat;
-        if (stat(dataDir.c_str(), &dirStat) != 0) {
-            // ไดเรกทอรีไม่มีอยู่ ให้สร้าง
-            std::string mkdirCmd = "mkdir -p \"" + dataDir + "\"";
-            int dirResult = system(mkdirCmd.c_str());
-            if (dirResult != 0) {
-                std::cout << YELLOW << "คำเตือน: ไม่สามารถสร้างไดเรกทอรี " << dataDir << ". กราฟอาจไม่ถูกบันทึก." << RESET << std::endl;
-            }
+        // สร้างทั้งโฟลเดอร์ Data และ graphs ถ้ายังไม่มี
+        std::string mkdirCmd = "mkdir -p \"" + graphsDir + "\"";
+        int dirResult = system(mkdirCmd.c_str());
+        if (dirResult != 0) {
+            std::cout << YELLOW << "คำเตือน: ไม่สามารถสร้างไดเรกทอรี " << graphsDir << ". กราฟอาจไม่ถูกบันทึก." << RESET << std::endl;
         }
 
         // จำลองข้อมูลการเทรนสำหรับสร้างกราฟ
@@ -294,8 +291,11 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
             csvFile.close();
         }
 
-        // ใช้ Python script เพื่อสร้างกราฟโดยตรงไม่ต้อง cd
-        std::string pythonCommand = "python3 src/utils/plot_generator.py \"" + csvPath + "\" \"" + dataDir + "\" \"Learning Curves for " + modelType + " Model\" 2>&1";
+        // กำหนดชื่อไฟล์ PNG ที่จะบันทึก
+        std::string pngFilename = graphsDir + "/dl_" + modelType + "_learning_curves.png";
+        
+        // ใช้ Python script เพื่อสร้างกราฟ และระบุชื่อไฟล์ PNG โดยตรง
+        std::string pythonCommand = "python3 src/utils/plot_generator.py \"" + csvPath + "\" \"" + pngFilename + "\" \"Learning Curves for " + modelType + " Model\" 2>&1";
 
         // เรียกใช้ Python script เพื่อสร้างกราฟ
         FILE* pipe = popen(pythonCommand.c_str(), "r");
@@ -322,7 +322,7 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
             std::cout << BLUE << "------------------------" << RESET << std::endl;
 
             std::cout << GREEN << "ข้อมูลได้รับการบันทึกเป็นไฟล์ CSV: " << csvPath << RESET << std::endl;
-            std::cout << GREEN << "กราฟถูกสร้างและบันทึกเป็นไฟล์ PNG: " << dataDir << "/dl_learning_curves.png" << RESET << std::endl;
+            std::cout << GREEN << "กราฟถูกสร้างและบันทึกเป็นไฟล์ PNG: " << pngFilename << RESET << std::endl;
             std::cout << GREEN << "To view the graph, open the PNG file in an image viewer" << RESET << std::endl;
         }
     } else if (showType == "performance" || showType == "metrics") {
