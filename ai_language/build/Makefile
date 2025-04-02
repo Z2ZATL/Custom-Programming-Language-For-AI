@@ -192,6 +192,30 @@ src/ai_lang.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_lang.dir/build.make CMakeFiles/ai_lang.dir/src/ai_lang.cpp.s
 .PHONY : src/ai_lang.cpp.s
 
+src/connectors/Connector.o: src/connectors/Connector.cpp.o
+.PHONY : src/connectors/Connector.o
+
+# target to build an object file
+src/connectors/Connector.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/connectors/Connector.cpp.o
+.PHONY : src/connectors/Connector.cpp.o
+
+src/connectors/Connector.i: src/connectors/Connector.cpp.i
+.PHONY : src/connectors/Connector.i
+
+# target to preprocess a source file
+src/connectors/Connector.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/connectors/Connector.cpp.i
+.PHONY : src/connectors/Connector.cpp.i
+
+src/connectors/Connector.s: src/connectors/Connector.cpp.s
+.PHONY : src/connectors/Connector.s
+
+# target to generate assembly for a file
+src/connectors/Connector.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/connectors/Connector.cpp.s
+.PHONY : src/connectors/Connector.cpp.s
+
 src/connectors/ScikitLearnConnector.o: src/connectors/ScikitLearnConnector.cpp.o
 .PHONY : src/connectors/ScikitLearnConnector.o
 
@@ -447,6 +471,9 @@ help:
 	@echo "... src/ai_lang.o"
 	@echo "... src/ai_lang.i"
 	@echo "... src/ai_lang.s"
+	@echo "... src/connectors/Connector.o"
+	@echo "... src/connectors/Connector.i"
+	@echo "... src/connectors/Connector.s"
 	@echo "... src/connectors/ScikitLearnConnector.o"
 	@echo "... src/connectors/ScikitLearnConnector.i"
 	@echo "... src/connectors/ScikitLearnConnector.s"

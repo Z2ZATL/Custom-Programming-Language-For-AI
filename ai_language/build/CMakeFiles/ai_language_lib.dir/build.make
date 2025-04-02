@@ -153,10 +153,24 @@ CMakeFiles/ai_language_lib.dir/src/connectors/ScikitLearnConnector.cpp.s: cmake_
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/ai_language_lib.dir/src/connectors/ScikitLearnConnector.cpp.s"
 	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/runner/workspace/ai_language/src/connectors/ScikitLearnConnector.cpp -o CMakeFiles/ai_language_lib.dir/src/connectors/ScikitLearnConnector.cpp.s
 
+CMakeFiles/ai_language_lib.dir/src/connectors/Connector.cpp.o: CMakeFiles/ai_language_lib.dir/flags.make
+CMakeFiles/ai_language_lib.dir/src/connectors/Connector.cpp.o: /home/runner/workspace/ai_language/src/connectors/Connector.cpp
+CMakeFiles/ai_language_lib.dir/src/connectors/Connector.cpp.o: CMakeFiles/ai_language_lib.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/workspace/ai_language/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/ai_language_lib.dir/src/connectors/Connector.cpp.o"
+	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ai_language_lib.dir/src/connectors/Connector.cpp.o -MF CMakeFiles/ai_language_lib.dir/src/connectors/Connector.cpp.o.d -o CMakeFiles/ai_language_lib.dir/src/connectors/Connector.cpp.o -c /home/runner/workspace/ai_language/src/connectors/Connector.cpp
+
+CMakeFiles/ai_language_lib.dir/src/connectors/Connector.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/ai_language_lib.dir/src/connectors/Connector.cpp.i"
+	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/runner/workspace/ai_language/src/connectors/Connector.cpp > CMakeFiles/ai_language_lib.dir/src/connectors/Connector.cpp.i
+
+CMakeFiles/ai_language_lib.dir/src/connectors/Connector.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/ai_language_lib.dir/src/connectors/Connector.cpp.s"
+	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/runner/workspace/ai_language/src/connectors/Connector.cpp -o CMakeFiles/ai_language_lib.dir/src/connectors/Connector.cpp.s
+
 CMakeFiles/ai_language_lib.dir/src/interpreters/interpreter.cpp.o: CMakeFiles/ai_language_lib.dir/flags.make
 CMakeFiles/ai_language_lib.dir/src/interpreters/interpreter.cpp.o: /home/runner/workspace/ai_language/src/interpreters/interpreter.cpp
 CMakeFiles/ai_language_lib.dir/src/interpreters/interpreter.cpp.o: CMakeFiles/ai_language_lib.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/workspace/ai_language/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/interpreter.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/workspace/ai_language/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/interpreter.cpp.o"
 	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ai_language_lib.dir/src/interpreters/interpreter.cpp.o -MF CMakeFiles/ai_language_lib.dir/src/interpreters/interpreter.cpp.o.d -o CMakeFiles/ai_language_lib.dir/src/interpreters/interpreter.cpp.o -c /home/runner/workspace/ai_language/src/interpreters/interpreter.cpp
 
 CMakeFiles/ai_language_lib.dir/src/interpreters/interpreter.cpp.i: cmake_force
@@ -170,7 +184,7 @@ CMakeFiles/ai_language_lib.dir/src/interpreters/interpreter.cpp.s: cmake_force
 CMakeFiles/ai_language_lib.dir/src/lexer.cpp.o: CMakeFiles/ai_language_lib.dir/flags.make
 CMakeFiles/ai_language_lib.dir/src/lexer.cpp.o: /home/runner/workspace/ai_language/src/lexer.cpp
 CMakeFiles/ai_language_lib.dir/src/lexer.cpp.o: CMakeFiles/ai_language_lib.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/workspace/ai_language/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/ai_language_lib.dir/src/lexer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/workspace/ai_language/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/ai_language_lib.dir/src/lexer.cpp.o"
 	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ai_language_lib.dir/src/lexer.cpp.o -MF CMakeFiles/ai_language_lib.dir/src/lexer.cpp.o.d -o CMakeFiles/ai_language_lib.dir/src/lexer.cpp.o -c /home/runner/workspace/ai_language/src/lexer.cpp
 
 CMakeFiles/ai_language_lib.dir/src/lexer.cpp.i: cmake_force
@@ -184,7 +198,7 @@ CMakeFiles/ai_language_lib.dir/src/lexer.cpp.s: cmake_force
 CMakeFiles/ai_language_lib.dir/src/parser.cpp.o: CMakeFiles/ai_language_lib.dir/flags.make
 CMakeFiles/ai_language_lib.dir/src/parser.cpp.o: /home/runner/workspace/ai_language/src/parser.cpp
 CMakeFiles/ai_language_lib.dir/src/parser.cpp.o: CMakeFiles/ai_language_lib.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/workspace/ai_language/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/ai_language_lib.dir/src/parser.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/runner/workspace/ai_language/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/ai_language_lib.dir/src/parser.cpp.o"
 	/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ai_language_lib.dir/src/parser.cpp.o -MF CMakeFiles/ai_language_lib.dir/src/parser.cpp.o.d -o CMakeFiles/ai_language_lib.dir/src/parser.cpp.o -c /home/runner/workspace/ai_language/src/parser.cpp
 
 CMakeFiles/ai_language_lib.dir/src/parser.cpp.i: cmake_force
@@ -203,6 +217,7 @@ ai_language_lib_OBJECTS = \
 "CMakeFiles/ai_language_lib.dir/src/interpreters/RLInterpreter.cpp.o" \
 "CMakeFiles/ai_language_lib.dir/src/interpreters/InterpreterFactory.cpp.o" \
 "CMakeFiles/ai_language_lib.dir/src/connectors/ScikitLearnConnector.cpp.o" \
+"CMakeFiles/ai_language_lib.dir/src/connectors/Connector.cpp.o" \
 "CMakeFiles/ai_language_lib.dir/src/interpreters/interpreter.cpp.o" \
 "CMakeFiles/ai_language_lib.dir/src/lexer.cpp.o" \
 "CMakeFiles/ai_language_lib.dir/src/parser.cpp.o"
@@ -216,12 +231,13 @@ libai_language_lib.a: CMakeFiles/ai_language_lib.dir/src/interpreters/DLInterpre
 libai_language_lib.a: CMakeFiles/ai_language_lib.dir/src/interpreters/RLInterpreter.cpp.o
 libai_language_lib.a: CMakeFiles/ai_language_lib.dir/src/interpreters/InterpreterFactory.cpp.o
 libai_language_lib.a: CMakeFiles/ai_language_lib.dir/src/connectors/ScikitLearnConnector.cpp.o
+libai_language_lib.a: CMakeFiles/ai_language_lib.dir/src/connectors/Connector.cpp.o
 libai_language_lib.a: CMakeFiles/ai_language_lib.dir/src/interpreters/interpreter.cpp.o
 libai_language_lib.a: CMakeFiles/ai_language_lib.dir/src/lexer.cpp.o
 libai_language_lib.a: CMakeFiles/ai_language_lib.dir/src/parser.cpp.o
 libai_language_lib.a: CMakeFiles/ai_language_lib.dir/build.make
 libai_language_lib.a: CMakeFiles/ai_language_lib.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/runner/workspace/ai_language/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX static library libai_language_lib.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/runner/workspace/ai_language/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Linking CXX static library libai_language_lib.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/ai_language_lib.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/ai_language_lib.dir/link.txt --verbose=$(VERBOSE)
 

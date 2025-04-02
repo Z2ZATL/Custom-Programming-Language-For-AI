@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/ai_language_lib.dir/src/connectors/Connector.cpp.o"
+  "CMakeFiles/ai_language_lib.dir/src/connectors/Connector.cpp.o.d"
   "CMakeFiles/ai_language_lib.dir/src/connectors/ScikitLearnConnector.cpp.o"
   "CMakeFiles/ai_language_lib.dir/src/connectors/ScikitLearnConnector.cpp.o.d"
   "CMakeFiles/ai_language_lib.dir/src/interpreters/BaseInterpreter.cpp.o"
