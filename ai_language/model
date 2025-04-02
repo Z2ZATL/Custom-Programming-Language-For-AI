@@ -1,0 +1,10 @@
+# model model trained with AI Language
+# Layers: 4
+# input:4:linear
+# hidden:8:relu
+# hidden:4:relu
+# output:3:softmax
+# Parameters:
+# batch_size: 16
+# epochs: 50
+# learning_rate: 0.001
