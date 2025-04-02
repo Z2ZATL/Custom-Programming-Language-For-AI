@@ -97,6 +97,10 @@ void DLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
         
         if (args.size() >= 5 && args[3] == "activation") {
             activation = args[4];
+            // Remove quotes if present
+            if (activation.size() >= 2 && activation.front() == '"' && activation.back() == '"') {
+                activation = activation.substr(1, activation.size() - 2);
+            }
         }
         
         // เพิ่มข้อมูล Layer ลงในลิสต์ของ neural network
