@@ -1,9 +1,9 @@
-
 // interpreters/DLInterpreter.cpp
 #include "../../include/interpreters/DLInterpreter.h"
 #include <iostream>
 #include <sys/stat.h>
 #include <chrono>
+#include <cstdlib> // Added for setenv
 
 namespace ai_language {
 
@@ -85,9 +85,9 @@ void DLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
             std::cout << RED << "รูปแบบคำสั่งไม่ถูกต้อง สำหรับ input layer: add layer input size" << RESET << std::endl;
             return;
         }
-        
+
         int inputSize = std::stoi(args[2]);
-        
+
         // รองรับทั้งรูปแบบเก่า (width, height, channels) และรูปแบบใหม่ (size)
         if (args.size() >= 5) {
             // รูปแบบเก่า: add layer input width height channels
@@ -99,7 +99,7 @@ void DLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
             // รูปแบบใหม่: add layer input size
             layerInfo = "input:" + std::to_string(inputSize) + ":linear";
         }
-        
+
     } else if (layerType == "convolutional" || layerType == "conv") {
         if (args.size() < 5) {
             std::cout << RED << "รูปแบบคำสั่งไม่ถูกต้อง สำหรับ convolutional layer: add layer conv filters kernel_size activation" << RESET << std::endl;
@@ -110,7 +110,7 @@ void DLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
         std::string activation = args.size() > 5 && args[4] == "activation" ? args[5] : "relu";
         if (activation.front() == '"') activation = activation.substr(1, activation.size()-2);
         layerInfo = "conv:" + std::to_string(filters) + ":" + std::to_string(kernelSize) + ":" + activation;
-        
+
     } else if (layerType == "max_pooling" || layerType == "pool") {
         if (args.size() < 4) {
             std::cout << RED << "รูปแบบคำสั่งไม่ถูกต้อง สำหรับ pooling layer: add layer pool size_x size_y" << RESET << std::endl;
@@ -119,10 +119,10 @@ void DLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
         int sizeX = std::stoi(args[2]);
         int sizeY = std::stoi(args[3]);
         layerInfo = "pool:" + std::to_string(sizeX) + "x" + std::to_string(sizeY);
-        
+
     } else if (layerType == "flatten") {
         layerInfo = "flatten";
-        
+
     } else if (layerType == "hidden" || layerType == "dense") {
         if (args.size() < 3) {
             std::cout << RED << "รูปแบบคำสั่งไม่ถูกต้อง สำหรับ hidden layer: add layer hidden neurons [activation function]" << RESET << std::endl;
@@ -132,7 +132,7 @@ void DLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
         std::string activation = args.size() > 4 && args[3] == "activation" ? args[4] : "relu";
         if (activation.front() == '"') activation = activation.substr(1, activation.size()-2);
         layerInfo = "hidden:" + std::to_string(neurons) + ":" + activation;
-        
+
     } else if (layerType == "output") {
         if (args.size() < 3) {
             std::cout << RED << "รูปแบบคำสั่งไม่ถูกต้อง สำหรับ output layer: add layer output neurons [activation function]" << RESET << std::endl;
@@ -142,7 +142,7 @@ void DLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
         std::string activation = args.size() > 4 && args[3] == "activation" ? args[4] : "softmax";
         if (activation.front() == '"') activation = activation.substr(1, activation.size()-2);
         layerInfo = "output:" + std::to_string(neurons) + ":" + activation;
-        
+
     } else if (layerType == "dropout") {
         if (args.size() < 3) {
             std::cout << RED << "รูปแบบคำสั่งไม่ถูกต้อง สำหรับ dropout layer: add layer dropout rate" << RESET << std::endl;
@@ -265,7 +265,7 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
         std::cout << GREEN << "ค่า Loss: 0.134" << RESET << std::endl;
     } else if (showType == "graph") {
         std::cout << GREEN << "กำลังสร้างกราฟผลการเทรนโมเดล " << modelType << "..." << RESET << std::endl;
-        
+
         // กำหนดเส้นทางสำหรับเก็บไฟล์กราฟ (ใช้โฟลเดอร์ที่มีอยู่แล้ว)
         std::string dataDir = "ai_language/Program test/Data";
 
@@ -285,14 +285,14 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
 
         // ใช้ Python script เพื่อสร้างกราฟเหมือนใน MLInterpreter
         std::string pythonCommand = "cd ai_language && python3 src/utils/plot_generator.py \"" + csvPath + "\" \"" + dataDir + "/dl_learning_curves.png\" \"Learning Curves for " + modelType + " Model\" 2>&1";
-        
+
         // เรียกใช้ Python script เพื่อสร้างกราฟ
         FILE* pipe = popen(pythonCommand.c_str(), "r");
         if (!pipe) {
             std::cout << RED << "เกิดข้อผิดพลาดในการสร้างกราฟ" << RESET << std::endl;
             return;
         }
-        
+
         char buffer[128];
         std::string scriptOutput = "";
         while (!feof(pipe)) {
@@ -309,7 +309,7 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
             std::cout << BLUE << "Loss ลดลงจาก 0.82 เหลือ 0.05 ตลอด " << parameters["epochs"] << " epochs" << RESET << std::endl;
             std::cout << BLUE << "Accuracy เพิ่มขึ้นจาก 0.65 เป็น 0.95 ตลอด " << parameters["epochs"] << " epochs" << RESET << std::endl;
             std::cout << BLUE << "------------------------" << RESET << std::endl;
-            
+
             std::cout << GREEN << "ข้อมูลได้รับการบันทึกเป็นไฟล์ CSV: " << csvPath << RESET << std::endl;
             std::cout << GREEN << "กราฟถูกสร้างและบันทึกเป็นไฟล์ PNG: " << dataDir << "/dl_learning_curves.png" << RESET << std::endl;
             std::cout << GREEN << "To view the graph, open the PNG file in an image viewer" << RESET << std::endl;
@@ -400,10 +400,14 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
     }
 
     std::cout << GREEN << "กำลังบันทึกโมเดล " << modelType << " ไปที่ " << savePath << RESET << std::endl;
-    
+
     // จำลองการบันทึกโมเดลโดยการสร้างไฟล์
     std::ofstream modelFile(savePath);
     if (modelFile.is_open()) {
+        // ตั้งค่า time zone เป็น +7 (ประเทศไทย)
+        setenv("TZ", "Asia/Bangkok", 1);
+        tzset(); // อัปเดต time zone
+
         // สร้างข้อมูลเวลาปัจจุบัน
         auto now = std::chrono::system_clock::now();
         std::time_t current_time = std::chrono::system_clock::to_time_t(now);
@@ -412,14 +416,14 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
         if (!timestamp.empty() && timestamp[timestamp.length()-1] == '\n') {
             timestamp.erase(timestamp.length()-1);
         }
-        
+
         modelFile << "# DL Model saved from AI Language\n";
         modelFile << "model_type: " << modelType << "\n";
         modelFile << "learning_rate: " << parameters["learning_rate"] << "\n";
         modelFile << "epochs: " << parameters["epochs"] << "\n";
         modelFile << "accuracy: 0.95\n";
         modelFile << "create_time: " << timestamp << "\n\n";
-        
+
         modelFile << "# Layers: " << layers.size() << "\n";
         for (const auto& layer : layers) {
             modelFile << "layer: " << layer << "\n";
@@ -428,13 +432,13 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
         for (const auto& param : parameters) {
             modelFile << param.first << ": " << param.second << "\n";
         }
-        
+
         modelFile.close();
         std::cout << GREEN << "โมเดลถูกบันทึกสำเร็จที่ '" << savePath << "'" << RESET << std::endl;
     } else {
         std::cout << RED << "เกิดข้อผิดพลาดในการบันทึกโมเดล: ไม่สามารถเปิดไฟล์ " << savePath << " ได้" << RESET << std::endl;
     }
-    
+
     hasSavedModel = true;
 }
 

@@ -6,6 +6,10 @@
 #include <cstdlib> // สำหรับ getenv
 
 int main() {
+    // ตั้งค่า time zone เป็น +7 (ประเทศไทย)
+    setenv("TZ", "Asia/Bangkok", 1);
+    tzset(); // อัปเดต time zone
+    
     // แปลง epoch time 1743341364 เป็นวันที่และเวลา
     std::time_t time = 1743341364;
     
@@ -15,7 +19,7 @@ int main() {
     
     // แสดงเวลาตาม local time zone
     std::tm* timeinfo_local = std::localtime(&time);
-    std::cout << "เวลาท้องถิ่น: " << std::put_time(timeinfo_local, "%Y-%m-%d %H:%M:%S") << std::endl;
+    std::cout << "เวลาท้องถิ่น (ไทย): " << std::put_time(timeinfo_local, "%Y-%m-%d %H:%M:%S") << std::endl;
     
     // แสดงเวลาตาม time zone ที่ผู้ใช้กำหนด
     const char* user_tz = std::getenv("TZ");
