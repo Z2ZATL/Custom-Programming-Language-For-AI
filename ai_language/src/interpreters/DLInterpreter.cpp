@@ -293,3 +293,42 @@ void DLInterpreter::handleHelpCommand() {
 }
 
 } // namespace ai_language
+void DLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
+    if (args.empty()) {
+        std::cout << "Error: Missing argument for add command" << std::endl;
+        return;
+    }
+    
+    if (args[0] == "layer") {
+        if (args.size() < 3) {
+            std::cout << "Error: Invalid layer definition. Usage: add layer <type> <neurons> [activation \"function\"]" << std::endl;
+            return;
+        }
+        
+        std::string layerType = args[1];
+        int neurons = 0;
+        try {
+            neurons = std::stoi(args[2]);
+        } catch (const std::exception& e) {
+            std::cout << "Error: Invalid neuron count" << std::endl;
+            return;
+        }
+        
+        std::string activation = "linear"; // default activation
+        if (args.size() >= 5 && args[3] == "activation") {
+            activation = args[4];
+            // Remove quotes if present
+            if (activation.size() >= 2 && activation.front() == '"' && activation.back() == '"') {
+                activation = activation.substr(1, activation.size() - 2);
+            }
+        }
+        
+        std::cout << "Adding " << layerType << " layer with " << neurons << " neurons";
+        if (args.size() >= 5) {
+            std::cout << " and " << activation << " activation";
+        }
+        std::cout << std::endl;
+    } else {
+        std::cout << "Unknown add type: " << args[0] << std::endl;
+    }
+}
