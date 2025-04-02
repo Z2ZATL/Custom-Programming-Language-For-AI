@@ -31,7 +31,7 @@ public:
     /**
      * @brief ฟังก์ชันหลักสำหรับแปลและทำงานตามคำสั่ง
      */
-    void interpret() override;
+    void interpret();
     
     /**
      * @brief โหลดโมเดล RL จากไฟล์
