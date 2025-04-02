@@ -294,17 +294,11 @@ void MLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
         if (!hasTrained) {
             std::cout << "Warning: Saving untrained model." << std::endl;
         }
-
-        // ตรวจสอบและสร้างโฟลเดอร์ที่จำเป็น
-        int mkdir_result = system("mkdir -p 'ai_language/Program test/model'");
-        if (mkdir_result != 0) {
-            std::cout << "Warning: Could not create directory structure. Model might not save correctly." << std::endl;
-        }
         
         // บันทึกโมเดล
         saveModel(args[1]);
         
-        std::cout << "โมเดลถูกบันทึกไปที่ 'ai_language/Program test/model/" << args[1] << "'" << std::endl;
+        std::cout << "โมเดลถูกบันทึกไปที่ 'Program test/model/" << args[1] << "'" << std::endl;
     } else {
         std::cout << "Unknown save type: " << args[0] << std::endl;
     }
