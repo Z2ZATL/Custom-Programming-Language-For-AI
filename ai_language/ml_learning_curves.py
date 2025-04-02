@@ -26,11 +26,6 @@ plt.xlabel('Epochs')
 plt.ylabel('Accuracy')
 plt.grid(True)
 
-import os
-
-# สร้างโฟลเดอร์ถ้ายังไม่มี
-os.makedirs('Program test/Picture', exist_ok=True)
-
 plt.tight_layout()
 plt.savefig('Program test/Picture/learning_curves.png')
 plt.close()
