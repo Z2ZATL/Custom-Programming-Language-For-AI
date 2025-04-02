@@ -22,15 +22,18 @@ public:
 
 // interpreters/DLInterpreter.cpp
 #include "../../include/interpreters/DLInterpreter.h"
-#include "../../include/connectors/ScikitLearnConnector.h"
+#include <iostream>
 
 namespace ai_language {
 
 void DLInterpreter::interpret() {
     // โค้ดสำหรับการแปลภาษา DL
-    // ตัวอย่างการใช้งาน ScikitLearnConnector
-    ScikitLearnConnector connector;
-    connector.connect();
+    std::cout << "กำลังดำเนินการกับโมเดล Deep Learning..." << std::endl;
+    std::cout << "กำลังสร้างเครือข่ายประสาทเทียม (Neural Network)..." << std::endl;
+
+    // ตัวอย่างการดำเนินการที่เกี่ยวข้องกับ Deep Learning โดยเฉพาะ
+    std::cout << "การตั้งค่าเครือข่าย Deep Learning เสร็จสิ้น" << std::endl;
+    std::cout << "เริ่มต้นการเทรนโมเดล..." << std::endl;
 }
 
 } // namespace ai_language
