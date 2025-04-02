@@ -1,5 +1,7 @@
 #include "../../include/interpreters/MLInterpreter.h"
 #include <iostream>
+#include <chrono>
+#include <ctime>
 
 namespace ai_language {
 
@@ -58,6 +60,15 @@ void MLInterpreter::saveModel(const std::string& modelPath) {
     
     std::cout << "Saving ML model to: " << fullPath << std::endl;
     
+    // สร้างข้อมูลเวลาปัจจุบัน
+    auto now = std::chrono::system_clock::now();
+    std::time_t current_time = std::chrono::system_clock::to_time_t(now);
+    std::string timestamp = std::ctime(&current_time);
+    // ลบ newline character ที่ ctime เพิ่มมาโดยอัตโนมัติ
+    if (!timestamp.empty() && timestamp[timestamp.length()-1] == '\n') {
+        timestamp.erase(timestamp.length()-1);
+    }
+    
     // สร้างไฟล์ตัวอย่างในโฟลเดอร์นั้น
     std::ofstream modelFile(fullPath);
     if (modelFile.is_open()) {
@@ -66,6 +77,7 @@ void MLInterpreter::saveModel(const std::string& modelPath) {
         modelFile << "learning_rate: " << parameters["learning_rate"] << "\n";
         modelFile << "epochs: " << parameters["epochs"] << "\n";
         modelFile << "accuracy: 0.95\n";
+        modelFile << "create_time: " << timestamp << "\n";
         modelFile.close();
         std::cout << "Model successfully saved to: " << fullPath << std::endl;
     } else {
