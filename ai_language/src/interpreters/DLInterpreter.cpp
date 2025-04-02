@@ -79,14 +79,24 @@ void DLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
     std::string layerInfo;
 
     if (layerType == "input") {
-        if (args.size() < 5) {
-            std::cout << RED << "รูปแบบคำสั่งไม่ถูกต้อง สำหรับ input layer: add layer input width height channels" << RESET << std::endl;
+        if (args.size() < 3) {
+            std::cout << RED << "รูปแบบคำสั่งไม่ถูกต้อง สำหรับ input layer: add layer input size" << RESET << std::endl;
             return;
         }
-        int width = std::stoi(args[2]);
-        int height = std::stoi(args[3]);
-        int channels = std::stoi(args[4]);
-        layerInfo = "input:" + std::to_string(width) + "x" + std::to_string(height) + "x" + std::to_string(channels);
+        
+        int inputSize = std::stoi(args[2]);
+        
+        // รองรับทั้งรูปแบบเก่า (width, height, channels) และรูปแบบใหม่ (size)
+        if (args.size() >= 5) {
+            // รูปแบบเก่า: add layer input width height channels
+            int width = inputSize;
+            int height = std::stoi(args[3]);
+            int channels = std::stoi(args[4]);
+            layerInfo = "input:" + std::to_string(width) + "x" + std::to_string(height) + "x" + std::to_string(channels);
+        } else {
+            // รูปแบบใหม่: add layer input size
+            layerInfo = "input:" + std::to_string(inputSize) + ":linear";
+        }
         
     } else if (layerType == "convolutional" || layerType == "conv") {
         if (args.size() < 5) {
