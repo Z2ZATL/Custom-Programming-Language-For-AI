@@ -1,6 +1,4 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/ai_language_lib.dir/src/InterpreterFactory.cpp.o"
-  "CMakeFiles/ai_language_lib.dir/src/InterpreterFactory.cpp.o.d"
   "CMakeFiles/ai_language_lib.dir/src/connectors/ScikitLearnConnector.cpp.o"
   "CMakeFiles/ai_language_lib.dir/src/connectors/ScikitLearnConnector.cpp.o.d"
   "CMakeFiles/ai_language_lib.dir/src/interpreter.cpp.o"
@@ -9,6 +7,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/ai_language_lib.dir/src/interpreters/BaseInterpreter.cpp.o.d"
   "CMakeFiles/ai_language_lib.dir/src/interpreters/DLInterpreter.cpp.o"
   "CMakeFiles/ai_language_lib.dir/src/interpreters/DLInterpreter.cpp.o.d"
+  "CMakeFiles/ai_language_lib.dir/src/interpreters/InterpreterFactory.cpp.o"
+  "CMakeFiles/ai_language_lib.dir/src/interpreters/InterpreterFactory.cpp.o.d"
   "CMakeFiles/ai_language_lib.dir/src/interpreters/MLInterpreter.cpp.o"
   "CMakeFiles/ai_language_lib.dir/src/interpreters/MLInterpreter.cpp.o.d"
   "CMakeFiles/ai_language_lib.dir/src/interpreters/RLInterpreter.cpp.o"
