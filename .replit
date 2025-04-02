@@ -126,3 +126,12 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "cd ai_language && mkdir -p build && cd build && cmake .. && make && cd .. && ./ai_lang examples/ml_examples/scikit_integration.ai"
+
+[[workflows.workflow]]
+name = "Test After Fixes"
+author = 41033354
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd ai_language && mkdir -p build && cd build && cmake .. && make && cd .. && ./ai_lang examples/rl_examples/dqn.ai"
