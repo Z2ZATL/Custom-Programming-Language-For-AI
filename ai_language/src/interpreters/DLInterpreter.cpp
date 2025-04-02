@@ -74,8 +74,14 @@ void DLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
         return;
     }
 
+    std::cout << "DEBUG: Received add command with args: ";
+    for (const auto& arg : args) {
+        std::cout << arg << " ";
+    }
+    std::cout << std::endl;
+
     // สำหรับคำสั่ง 'add layer ...'
-    if (args[0] == "layer") {
+    if (args.size() >= 1 && args[0] == "layer") {
         if (args.size() < 3) {
             std::cout << RED << "รูปแบบคำสั่งไม่ถูกต้อง ตัวอย่าง: add layer input 784" << RESET << std::endl;
             return;
