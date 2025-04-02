@@ -1,11 +1,11 @@
 modules = ["cpp-clang14", "c-clang14", "bash"]
-run = "node index.js"
+run = "cd ai_language && mkdir -p build && cd build && cmake .. && make && cd .. && ./ai_lang -i"
 
 [nix]
 channel = "stable-24_05"
 
 [deployment]
-run = ["sh", "-c", "node index.js"]
+run = ["sh", "-c", "cd ai_language && mkdir -p build && cd build && cmake .. && make && cd .. && ./ai_lang -i"]
 
 [workflows]
 runButton = "Run Interactive Mode"
