@@ -146,22 +146,28 @@ void generateLearningCurves(int epochs, const std::string& outputPath) {
     
     htmlFile.close();
     
-    // สร้างไฟล์ PNG ด้วย ImageMagick
+    // สร้างไฟล์ PNG
     std::string pngPath = outputPath + "/learning_curves.png";
     
-    // ใช้ ImageMagick เพื่อแปลง HTML เป็น PNG
-    std::string convert_cmd = "mkdir -p \"" + outputPath + "\" && which convert > /dev/null 2>&1 && convert -quality 100 -resize 1200x800 \"" + htmlPath + "\" \"" + pngPath + "\"";
-    int img_result = system(convert_cmd.c_str());
+    // ลองใช้ wkhtmltoimage ก่อน (ถ้ามี)
+    std::string wkhtmltoimage_cmd = "mkdir -p \"" + outputPath + "\" && which wkhtmltoimage > /dev/null 2>&1 && wkhtmltoimage --quality 100 \"" + htmlPath + "\" \"" + pngPath + "\"";
+    int wk_result = system(wkhtmltoimage_cmd.c_str());
     
-    if (img_result != 0) {
-        // ถ้าไม่มี ImageMagick ให้สร้างไฟล์ PNG ง่ายๆ
-        std::ofstream pngFile(pngPath);
-        if (pngFile.is_open()) {
-            pngFile << "<This is a placeholder for PNG image. Please open the HTML file for the actual graph.>";
-            pngFile.close();
-            std::cout << "ImageMagick not found. Created placeholder PNG file. For actual graph, please view the HTML file." << std::endl;
-        } else {
-            std::cerr << "Error: Could not create placeholder PNG file at " << pngPath << std::endl;
+    // ถ้าไม่มี wkhtmltoimage ลองใช้ ImageMagick
+    if (wk_result != 0) {
+        std::string convert_cmd = "which convert > /dev/null 2>&1 && convert -quality 100 \"" + htmlPath + "\" \"" + pngPath + "\"";
+        int img_result = system(convert_cmd.c_str());
+        
+        // ถ้าไม่มีทั้ง wkhtmltoimage และ ImageMagick ให้สร้างไฟล์ PNG ง่ายๆ
+        if (img_result != 0) {
+            std::ofstream pngFile(pngPath);
+            if (pngFile.is_open()) {
+                pngFile << "<This is a placeholder for PNG image. Please open the HTML file for the actual graph.>";
+                pngFile.close();
+                std::cout << "Image converters not found. Created placeholder PNG file. For actual graph, please view the HTML file." << std::endl;
+            } else {
+                std::cerr << "Error: Could not create placeholder PNG file at " << pngPath << std::endl;
+            }
         }
     }
     
