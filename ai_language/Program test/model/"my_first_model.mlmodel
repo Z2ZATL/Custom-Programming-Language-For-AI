@@ -1,8 +1,0 @@
-// ML Model: LinearRegression
-// Created: 2025-04-01 01:32:53
-// Parameters:
-//   batch_size: 32
-//   epochs: 50
-//   learning_rate: 0.01
-
-// Model data (binary/serialized) would be here in a real implementation
