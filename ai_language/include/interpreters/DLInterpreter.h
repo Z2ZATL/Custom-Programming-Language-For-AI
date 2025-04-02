@@ -1,15 +1,21 @@
-#include "interpreters/BaseInterpreter.h"
 
-//  The rest of the file would go here.  This is a placeholder due to the lack of original code.
-//  To complete this, you would need to provide the original code and any additional changes needed for other files.  
-//  This includes updating include paths and potentially moving other files into the 'connectors' and 'interpreters' directories.
+#ifndef DL_INTERPRETER_H
+#define DL_INTERPRETER_H
 
-// Example of additional code that might be needed (Illustrative only):
-// DatabaseConnector จะถูกเพิ่มเมื่อมีการพัฒนาต่อไป
-// #include "connectors/DatabaseConnector.h"
+#include "BaseInterpreter.h"
 
-int main() {
-  BaseInterpreter* interpreter = new BaseInterpreter(); // Example usage
-  // ... rest of main function ...
-  return 0;
-}
+namespace ai_language {
+
+class DLInterpreter : public BaseInterpreter {
+public:
+    DLInterpreter() = default;
+    ~DLInterpreter() override = default;
+    
+    void interpret();
+    
+    // เพิ่มฟังก์ชันที่จำเป็นสำหรับการทำงานกับ Deep Learning
+};
+
+} // namespace ai_language
+
+#endif // DL_INTERPRETER_H
