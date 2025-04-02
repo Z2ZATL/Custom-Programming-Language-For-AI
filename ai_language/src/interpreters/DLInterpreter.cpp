@@ -283,8 +283,8 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
             csvFile.close();
         }
 
-        // ใช้ Python script เพื่อสร้างกราฟเหมือนใน MLInterpreter
-        std::string pythonCommand = "cd ai_language && python3 src/utils/plot_generator.py \"" + csvPath + "\" \"" + dataDir + "/dl_learning_curves.png\" \"Learning Curves for " + modelType + " Model\" 2>&1";
+        // ใช้ Python script เพื่อสร้างกราฟโดยตรงไม่ต้อง cd
+        std::string pythonCommand = "python3 ai_language/src/utils/plot_generator.py \"" + csvPath + "\" \"" + dataDir + "/dl_learning_curves.png\" \"Learning Curves for " + modelType + " Model\" 2>&1";
 
         // เรียกใช้ Python script เพื่อสร้างกราฟ
         FILE* pipe = popen(pythonCommand.c_str(), "r");
@@ -345,16 +345,26 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
                 if (layerType == "input") {
                     std::cout << "Input Layer: ";
                 } else if (layerType == "hidden") {
-                    std::cout << "Hidden Layer " << i << ": ";
+                    std::cout << "Hidden Layer " << (i) << ": ";
                 } else if (layerType == "output") {
                     std::cout << "Output Layer: ";
+                } else if (layerType == "conv") {
+                    std::cout << "Convolutional Layer: ";
+                } else if (layerType == "pool") {
+                    std::cout << "Max Pooling Layer: ";
+                } else if (layerType == "dropout") {
+                    std::cout << "Dropout Layer (rate=" << neurons << "): ";
+                } else if (layerType == "flatten") {
+                    std::cout << "Flatten Layer: ";
                 } else {
                     std::cout << layerType << " Layer: ";
                 }
 
-                std::cout << neurons << " neurons";
-                if (activation != "linear") {
-                    std::cout << ", Activation: " << activation;
+                if (layerType != "dropout" && layerType != "flatten" && layerType != "pool") {
+                    std::cout << neurons << " neurons";
+                    if (activation != "linear") {
+                        std::cout << ", Activation: " << activation;
+                    }
                 }
                 std::cout << RESET << std::endl;
             }
