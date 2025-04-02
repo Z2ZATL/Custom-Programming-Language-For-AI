@@ -181,6 +181,7 @@ void MLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
             std::cout << "Warning: Model not trained yet, no graph to show." << std::endl;
             return;
         }
+        
         std::cout << "Displaying learning curve graph for model " << modelType << std::endl;
         std::cout << "Epoch vs. Loss Graph:" << std::endl;
         std::cout << "------------------------" << std::endl;
@@ -188,6 +189,49 @@ void MLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
         std::cout << "Epoch vs. Accuracy Graph:" << std::endl;
         std::cout << "------------------------" << std::endl;
         std::cout << "Accuracy increases from 0.65 to 0.95 over " << parameters["epochs"] << " epochs" << std::endl;
+        
+        // สร้างไฟล์ Python สำหรับการสร้างกราฟ
+        std::string graphFilename = "ml_learning_curves.py";
+        std::ofstream graphFile(graphFilename);
+        
+        if (graphFile.is_open()) {
+            graphFile << "import matplotlib.pyplot as plt\n";
+            graphFile << "import numpy as np\n\n";
+            graphFile << "# สร้างข้อมูลจำลอง\n";
+            graphFile << "epochs = " << parameters["epochs"] << "\n";
+            graphFile << "x = np.arange(1, epochs + 1)\n";
+            graphFile << "loss = 0.82 - 0.77 * (1 - np.exp(-x/30))\n";
+            graphFile << "accuracy = 0.65 + 0.3 * (1 - np.exp(-x/25))\n\n";
+            graphFile << "# สร้างกราฟ\n";
+            graphFile << "plt.figure(figsize=(12, 5))\n\n";
+            graphFile << "# กราฟ Loss\n";
+            graphFile << "plt.subplot(1, 2, 1)\n";
+            graphFile << "plt.plot(x, loss, 'r-', linewidth=2)\n";
+            graphFile << "plt.title('Loss vs. Epochs')\n";
+            graphFile << "plt.xlabel('Epochs')\n";
+            graphFile << "plt.ylabel('Loss')\n";
+            graphFile << "plt.grid(True)\n\n";
+            graphFile << "# กราฟ Accuracy\n";
+            graphFile << "plt.subplot(1, 2, 2)\n";
+            graphFile << "plt.plot(x, accuracy, 'b-', linewidth=2)\n";
+            graphFile << "plt.title('Accuracy vs. Epochs')\n";
+            graphFile << "plt.xlabel('Epochs')\n";
+            graphFile << "plt.ylabel('Accuracy')\n";
+            graphFile << "plt.grid(True)\n\n";
+            graphFile << "plt.tight_layout()\n";
+            graphFile << "plt.savefig('learning_curves.png')\n";
+            graphFile << "plt.close()\n";
+            
+            graphFile.close();
+            
+            // รันไฟล์ Python เพื่อสร้างกราฟ
+            std::cout << "Creating graphical visualization..." << std::endl;
+            system("python ml_learning_curves.py");
+            std::cout << "Graph saved as 'learning_curves.png'" << std::endl;
+            std::cout << "To view the graph, open the file in a image viewer or web browser" << std::endl;
+        } else {
+            std::cout << "Error: Could not create graph file." << std::endl;
+        }
     } else {
         std::cout << "Unknown show type: " << showType << std::endl;
     }
