@@ -58,7 +58,7 @@ void ScikitLearnConnector::connect() {
 }
 
 // main.cpp
-#include "../interpreters/DLInterpreter.h"
+#include "../../include/interpreters/DLInterpreter.h"
 #include "../connectors/ScikitLearnConnector.h" 
 
 int main() {
