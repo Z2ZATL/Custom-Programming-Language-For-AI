@@ -140,7 +140,7 @@ void MLInterpreter::handleEvaluateCommand(const std::vector<std::string>& args) 
         return;
     }
     
-    if (args.size() >= 1 && args[0] == "model") {
+    if (args.empty() || (args.size() >= 1 && args[0] == "model")) {
         evaluateModel();
         std::cout << "Model evaluation complete. Use 'show accuracy' or 'show loss' to see results." << std::endl;
     } else {

@@ -249,6 +249,28 @@ void Interpreter::handleAddCommand(const std::map<std::string, std::string>& par
     //Add more specific handling based on the type here.
 }
 
+void Interpreter::handleEvaluateCommand(const std::map<std::string, std::string>& params) {
+    // ตรวจสอบว่าได้ฝึกโมเดลแล้วหรือไม่
+    if (!m_environment.modelTrained) {
+        m_errorHandler("ต้องฝึกโมเดลก่อนที่จะประเมินผล");
+        return;
+    }
+
+    m_outputHandler("กำลังประเมินผลโมเดล");
+    m_environment.modelEvaluated = true;
+
+    // สร้างเมทริกซ์การประเมินผล
+    if (params.find("target") != params.end() && params.at("target") == "model") {
+        // กรณีที่มีการระบุเป้าหมายเป็น model
+        m_outputHandler("กำลังประเมินผลโมเดลทั้งหมด");
+    }
+
+    // แสดงพารามิเตอร์ที่ใช้
+    for (const auto& pair : params) {
+        m_outputHandler("  พารามิเตอร์: " + pair.first + " = " + pair.second);
+    }
+}
+
 
 void Interpreter::handlePredictCommand(const std::map<std::string, std::string>& params) {
     // ตรวจสอบว่าได้ฝึกโมเดลแล้วหรือไม่

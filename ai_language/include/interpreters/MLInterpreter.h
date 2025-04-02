@@ -1,4 +1,3 @@
-
 #ifndef AI_LANGUAGE_ML_INTERPRETER_H
 #define AI_LANGUAGE_ML_INTERPRETER_H
 
@@ -24,14 +23,14 @@ public:
     ~MLInterpreter();
 
     void interpret();
-    
+
     // Additional functions
     void setDefaultParameters();
     void loadModel(const std::string& modelPath);
     void trainModel();
     void evaluateModel();
     void saveModel(const std::string& modelPath);
-    
+
     // Function to handle commands
     void handleStartCommand() override;
     void handleCreateCommand(const std::vector<std::string>& args) override;

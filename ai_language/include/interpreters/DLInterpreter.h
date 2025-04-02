@@ -1,4 +1,3 @@
-
 #ifndef DL_INTERPRETER_H
 #define DL_INTERPRETER_H
 
@@ -10,9 +9,9 @@ class DLInterpreter : public BaseInterpreter {
 public:
     DLInterpreter() = default;
     ~DLInterpreter() override = default;
-    
+
     void interpret();
-    
+
     // Override virtual functions from BaseInterpreter
     void setDefaultParameters() override;
     void handleStartCommand() override;
