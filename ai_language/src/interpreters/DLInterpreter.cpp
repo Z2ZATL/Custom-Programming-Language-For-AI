@@ -2,6 +2,8 @@
 // interpreters/DLInterpreter.cpp
 #include "../../include/interpreters/DLInterpreter.h"
 #include <iostream>
+#include <sys/stat.h>
+#include <chrono>
 
 namespace ai_language {
 
@@ -370,41 +372,67 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
         return;
     }
 
-    std::string savePath = "ai_language/Program test/model/model.h5";
+    std::string savePath = "Program test/model/model.dlmodel";
     if (args.size() >= 1) {
         // ถ้ามีการระบุเส้นทางที่ไม่ได้ขึ้นต้นด้วย / หรือ ./ ให้เพิ่มเส้นทาง default
         if (args[0][0] != '/' && (args[0].size() < 2 || args[0].substr(0, 2) != "./")) {
-            savePath = "ai_language/Program test/model/" + args[0];
+            savePath = "Program test/model/" + args[0];
         } else {
             savePath = args[0];
         }
     }
-    
-    // ตรวจสอบว่าโฟลเดอร์มีอยู่หรือไม่ แต่ไม่สร้างใหม่
+
+    // ตรวจสอบเส้นทางว่ามีโฟลเดอร์หรือไม่
     size_t lastSlash = savePath.find_last_of("/\\");
     if (lastSlash != std::string::npos) {
         std::string directory = savePath.substr(0, lastSlash);
-        // ไม่ต้องสร้างโฟลเดอร์ใหม่เนื่องจากมีอยู่แล้ว
+        // ตรวจสอบว่าโฟลเดอร์มีอยู่หรือไม่
+        struct stat buffer;
+        if (stat(directory.c_str(), &buffer) != 0) {
+            // โฟลเดอร์ไม่มีอยู่ ให้สร้าง
+            std::string command = "mkdir -p \"" + directory + "\"";
+            int result = system(command.c_str());
+            if (result != 0) {
+                std::cout << RED << "เกิดข้อผิดพลาดในการสร้างโฟลเดอร์: " << directory << RESET << std::endl;
+                return;
+            }
+        }
     }
 
     std::cout << GREEN << "กำลังบันทึกโมเดล " << modelType << " ไปที่ " << savePath << RESET << std::endl;
     
-    // จำลองการบันทึกโมเดลโดยการสร้างไฟล์ว่าง
+    // จำลองการบันทึกโมเดลโดยการสร้างไฟล์
     std::ofstream modelFile(savePath);
     if (modelFile.is_open()) {
-        modelFile << "# " << modelType << " model trained with AI Language\n";
+        // สร้างข้อมูลเวลาปัจจุบัน
+        auto now = std::chrono::system_clock::now();
+        std::time_t current_time = std::chrono::system_clock::to_time_t(now);
+        std::string timestamp = std::ctime(&current_time);
+        // ลบ newline character ที่ ctime เพิ่มมาโดยอัตโนมัติ
+        if (!timestamp.empty() && timestamp[timestamp.length()-1] == '\n') {
+            timestamp.erase(timestamp.length()-1);
+        }
+        
+        modelFile << "# DL Model saved from AI Language\n";
+        modelFile << "model_type: " << modelType << "\n";
+        modelFile << "learning_rate: " << parameters["learning_rate"] << "\n";
+        modelFile << "epochs: " << parameters["epochs"] << "\n";
+        modelFile << "accuracy: 0.95\n";
+        modelFile << "create_time: " << timestamp << "\n\n";
+        
         modelFile << "# Layers: " << layers.size() << "\n";
         for (const auto& layer : layers) {
-            modelFile << "# " << layer << "\n";
+            modelFile << "layer: " << layer << "\n";
         }
-        modelFile << "# Parameters:\n";
+        modelFile << "\n# Parameters:\n";
         for (const auto& param : parameters) {
-            modelFile << "# " << param.first << ": " << param.second << "\n";
+            modelFile << param.first << ": " << param.second << "\n";
         }
+        
         modelFile.close();
         std::cout << GREEN << "โมเดลถูกบันทึกสำเร็จที่ '" << savePath << "'" << RESET << std::endl;
     } else {
-        std::cout << RED << "เกิดข้อผิดพลาดในการบันทึกโมเดล" << RESET << std::endl;
+        std::cout << RED << "เกิดข้อผิดพลาดในการบันทึกโมเดล: ไม่สามารถเปิดไฟล์ " << savePath << " ได้" << RESET << std::endl;
     }
     
     hasSavedModel = true;
