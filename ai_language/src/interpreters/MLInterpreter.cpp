@@ -60,7 +60,12 @@ void MLInterpreter::saveModel(const std::string& modelPath) {
     }
 
     // เพิ่มชื่อไฟล์เข้าไปที่เส้นทาง
-    fullPath += modelPath;
+    // ลบเครื่องหมายคำพูดออกจากชื่อไฟล์ถ้ามี
+    std::string cleanPath = modelPath;
+    if (cleanPath.front() == '"' && cleanPath.back() == '"') {
+        cleanPath = cleanPath.substr(1, cleanPath.size() - 2);
+    }
+    fullPath += cleanPath;
 
     std::cout << "Saving ML model to: " << fullPath << std::endl;
 
