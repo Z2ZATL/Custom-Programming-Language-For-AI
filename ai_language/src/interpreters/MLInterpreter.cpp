@@ -211,6 +211,26 @@ void MLInterpreter::handleHelpCommand() {
     std::cout << "  save model <path>            # Save model to file" << std::endl;
     std::cout << "  help                         # Show this help message" << std::endl;
     std::cout << "  evaluate model               # Evaluate the trained model" << std::endl; // Added evaluate command to help
+
+
+void MLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
+    if (args.empty()) {
+        std::cout << "Error: Missing argument for add command" << std::endl;
+        return;
+    }
+    
+    if (args[0] == "feature") {
+        if (args.size() < 2) {
+            std::cout << "Error: Missing feature name. Usage: add feature <feature_name>" << std::endl;
+            return;
+        }
+        std::cout << "Adding feature: " << args[1] << " to the model" << std::endl;
+        // Implementation for adding features
+    } else {
+        std::cout << "Unknown add type: " << args[0] << std::endl;
+    }
+}
+
 }
 
 } // namespace ai_language

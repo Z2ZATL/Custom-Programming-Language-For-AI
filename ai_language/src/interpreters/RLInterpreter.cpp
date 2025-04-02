@@ -67,6 +67,33 @@ void RLInterpreter::handleCreateCommand(const std::vector<std::string>& args) {
         return;
     }
 
+
+
+void RLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
+    if (args.empty()) {
+        std::cout << "Error: Missing argument for add command" << std::endl;
+        return;
+    }
+    
+    if (args[0] == "action") {
+        if (args.size() < 2) {
+            std::cout << "Error: Missing action name. Usage: add action <action_name>" << std::endl;
+            return;
+        }
+        std::cout << "Adding action: " << args[1] << " to the environment" << std::endl;
+        // Implementation for adding actions to RL environment
+    } else if (args[0] == "state") {
+        if (args.size() < 2) {
+            std::cout << "Error: Missing state name. Usage: add state <state_name>" << std::endl;
+            return;
+        }
+        std::cout << "Adding state: " << args[1] << " to the environment" << std::endl;
+        // Implementation for adding states to RL environment
+    } else {
+        std::cout << "Unknown add type: " << args[0] << std::endl;
+    }
+}
+
     std::string modelType = args[0];
     std::cout << "Creating RL model: " << modelType << std::endl;
 
