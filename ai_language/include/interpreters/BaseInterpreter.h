@@ -61,7 +61,7 @@ public:
     virtual void handleCreateCommand(const std::vector<std::string>& args) = 0;
     virtual void handleLoadCommand(const std::vector<std::string>& args) = 0;
     virtual void handleSetCommand(const std::vector<std::string>& args) = 0;
-    virtual void handleAddCommand(const std::vector<std::string>& args) { /* คำสั่ง add เฉพาะบางโมเดล */ };
+    virtual void handleAddCommand(const std::vector<std::string>& args) = 0;
     virtual void handleTrainCommand(const std::vector<std::string>& args) = 0;
     virtual void handleEvaluateCommand(const std::vector<std::string>& args) = 0;
     virtual void handleShowCommand(const std::vector<std::string>& args) = 0;

@@ -244,9 +244,22 @@ void Interpreter::handleAddCommand(const std::map<std::string, std::string>& par
         return;
     }
     std::string type = params.at("type");
-    m_outputHandler("กำลังเพิ่ม " + type);
-
-    //Add more specific handling based on the type here.
+    if (type == "layer") {
+        if (params.find("layer_type") == params.end() || params.find("units") == params.end()) {
+            m_errorHandler("ต้องระบุ layer_type และ units สำหรับการเพิ่ม layer");
+            return;
+        }
+        std::string layerType = params.at("layer_type");
+        int units = std::stoi(params.at("units"));
+        std::string activation = "relu"; // default activation
+        if (params.find("activation") != params.end()){
+            activation = params.at("activation");
+        }
+        m_outputHandler("กำลังเพิ่ม layer ประเภท: " + layerType + ", units: " + std::to_string(units) + ", activation: " + activation);
+        // Add layer to model here...  This would involve interacting with a model object.
+    } else {
+        m_errorHandler("ไม่รู้จัก type ที่จะเพิ่ม: " + type);
+    }
 }
 
 
