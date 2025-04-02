@@ -6,6 +6,9 @@
 namespace ai_language {
 
 class DLInterpreter : public BaseInterpreter {
+private:
+    std::vector<std::string> layers; // Store neural network layers
+
 public:
     DLInterpreter() = default;
     ~DLInterpreter() override = default;

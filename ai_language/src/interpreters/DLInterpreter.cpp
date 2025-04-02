@@ -56,6 +56,9 @@ void DLInterpreter::handleCreateCommand(const std::vector<std::string>& args) {
         std::cout << BLUE << "สร้างโมเดล Neural Network ทั่วไป" << RESET << std::endl;
     }
 
+    // เคลียร์ Layer เก่าเมื่อสร้างโมเดลใหม่
+    layers.clear();
+    
     hasCreatedModel = true;
     this->modelType = modelType;
 }
@@ -89,6 +92,10 @@ void DLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
         if (args.size() >= 5 && args[3] == "activation") {
             activation = args[4];
         }
+        
+        // เพิ่มข้อมูล Layer ลงในลิสต์ของ neural network
+        std::string layerInfo = layerType + ":" + std::to_string(neurons) + ":" + activation;
+        layers.push_back(layerInfo);
         
         std::cout << GREEN << "เพิ่ม Layer " << layerType;
         if (neurons > 0) {
@@ -209,10 +216,42 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
         std::cout << GREEN << "ค่า Loss: 0.134" << RESET << std::endl;
     } else if (showType == "model") {
         std::cout << GREEN << "โครงสร้างโมเดล " << modelType << ":" << RESET << std::endl;
-        std::cout << BLUE << "- Input Layer: 784 neurons" << RESET << std::endl;
-        std::cout << BLUE << "- Hidden Layer 1: " << parameters["neurons_per_layer"] << " neurons, Activation: ReLU" << RESET << std::endl;
-        std::cout << BLUE << "- Hidden Layer 2: " << parameters["neurons_per_layer"] / 2 << " neurons, Activation: ReLU" << RESET << std::endl;
-        std::cout << BLUE << "- Output Layer: 10 neurons, Activation: Softmax" << RESET << std::endl;
+        
+        if (layers.empty()) {
+            // ถ้ายังไม่มีการกำหนด layer ใช้ค่าเริ่มต้น
+            std::cout << BLUE << "- Input Layer: 784 neurons" << RESET << std::endl;
+            std::cout << BLUE << "- Hidden Layer 1: " << parameters["neurons_per_layer"] << " neurons, Activation: ReLU" << RESET << std::endl;
+            std::cout << BLUE << "- Hidden Layer 2: " << parameters["neurons_per_layer"] / 2 << " neurons, Activation: ReLU" << RESET << std::endl;
+            std::cout << BLUE << "- Output Layer: 10 neurons, Activation: Softmax" << RESET << std::endl;
+        } else {
+            // แสดง layer ที่ผู้ใช้กำหนด
+            for (size_t i = 0; i < layers.size(); i++) {
+                std::string layerInfo = layers[i];
+                size_t firstColon = layerInfo.find(':');
+                size_t secondColon = layerInfo.find(':', firstColon + 1);
+                
+                std::string layerType = layerInfo.substr(0, firstColon);
+                int neurons = std::stoi(layerInfo.substr(firstColon + 1, secondColon - firstColon - 1));
+                std::string activation = layerInfo.substr(secondColon + 1);
+                
+                std::cout << BLUE << "- ";
+                if (layerType == "input") {
+                    std::cout << "Input Layer: ";
+                } else if (layerType == "hidden") {
+                    std::cout << "Hidden Layer " << i << ": ";
+                } else if (layerType == "output") {
+                    std::cout << "Output Layer: ";
+                } else {
+                    std::cout << layerType << " Layer: ";
+                }
+                
+                std::cout << neurons << " neurons";
+                if (activation != "linear") {
+                    std::cout << ", Activation: " << activation;
+                }
+                std::cout << RESET << std::endl;
+            }
+        }
     } else {
         std::cout << RED << "ไม่รู้จักคำสั่ง show ประเภท: " << showType << RESET << std::endl;
     }
