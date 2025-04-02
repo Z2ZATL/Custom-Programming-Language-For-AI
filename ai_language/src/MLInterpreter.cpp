@@ -275,7 +275,9 @@ void MLInterpreter::handleTrainCommand(const std::vector<std::string>& args) {
     // ตรวจสอบว่าใช้ scikit-learn หรือไม่
     if (useScikitLearn) {
         std::cout << YELLOW << "กำลังใช้ scikit-learn สำหรับการเทรนโมเดล..." << RESET << std::endl;
-        scikitConnector.trainModel(modelType, datasetPath, parameters);
+        // แปลง unordered_map เป็น map ที่ ScikitLearnConnector คาดหวัง
+        std::map<std::string, double> paramsMap(parameters.begin(), parameters.end());
+        scikitConnector.trainModel(modelType, datasetPath, paramsMap);
         hasTrainedModel = true;
         return;
     }
