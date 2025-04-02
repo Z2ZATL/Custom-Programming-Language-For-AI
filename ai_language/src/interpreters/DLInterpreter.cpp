@@ -261,6 +261,59 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
         std::cout << GREEN << "ความแม่นยำของโมเดล: 0.89" << RESET << std::endl;
     } else if (showType == "loss") {
         std::cout << GREEN << "ค่า Loss: 0.134" << RESET << std::endl;
+    } else if (showType == "graph") {
+        std::cout << GREEN << "กำลังสร้างกราฟผลการเทรนโมเดล " << modelType << "..." << RESET << std::endl;
+        
+        // สร้างโฟลเดอร์สำหรับเก็บไฟล์กราฟ
+        std::string dataDir = "Program test/Data";
+        std::string command = "mkdir -p \"" + dataDir + "\"";
+        system(command.c_str());
+
+        // จำลองข้อมูลการเทรนสำหรับสร้างกราฟ
+        std::string csvPath = dataDir + "/dl_learning_curves_data.csv";
+        std::ofstream csvFile(csvPath);
+        if (csvFile.is_open()) {
+            csvFile << "epoch,accuracy,loss\n";
+            for (int i = 1; i <= int(parameters["epochs"]); i++) {
+                float progress = i / float(parameters["epochs"]);
+                float accuracy = 0.65f + 0.3f * progress;
+                float loss = 0.82f - 0.77f * progress;
+                csvFile << i << "," << accuracy << "," << loss << "\n";
+            }
+            csvFile.close();
+        }
+
+        // ใช้ Python script เพื่อสร้างกราฟเหมือนใน MLInterpreter
+        std::string pythonCommand = "python3 src/utils/plot_generator.py \"" + csvPath + "\" \"" + dataDir + "/dl_learning_curves.png\" \"Learning Curves for " + modelType + " Model\" 2>&1";
+        
+        // เรียกใช้ Python script เพื่อสร้างกราฟ
+        FILE* pipe = popen(pythonCommand.c_str(), "r");
+        if (!pipe) {
+            std::cout << RED << "เกิดข้อผิดพลาดในการสร้างกราฟ" << RESET << std::endl;
+            return;
+        }
+        
+        char buffer[128];
+        std::string result = "";
+        while (!feof(pipe)) {
+            if (fgets(buffer, 128, pipe) != NULL)
+                result += buffer;
+        }
+        pclose(pipe);
+
+        if (result.find("Error") != std::string::npos) {
+            std::cout << RED << result << RESET << std::endl;
+        } else {
+            std::cout << BLUE << "ข้อมูลสรุปการเทรนโมเดล:" << RESET << std::endl;
+            std::cout << BLUE << "------------------------" << RESET << std::endl;
+            std::cout << BLUE << "Loss ลดลงจาก 0.82 เหลือ 0.05 ตลอด " << parameters["epochs"] << " epochs" << RESET << std::endl;
+            std::cout << BLUE << "Accuracy เพิ่มขึ้นจาก 0.65 เป็น 0.95 ตลอด " << parameters["epochs"] << " epochs" << RESET << std::endl;
+            std::cout << BLUE << "------------------------" << RESET << std::endl;
+            
+            std::cout << GREEN << "ข้อมูลได้รับการบันทึกเป็นไฟล์ CSV: " << csvPath << RESET << std::endl;
+            std::cout << GREEN << "กราฟถูกสร้างและบันทึกเป็นไฟล์ PNG: " << dataDir << "/dl_learning_curves.png" << RESET << std::endl;
+            std::cout << GREEN << "To view the graph, open the PNG file in an image viewer" << RESET << std::endl;
+        }
     } else if (showType == "performance" || showType == "metrics") {
         std::cout << GREEN << "ผลการวัดประสิทธิภาพของโมเดล " << modelType << ":" << RESET << std::endl;
         std::cout << BLUE << "ความแม่นยำ (Accuracy): 0.89" << RESET << std::endl;
@@ -323,8 +376,35 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
     if (args.size() >= 1) {
         savePath = args[0];
     }
+    
+    // สร้างโฟลเดอร์สำหรับบันทึกโมเดล (ถ้ามีการระบุ path ที่มี directory)
+    size_t lastSlash = savePath.find_last_of("/\\");
+    if (lastSlash != std::string::npos) {
+        std::string directory = savePath.substr(0, lastSlash);
+        std::string command = "mkdir -p \"" + directory + "\"";
+        system(command.c_str());
+    }
 
     std::cout << GREEN << "กำลังบันทึกโมเดล " << modelType << " ไปที่ " << savePath << RESET << std::endl;
+    
+    // จำลองการบันทึกโมเดลโดยการสร้างไฟล์ว่าง
+    std::ofstream modelFile(savePath);
+    if (modelFile.is_open()) {
+        modelFile << "# " << modelType << " model trained with AI Language\n";
+        modelFile << "# Layers: " << layers.size() << "\n";
+        for (const auto& layer : layers) {
+            modelFile << "# " << layer << "\n";
+        }
+        modelFile << "# Parameters:\n";
+        for (const auto& param : parameters) {
+            modelFile << "# " << param.first << ": " << param.second << "\n";
+        }
+        modelFile.close();
+        std::cout << GREEN << "โมเดลถูกบันทึกสำเร็จที่ '" << savePath << "'" << RESET << std::endl;
+    } else {
+        std::cout << RED << "เกิดข้อผิดพลาดในการบันทึกโมเดล" << RESET << std::endl;
+    }
+    
     hasSavedModel = true;
 }
 
