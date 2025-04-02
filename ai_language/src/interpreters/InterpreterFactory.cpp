@@ -24,7 +24,7 @@ std::unique_ptr<BaseInterpreter> InterpreterFactory::createInterpreter(const std
 std::unique_ptr<BaseInterpreter> InterpreterFactory::createInterpreterFromFile(const std::string& filename) {
     std::ifstream file(filename);
     if (!file.is_open()) {
-        std::cerr << RED << "ข้อผิดพลาด: ไม่สามารถเปิดไฟล์ " << filename << RESET << std::endl;
+        std::cerr << "ข้อผิดพลาด: ไม่สามารถเปิดไฟล์ " << filename << std::endl;
         return createInterpreter("ML"); // ใช้ ML เป็นค่าเริ่มต้น
     }
 

@@ -9,6 +9,7 @@
 
 #include "BaseInterpreter.h"
 #include <string>
+#include <map>
 
 namespace ai_language {
 
@@ -54,6 +55,22 @@ public:
      * @param modelPath พาธของไฟล์โมเดลที่ต้องการบันทึก
      */
     void saveModel(const std::string& modelPath);
+    
+    // Implementation of pure virtual functions from BaseInterpreter
+    void setDefaultParameters() override;
+    void handleStartCommand() override;
+    void handleCreateCommand(const std::vector<std::string>& args) override;
+    void handleLoadCommand(const std::vector<std::string>& args) override;
+    void handleSetCommand(const std::vector<std::string>& args) override;
+    void handleTrainCommand(const std::vector<std::string>& args) override;
+    void handleShowCommand(const std::vector<std::string>& args) override;
+    void handleSaveCommand(const std::vector<std::string>& args) override;
+    void handleHelpCommand() override;
+
+private:
+    std::map<std::string, double> parameters;
+    bool hasLoadedData;
+    bool hasCreatedModel;
 };
 
 } // namespace ai_language
