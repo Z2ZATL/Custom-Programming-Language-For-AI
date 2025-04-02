@@ -269,55 +269,49 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
         // กำหนดเส้นทางสำหรับเก็บไฟล์กราฟ
         std::string dataDir = "Program test/Data";
         
-        // ใช้ไดเรกทอรีที่มีอยู่แล้ว ไม่ต้องสร้างใหม่
+        // ตรวจสอบและสร้างโฟลเดอร์หากไม่มีอยู่
+        std::string mkdir_cmd = "mkdir -p '" + dataDir + "'";
+        int mkdir_result = system(mkdir_cmd.c_str());
+        if (mkdir_result != 0) {
+            std::cout << RED << "ไม่สามารถสร้างโฟลเดอร์สำหรับบันทึกข้อมูล" << RESET << std::endl;
+            return;
+        }
+        
         // จำลองข้อมูลการเทรนสำหรับสร้างกราฟ
-        std::string csvPath = dataDir + "/dl_learning_curves_data.csv";
+        std::string csvPath = dataDir + "/learning_curves_data.csv";
         std::ofstream csvFile(csvPath);
         if (csvFile.is_open()) {
             csvFile << "epoch,accuracy,loss\n";
             for (int i = 1; i <= int(parameters["epochs"]); i++) {
                 float progress = i / float(parameters["epochs"]);
-                float accuracy = 0.65f + 0.3f * progress;
-                float loss = 0.82f - 0.77f * progress;
+                float accuracy = 0.65f + 0.3f * (1 - std::exp(-(i)/25.0));
+                float loss = 0.82f - 0.77f * (1 - std::exp(-(i)/30.0));
                 csvFile << i << "," << accuracy << "," << loss << "\n";
             }
             csvFile.close();
-        }
-
-        // กำหนดชื่อไฟล์ PNG ที่จะบันทึกไว้ในโฟลเดอร์หลัก
-        std::string pngFilename = dataDir + "/dl_" + modelType + "_learning_curves.png";
-        
-        // ใช้ Python script เพื่อสร้างกราฟ และระบุชื่อไฟล์ PNG โดยตรง
-        std::string pythonCommand = "python3 src/utils/plot_generator.py \"" + csvPath + "\" \"" + pngFilename + "\" \"Learning Curves for " + modelType + " Model\" 2>&1";
-
-        // เรียกใช้ Python script เพื่อสร้างกราฟ
-        FILE* pipe = popen(pythonCommand.c_str(), "r");
-        if (!pipe) {
-            std::cout << RED << "เกิดข้อผิดพลาดในการสร้างกราฟ" << RESET << std::endl;
+            std::cout << "กำลังบันทึกข้อมูลเป็นไฟล์ CSV เท่านั้น (ส่วนการสร้างกราฟกำลังปรับปรุง)..." << std::endl;
+        } else {
+            std::cout << RED << "ไม่สามารถเปิดไฟล์สำหรับบันทึกข้อมูล: " << csvPath << RESET << std::endl;
             return;
         }
 
-        char charBuffer[128];
-        std::string scriptOutput = "";
-        while (!feof(pipe)) {
-            if (fgets(charBuffer, 128, pipe) != NULL)
-                scriptOutput += charBuffer;
-        }
-        pclose(pipe);
-
-        if (scriptOutput.find("Error") != std::string::npos) {
-            std::cout << RED << scriptOutput << RESET << std::endl;
+        // สร้างกราฟด้วย plot_generator.py
+        std::cout << "กำลังสร้างไฟล์กราฟข้อมูลทั้งในรูปแบบ HTML และ PNG (ไม่สามารถแสดงในเทอร์มินัลได้)..." << std::endl;
+        
+        // ใช้ Python script เพื่อสร้างกราฟ
+        std::string command = "python3 src/utils/plot_generator.py \"" + csvPath + "\" \"" + dataDir + "\" \"Learning Curves for " + modelType + " Model\"";
+        int result = system(command.c_str());
+        
+        if (result == 0) {
+            std::cout << "Graph saved successfully to " << dataDir << std::endl;
+            std::cout << "ข้อมูลได้รับการบันทึกเป็นไฟล์ CSV: ai_language/" << csvPath << std::endl;
+            std::cout << "กราฟถูกสร้างและบันทึกเป็นไฟล์ PNG: ai_language/" << dataDir << "/learning_curves.png" << std::endl;
+            std::cout << "To view the graph, open the HTML file in a web browser" << std::endl;
         } else {
-            std::cout << BLUE << "ข้อมูลสรุปการเทรนโมเดล:" << RESET << std::endl;
-            std::cout << BLUE << "------------------------" << RESET << std::endl;
-            std::cout << BLUE << "Loss ลดลงจาก 0.82 เหลือ 0.05 ตลอด " << parameters["epochs"] << " epochs" << RESET << std::endl;
-            std::cout << BLUE << "Accuracy เพิ่มขึ้นจาก 0.65 เป็น 0.95 ตลอด " << parameters["epochs"] << " epochs" << RESET << std::endl;
-            std::cout << BLUE << "------------------------" << RESET << std::endl;
-
-            std::cout << GREEN << "ข้อมูลได้รับการบันทึกเป็นไฟล์ CSV: " << csvPath << RESET << std::endl;
-            std::cout << GREEN << "กราฟถูกสร้างและบันทึกเป็นไฟล์ PNG: " << pngFilename << RESET << std::endl;
-            std::cout << GREEN << "To view the graph, open the PNG file in an image viewer" << RESET << std::endl;
+            std::cout << RED << "เกิดข้อผิดพลาดในการสร้างกราฟ" << RESET << std::endl;
+            return;
         }
+        
     } else if (showType == "performance" || showType == "metrics") {
         std::cout << GREEN << "ผลการวัดประสิทธิภาพของโมเดล " << modelType << ":" << RESET << std::endl;
         std::cout << BLUE << "ความแม่นยำ (Accuracy): 0.89" << RESET << std::endl;
@@ -420,7 +414,8 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
         }
     }
 
-    std::cout << GREEN << "กำลังบันทึกโมเดล " << modelType << " ไปที่ " << savePath << RESET << std::endl;
+    // แสดงข้อความว่ากำลังบันทึกโมเดลไปที่ไหน
+    std::cout << "Saving DL model to: " << savePath << std::endl;
 
     // จำลองการบันทึกโมเดลโดยการสร้างไฟล์
     std::ofstream modelFile(savePath);
@@ -455,7 +450,8 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
         }
 
         modelFile.close();
-        std::cout << GREEN << "โมเดลถูกบันทึกสำเร็จที่ '" << savePath << "'" << RESET << std::endl;
+        std::cout << "Model successfully saved to: " << savePath << std::endl;
+        std::cout << GREEN << "โมเดลถูกบันทึกไปที่ 'ai_language/" << savePath << "'" << RESET << std::endl;
     } else {
         std::cout << RED << "เกิดข้อผิดพลาดในการบันทึกโมเดล: ไม่สามารถเปิดไฟล์ " << savePath << " ได้" << RESET << std::endl;
     }
