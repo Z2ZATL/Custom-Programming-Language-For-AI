@@ -267,7 +267,7 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
         std::cout << GREEN << "กำลังสร้างกราฟผลการเทรนโมเดล " << modelType << "..." << RESET << std::endl;
 
         // กำหนดเส้นทางสำหรับเก็บไฟล์กราฟ ใช้โฟลเดอร์ที่มีอยู่แล้ว
-        std::string dataDir = "ai_language/Program test/Data";
+        std::string dataDir = "Program test/Data";
         
         // ตรวจสอบว่าไดเรกทอรีมีอยู่แล้วหรือไม่ - ถ้าไม่มีให้สร้างเฉพาะเมื่อจำเป็น
         struct stat dirStat;
@@ -393,12 +393,12 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
         return;
     }
 
-    std::string savePath = "ai_language/Program test/model/dl_model.dlmodel";
+    std::string savePath = "Program test/model/dl_model.dlmodel";
     if (args.size() >= 1) {
         std::string fileName = args[0];
         // ถ้ามีการระบุเส้นทางที่ไม่ได้ขึ้นต้นด้วย / หรือ ./ ให้เพิ่มเส้นทาง default
         if (fileName[0] != '/' && (fileName.size() < 2 || fileName.substr(0, 2) != "./")) {
-            savePath = "ai_language/Program test/model/" + fileName;
+            savePath = "Program test/model/" + fileName;
         } else {
             savePath = fileName;
         }
