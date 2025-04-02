@@ -146,20 +146,11 @@ void generateLearningCurves(int epochs, const std::string& outputPath) {
     
     htmlFile.close();
     
-    // สร้างไฟล์ PNG (อาจใช้คำสั่ง Chrome headless หรือเครื่องมืออื่นในการแปลง HTML เป็น PNG)
+    // ใช้เฉพาะไฟล์ HTML ซึ่งสามารถแสดงผลได้ในเว็บเบราวเซอร์
     std::string pngPath = outputPath + "/learning_curves.png";
-    
-    // ใช้ convert จาก ImageMagick หากมี
-    std::string convert_cmd = "which convert > /dev/null 2>&1 && convert -size 1000x600 " + htmlPath + " " + pngPath + " || echo 'ImageMagick not found, using HTML file instead'";
-    system(convert_cmd.c_str());
-    
-    // ถ้าไม่มี ImageMagick เราจะทำสำเนาไฟล์ SVG เป็น PNG แทน (จะไม่เปิดได้แต่อย่างน้อยมีไฟล์ให้ใช้งาน)
-    std::string cp_cmd = "[ ! -f \"" + pngPath + "\" ] && cp " + htmlPath + " " + pngPath;
-    system(cp_cmd.c_str());
     
     std::cout << "Graph saved as '" << htmlPath << "'" << std::endl;
     std::cout << "Data saved as '" << dataPath << "'" << std::endl;
-    std::cout << "(PNG format may require manual conversion)" << std::endl;
 }
 
 } // namespace ai_language
