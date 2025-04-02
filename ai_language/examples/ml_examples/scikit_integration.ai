@@ -1,6 +1,7 @@
 
 # ตัวอย่างการเชื่อมต่อกับ scikit-learn
-start create ML
+start
+create ML
 
 # โหลดข้อมูล
 load dataset "datasets/classification_data.csv" type "csv"
@@ -25,4 +26,4 @@ show metric "recall"
 show metric "f1"
 
 # บันทึกโมเดล
-save model to "scikit_rf_model.pkl"
+save model "scikit_rf_model.pkl"
