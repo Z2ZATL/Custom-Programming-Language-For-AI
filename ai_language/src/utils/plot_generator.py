@@ -28,16 +28,24 @@ def main():
         # สร้างกราฟ
         plt.figure(figsize=(10, 6))
 
-        # ตรวจสอบคอลัมน์ที่มีในข้อมูล
+        # ตรวจสอบคอลัมน์ที่มีในข้อมูล และเก็บค่าว่ามีการวาดกราฟหรือไม่
+        has_plots = False
+        
         if 'epoch' in df.columns and 'accuracy' in df.columns:
             plt.plot(df['epoch'], df['accuracy'], 'b-', label='Accuracy')
+            has_plots = True
         if 'epoch' in df.columns and 'loss' in df.columns:
             plt.plot(df['epoch'], df['loss'], 'r-', label='Loss')
+            has_plots = True
 
         plt.title(title)
         plt.xlabel('Epochs')
         plt.ylabel('Value')
-        plt.legend()
+        
+        # แสดง legend เฉพาะเมื่อมีการวาดกราฟแล้ว
+        if has_plots:
+            plt.legend()
+        
         plt.grid(True)
 
         # บันทึกกราฟเป็นไฟล์ PNG - บันทึกไปยังตำแหน่งที่ถูกต้อง
