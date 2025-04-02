@@ -12,8 +12,9 @@ DLInterpreter::DLInterpreter() {
     projectType = "DL";
 }
 
-std::vector<std::string> DLInterpreter::tokenizeLine(const std::string& line) {
+std::vector<std::string> DLInterpreter::tokenizeLine(const std::string& line) const {
     std::vector<std::string> tokens;
+    tokens.reserve(line.length() / 3); // สำรองพื้นที่ประมาณการ
     std::string currentToken;
     bool inQuotes = false;
 

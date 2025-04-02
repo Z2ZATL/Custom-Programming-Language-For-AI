@@ -438,7 +438,7 @@ public:
 
     // รีเซ็ตสถานะข้อผิดพลาด
     void resetError();
-    
+
 private:
 };
 

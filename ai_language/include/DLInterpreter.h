@@ -22,7 +22,7 @@ private:
     std::string datasetFilename; // เพิ่มตัวแปรสำหรับเก็บชื่อไฟล์ข้อมูล
 
     // Helper function
-    std::vector<std::string> tokenizeLine(const std::string& line);
+    std::vector<std::string> tokenizeLine(const std::string& line) const;
 
 public:
     DLInterpreter();

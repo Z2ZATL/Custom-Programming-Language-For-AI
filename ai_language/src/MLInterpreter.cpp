@@ -535,4 +535,18 @@ void MLInterpreter::handleHelpCommand() {
     std::cout << "  end                         - สิ้นสุดโปรแกรม" << std::endl;
 }
 
+std::string MLInterpreter::getCurrentDateTime() const {
+        auto now = std::chrono::system_clock::now();
+        auto time_t_now = std::chrono::system_clock::to_time_t(now);
+
+        // ปรับเวลาตาม timezone ที่ผู้ใช้กำหนด
+        time_t_now += userTimezoneOffset * 3600;
+
+        std::tm* tm_now = std::gmtime(&time_t_now);
+
+        char buffer[80];
+        std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_now);
+        return std::string(buffer);
+    }
+
 } // namespace ai_language

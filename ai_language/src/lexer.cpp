@@ -38,6 +38,7 @@ Lexer::Lexer(const std::string& source)
 
 std::vector<Token> Lexer::tokenize() {
     _tokens.clear();
+    _tokens.reserve(_source.length() / 5); // คาดการณ์จำนวน tokens
     _start = 0;
     _current = 0;
     _line = 1;

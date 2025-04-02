@@ -1,20 +1,21 @@
-
 #include "../include/BaseInterpreter.h"
 #include "../include/InterpreterFactory.h"
 #include <sstream>
 
 namespace ai_language {
 
-std::string BaseInterpreter::getCurrentDateTime() {
+std::string BaseInterpreter::getCurrentDateTime() const {
     auto now = std::chrono::system_clock::now();
     auto time_t_now = std::chrono::system_clock::to_time_t(now);
 
-    // ปรับเวลาตาม timezone ของผู้ใช้
-    time_t_now += userTimezoneOffset * 3600; // ปรับเวลาตาม offset (ชั่วโมง)
+    // ปรับเวลาตาม timezone ที่ผู้ใช้กำหนด
+    time_t_now += userTimezoneOffset * 3600;
 
-    std::stringstream ss;
-    ss << std::put_time(std::gmtime(&time_t_now), "%Y-%m-%d %H:%M:%S");
-    return ss.str();
+    std::tm* tm_now = std::gmtime(&time_t_now);
+
+    char buffer[80];
+    std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_now);
+    return std::string(buffer);
 }
 
 void BaseInterpreter::interpretFile(const std::string& filename) {

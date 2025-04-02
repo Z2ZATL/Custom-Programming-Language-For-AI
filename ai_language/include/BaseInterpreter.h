@@ -44,7 +44,7 @@ protected:
     int userTimezoneOffset = 7; // ค่าเริ่มต้นคือ UTC+7 (ประเทศไทย)
 
     // Helper function to get current date and time adjusted for user timezone
-    std::string getCurrentDateTime();
+    std::string getCurrentDateTime() const;
 
     // ตั้งค่าพารามิเตอร์เริ่มต้น
     virtual void setDefaultParameters() = 0;
