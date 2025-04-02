@@ -1,3 +1,4 @@
+
 #include "../../include/interpreters/RLInterpreter.h"
 #include "../../include/connectors/Connector.h"
 #include <iostream>
@@ -60,14 +61,6 @@ void RLInterpreter::setDefaultParameters() {
 void RLInterpreter::handleStartCommand() {
     std::cout << "Starting Reinforcement Learning interpreter..." << std::endl;
 }
-
-void RLInterpreter::handleCreateCommand(const std::vector<std::string>& args) {
-    if (args.empty()) {
-        std::cout << "Error: Missing model type for create command" << std::endl;
-        return;
-    }
-
-
 
 void RLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
     if (args.empty()) {

@@ -66,6 +66,7 @@ public:
     void handleShowCommand(const std::vector<std::string>& args) override;
     void handleSaveCommand(const std::vector<std::string>& args) override;
     void handleHelpCommand() override;
+    void handleAddCommand(const std::vector<std::string>& args) override;
 
 private:
     std::map<std::string, double> parameters;
