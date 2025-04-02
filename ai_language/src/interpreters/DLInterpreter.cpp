@@ -268,15 +268,8 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
 
         // กำหนดเส้นทางสำหรับเก็บไฟล์กราฟ
         std::string dataDir = "Program test/Data";
-        std::string graphsDir = dataDir + "/graphs";
         
-        // สร้างทั้งโฟลเดอร์ Data และ graphs ถ้ายังไม่มี
-        std::string mkdirCmd = "mkdir -p \"" + graphsDir + "\"";
-        int dirResult = system(mkdirCmd.c_str());
-        if (dirResult != 0) {
-            std::cout << YELLOW << "คำเตือน: ไม่สามารถสร้างไดเรกทอรี " << graphsDir << ". กราฟอาจไม่ถูกบันทึก." << RESET << std::endl;
-        }
-
+        // ใช้ไดเรกทอรีที่มีอยู่แล้ว ไม่ต้องสร้างใหม่
         // จำลองข้อมูลการเทรนสำหรับสร้างกราฟ
         std::string csvPath = dataDir + "/dl_learning_curves_data.csv";
         std::ofstream csvFile(csvPath);
@@ -291,8 +284,8 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
             csvFile.close();
         }
 
-        // กำหนดชื่อไฟล์ PNG ที่จะบันทึก
-        std::string pngFilename = graphsDir + "/dl_" + modelType + "_learning_curves.png";
+        // กำหนดชื่อไฟล์ PNG ที่จะบันทึกไว้ในโฟลเดอร์หลัก
+        std::string pngFilename = dataDir + "/dl_" + modelType + "_learning_curves.png";
         
         // ใช้ Python script เพื่อสร้างกราฟ และระบุชื่อไฟล์ PNG โดยตรง
         std::string pythonCommand = "python3 src/utils/plot_generator.py \"" + csvPath + "\" \"" + pngFilename + "\" \"Learning Curves for " + modelType + " Model\" 2>&1";
