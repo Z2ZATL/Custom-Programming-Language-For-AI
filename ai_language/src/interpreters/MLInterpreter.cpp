@@ -226,6 +226,7 @@ void MLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
         std::cout << "Loss ลดลงจาก 0.82 เหลือ 0.05 ตลอด " << parameters["epochs"] << " epochs" << std::endl;
         std::cout << "Accuracy เพิ่มขึ้นจาก 0.65 เป็น 0.95 ตลอด " << parameters["epochs"] << " epochs" << std::endl;
         std::cout << "------------------------" << std::endl;
+        std::cout << "กำลังบันทึกข้อมูลเป็นไฟล์ CSV เท่านั้น (ส่วนการสร้างกราฟกำลังปรับปรุง)..." << std::endl;
 
         // ใช้ฟังก์ชัน C++ สร้างกราฟโดยตรง
         std::cout << "กำลังสร้างไฟล์กราฟข้อมูลทั้งในรูปแบบ HTML และ PNG (ไม่สามารถแสดงในเทอร์มินัลได้)..." << std::endl;
