@@ -147,7 +147,7 @@ int main(int argc, char* argv[]) {
     
     // ตรวจสอบ arguments
     if (argc == 1) {
-        printUsage();
+        ai_language::printUsage();
         return 0;
     }
 
