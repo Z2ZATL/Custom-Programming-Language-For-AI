@@ -5,7 +5,7 @@
 //     DLInterpreter.cpp
 //   connectors/
 //     ScikitLearnConnector.h
-//     ScikitLearnConnector.cpp // Added this line to reflect the new connector.
+//     ScikitLearnConnector.cpp 
 //   main.cpp
 
 // interpreters/DLInterpreter.h
@@ -22,14 +22,21 @@ public:
 
 // interpreters/DLInterpreter.cpp
 #include "../../include/interpreters/DLInterpreter.h"
-#include "../../include/connectors/ScikitLearnConnector.h" // Added this line
+#include "../../include/connectors/ScikitLearnConnector.h"
+
+namespace ai_language {
 
 void DLInterpreter::interpret() {
-  // โค้ดสำหรับการแปลภาษา DL
+    // โค้ดสำหรับการแปลภาษา DL
+    // ตัวอย่างการใช้งาน ScikitLearnConnector
+    ScikitLearnConnector connector;
+    connector.connect();
 }
 
+} // namespace ai_language
 
-// connectors/MyConnector.h  // This remains, even though it's not used.  No information provided to remove it.
+
+// connectors/MyConnector.h  
 #ifndef MYCONNECTOR_H
 #define MYCONNECTOR_H
 
@@ -49,7 +56,7 @@ void MyConnector::connect() {
 }
 
 
-// connectors/ScikitLearnConnector.h // Added this file.  Dummy implementation.
+// connectors/ScikitLearnConnector.h 
 #ifndef SCIKITLEARNCONNECTOR_H
 #define SCIKITLEARNCONNECTOR_H
 
@@ -60,7 +67,7 @@ public:
 
 #endif
 
-// connectors/ScikitLearnConnector.cpp // Added this file. Dummy implementation
+// connectors/ScikitLearnConnector.cpp 
 #include "ScikitLearnConnector.h"
 
 void ScikitLearnConnector::connect() {
@@ -69,10 +76,10 @@ void ScikitLearnConnector::connect() {
 
 // main.cpp
 #include "../interpreters/DLInterpreter.h"
-#include "../connectors/MyConnector.h" // Kept this line as it's in the original code.  The new connector is not used in main.
+#include "../connectors/MyConnector.h" 
 
 int main() {
-  DLInterpreter interpreter;
+  ai_language::DLInterpreter interpreter;
   MyConnector connector;
 
   connector.connect();
