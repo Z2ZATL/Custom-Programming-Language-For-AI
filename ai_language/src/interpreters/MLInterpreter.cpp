@@ -53,7 +53,10 @@ void MLInterpreter::saveModel(const std::string& modelPath) {
     std::string fullPath = "Program test/model/";
     
     // สร้างโฟลเดอร์ถ้ายังไม่มี
-    system("mkdir -p 'Program test/model'");
+    int mkdir_result = system("mkdir -p 'Program test/model'");
+    if (mkdir_result != 0) {
+        std::cout << "Warning: Could not create directory structure. Model might not save correctly." << std::endl;
+    }
     
     // เพิ่มชื่อไฟล์เข้าไปที่เส้นทาง
     fullPath += modelPath;
@@ -287,7 +290,10 @@ void MLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
         }
 
         // ตรวจสอบและสร้างโฟลเดอร์ที่จำเป็น
-        system("mkdir -p 'ai_language/Program test/model'");
+        int mkdir_result = system("mkdir -p 'ai_language/Program test/model'");
+        if (mkdir_result != 0) {
+            std::cout << "Warning: Could not create directory structure. Model might not save correctly." << std::endl;
+        }
         
         // บันทึกโมเดล
         saveModel(args[1]);
