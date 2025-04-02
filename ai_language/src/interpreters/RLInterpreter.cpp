@@ -1,7 +1,8 @@
-
 #include "../../include/interpreters/RLInterpreter.h"
 #include "../../include/connectors/Connector.h"
 #include <iostream>
+#include <cstdlib> // for setenv
+#include <ctime>   // for tzset
 
 namespace ai_language {
 
@@ -46,7 +47,7 @@ void RLInterpreter::evaluateModel() {
 
 void RLInterpreter::saveModel(const std::string& modelPath) {
     std::cout << "Saving RL model to: " << modelPath << std::endl;
-    
+
     // ตรวจสอบและสร้างโฟลเดอร์ให้แน่ใจว่ามีอยู่
     std::string directory = "Program test/model/";
     struct stat info;
@@ -57,7 +58,7 @@ void RLInterpreter::saveModel(const std::string& modelPath) {
             std::cout << "Warning: Failed to create directory: " << directory << std::endl;
         }
     }
-    
+
     // สร้างเส้นทางเต็มสำหรับไฟล์
     std::string fullPath = directory + modelPath;
     if (fullPath.find(".rlmodel") == std::string::npos) {
@@ -105,7 +106,7 @@ void RLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
         std::cout << "Error: Missing argument for add command" << std::endl;
         return;
     }
-    
+
     if (args[0] == "action") {
         if (args.size() < 2) {
             std::cout << "Error: Missing action name. Usage: add action <action_name>" << std::endl;
@@ -157,20 +158,54 @@ void RLInterpreter::handleLoadCommand(const std::vector<std::string>& args) {
     }
 }
 
-void RLInterpreter::handleSetCommand(const std::vector<std::string>& args) {
-    if (args.size() < 2) {
-        std::cout << "Error: Invalid set command format" << std::endl;
+void RLInterpreter::handleSetCommand(const std::vector<std::string>& parts) {
+    if (parts.size() < 3) {
+        std::cout << "Error: Invalid set command. Expected: set <parameter> <value>" << std::endl;
         return;
     }
 
-    std::string paramName = args[0];
-    std::string paramValue = args[1];
+    std::string parameter = parts[1];
+    std::string valueStr = parts[2];
 
-    try {
-        parameters[paramName] = std::stod(paramValue);
-        std::cout << "Set " << paramName << " = " << parameters[paramName] << std::endl;
-    } catch (const std::exception& e) {
-        std::cout << "Error: Invalid parameter value" << std::endl;
+    // Handle timezone separately since it might be an integer
+    if (parameter == "timezone") {
+        int timezone_value = std::stoi(valueStr);
+        parameters["timezone"] = static_cast<double>(timezone_value);
+        std::cout << "Set timezone = UTC" << (timezone_value >= 0 ? "+" : "") << timezone_value << std::endl;
+
+        // ตั้งค่า timezone ในระบบ (สำหรับ Linux)
+        std::string tz_env;
+        if (timezone_value >= 0) {
+            tz_env = "Etc/GMT-" + std::to_string(timezone_value); // เครื่องหมายกลับกันใน POSIX
+        } else {
+            tz_env = "Etc/GMT+" + std::to_string(-timezone_value); // เครื่องหมายกลับกันใน POSIX
+        }
+        setenv("TZ", tz_env.c_str(), 1);
+        tzset();
+        return;
+    }
+
+    // สำหรับพารามิเตอร์อื่นๆ
+    double value = std::stod(valueStr);
+
+    if (parameter == "learning_rate") {
+        parameters["learning_rate"] = value;
+        std::cout << "Set learning_rate = " << value << std::endl;
+    } 
+    else if (parameter == "episodes") {
+        parameters["episodes"] = value;
+        std::cout << "Set episodes = " << value << std::endl;
+    }
+    else if (parameter == "discount_factor") {
+        parameters["gamma"] = value;
+        std::cout << "Set discount_factor = " << value << std::endl;
+    }
+    else if (parameter == "exploration_rate") {
+        parameters["epsilon"] = value;
+        std::cout << "Set exploration_rate = " << value << std::endl;
+    }
+    else {
+        std::cout << "Warning: Unknown parameter: " << parameter << std::endl;
     }
 }
 
@@ -215,6 +250,7 @@ void RLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
         std::cout << "Discount factor: " << parameters["gamma"] << std::endl;
         std::cout << "Exploration rate: " << parameters["epsilon"] << std::endl;
         // Display other parameters as needed
+        std::cout << "Timezone: UTC" << (parameters["timezone"] >= 0 ? "+" : "") << static_cast<int>(parameters["timezone"]) << std::endl;
     } else if (showType == "performance") {
         if (!hasTrained) {
             std::cout << "Warning: Model not trained yet, no performance metrics to show." << std::endl;
