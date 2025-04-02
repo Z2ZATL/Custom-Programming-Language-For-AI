@@ -179,54 +179,6 @@ ai_lang.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_lang.dir/build.make CMakeFiles/ai_lang.dir/ai_lang.cpp.s
 .PHONY : ai_lang.cpp.s
 
-src/BaseInterpreter.o: src/BaseInterpreter.cpp.o
-.PHONY : src/BaseInterpreter.o
-
-# target to build an object file
-src/BaseInterpreter.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/BaseInterpreter.cpp.o
-.PHONY : src/BaseInterpreter.cpp.o
-
-src/BaseInterpreter.i: src/BaseInterpreter.cpp.i
-.PHONY : src/BaseInterpreter.i
-
-# target to preprocess a source file
-src/BaseInterpreter.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/BaseInterpreter.cpp.i
-.PHONY : src/BaseInterpreter.cpp.i
-
-src/BaseInterpreter.s: src/BaseInterpreter.cpp.s
-.PHONY : src/BaseInterpreter.s
-
-# target to generate assembly for a file
-src/BaseInterpreter.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/BaseInterpreter.cpp.s
-.PHONY : src/BaseInterpreter.cpp.s
-
-src/DLInterpreter.o: src/DLInterpreter.cpp.o
-.PHONY : src/DLInterpreter.o
-
-# target to build an object file
-src/DLInterpreter.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/DLInterpreter.cpp.o
-.PHONY : src/DLInterpreter.cpp.o
-
-src/DLInterpreter.i: src/DLInterpreter.cpp.i
-.PHONY : src/DLInterpreter.i
-
-# target to preprocess a source file
-src/DLInterpreter.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/DLInterpreter.cpp.i
-.PHONY : src/DLInterpreter.cpp.i
-
-src/DLInterpreter.s: src/DLInterpreter.cpp.s
-.PHONY : src/DLInterpreter.s
-
-# target to generate assembly for a file
-src/DLInterpreter.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/DLInterpreter.cpp.s
-.PHONY : src/DLInterpreter.cpp.s
-
 src/InterpreterFactory.o: src/InterpreterFactory.cpp.o
 .PHONY : src/InterpreterFactory.o
 
@@ -251,77 +203,197 @@ src/InterpreterFactory.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/InterpreterFactory.cpp.s
 .PHONY : src/InterpreterFactory.cpp.s
 
-src/MLInterpreter.o: src/MLInterpreter.cpp.o
-.PHONY : src/MLInterpreter.o
+src/connectors/ScikitLearnConnector.o: src/connectors/ScikitLearnConnector.cpp.o
+.PHONY : src/connectors/ScikitLearnConnector.o
 
 # target to build an object file
-src/MLInterpreter.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/MLInterpreter.cpp.o
-.PHONY : src/MLInterpreter.cpp.o
+src/connectors/ScikitLearnConnector.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/connectors/ScikitLearnConnector.cpp.o
+.PHONY : src/connectors/ScikitLearnConnector.cpp.o
 
-src/MLInterpreter.i: src/MLInterpreter.cpp.i
-.PHONY : src/MLInterpreter.i
+src/connectors/ScikitLearnConnector.i: src/connectors/ScikitLearnConnector.cpp.i
+.PHONY : src/connectors/ScikitLearnConnector.i
 
 # target to preprocess a source file
-src/MLInterpreter.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/MLInterpreter.cpp.i
-.PHONY : src/MLInterpreter.cpp.i
+src/connectors/ScikitLearnConnector.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/connectors/ScikitLearnConnector.cpp.i
+.PHONY : src/connectors/ScikitLearnConnector.cpp.i
 
-src/MLInterpreter.s: src/MLInterpreter.cpp.s
-.PHONY : src/MLInterpreter.s
+src/connectors/ScikitLearnConnector.s: src/connectors/ScikitLearnConnector.cpp.s
+.PHONY : src/connectors/ScikitLearnConnector.s
 
 # target to generate assembly for a file
-src/MLInterpreter.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/MLInterpreter.cpp.s
-.PHONY : src/MLInterpreter.cpp.s
+src/connectors/ScikitLearnConnector.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/connectors/ScikitLearnConnector.cpp.s
+.PHONY : src/connectors/ScikitLearnConnector.cpp.s
 
-src/RLInterpreter.o: src/RLInterpreter.cpp.o
-.PHONY : src/RLInterpreter.o
+src/interpreter.o: src/interpreter.cpp.o
+.PHONY : src/interpreter.o
 
 # target to build an object file
-src/RLInterpreter.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/RLInterpreter.cpp.o
-.PHONY : src/RLInterpreter.cpp.o
+src/interpreter.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/interpreter.cpp.o
+.PHONY : src/interpreter.cpp.o
 
-src/RLInterpreter.i: src/RLInterpreter.cpp.i
-.PHONY : src/RLInterpreter.i
+src/interpreter.i: src/interpreter.cpp.i
+.PHONY : src/interpreter.i
 
 # target to preprocess a source file
-src/RLInterpreter.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/RLInterpreter.cpp.i
-.PHONY : src/RLInterpreter.cpp.i
+src/interpreter.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/interpreter.cpp.i
+.PHONY : src/interpreter.cpp.i
 
-src/RLInterpreter.s: src/RLInterpreter.cpp.s
-.PHONY : src/RLInterpreter.s
+src/interpreter.s: src/interpreter.cpp.s
+.PHONY : src/interpreter.s
 
 # target to generate assembly for a file
-src/RLInterpreter.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/RLInterpreter.cpp.s
-.PHONY : src/RLInterpreter.cpp.s
+src/interpreter.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/interpreter.cpp.s
+.PHONY : src/interpreter.cpp.s
 
-src/ScikitLearnConnector.o: src/ScikitLearnConnector.cpp.o
-.PHONY : src/ScikitLearnConnector.o
+src/interpreters/BaseInterpreter.o: src/interpreters/BaseInterpreter.cpp.o
+.PHONY : src/interpreters/BaseInterpreter.o
 
 # target to build an object file
-src/ScikitLearnConnector.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/ScikitLearnConnector.cpp.o
-.PHONY : src/ScikitLearnConnector.cpp.o
+src/interpreters/BaseInterpreter.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/interpreters/BaseInterpreter.cpp.o
+.PHONY : src/interpreters/BaseInterpreter.cpp.o
 
-src/ScikitLearnConnector.i: src/ScikitLearnConnector.cpp.i
-.PHONY : src/ScikitLearnConnector.i
+src/interpreters/BaseInterpreter.i: src/interpreters/BaseInterpreter.cpp.i
+.PHONY : src/interpreters/BaseInterpreter.i
 
 # target to preprocess a source file
-src/ScikitLearnConnector.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/ScikitLearnConnector.cpp.i
-.PHONY : src/ScikitLearnConnector.cpp.i
+src/interpreters/BaseInterpreter.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/interpreters/BaseInterpreter.cpp.i
+.PHONY : src/interpreters/BaseInterpreter.cpp.i
 
-src/ScikitLearnConnector.s: src/ScikitLearnConnector.cpp.s
-.PHONY : src/ScikitLearnConnector.s
+src/interpreters/BaseInterpreter.s: src/interpreters/BaseInterpreter.cpp.s
+.PHONY : src/interpreters/BaseInterpreter.s
 
 # target to generate assembly for a file
-src/ScikitLearnConnector.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/ScikitLearnConnector.cpp.s
-.PHONY : src/ScikitLearnConnector.cpp.s
+src/interpreters/BaseInterpreter.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/interpreters/BaseInterpreter.cpp.s
+.PHONY : src/interpreters/BaseInterpreter.cpp.s
+
+src/interpreters/DLInterpreter.o: src/interpreters/DLInterpreter.cpp.o
+.PHONY : src/interpreters/DLInterpreter.o
+
+# target to build an object file
+src/interpreters/DLInterpreter.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/interpreters/DLInterpreter.cpp.o
+.PHONY : src/interpreters/DLInterpreter.cpp.o
+
+src/interpreters/DLInterpreter.i: src/interpreters/DLInterpreter.cpp.i
+.PHONY : src/interpreters/DLInterpreter.i
+
+# target to preprocess a source file
+src/interpreters/DLInterpreter.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/interpreters/DLInterpreter.cpp.i
+.PHONY : src/interpreters/DLInterpreter.cpp.i
+
+src/interpreters/DLInterpreter.s: src/interpreters/DLInterpreter.cpp.s
+.PHONY : src/interpreters/DLInterpreter.s
+
+# target to generate assembly for a file
+src/interpreters/DLInterpreter.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/interpreters/DLInterpreter.cpp.s
+.PHONY : src/interpreters/DLInterpreter.cpp.s
+
+src/interpreters/MLInterpreter.o: src/interpreters/MLInterpreter.cpp.o
+.PHONY : src/interpreters/MLInterpreter.o
+
+# target to build an object file
+src/interpreters/MLInterpreter.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/interpreters/MLInterpreter.cpp.o
+.PHONY : src/interpreters/MLInterpreter.cpp.o
+
+src/interpreters/MLInterpreter.i: src/interpreters/MLInterpreter.cpp.i
+.PHONY : src/interpreters/MLInterpreter.i
+
+# target to preprocess a source file
+src/interpreters/MLInterpreter.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/interpreters/MLInterpreter.cpp.i
+.PHONY : src/interpreters/MLInterpreter.cpp.i
+
+src/interpreters/MLInterpreter.s: src/interpreters/MLInterpreter.cpp.s
+.PHONY : src/interpreters/MLInterpreter.s
+
+# target to generate assembly for a file
+src/interpreters/MLInterpreter.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/interpreters/MLInterpreter.cpp.s
+.PHONY : src/interpreters/MLInterpreter.cpp.s
+
+src/interpreters/RLInterpreter.o: src/interpreters/RLInterpreter.cpp.o
+.PHONY : src/interpreters/RLInterpreter.o
+
+# target to build an object file
+src/interpreters/RLInterpreter.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/interpreters/RLInterpreter.cpp.o
+.PHONY : src/interpreters/RLInterpreter.cpp.o
+
+src/interpreters/RLInterpreter.i: src/interpreters/RLInterpreter.cpp.i
+.PHONY : src/interpreters/RLInterpreter.i
+
+# target to preprocess a source file
+src/interpreters/RLInterpreter.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/interpreters/RLInterpreter.cpp.i
+.PHONY : src/interpreters/RLInterpreter.cpp.i
+
+src/interpreters/RLInterpreter.s: src/interpreters/RLInterpreter.cpp.s
+.PHONY : src/interpreters/RLInterpreter.s
+
+# target to generate assembly for a file
+src/interpreters/RLInterpreter.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/interpreters/RLInterpreter.cpp.s
+.PHONY : src/interpreters/RLInterpreter.cpp.s
+
+src/lexer.o: src/lexer.cpp.o
+.PHONY : src/lexer.o
+
+# target to build an object file
+src/lexer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/lexer.cpp.o
+.PHONY : src/lexer.cpp.o
+
+src/lexer.i: src/lexer.cpp.i
+.PHONY : src/lexer.i
+
+# target to preprocess a source file
+src/lexer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/lexer.cpp.i
+.PHONY : src/lexer.cpp.i
+
+src/lexer.s: src/lexer.cpp.s
+.PHONY : src/lexer.s
+
+# target to generate assembly for a file
+src/lexer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/lexer.cpp.s
+.PHONY : src/lexer.cpp.s
+
+src/parser.o: src/parser.cpp.o
+.PHONY : src/parser.o
+
+# target to build an object file
+src/parser.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/parser.cpp.o
+.PHONY : src/parser.cpp.o
+
+src/parser.i: src/parser.cpp.i
+.PHONY : src/parser.i
+
+# target to preprocess a source file
+src/parser.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/parser.cpp.i
+.PHONY : src/parser.cpp.i
+
+src/parser.s: src/parser.cpp.s
+.PHONY : src/parser.s
+
+# target to generate assembly for a file
+src/parser.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ai_language_lib.dir/build.make CMakeFiles/ai_language_lib.dir/src/parser.cpp.s
+.PHONY : src/parser.cpp.s
 
 # Help Target
 help:
@@ -337,24 +409,33 @@ help:
 	@echo "... ai_lang.o"
 	@echo "... ai_lang.i"
 	@echo "... ai_lang.s"
-	@echo "... src/BaseInterpreter.o"
-	@echo "... src/BaseInterpreter.i"
-	@echo "... src/BaseInterpreter.s"
-	@echo "... src/DLInterpreter.o"
-	@echo "... src/DLInterpreter.i"
-	@echo "... src/DLInterpreter.s"
 	@echo "... src/InterpreterFactory.o"
 	@echo "... src/InterpreterFactory.i"
 	@echo "... src/InterpreterFactory.s"
-	@echo "... src/MLInterpreter.o"
-	@echo "... src/MLInterpreter.i"
-	@echo "... src/MLInterpreter.s"
-	@echo "... src/RLInterpreter.o"
-	@echo "... src/RLInterpreter.i"
-	@echo "... src/RLInterpreter.s"
-	@echo "... src/ScikitLearnConnector.o"
-	@echo "... src/ScikitLearnConnector.i"
-	@echo "... src/ScikitLearnConnector.s"
+	@echo "... src/connectors/ScikitLearnConnector.o"
+	@echo "... src/connectors/ScikitLearnConnector.i"
+	@echo "... src/connectors/ScikitLearnConnector.s"
+	@echo "... src/interpreter.o"
+	@echo "... src/interpreter.i"
+	@echo "... src/interpreter.s"
+	@echo "... src/interpreters/BaseInterpreter.o"
+	@echo "... src/interpreters/BaseInterpreter.i"
+	@echo "... src/interpreters/BaseInterpreter.s"
+	@echo "... src/interpreters/DLInterpreter.o"
+	@echo "... src/interpreters/DLInterpreter.i"
+	@echo "... src/interpreters/DLInterpreter.s"
+	@echo "... src/interpreters/MLInterpreter.o"
+	@echo "... src/interpreters/MLInterpreter.i"
+	@echo "... src/interpreters/MLInterpreter.s"
+	@echo "... src/interpreters/RLInterpreter.o"
+	@echo "... src/interpreters/RLInterpreter.i"
+	@echo "... src/interpreters/RLInterpreter.s"
+	@echo "... src/lexer.o"
+	@echo "... src/lexer.i"
+	@echo "... src/lexer.s"
+	@echo "... src/parser.o"
+	@echo "... src/parser.i"
+	@echo "... src/parser.s"
 .PHONY : help
 
 
