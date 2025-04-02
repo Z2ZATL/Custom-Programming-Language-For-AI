@@ -267,8 +267,8 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
         // สร้างโฟลเดอร์สำหรับเก็บไฟล์กราฟ
         std::string dataDir = "Program test/Data";
         std::string command = "mkdir -p \"" + dataDir + "\"";
-        int result = system(command.c_str());
-        if (result != 0) {
+        int mkdirResult = system(command.c_str());
+        if (mkdirResult != 0) {
             std::cout << RED << "เกิดข้อผิดพลาดในการสร้างโฟลเดอร์: " << dataDir << RESET << std::endl;
             return;
         }
@@ -298,14 +298,14 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
         }
         
         char buffer[128];
-        std::string result = "";
+        std::string scriptOutput = "";
         while (!feof(pipe)) {
             if (fgets(buffer, 128, pipe) != NULL)
-                result += buffer;
+                scriptOutput += buffer;
         }
         pclose(pipe);
 
-        if (result.find("Error") != std::string::npos) {
+        if (scriptOutput.find("Error") != std::string::npos) {
             std::cout << RED << result << RESET << std::endl;
         } else {
             std::cout << BLUE << "ข้อมูลสรุปการเทรนโมเดล:" << RESET << std::endl;
