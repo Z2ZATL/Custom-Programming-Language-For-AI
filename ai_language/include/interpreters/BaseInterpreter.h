@@ -31,7 +31,7 @@ public:
 
     // Main method to interpret a line of code
     void interpretLine(const std::string& line);
-
+    
     // Common methods for all interpreters
     virtual void setDefaultParameters() = 0;
     virtual void handleStartCommand() = 0;
@@ -52,7 +52,6 @@ public:
 
     // Method to interpret a file
     void interpretFile(const std::string& filename);
-
 
     virtual void handlePredictCommand(const std::vector<std::string>& args) = 0;
     virtual void handleListModelsCommand() = 0;

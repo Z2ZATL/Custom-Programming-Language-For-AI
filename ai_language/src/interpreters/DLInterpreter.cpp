@@ -30,12 +30,12 @@ void DLInterpreter::addLayer(const std::string& layerType, const std::map<std::s
 
 void DLInterpreter::createModel(const std::string& modelType) {
     std::cout << "Creating DL model: " << modelType << std::endl;
-    
+
     // รองรับโมเดลประเภทต่างๆ สำหรับ DL
     std::vector<std::string> supportedModels = {
         "NeuralNetwork", "CNN", "RNN", "LSTM", "GRU", "Transformer"
     };
-    
+
     bool isSupported = false;
     for (const auto& model : supportedModels) {
         if (model == modelType) {
@@ -43,7 +43,7 @@ void DLInterpreter::createModel(const std::string& modelType) {
             break;
         }
     }
-    
+
     if (!isSupported) {
         std::cerr << "Warning: Model type '" << modelType << "' might not be fully supported for DL." << std::endl;
     }
@@ -551,11 +551,11 @@ void DLInterpreter::handleCrossValidateCommand(const std::vector<std::string>& a
 }
 
 void DLInterpreter::handleExportResultsCommand(const std::vector<std::string>& args) {
-    std::cout << "Export results command is not implemented for DL yet" << std::endl;
+    std::cout << "Export results command not implemented yet in DL interpreter" << std::endl;
 }
 
 void DLInterpreter::handleScheduleTrainingCommand(const std::vector<std::string>& args) {
-    std::cout << "Schedule training command is not implemented for DL yet" << std::endl;
+    std::cout << "Schedule training command not implemented yet in DL interpreter" << std::endl;
 }
 
 } // namespace ai_language

@@ -15,10 +15,11 @@ private:
     std::string datasetPath;
 
 public:
-    void interpret() override;
+    void interpret();
     void setDefaultParameters() override;
     void addLayer(const std::string& layerType, const std::map<std::string, std::string>& params);
-    void createModel(const std::string& modelType) override; 
+    void createModel(const std::string& modelType);
+    
     // Override virtual functions from BaseInterpreter
     void handleLoadCommand(const std::vector<std::string>& args) override; 
     void handleSetCommand(const std::vector<std::string>& args) override;
@@ -28,26 +29,24 @@ public:
     void handleShowCommand(const std::vector<std::string>& args) override;
     void handleSaveCommand(const std::vector<std::string>& args) override;
     void handleHelpCommand() override;
-
-    // Implement remaining pure virtual functions.  These are placeholders.
-    void handlePlotCommand(const std::vector<std::string>& parts) override { std::cerr << "Not implemented yet" << std::endl; }
-    void handleInspectCommand(const std::vector<std::string>& args) override { std::cerr << "Not implemented yet" << std::endl; }
-    void handleValidateCommand(const std::vector<std::string>& args) override { std::cerr << "Not implemented yet" << std::endl; }
-    void handlePreprocessCommand(const std::vector<std::string>& args) override { std::cerr << "Not implemented yet" << std::endl; }
-    void handleSplitDatasetCommand(const std::vector<std::string>& args) override { std::cerr << "Not implemented yet" << std::endl; }
-    void handlePredictCommand(const std::vector<std::string>& args) override { std::cerr << "Not implemented yet" << std::endl; }
-    void handleListModelsCommand() override { std::cerr << "Not implemented yet" << std::endl; }
-    void handleDeleteModelCommand(const std::vector<std::string>& args) override { std::cerr << "Not implemented yet" << std::endl; }
-    void handleCompareModelsCommand() override { std::cerr << "Not implemented yet" << std::endl; }
-    void handleCheckStatusCommand() override { std::cerr << "Not implemented yet" << std::endl; }
-    void handleDebugCommand(const std::vector<std::string>& args) override { std::cerr << "Not implemented yet" << std::endl; }
-    void handleCrossValidateCommand(const std::vector<std::string>& args) override { std::cerr << "Not implemented yet" << std::endl; }
-    void handleExportResultsCommand(const std::vector<std::string>& args) override { std::cerr << "Not implemented yet" << std::endl; }
+    void handleCreateCommand(const std::vector<std::string>& args) override;
+    void handleStartCommand() override;
+    
+    // Implement remaining pure virtual functions
+    void handlePlotCommand(const std::vector<std::string>& parts) override;
+    void handleInspectCommand(const std::vector<std::string>& args) override;
+    void handleValidateCommand(const std::vector<std::string>& args) override;
+    void handlePreprocessCommand(const std::vector<std::string>& args) override;
+    void handleSplitDatasetCommand(const std::vector<std::string>& args) override;
+    void handlePredictCommand(const std::vector<std::string>& args) override;
+    void handleListModelsCommand() override;
+    void handleDeleteModelCommand(const std::vector<std::string>& args) override;
+    void handleCompareModelsCommand() override;
+    void handleCheckStatusCommand() override;
+    void handleDebugCommand(const std::vector<std::string>& args) override;
+    void handleCrossValidateCommand(const std::vector<std::string>& args) override;
+    void handleExportResultsCommand(const std::vector<std::string>& args) override;
     void handleScheduleTrainingCommand(const std::vector<std::string>& args) override;
-    void handleCreateCommand(const std::vector<std::string>& args) override; 
-    void handleStartCommand() override {std::cerr << "Not implemented yet" << std::endl;}; 
-
-
 };
 
 } // namespace ai_language

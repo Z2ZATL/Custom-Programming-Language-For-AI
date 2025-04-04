@@ -99,19 +99,19 @@ private:
     bool hasEvaluated;
 
     // เพิ่มฟังก์ชันสำหรับจัดการคำสั่งใหม่
-    void handleInspectCommand(const std::vector<std::string>& args);
-    void handleValidateCommand(const std::vector<std::string>& args);
-    void handlePlotCommand(const std::vector<std::string>& args);
-    void handlePreprocessCommand(const std::vector<std::string>& args);
-    void handleSplitDatasetCommand(const std::vector<std::string>& args);
-    void handlePredictCommand(const std::vector<std::string>& args);
-    void handleListModelsCommand();
-    void handleDeleteModelCommand(const std::vector<std::string>& args);
-    void handleCompareModelsCommand();
-    void handleCheckStatusCommand();
-    void handleDebugCommand(const std::vector<std::string>& args);
-    void handleCrossValidateCommand(const std::vector<std::string>& args);
-    void handleExportResultsCommand(const std::vector<std::string>& args);
+    void handleInspectCommand(const std::vector<std::string>& args) override;
+    void handleValidateCommand(const std::vector<std::string>& args) override;
+    void handlePlotCommand(const std::vector<std::string>& args) override;
+    void handlePreprocessCommand(const std::vector<std::string>& args) override;
+    void handleSplitDatasetCommand(const std::vector<std::string>& args) override;
+    void handlePredictCommand(const std::vector<std::string>& args) override;
+    void handleListModelsCommand() override;
+    void handleDeleteModelCommand(const std::vector<std::string>& args) override;
+    void handleCompareModelsCommand() override;
+    void handleCheckStatusCommand() override;
+    void handleDebugCommand(const std::vector<std::string>& args) override;
+    void handleCrossValidateCommand(const std::vector<std::string>& args) override;
+    void handleExportResultsCommand(const std::vector<std::string>& args) override;
     void handleScheduleTrainingCommand(const std::vector<std::string>& args) override;
 
     // ฟังก์ชันช่วย
