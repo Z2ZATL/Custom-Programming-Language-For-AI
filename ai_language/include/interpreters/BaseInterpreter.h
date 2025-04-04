@@ -10,6 +10,7 @@
 #include <iomanip>
 #include <chrono>
 #include <ctime>
+#include <map>
 
 // ANSI Color Codes
 #define RESET   "\033[0m"
