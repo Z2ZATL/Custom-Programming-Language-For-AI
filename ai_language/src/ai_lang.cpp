@@ -111,6 +111,27 @@ void runInteractiveMode() {
             currentType = "RL";
         }
 
+        // ตรวจสอบคำสั่งพิเศษ
+        if (line == "list models" || line == "list") {
+            interpreter->listModels();
+            continue;
+        } else if (line == "show version") {
+            interpreter->showVersion();
+            continue;
+        } else if (line == "show help" || line == "help") {
+            interpreter->showHelp();
+            continue;
+        } else if (line == "show time" || line == "time") {
+            interpreter->showTime();
+            continue;
+        } else if (line == "exit" || line == "quit") {
+            std::cout << "ออกจากโปรแกรม" << std::endl;
+            break;
+        } else if (line == "clear" || line == "cls") {
+            std::cout << "\033[2J\033[1;1H"; // คำสั่งล้างหน้าจอใน terminal
+            continue;
+        }
+        
         // ตรวจสอบว่าเป็นการสิ้นสุดคำสั่งหลายบรรทัดหรือไม่
         if (multiline.find(";;") != std::string::npos || line.find(";;") != std::string::npos) {
             // ลบเครื่องหมาย ;; ออก

@@ -1,10 +1,10 @@
-
-#ifndef DL_INTERPRETER_H
-#define DL_INTERPRETER_H
+#ifndef AI_LANGUAGE_DLINTERPRETER_H
+#define AI_LANGUAGE_DLINTERPRETER_H
 
 #include "BaseInterpreter.h"
+#include <string>
 #include <map>
-#include <cmath>
+#include <vector>
 
 namespace ai_language {
 
@@ -13,18 +13,14 @@ private:
     std::vector<std::string> layers; // Store neural network layers
     std::map<std::string, double> parameters;
     std::string datasetPath;
-    
+
 public:
-    DLInterpreter() = default;
-    ~DLInterpreter() override = default;
-
-    void interpret();
-
-    // Override virtual functions from BaseInterpreter
+    void interpret() override;
     void setDefaultParameters() override;
-    void handleStartCommand() override;
-    void handleCreateCommand(const std::vector<std::string>& args) override;
-    void handleLoadCommand(const std::vector<std::string>& args) override;
+    void addLayer(const std::string& layerType, const std::map<std::string, std::string>& params);
+    void createModel(const std::string& modelType) override; //Added override
+    // Override virtual functions from BaseInterpreter
+    void handleLoadCommand(const std::vector<std::string>& args) override; 
     void handleSetCommand(const std::vector<std::string>& args) override;
     void handleAddCommand(const std::vector<std::string>& args) override;
     void handleTrainCommand(const std::vector<std::string>& args) override;
@@ -33,23 +29,27 @@ public:
     void handleSaveCommand(const std::vector<std::string>& args) override;
     void handleHelpCommand() override;
 
-    // Implement remaining pure virtual functions
-    void handlePlotCommand(const std::vector<std::string>& parts) override;
-    void handleInspectCommand(const std::vector<std::string>& args) override;
-    void handleValidateCommand(const std::vector<std::string>& args) override;
-    void handlePreprocessCommand(const std::vector<std::string>& args) override;
-    void handleSplitDatasetCommand(const std::vector<std::string>& args) override;
-    void handlePredictCommand(const std::vector<std::string>& args) override;
-    void handleListModelsCommand() override;
-    void handleDeleteModelCommand(const std::vector<std::string>& args) override;
-    void handleCompareModelsCommand() override;
-    void handleCheckStatusCommand() override;
-    void handleDebugCommand(const std::vector<std::string>& args) override;
-    void handleCrossValidateCommand(const std::vector<std::string>& args) override;
-    void handleExportResultsCommand(const std::vector<std::string>& args) override;
-    void handleScheduleTrainingCommand(const std::vector<std::string>& args) override;
+    // Implement remaining pure virtual functions.  These are placeholders.
+    void handlePlotCommand(const std::vector<std::string>& parts) override { std::cerr << "Not implemented yet" << std::endl; }
+    void handleInspectCommand(const std::vector<std::string>& args) override { std::cerr << "Not implemented yet" << std::endl; }
+    void handleValidateCommand(const std::vector<std::string>& args) override { std::cerr << "Not implemented yet" << std::endl; }
+    void handlePreprocessCommand(const std::vector<std::string>& args) override { std::cerr << "Not implemented yet" << std::endl; }
+    void handleSplitDatasetCommand(const std::vector<std::string>& args) override { std::cerr << "Not implemented yet" << std::endl; }
+    void handlePredictCommand(const std::vector<std::string>& args) override { std::cerr << "Not implemented yet" << std::endl; }
+    void handleListModelsCommand() override { std::cerr << "Not implemented yet" << std::endl; }
+    void handleDeleteModelCommand(const std::vector<std::string>& args) override { std::cerr << "Not implemented yet" << std::endl; }
+    void handleCompareModelsCommand() override { std::cerr << "Not implemented yet" << std::endl; }
+    void handleCheckStatusCommand() override { std::cerr << "Not implemented yet" << std::endl; }
+    void handleDebugCommand(const std::vector<std::string>& args) override { std::cerr << "Not implemented yet" << std::endl; }
+    void handleCrossValidateCommand(const std::vector<std::string>& args) override { std::cerr << "Not implemented yet" << std::endl; }
+    void handleExportResultsCommand(const std::vector<std::string>& args) override { std::cerr << "Not implemented yet" << std::endl; }
+    void handleScheduleTrainingCommand(const std::vector<std::string>& args) override { std::cerr << "Not implemented yet" << std::endl; }
+    void handleCreateCommand(const std::vector<std::string>& args) override; //Added override
+    void handleStartCommand() override {std::cerr << "Not implemented yet" << std::endl;}; //Added override
+
+
 };
 
 } // namespace ai_language
 
-#endif // DL_INTERPRETER_H
+#endif // AI_LANGUAGE_DLINTERPRETER_H

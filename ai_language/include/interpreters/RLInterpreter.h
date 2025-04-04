@@ -31,7 +31,7 @@ public:
     /**
      * @brief ฟังก์ชันหลักสำหรับแปลและทำงานตามคำสั่ง
      */
-    void interpret();
+    void interpret() override;
 
     /**
      * @brief โหลดโมเดล RL จากไฟล์
@@ -55,6 +55,29 @@ public:
      */
     void saveModel(const std::string& modelPath);
 
+    /**
+     * @brief โหลดสภาพแวดล้อม
+     * @param environmentPath พาธของไฟล์สภาพแวดล้อม
+     */
+    void loadEnvironment(const std::string& environmentPath);
+
+    /**
+     * @brief สร้างโมเดล RL
+     * @param modelType ชนิดของโมเดล
+     */
+    void createModel(const std::string& modelType);
+
+
+    /**
+     * @brief แสดงค่า Reward
+     */
+    void showReward();
+
+    /**
+     * @brief แสดง Q-Table
+     */
+    void showQTable();
+
     // Implementation of pure virtual functions from BaseInterpreter
     void setDefaultParameters() override;
     void handleStartCommand() override;
@@ -74,7 +97,7 @@ private:
     bool hasCreatedModel;
     bool hasTrained;
     bool hasEvaluated;
-    
+
     // เพิ่มฟังก์ชันสำหรับจัดการคำสั่งใหม่
     void handleInspectCommand(const std::vector<std::string>& args);
     void handleValidateCommand(const std::vector<std::string>& args);
@@ -92,7 +115,7 @@ private:
     void handleScheduleTrainingCommand(const std::vector<std::string>& args);
     void handleCreateEnvironmentCommand(const std::vector<std::string>& args);
     void handleSetEnvironmentParameterCommand(const std::vector<std::string>& args);
-    
+
     // ฟังก์ชันช่วย
     void cleanModelFileName(std::string& modelPath);
 };

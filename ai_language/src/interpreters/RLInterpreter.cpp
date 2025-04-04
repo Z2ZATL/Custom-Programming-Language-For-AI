@@ -22,13 +22,42 @@ RLInterpreter::~RLInterpreter() {
 }
 
 void RLInterpreter::interpret() {
-    std::cout << "Interpreting Reinforcement Learning code..." << std::endl;
+    std::cout << "Starting Reinforcement Learning interpreter..." << std::endl;
+    // ดำเนินการตามคำสั่งสำหรับ RL
+}
 
-    // Create a connector instance for external RL libraries if needed
-    Connector connector;
-    connector.connect();
+void RLInterpreter::loadEnvironment(const std::string& environmentPath) {
+    std::cout << "Loading RL environment from: " << environmentPath << std::endl;
+    // ดำเนินการโหลดสภาพแวดล้อม RL
+}
 
-    // Implementation of RL interpretation logic
+void RLInterpreter::createModel(const std::string& modelType) {
+    std::cout << "Creating RL model: " << modelType << std::endl;
+
+    // รองรับโมเดลประเภทต่างๆ สำหรับ RL
+    std::vector<std::string> supportedModels = {
+        "QLearning", "DQN", "PPO", "A2C", "DDQN"
+    };
+
+    bool isSupported = false;
+    for (const auto& model : supportedModels) {
+        if (model == modelType) {
+            isSupported = true;
+            break;
+        }
+    }
+
+    if (!isSupported) {
+        std::cerr << "Warning: Model type '" << modelType << "' might not be fully supported for RL." << std::endl;
+    }
+}
+
+void RLInterpreter::showReward() {
+    std::cout << "Showing reward history for RL model..." << std::endl;
+}
+
+void RLInterpreter::showQTable() {
+    std::cout << "Showing Q-table for RL model..." << std::endl;
 }
 
 void RLInterpreter::loadModel(const std::string& modelPath) {
@@ -139,12 +168,12 @@ void RLInterpreter::handleCreateCommand(const std::vector<std::string>& args) {
         std::cout << "Error: Missing model type for create command" << std::endl;
         return;
     }
-
-    std::string modelType = args[0];
-    std::cout << "Creating RL model: " << modelType << std::endl;
-
-    // Create the specified RL model
-    hasCreatedModel = true;
+    if (args[0] == "DL" || args[0] == "RL") {
+        createModel(args[1]); // Delegate to the createModel function
+    }
+    else {
+        std::cout << "Error: Unknown create type: " << args[0] << std::endl;
+    }
 }
 
 void RLInterpreter::handleLoadCommand(const std::vector<std::string>& args) {
@@ -161,6 +190,8 @@ void RLInterpreter::handleLoadCommand(const std::vector<std::string>& args) {
         hasLoadedData = true;
     } else if (loadType == "model") {
         loadModel(path);
+    } else if (loadType == "environment") {
+        loadEnvironment(path);
     } else {
         std::cout << "Error: Unknown load type: " << loadType << std::endl;
     }
@@ -268,6 +299,10 @@ void RLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
         // Display various metrics specific to RL
         std::cout << "Average reward: " << 85.2 << std::endl;
         std::cout << "Success rate: " << 0.78 << std::endl;
+    } else if (showType == "reward") {
+        showReward();
+    } else if (showType == "q_table") {
+        showQTable();
     } else {
         std::cout << "Unknown show type: " << showType << std::endl;
     }
@@ -420,11 +455,14 @@ void RLInterpreter::handleHelpCommand() {
     std::cout << "  create model <model_type>         # สร้างโมเดล RL (เช่น QLearning, DQN)" << std::endl;
     std::cout << "  load dataset <path>               # โหลดข้อมูลสภาพแวดล้อม" << std::endl;
     std::cout << "  load model <path>                 # โหลดโมเดลที่บันทึกไว้" << std::endl;
+    std::cout << "  load environment <path>           # โหลดสภาพแวดล้อม" << std::endl;
     std::cout << "  set <param> <value>               # ตั้งค่าพารามิเตอร์" << std::endl;
     std::cout << "  train model                       # ฝึกโมเดล" << std::endl;
     std::cout << "  evaluate model                    # ประเมินประสิทธิภาพโมเดล" << std::endl;
     std::cout << "  show parameters                   # แสดงพารามิเตอร์ปัจจุบัน" << std::endl;
     std::cout << "  show performance                  # แสดงประสิทธิภาพโมเดล" << std::endl;
+    std::cout << "  show reward                       # แสดงประวัติผลตอบแทน" << std::endl;
+    std::cout << "  show q_table                      # แสดงตาราง Q" << std::endl;
     std::cout << "  inspect model <model> <option>    # ตรวจสอบรายละเอียดของโมเดล" << std::endl;
     std::cout << "  validate model <dataset_path>     # ตรวจสอบโมเดลด้วยชุดข้อมูลใหม่" << std::endl;
     std::cout << "  plot model <type> <output_path>   # สร้างกราฟจากโมเดล" << std::endl;

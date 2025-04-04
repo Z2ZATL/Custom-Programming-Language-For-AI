@@ -1,4 +1,3 @@
-
 #include "../../include/interpreters/InterpreterFactory.h"
 #include "../../include/interpreters/MLInterpreter.h"
 #include "../../include/interpreters/DLInterpreter.h"
@@ -9,14 +8,15 @@
 namespace ai_language {
 
 std::unique_ptr<BaseInterpreter> InterpreterFactory::createInterpreter(const std::string& type) {
-    if (type == "ML") {
-        return std::make_unique<MLInterpreter>();
-    } else if (type == "DL") {
+    if (type == "DL" || type == "dl") {
+        std::cout << "Starting Deep Learning interpreter..." << std::endl;
         return std::make_unique<DLInterpreter>();
-    } else if (type == "RL") {
+    } else if (type == "RL" || type == "rl") {
+        std::cout << "Starting Reinforcement Learning interpreter..." << std::endl;
         return std::make_unique<RLInterpreter>();
     } else {
-        // หากไม่ระบุประเภทหรือประเภทไม่ถูกต้อง ใช้ ML เป็นค่าเริ่มต้น
+        // Default to ML
+        std::cout << "Starting Machine Learning interpreter..." << std::endl;
         return std::make_unique<MLInterpreter>();
     }
 }

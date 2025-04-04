@@ -109,12 +109,16 @@ void MLInterpreter::handleCreateCommand(const std::vector<std::string>& args) {
         }
 
         modelType = args[1];
-        std::cout << "Creating ML model: " << modelType << std::endl;
+        createModel(modelType); //Use the improved createModel function
         hasCreatedModel = true;
     } else if (createType == "ML") {
         // สำหรับคำสั่ง "create ML" เพื่อรองรับไวยากรณ์ใหม่
         std::cout << "Creating ML environment" << std::endl;
         hasCreatedModel = true;
+    } else if (createType == "DL" || createType == "RL") {
+        std::cout << "Creating " << createType << " model. (Not fully implemented)" << std::endl;
+        hasCreatedModel = true; //Mark as created even if not fully implemented
+
     } else {
         std::cout << "Unknown create type: " << createType << std::endl;
     }
@@ -134,6 +138,8 @@ void MLInterpreter::handleLoadCommand(const std::vector<std::string>& args) {
         hasLoadedData = true;
     } else if (loadType == "model") {
         loadModel(path);
+    } else if (loadType == "environment") {
+        std::cout << "Loading environment from: " << path << " (Not implemented)" << std::endl;
     } else {
         std::cout << "Error: Unknown load type: " << loadType << std::endl;
     }
@@ -239,6 +245,8 @@ void MLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
         } catch (const std::exception& e) {
             std::cerr << "Error generating graph: " << e.what() << std::endl;
         }
+    } else if (showType == "reward" || showType == "q_table" || showType == "model_info" || showType == "version" || showType == "help" || showType == "time") {
+        std::cout << "Showing " << showType << " (Not implemented)" << std::endl;
     } else {
         std::cout << "Unknown show type: " << showType << std::endl;
     }
@@ -283,6 +291,15 @@ void MLInterpreter::handleHelpCommand() {
     std::cout << "  save model <path>            # Save model to file" << std::endl;
     std::cout << "  help                         # Show this help message" << std::endl;
     std::cout << "  evaluate model               # Evaluate the trained model" << std::endl; // Added evaluate command to help
+    std::cout << "  create DL                    # Create a Deep Learning model (Not fully implemented)" << std::endl;
+    std::cout << "  create RL                    # Create a Reinforcement Learning model (Not fully implemented)" << std::endl;
+    std::cout << "  load environment <path>      # Load environment (Not fully implemented)" << std::endl;
+    std::cout << "  show reward                  # Show reward (Not fully implemented)" << std::endl;
+    std::cout << "  show q_table                 # Show q_table (Not fully implemented)" << std::endl;
+    std::cout << "  show model_info              # Show model info (Not fully implemented)" << std::endl;
+    std::cout << "  show version                 # Show version (Not fully implemented)" << std::endl;
+    std::cout << "  show time                    # Show time (Not fully implemented)" << std::endl;
+
 }
 
 void MLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
@@ -298,6 +315,8 @@ void MLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
         }
         std::cout << "Adding feature: " << args[1] << " to the model" << std::endl;
         // Implementation for adding features
+    } else if (args[0] == "layer") {
+        std::cout << "Adding layer (Not implemented)" << std::endl;
     } else {
         std::cout << "Unknown add type: " << args[0] << std::endl;
     }
@@ -359,5 +378,28 @@ void MLInterpreter::handleExportResultsCommand(const std::vector<std::string>& a
 void MLInterpreter::handleScheduleTrainingCommand(const std::vector<std::string>& args) {
     std::cout << "Schedule training command is not implemented for ML yet" << std::endl;
 }
+
+void MLInterpreter::createModel(const std::string& modelType) {
+    std::cout << "Creating ML model: " << modelType << std::endl;
+
+    // รองรับโมเดลประเภทต่างๆ สำหรับ ML
+    std::vector<std::string> supportedModels = {
+        "LinearRegression", "LogisticRegression", "RandomForest", 
+        "SVM", "KNN", "DecisionTree", "GradientBoosting"
+    };
+
+    bool isSupported = false;
+    for (const auto& model : supportedModels) {
+        if (model == modelType) {
+            isSupported = true;
+            break;
+        }
+    }
+
+    if (!isSupported) {
+        std::cerr << "Warning: Model type '" << modelType << "' might not be fully supported for ML." << std::endl;
+    }
+}
+
 
 } // namespace ai_language

@@ -79,6 +79,16 @@ protected:
     std::unordered_map<std::string, double> parameters;
     std::unordered_map<std::string, std::string> modelInfo;
     int timezone; // Timezone offset from UTC
+
+    virtual void predict(const std::map<std::string, std::string>& params);
+    virtual void showMetric(const std::string& metric);
+    virtual void showModelInfo();
+    virtual void showVersion();
+    virtual void showHelp();
+    virtual void showTime();
+    virtual void listModels();
+
+    // Helper methods
 };
 
 } // namespace ai_language

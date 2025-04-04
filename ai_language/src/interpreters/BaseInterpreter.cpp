@@ -371,4 +371,44 @@ void BaseInterpreter::interpretFile(const std::string& filename) {
     }
 }
 
+void BaseInterpreter::showModelInfo() {
+    std::cout << "Model Information:" << std::endl;
+    std::cout << "  - Type: Generic Model" << std::endl;
+    std::cout << "  - Parameters: (not available)" << std::endl;
+    std::cout << "  - Performance metrics: (not available)" << std::endl;
+}
+
+void BaseInterpreter::showVersion() {
+    std::cout << "AI Language Version: 1.0.0" << std::endl;
+    std::cout << "Build Date: " << __DATE__ << " " << __TIME__ << std::endl;
+}
+
+void BaseInterpreter::showHelp() {
+    std::cout << "=== AI Language Help ===" << std::endl;
+    std::cout << "Available commands:" << std::endl;
+    std::cout << "  start                           # Start a new AI project" << std::endl;
+    std::cout << "  create <type>                   # Create ML, DL, or RL project" << std::endl;
+    std::cout << "  load dataset <path> [type]      # Load dataset from file" << std::endl;
+    std::cout << "  create model <model_type>       # Create a specific model" << std::endl;
+    std::cout << "  set <param> <value>             # Set parameter value" << std::endl;
+    std::cout << "  train model                     # Train the model" << std::endl;
+    std::cout << "  evaluate model                  # Evaluate model performance" << std::endl;
+    std::cout << "  save model <path>               # Save model to file" << std::endl;
+    std::cout << "  show <metric|info>              # Show metrics or model info" << std::endl;
+    std::cout << "  predict <input>                 # Make predictions" << std::endl;
+    std::cout << "For more details, see docs/guides/USAGE_GUIDE.md" << std::endl;
+}
+
+void BaseInterpreter::showTime() {
+    std::time_t now = std::time(nullptr);
+    std::cout << "Current time: " << std::ctime(&now);
+}
+
+void BaseInterpreter::listModels() {
+    std::cout << "Available models:" << std::endl;
+    std::cout << "  ML models: LinearRegression, LogisticRegression, RandomForest, SVM, KNN" << std::endl;
+    std::cout << "  DL models: NeuralNetwork, CNN, RNN, LSTM, GRU, Transformer" << std::endl;
+    std::cout << "  RL models: QLearning, DQN, PPO, A2C, DDQN" << std::endl;
+}
+
 } // namespace ai_language

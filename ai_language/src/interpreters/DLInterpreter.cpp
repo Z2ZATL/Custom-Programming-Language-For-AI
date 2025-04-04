@@ -5,6 +5,8 @@
 #include <chrono>
 #include <cstdlib> // Added for setenv
 #include <cmath> // Added for std::exp
+#include <map>
+#include <string>
 
 namespace ai_language {
 
@@ -18,8 +20,37 @@ void DLInterpreter::interpret() {
     std::cout << "เริ่มต้นการเทรนโมเดล..." << std::endl;
 }
 
+void DLInterpreter::addLayer(const std::string& layerType, const std::map<std::string, std::string>& params) {
+    std::cout << "Adding " << layerType << " layer with parameters: ";
+    for (const auto& param : params) {
+        std::cout << param.first << "=" << param.second << " ";
+    }
+    std::cout << std::endl;
+}
+
+void DLInterpreter::createModel(const std::string& modelType) {
+    std::cout << "Creating DL model: " << modelType << std::endl;
+    
+    // รองรับโมเดลประเภทต่างๆ สำหรับ DL
+    std::vector<std::string> supportedModels = {
+        "NeuralNetwork", "CNN", "RNN", "LSTM", "GRU", "Transformer"
+    };
+    
+    bool isSupported = false;
+    for (const auto& model : supportedModels) {
+        if (model == modelType) {
+            isSupported = true;
+            break;
+        }
+    }
+    
+    if (!isSupported) {
+        std::cerr << "Warning: Model type '" << modelType << "' might not be fully supported for DL." << std::endl;
+    }
+}
+
 void DLInterpreter::setDefaultParameters() {
-    // ตั้งค่าพารามิเตอร์เริ่มต้นสำหรับ Deep Learning
+    // ตั้งค่าพารามิเตอร์เริ่มต้นสำหรับ Deep Learningning
     parameters["learning_rate"] = 0.001;
     parameters["batch_size"] = 32;
     parameters["epochs"] = 50;
