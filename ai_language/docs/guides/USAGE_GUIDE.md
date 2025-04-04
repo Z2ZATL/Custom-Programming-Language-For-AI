@@ -1,182 +1,229 @@
 
-# คู่มือการใช้งานภาษา AI ในโหมดโต้ตอบ
+# คู่มือการใช้งาน AI Language
 
-## การเริ่มต้นใช้งาน
+## บทนำ
 
-เมื่อเริ่มต้นโปรแกรมในโหมดโต้ตอบด้วยคำสั่ง `./ai_lang -i` คุณจะเข้าสู่โหมดการโต้ตอบกับภาษา AI โดยคุณสามารถพิมพ์คำสั่งต่างๆ ได้ทั้งในรูปแบบบรรทัดเดียวหรือหลายบรรทัด
+AI Language เป็นภาษาที่ออกแบบมาเพื่อทำให้การสร้างและฝึกโมเดล AI เป็นเรื่องง่าย โดยไม่จำเป็นต้องรู้รายละเอียดการเขียนโค้ดแบบดั้งเดิม คู่มือนี้จะแนะนำการใช้งานเบื้องต้นจนถึงการใช้งานขั้นสูง
 
-### การใช้คำสั่งหลายบรรทัด
+## การติดตั้ง
 
-คุณสามารถป้อนคำสั่งหลายบรรทัดได้โดย:
-- พิมพ์เครื่องหมาย `\` (backslash) ท้ายบรรทัดแล้วกด Enter เพื่อพิมพ์ต่อในบรรทัดถัดไป
-- พิมพ์เครื่องหมาย `;;` เมื่อจบคำสั่งชุดสุดท้ายเพื่อประมวลผลทั้งชุดคำสั่ง
+คุณสามารถเรียกใช้ AI Language ได้ 2 วิธี:
 
-ตัวอย่าง:
+1. รัน binary ที่ build ไว้แล้ว:
 ```
-start \
-create ML \
-load dataset "datasets/linear_data.csv" \
-create model LinearRegression ;;
+./ai_lang <ชื่อไฟล์สคริปต์.ai>
 ```
 
-คำสั่งชุดนี้จะทำงานเสมือนคุณได้ป้อนคำสั่งทีละบรรทัด 4 คำสั่งติดต่อกัน
+2. รันในโหมด interactive:
+```
+./ai_lang -i
+```
 
-## ลำดับการทำงานของคำสั่ง
+## โครงสร้างพื้นฐานของภาษา
 
-ลำดับการทำงานของคำสั่งต้องเป็นไปตามขั้นตอนต่อไปนี้:
+ไฟล์สคริปต์ AI Language มีนามสกุล `.ai` และประกอบด้วยชุดคำสั่งที่ทำงานไปตามลำดับ โดยโครงสร้างพื้นฐานจะเริ่มจาก `start` และจบด้วย `end`
 
-1. คำสั่งเริ่มต้น: `start`
-2. คำสั่งสร้างโปรเจกต์: `create <ประเภท>`
-3. คำสั่งโหลดข้อมูล: `load dataset "<ที่อยู่ไฟล์>"`
-4. คำสั่งสร้างโมเดล: `create model <ชื่อโมเดล>`
-5. คำสั่งปรับแต่งการเทรน (ไม่บังคับ): `set <พารามิเตอร์> <ค่า>`
-6. คำสั่งเทรนโมเดล: `train model`
-7. คำสั่งแสดงผลลัพธ์: `show <ประเภทผลลัพธ์>`
-8. คำสั่งบันทึกโมเดล: `save model "<ที่อยู่ไฟล์>"`
-9. คำสั่งสิ้นสุด: `end` (ไม่บังคับในโหมดโต้ตอบ)
-
-## คำสั่งพื้นฐาน
-
-### คำสั่งเริ่มต้น
 ```
 start
+# คำสั่งต่างๆ
+end
 ```
 
-### คำสั่งสร้างโปรเจค
+## การเลือกประเภท AI
+
+AI Language รองรับการทำงานกับ AI 3 ประเภท:
+
 ```
-create ML   # สำหรับ Machine Learning
-create DL   # สำหรับ Deep Learning
-create RL   # สำหรับ Reinforcement Learning
+create ML  # Machine Learning
+create DL  # Deep Learning
+create RL  # Reinforcement Learning
 ```
 
-### คำสั่งโหลดข้อมูล
+คุณต้องเลือกประเภท AI ที่จะใช้งานก่อนที่จะใช้คำสั่งอื่นๆ
+
+## การทำงานกับข้อมูล
+
+### โหลดข้อมูล
+
 ```
-load dataset "datasets/linear_data.csv"
-load dataset "datasets/iris.csv" type "csv"
+load dataset "datasets/iris.csv"
 load dataset "datasets/images/" type "image"
-load dataset "datasets/environment.json"
-load model "models/trained_model.mlmodel"
 ```
 
-### คำสั่งสร้างโมเดล
+### เตรียมข้อมูล
+
 ```
-create model LinearRegression
-create model RandomForest
-create model NeuralNetwork
-create model CNN
-create model QLearning
+preprocess data normalize
+preprocess data standardize
 ```
 
-### คำสั่งกำหนดพารามิเตอร์
+### แบ่งข้อมูล
+
+```
+split dataset 0.8 0.2  # training 80%, testing 20%
+```
+
+## การสร้างและฝึกโมเดล
+
+### สร้างโมเดล
+
+```
+create model LinearRegression  # ML
+create model NeuralNetwork     # DL
+create model QLearning         # RL
+```
+
+### กำหนดค่าพารามิเตอร์
+
 ```
 set learning_rate 0.01
 set epochs 100
 set batch_size 32
-set trees 100
-set max_depth 5
-set episodes 1000
-set discount_factor 0.9
-set exploration_rate 0.3
-set timezone 7     # ตั้งค่าเขตเวลา UTC+7 (ประเทศไทย)
 ```
 
-### คำสั่งเกี่ยวกับ Neural Network
+สำหรับ Deep Learning คุณสามารถเพิ่ม layer ได้:
+
 ```
 add layer input 4
 add layer hidden 8 activation "relu"
-add layer output 3 activation "softmax"
-add layer dropout 0.2
+add layer output 1 activation "sigmoid"
 ```
 
-### คำสั่งฝึกโมเดล
+### ฝึกโมเดล
+
 ```
 train model
 ```
 
-### คำสั่งวิเคราะห์และแสดงผล
+## การประเมินและแสดงผลลัพธ์
+
+### ประเมินโมเดล
+
 ```
 evaluate model
+```
+
+### แสดงผลลัพธ์
+
+```
 show accuracy
 show loss
-show graph
-show performance
-visualize data
-plot model
 ```
 
-### คำสั่งบันทึกโมเดล
+### สร้างกราฟ
+
 ```
-save model "model_name.ml"
+plot model learning_curve "graphs/learning_curve.png"
+plot model structure "graphs/model_structure.png"
 ```
 
-### คำสั่งโหลดโมเดล
+## การบันทึกและโหลดโมเดล
+
+### บันทึกโมเดล
+
 ```
-load model "model_name.ml"
+save model "my_model"
 ```
 
-## ตัวอย่างลำดับคำสั่งสำหรับแต่ละประเภท
+โปรแกรมจะเพิ่มนามสกุลไฟล์ที่เหมาะสมให้อัตโนมัติตามประเภทของโมเดล:
+- ML: `.mlmodel`
+- DL: `.dlmodel`
+- RL: `.rlmodel`
 
-### Machine Learning - Linear Regression
+### โหลดโมเดล
+
+```
+load model "my_model"
+```
+
+## การทำนายด้วยโมเดล
+
+```
+predict "5.1,3.5,1.4,0.2"
+predict dataset "datasets/new_data.csv"
+```
+
+## คำสั่งจัดการโมเดล
+
+```
+list models
+delete model <model_name>
+compare models
+```
+
+## การตั้งค่าเขตเวลา
+
+```
+set timezone 7  # ประเทศไทย
+```
+
+## ตัวอย่างสคริปต์ที่สมบูรณ์
+
+### Machine Learning
+
 ```
 start
 create ML
-load dataset "datasets/linear_data.csv"
-create model LinearRegression
+load dataset "datasets/iris.csv"
+preprocess data normalize
+split dataset 0.8 0.2
+create model LogisticRegression
 set learning_rate 0.01
 set epochs 100
 train model
 evaluate model
 show accuracy
-save model "linear_model.ml"
+plot model learning_curve "graphs/learning_curve.png"
+save model "iris_model"
+predict "5.1,3.5,1.4,0.2"
+end
 ```
 
-### Deep Learning - Neural Network
+### Deep Learning
+
 ```
 start
 create DL
-load dataset "datasets/iris.csv"
-create model NeuralNetwork
-add layer input 4
-add layer hidden 8 activation "relu"
-add layer output 3 activation "softmax"
+load dataset "datasets/mnist.csv"
+preprocess data normalize
+split dataset 0.7 0.3
+create model CNN
+add layer input 784
+add layer conv 32 kernel_size 3 activation "relu"
+add layer pool 2 type "max"
+add layer flatten
+add layer hidden 128 activation "relu"
+add layer output 10 activation "softmax"
 set learning_rate 0.001
-set epochs 200
+set epochs 20
+set batch_size 64
 train model
 evaluate model
 show accuracy
-save model "neural_network_model.ml"
+save model "mnist_model"
+end
 ```
 
-### Reinforcement Learning - Q-Learning
+### Reinforcement Learning
+
 ```
 start
 create RL
 load dataset "datasets/environment.json"
 create model QLearning
-set episodes 1000
 set discount_factor 0.9
+set episodes 1000
 set exploration_rate 0.3
 train model
 evaluate model
-show accuracy
-save model "q_learning_model.rlmodel"
+show performance
+save model "q_learning_model"
+end
 ```
 
-## การใช้ค่าพารามิเตอร์อัตโนมัติ
+## ความช่วยเหลือเพิ่มเติม
 
-หากไม่มีการตั้งค่าพารามิเตอร์ด้วยคำสั่ง `set` โปรแกรมจะใช้ค่าพื้นฐานตามประเภทโมเดล:
-
-### ค่าอัตโนมัติสำหรับ Machine Learning (ML)
-- `learning_rate`: 0.01
-- `epochs`: 50
-- `batch_size`: 32
-
-### ค่าอัตโนมัติสำหรับ Deep Learning (DL)
-- `learning_rate`: 0.001
-- `epochs`: 100
-- `batch_size`: 32
-
-### ค่าอัตโนมัติสำหรับ Reinforcement Learning (RL)
-- `learning_rate`: 0.1
-- `episodes`: 1000
-- `discount_factor`: 0.9
+หากต้องการข้อมูลเพิ่มเติม สามารถศึกษาได้จากเอกสารอ้างอิงในโฟลเดอร์ `docs/references/`:
+- `SYNTAX_REFERENCE.md` - ไวยากรณ์ทั้งหมดของภาษา
+- `MODEL_FILE_EXTENSIONS.md` - นามสกุลไฟล์ที่ใช้ในการบันทึกโมเดล
+- `SYNTAX_FLOW.md` - ลำดับการทำงานของคำสั่ง

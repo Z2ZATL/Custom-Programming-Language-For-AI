@@ -1,181 +1,96 @@
+# ขั้นตอนการทำงานของไวยากรณ์ AI Language
 
-# ลำดับการทำงานของ Syntax ในภาษา AI
+เอกสารนี้อธิบายลำดับการทำงานและการไหลของคำสั่งในภาษา AI Language
 
-## ขั้นตอนการใช้งาน
+## ขั้นตอนพื้นฐาน
 
-### **1. คำสั่งเริ่มต้น: `start`**
-- **ความหมาย**: เริ่มต้นการทำงานของโปรแกรม
-- **เงื่อนไข**: ต้องเป็นคำสั่งแรกและอยู่บรรทัดแรกเสมอ
-- **ตัวอย่าง**:
-  ```
-  start
-  ```
+ขั้นตอนการทำงานของโปรแกรม AI Language มีดังนี้:
 
-### **2. คำสั่งสร้างโปรเจกต์: `create [type]`**
-- **ความหมาย**: กำหนดประเภทของ AI เช่น `ML` (Machine Learning), `DL` (Deep Learning), `RL` (Reinforcement Learning)
-- **เงื่อนไข**: ต้องเป็นคำสั่งที่สองและอยู่ในบรรทัดที่สอง
-- **ตัวอย่าง**:
-  ```
-  start
-  create ML
-  ```
+1. **เริ่มต้น** - ทุกสคริปต์ต้องเริ่มต้นด้วยคำสั่ง `start`
+2. **กำหนดประเภท AI** - ระบุประเภทของโปรเจกต์ด้วยคำสั่ง `create ML`, `create DL`, หรือ `create RL`
+3. **โหลดข้อมูล** - โหลดข้อมูลสำหรับฝึกโมเดลด้วยคำสั่ง `load dataset`
+4. **จัดการข้อมูล** - เตรียมข้อมูลด้วยคำสั่ง `preprocess` และ `split dataset`
+5. **สร้างโมเดล** - สร้างโมเดลด้วยคำสั่ง `create model` ตามด้วยประเภทโมเดล
+6. **กำหนดค่าพารามิเตอร์** - ตั้งค่าพารามิเตอร์ต่างๆ ด้วยคำสั่ง `set`
+7. **ฝึกโมเดล** - ฝึกโมเดลด้วยคำสั่ง `train model`
+8. **ประเมินผล** - ตรวจสอบผลลัพธ์ด้วยคำสั่ง `evaluate`, `show` หรือ `plot`
+9. **บันทึกโมเดล** - บันทึกโมเดลด้วยคำสั่ง `save model`
+10. **จบการทำงาน** - จบสคริปต์ด้วยคำสั่ง `end`
 
-### **3. คำสั่งโหลดข้อมูล: `load dataset "[filename]"`**
-- **ความหมาย**: โหลดข้อมูลจากไฟล์ เช่น CSV หรือโฟลเดอร์ภาพ
-- **เงื่อนไข**: ต้องใช้หลังจาก `create [type]`
-- **ตัวอย่าง**:
-  ```
-  start
-  create ML
-  load dataset "data.csv"
-  ```
+## แผนภาพการไหลของคำสั่ง
 
-### **4. คำสั่งสร้างโมเดล: `create model [model_name]`**
-- **ความหมาย**: สร้างโมเดล AI ตามประเภทที่กำหนด เช่น `LinearRegression`, `NeuralNetwork`
-- **เงื่อนไข**: ต้องใช้หลังจาก `load dataset`
-- **ตัวอย่าง**:
-  ```
-  start
-  create ML
-  load dataset "data.csv"
-  create model LinearRegression
-  ```
-
-### **5. คำสั่งปรับแต่งการเทรน (ไม่บังคับ): `set [parameter] [value]`**
-- **ความหมาย**: ปรับแต่งพารามิเตอร์การเทรน เช่น `learning_rate`, `epochs`, `batch_size`
-- **เงื่อนไข**: ใช้ได้หลังจาก `create model` และก่อน `train model`
-- **ตัวอย่าง**:
-  ```
-  start
-  create ML
-  load dataset "data.csv"
-  create model LinearRegression
-  set learning_rate 0.01
-  set epochs 100
-  set batch_size 32
-  ```
-
-### **6. คำสั่งเทรนโมเดล: `train model`**
-- **ความหมาย**: เริ่มกระบวนการฝึกโมเดลด้วยข้อมูลและพารามิเตอร์ที่กำหนด
-- **เงื่อนไข**: ต้องใช้หลังจาก `create model` (และ `set [parameter]` หากมี)
-- **ตัวอย่าง**:
-  ```
-  start
-  create ML
-  load dataset "data.csv"
-  create model LinearRegression
-  train model
-  ```
-
-### **7. คำสั่งแสดงผลลัพธ์: `show [result_type]`**
-- **ความหมาย**: แสดงผลลัพธ์ เช่น ความแม่นยำ, ค่า loss หรือกราฟ
-- **เงื่อนไข**: ต้องใช้หลังจาก `train model`
-- **ตัวเลือก**:
-  - `show accuracy`: แสดงความแม่นยำ
-  - `show loss`: แสดงค่า loss
-  - `show graph`: แสดงกราฟการเทรน
-- **ตัวอย่าง**:
-  ```
-  start
-  create ML
-  load dataset "data.csv"
-  create model LinearRegression
-  train model
-  show accuracy
-  ```
-
-### **8. คำสั่งบันทึกโมเดล: `save model "[filename]"`**
-- **ความหมาย**: บันทึกโมเดลที่ฝึกแล้วลงไฟล์
-- **เงื่อนไข**: ต้องใช้หลังจาก `train model`
-- **ตัวอย่าง**:
-  ```
-  start
-  create ML
-  load dataset "data.csv"
-  create model LinearRegression
-  train model
-  save model "trained_model.ml"
-  ```
-
-### **9. คำสั่งโหลดโมเดล: `load model "[filename]"`**
-- **ความหมาย**: โหลดโมเดลที่บันทึกไว้เพื่อใช้งานหรือเทรนต่อ
-- **เงื่อนไข**: ใช้แทน `create model` ได้หลังจาก `load dataset`
-- **ตัวอย่าง**:
-  ```
-  start
-  create ML
-  load dataset "new_data.csv"
-  load model "trained_model.ml"
-  train model
-  ```
-
-### **10. คำสั่งสิ้นสุด: `end`**
-- **ความหมาย**: สิ้นสุดการทำงานของโปรแกรม
-- **เงื่อนไข**: ต้องเป็นคำสั่งสุดท้าย
-- **ตัวอย่าง**:
-  ```
-  start
-  create ML
-  load dataset "data.csv"
-  create model LinearRegression
-  train model
-  end
-  ```
-
-## การตั้งค่าอัตโนมัติ
-
-หากผู้ใช้ไม่ใช้คำสั่ง `set [parameter]` โปรแกรมจะตั้งค่าพารามิเตอร์การเทรนอัตโนมัติตามประเภท AI ดังนี้:
-
-| AI Type | Learning Rate | Epochs | Batch Size | อื่นๆ |
-|---------|--------------|--------|------------|-----|
-| ML | 0.01 | 50 | 32 | - |
-| DL | 0.001 | 100 | 32 | - |
-| RL | 0.1 | - | - | episodes: 1000, discount_factor: 0.9 |
-
-## ตัวอย่างการใช้งาน
-
-### ตัวอย่าง 1: ปรับแต่งทุกอย่าง
 ```
-start
-create DL
-load dataset "images.csv"
-create model NeuralNetwork
-set learning_rate 0.001
-set epochs 200
-set batch_size 64
-train model
-show accuracy
-show loss
-save model "dl_model.dl"
-end
+[start] --> [create AI type] --> [load dataset] --> [preprocessing] --> [create model] 
+--> [set parameters] --> [train model] --> [evaluate/show/plot] --> [save model] --> [end]
 ```
 
-### ตัวอย่าง 2: ใช้ค่าอัตโนมัติ
+## คำสั่งที่สามารถใช้ได้ในแต่ละขั้นตอน
+
+### ก่อน create AI type
+- `start` - เริ่มโปรแกรม
+
+### หลัง create AI type
+- `load dataset` - โหลดข้อมูล
+- `load model` - โหลดโมเดลที่บันทึกไว้ก่อนหน้า
+- `set timezone` - กำหนดเขตเวลา
+
+### หลัง load dataset
+- `preprocess data` - เตรียมข้อมูล
+- `split dataset` - แบ่งข้อมูล
+- `visualize data` - แสดงข้อมูลในรูปแบบภาพ
+- `create model` - สร้างโมเดล
+
+### หลัง create model
+- `set` - กำหนดค่าพารามิเตอร์
+- `add layer` - เพิ่ม layer (สำหรับ DL)
+- `inspect model` - ตรวจสอบโครงสร้างโมเดล
+- `train model` - ฝึกโมเดล
+
+### หลัง train model
+- `evaluate model` - ประเมินประสิทธิภาพโมเดล
+- `show` - แสดงค่าต่างๆ
+- `plot` - สร้างกราฟ
+- `predict` - ทำนายผลลัพธ์
+- `save model` - บันทึกโมเดล
+- `cross_validate` - ทำ cross-validation
+- `validate model` - ตรวจสอบโมเดลด้วยข้อมูลชุดใหม่
+
+### คำสั่งที่ใช้ได้ตลอดเวลา
+- `check status` - ตรวจสอบสถานะ
+- `debug on/off` - เปิด/ปิดโหมดดีบัก
+- `end` - จบโปรแกรม
+
+## ข้อควรระวังและข้อจำกัด
+
+1. คำสั่ง `create ML`, `create DL`, หรือ `create RL` ต้องระบุก่อนใช้คำสั่งอื่นๆ ที่เกี่ยวข้องกับการสร้างหรือฝึกโมเดล
+2. คำสั่ง `train model` ต้องมีการสร้างโมเดลก่อนด้วยคำสั่ง `create model`
+3. คำสั่ง `predict` ต้องมีการฝึกโมเดลก่อนด้วยคำสั่ง `train model` หรือโหลดโมเดลที่ฝึกแล้วด้วย `load model`
+4. คำสั่ง `add layer` ใช้ได้เฉพาะกับ `create DL` เท่านั้น
+5. คำสั่ง `save model` จะเพิ่มนามสกุลไฟล์ที่เหมาะสมให้อัตโนมัติตามประเภทของโมเดล (.mlmodel, .dlmodel, .rlmodel)
+
+## การจัดการข้อผิดพลาด
+
+โปรแกรมจะตรวจสอบลำดับขั้นตอนการทำงานและแสดงข้อผิดพลาดในกรณีต่อไปนี้:
+
+- ไม่มีคำสั่ง `start` ในตอนเริ่มต้น
+- ใช้คำสั่งที่ต้องมีโมเดลก่อนที่จะมีการสร้างโมเดล
+- ลำดับคำสั่งไม่ถูกต้อง (เช่น `train model` ก่อน `create model`)
+- พารามิเตอร์ไม่ถูกต้องหรือไม่ครบถ้วน
+
+## ตัวอย่างการใช้งานที่ถูกต้อง
+
 ```
 start
 create ML
-load dataset "data.csv"
-create model LinearRegression
+load dataset "datasets/iris.csv"
+preprocess data normalize
+split dataset 0.8 0.2
+create model LogisticRegression
+set learning_rate 0.01
 train model
-show accuracy
+evaluate model
+save model "iris_model"
 end
 ```
 
-### ตัวอย่าง 3: โหลดโมเดลและเทรนต่อ
-```
-start
-create DL
-load dataset "new_images.csv"
-load model "dl_model.dl"
-set epochs 50
-train model
-show accuracy
-end
-```
-
-ดูตัวอย่างเพิ่มเติมได้ในไฟล์:
-- `examples/syntax_guide.ai`
-- `examples/auto_parameter_guide.ai`
-- `examples/ml_examples/linear_regression.ai`
-- `examples/dl_examples/neural_network.ai`
-- `examples/rl_examples/q_learning.ai`
+โปรแกรมจะบันทึกโมเดลเป็นไฟล์ `iris_model.mlmodel` โดยอัตโนมัติ
