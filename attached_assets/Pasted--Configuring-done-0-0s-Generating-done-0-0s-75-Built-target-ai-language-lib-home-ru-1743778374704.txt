@@ -1,0 +1,68 @@
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+[ 75%] Built target ai_language_lib: /home/runner/workspace/ai_language/build
+[ 87%] Built target show_time
+[100%] Built target ai_lang
+DEBUG: Starting ai_lang with 2 arguments
+DEBUG: First argument is -i
+DEBUG: About to enter interactive mode
+DEBUG: Starting interactive mode
+
+
+=== โหมดโต้ตอบของภาษา AI ===
+พิมพ์คำสั่งและกด Enter เพื่อดำเนินการ (พิมพ์ 'exit' เพื่อออก)
+รองรับคำสั่งหลายบรรทัด - พิมพ์ '\' แล้วกด Enter เพื่อพิมพ์ต่อในบรรทัดถัดไป
+พิมพ์ ';;' เพื่อดำเนินการทั้งหมด
+
+ตัวอย่างคำสั่ง:
+  start
+  create ML                        # สร้างโปรเจค Machine Learning
+  create DL                        # สร้างโปรเจค Deep Learning
+  create RL                        # สร้างโปรเจค Reinforcement Learning
+  load dataset "datasets/linear_data.csv" type "csv"  # โหลดข้อมูลสำหรับ ML
+  load dataset "datasets/iris.csv" type "csv"         # โหลดข้อมูลสำหรับ DL
+  load environment "datasets/environment.json"         # โหลดสภาพแวดล้อมสำหรับ RL
+  create model LinearRegression    # สร้างโมเดล LinearRegression
+  create model NeuralNetwork       # สร้างโมเดล Neural Network
+  create model QLearning           # สร้างโมเดล Q-Learning
+  set learning_rate 0.01           # ตั้งค่า learning rate
+  set epochs 100                   # ตั้งค่าจำนวนรอบการเรียนรู้
+  train model                      # ฝึกโมเดล
+  evaluate model                   # ประเมินประสิทธิภาพโมเดล
+  show accuracy                    # แสดงความแม่นยำของโมเดล
+  save model "model_name.dat"      # บันทึกโมเดล
+
+ตัวอย่างคำสั่งหลายบรรทัด:
+  start \
+  create ML \
+  load dataset "datasets/linear_data.csv" \
+  create model LinearRegression ;;
+
+โปรดลองใช้คำสั่ง 'start' และ 'create ML' เพื่อเริ่มต้นใช้งาน
+
+DEBUG: Creating default ML interpreter
+Starting Machine Learning interpreter...
+DEBUG: Successfully created interpreter
+AI> DEBUG: Got input: 'start'
+DEBUG: Interpreting single command: 'start'
+Starting Machine Learning interpreter...
+AI> DEBUG: Got input: 'create ML'
+DEBUG: Interpreting single command: 'create ML'
+Creating ML environment
+AI> DEBUG: Got input: 'help'
+=== AI Language Help ===
+Available commands:
+  start                           # Start a new AI project
+  create <type>                   # Create ML, DL, or RL project
+  load dataset <path> [type]      # Load dataset from file
+  create model <model_type>       # Create a specific model
+  set <param> <value>             # Set parameter value
+  train model                     # Train the model
+  evaluate model                  # Evaluate model performance
+  save model <path>               # Save model to file
+  show <metric|info>              # Show metrics or model info
+  predict <input>                 # Make predictions
+For more details, see docs/guides/USAGE_GUIDE.md
+AI> DEBUG: Got input: 'exit'
+ออกจากโปรแกรม
+DEBUG: Interactive mode completed normally
