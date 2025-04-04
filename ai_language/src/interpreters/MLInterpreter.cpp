@@ -303,8 +303,6 @@ void MLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
     }
 }
 
-} // namespace ai_language
-
 // Implementation of remaining pure virtual functions
 void MLInterpreter::handlePlotCommand(const std::vector<std::string>& parts) {
     std::cout << "Plot command is not implemented for ML yet" << std::endl;
@@ -361,3 +359,5 @@ void MLInterpreter::handleExportResultsCommand(const std::vector<std::string>& a
 void MLInterpreter::handleScheduleTrainingCommand(const std::vector<std::string>& args) {
     std::cout << "Schedule training command is not implemented for ML yet" << std::endl;
 }
+
+} // namespace ai_language
