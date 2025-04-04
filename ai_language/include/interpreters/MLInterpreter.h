@@ -10,14 +10,15 @@ namespace ai_language {
 
 class MLInterpreter : public BaseInterpreter {
 private:
+    std::string modelType;
     bool hasStarted;
     bool hasLoadedData;
     bool hasCreatedModel;
     bool hasTrained;
     bool hasShowedAccuracy;
     bool hasEvaluated;
-    std::string modelType;
     std::map<std::string, double> parameters;
+    std::map<std::string, std::string> stringParameters; // เพิ่มแมปสำหรับเก็บพารามิเตอร์ที่เป็นสตริง
 
 public:
     MLInterpreter();
@@ -44,7 +45,7 @@ public:
     void handleSaveCommand(const std::vector<std::string>& args) override;
     void handleHelpCommand() override;
     void handleAddCommand(const std::vector<std::string>& args) override;
-    
+
     // Implement remaining pure virtual functions
     void handlePlotCommand(const std::vector<std::string>& parts) override;
     void handleInspectCommand(const std::vector<std::string>& args) override;

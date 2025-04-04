@@ -184,29 +184,33 @@ void MLInterpreter::handleSetCommand(const std::vector<std::string>& args) {
             parameters[paramName] = value;
             std::cout << "Set " << paramName << " = " << value << std::endl;
         } else if (paramName == "optimizer") {
-            // ไม่ต้องแปลงเป็นตัวเลข
-            parameters[paramName] = paramValue;
+            // สตริงพารามิเตอร์ - เราจะเก็บเป็นค่าตัวเลข -1 เพื่อบ่งชี้ว่าเป็นค่าพิเศษ
+            // แล้วเก็บค่าจริงไว้ในแมปแยกต่างหาก
+            parameters[paramName] = -1; // ใช้ค่าพิเศษเพื่อบ่งชี้ว่านี่คือพารามิเตอร์ที่เป็นสตริง
+            stringParameters[paramName] = paramValue;
             std::cout << "Set " << paramName << " = " << paramValue << std::endl;
         } else if (paramName == "loss_function") {
-            // ไม่ต้องแปลงเป็นตัวเลข
-            parameters[paramName] = paramValue;
+            parameters[paramName] = -1;
+            stringParameters[paramName] = paramValue;
             std::cout << "Set " << paramName << " = " << paramValue << std::endl;
         } else if (paramName == "random_state" || paramName == "seed") {
             int value = std::stoi(paramValue);
             parameters[paramName] = value;
             std::cout << "Set " << paramName << " = " << value << std::endl;
         } else if (paramName == "activation") {
-            // ไม่ต้องแปลงเป็นตัวเลข
-            parameters[paramName] = paramValue;
+            parameters[paramName] = -1;
+            stringParameters[paramName] = paramValue;
             std::cout << "Set " << paramName << " = " << paramValue << std::endl;
         } else {
             // กรณีอื่นๆ ลองแปลงเป็นตัวเลข
             try {
-                parameters[paramName] = std::stod(paramValue);
-                std::cout << "Set " << paramName << " = " << parameters[paramName] << std::endl;
+                double value = std::stod(paramValue);
+                parameters[paramName] = value;
+                std::cout << "Set " << paramName << " = " << value << std::endl;
             } catch (...) {
-                // ถ้าแปลงเป็นตัวเลขไม่ได้ ให้เก็บเป็น string (แบบเดิม)
-                parameters[paramName] = paramValue;
+                // ถ้าแปลงเป็นตัวเลขไม่ได้ ให้เก็บเป็น string
+                parameters[paramName] = -1; // ใช้ค่าพิเศษ
+                stringParameters[paramName] = paramValue;
                 std::cout << "Set " << paramName << " = " << paramValue << std::endl;
             }
         }
