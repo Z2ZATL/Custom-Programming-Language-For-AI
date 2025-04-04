@@ -582,122 +582,151 @@ void MLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& ar
         return;
     }
 
-    // แปลงรูปแบบคำสั่งใหม่ เช่น "split data into train, test with ratio 0.8, 0.2"
-    std::vector<std::string> ratioValues;
+    // สร้างรายการใหม่เพื่อเก็บค่า ratio หลังจากการแปลง
+    std::vector<std::string> cleanedArgs;
     
-    // ตรวจหาคำว่า "ratio" ในอาร์กิวเมนต์
-    bool foundRatio = false;
-    size_t ratioIndex = 0;
+    // ลองจัดการทั้งรูปแบบเก่าและใหม่
+    // รูปแบบ 1: split dataset 0.8 0.2
+    // รูปแบบ 2: split dataset into train, test with ratio 0.8, 0.2
     
+    // ตรวจสอบว่าเป็นคำสั่งแบบระบุ "ratio" หรือไม่
+    bool hasRatioKeyword = false;
+    bool hasIntoKeyword = false;
+    size_t ratioPos = 0;
+    size_t intoPos = 0;
+    
+    // ค้นหาตำแหน่งคำสำคัญ
     for (size_t i = 0; i < args.size(); i++) {
         if (args[i] == "ratio") {
-            foundRatio = true;
-            ratioIndex = i + 1;
-            break;
+            hasRatioKeyword = true;
+            ratioPos = i;
+        }
+        else if (args[i] == "into") {
+            hasIntoKeyword = true;
+            intoPos = i;
         }
     }
     
-    // ถ้าเจอคำว่า "ratio" ให้ดึงค่าต่อจากนั้นมาเป็น ratio values
-    if (foundRatio && ratioIndex < args.size()) {
-        for (size_t i = ratioIndex; i < args.size(); i++) {
+    // กรณีที่เป็นรูปแบบ split dataset into ... with ratio ...
+    if (hasRatioKeyword && ratioPos + 1 < args.size()) {
+        for (size_t i = ratioPos + 1; i < args.size(); i++) {
             std::string value = args[i];
             // ลบเครื่องหมาย , ออกถ้ามี
             if (!value.empty() && value.back() == ',') {
                 value.pop_back();
             }
             if (!value.empty()) {
-                ratioValues.push_back(value);
+                cleanedArgs.push_back(value);
             }
         }
-    } else {
-        // รูปแบบเดิม โดยเอาค่าทั้งหมดมาเป็น ratio values
-        ratioValues = args;
+    } 
+    // กรณีที่เป็นรูปแบบเรียบง่าย split dataset 0.8 0.2
+    else {
+        for (const auto& arg : args) {
+            if (!arg.empty() && arg != "into" && arg != "with" && arg != "ratio" && 
+                arg != "train" && arg != "train," && arg != "test" && arg != "test," && 
+                arg != "validation" && arg != "validation,") {
+                // ลบเครื่องหมาย , ออกถ้ามี
+                std::string value = arg;
+                if (!value.empty() && value.back() == ',') {
+                    value.pop_back();
+                }
+                cleanedArgs.push_back(value);
+            }
+        }
     }
     
-    if (ratioValues.size() < 2) {
+    // ตรวจสอบจำนวน ratio ที่ระบุ
+    if (cleanedArgs.size() < 2) {
         std::cout << RED << "Error: Missing split ratios. Usage: split dataset <train_ratio> <test_ratio> [validation_ratio]" << RESET << std::endl;
         return;
     }
-
-    double trainRatio = 0.0, testRatio = 0.0, validationRatio = 0.0;
+    
+    // แปลงค่าจากสตริงเป็นตัวเลข
+    std::vector<double> ratios;
     
     try {
-        // ตรวจสอบรูปแบบข้อมูลเพื่อปรับแก้ให้สามารถรับค่าได้หลากหลายรูปแบบ
-        std::string trainStr = ratioValues[0];
-        std::string testStr = ratioValues[1];
-        
-        // ลบช่องว่างหน้าและหลังของสตริง
-        trainStr.erase(0, trainStr.find_first_not_of(" \t"));
-        trainStr.erase(trainStr.find_last_not_of(" \t") + 1);
-        testStr.erase(0, testStr.find_first_not_of(" \t"));
-        testStr.erase(testStr.find_last_not_of(" \t") + 1);
-        
-        // ตัดเครื่องหมาย % ออกถ้ามี
-        if (!trainStr.empty() && trainStr.back() == '%') {
-            trainStr.pop_back();
-            trainRatio = std::stod(trainStr) / 100.0;
-        } else {
-            trainRatio = std::stod(trainStr);
-        }
-        
-        if (!testStr.empty() && testStr.back() == '%') {
-            testStr.pop_back();
-            testRatio = std::stod(testStr) / 100.0;
-        } else {
-            testRatio = std::stod(testStr);
-        }
-        
-        // ตรวจสอบข้อมูลตัวที่ 3 ถ้ามี
-        if (ratioValues.size() > 2) {
-            std::string validStr = ratioValues[2];
+        for (const auto& arg : cleanedArgs) {
+            std::string cleanArg = arg;
             
-            // ลบช่องว่างหน้าและหลังของสตริง
-            validStr.erase(0, validStr.find_first_not_of(" \t"));
-            validStr.erase(validStr.find_last_not_of(" \t") + 1);
+            // ลบช่องว่างหน้าและหลัง
+            cleanArg.erase(0, cleanArg.find_first_not_of(" \t"));
+            cleanArg.erase(cleanArg.find_last_not_of(" \t") + 1);
             
-            if (!validStr.empty() && validStr.back() == '%') {
-                validStr.pop_back();
-                validationRatio = std::stod(validStr) / 100.0;
+            // ตัดเครื่องหมาย % ออกถ้ามี
+            if (!cleanArg.empty() && cleanArg.back() == '%') {
+                cleanArg.pop_back();
+                ratios.push_back(std::stod(cleanArg) / 100.0);
             } else {
-                validationRatio = std::stod(validStr);
+                double value = std::stod(cleanArg);
+                // ปรับค่าอัตโนมัติถ้ามากกว่า 1
+                if (value > 1.0) {
+                    value /= 100.0;
+                }
+                ratios.push_back(value);
             }
         }
         
-        // ตรวจสอบว่าอัตราส่วนอยู่ระหว่าง 0 และ 1 และแปลงค่าหากจำเป็น
-        // บางครั้งอาจมีการระบุเป็นเปอร์เซ็นต์ เช่น 0.8 หรือ 80 (80%)
-        if (trainRatio > 1) {
-            // สันนิษฐานว่าเป็นเปอร์เซ็นต์
-            trainRatio /= 100.0;
+        // ตรวจสอบค่า ratio ทั้งหมด
+        for (const auto& ratio : ratios) {
+            if (ratio < 0.0 || ratio > 1.0) {
+                std::cout << RED << "Error: Ratio value " << ratio << " is out of range. Must be between 0 and 1." << RESET << std::endl;
+                return;
+            }
         }
         
-        if (testRatio > 1) {
-            testRatio /= 100.0;
+        double trainRatio = ratios[0];
+        double testRatio = ratios[1];
+        double validationRatio = (ratios.size() > 2) ? ratios[2] : 0.0;
+        
+        // ตรวจสอบผลรวม
+        double totalRatio = 0.0;
+        for (const auto& ratio : ratios) {
+            totalRatio += ratio;
         }
         
-        if (validationRatio > 1) {
-            validationRatio /= 100.0;
-        }
-        
-        // ตรวจสอบอีกครั้งหลังจากปรับค่าแล้ว
-        if (trainRatio < 0 || trainRatio > 1 || testRatio < 0 || testRatio > 1 || validationRatio < 0 || validationRatio > 1) {
-            std::cout << RED << "Error: Ratio values must be between 0 and 1." << RESET << std::endl;
-            return;
-        }
-        
-        // ตรวจสอบว่าอัตราส่วนรวมกันได้ 1.0
-        double totalRatio = trainRatio + testRatio + validationRatio;
+        // ตรวจสอบว่าผลรวมใกล้เคียง 1.0 หรือไม่
         if (std::abs(totalRatio - 1.0) > 0.001) {
-            // ถ้าผลรวมไม่เท่ากับ 1.0 ให้แจ้งเตือนและปรับค่า
             std::cout << YELLOW << "Warning: Split ratios should sum to 1.0. Current sum: " << totalRatio << ". Normalizing values..." << RESET << std::endl;
-            // ปรับให้มีผลรวมเป็น 1.0
-            trainRatio /= totalRatio;
-            testRatio /= totalRatio;
-            if (validationRatio > 0) {
-                validationRatio /= totalRatio;
+            
+            // ปรับให้ผลรวมเป็น 1.0
+            for (auto& ratio : ratios) {
+                ratio /= totalRatio;
             }
+            
+            // ดึงค่าหลังจากปรับ
+            trainRatio = ratios[0];
+            testRatio = ratios[1];
+            validationRatio = (ratios.size() > 2) ? ratios[2] : 0.0;
         }
+        
+        // แสดงผล
+        std::cout << CYAN << "Splitting dataset with ratio - ";
+        std::cout << "Train: " << (trainRatio * 100) << "%, ";
+        std::cout << "Test: " << (testRatio * 100) << "%";
+        
+        if (validationRatio > 0) {
+            std::cout << ", Validation: " << (validationRatio * 100) << "%";
+        }
+        
+        std::cout << RESET << std::endl;
+        
+        // จำลองการแบ่งชุดข้อมูล
+        int totalSamples = 1000; // สมมติว่ามี 1000 ตัวอย่าง
+        int trainSamples = static_cast<int>(totalSamples * trainRatio);
+        int testSamples = static_cast<int>(totalSamples * testRatio);
+        int validationSamples = static_cast<int>(totalSamples * validationRatio);
+        
+        std::cout << GREEN << "Dataset split complete:" << RESET << std::endl;
+        std::cout << "- Training set: " << trainSamples << " samples" << std::endl;
+        std::cout << "- Testing set: " << testSamples << " samples" << std::endl;
+        
+        if (validationRatio > 0) {
+            std::cout << "- Validation set: " << validationSamples << " samples" << std::endl;
+        }
+        
     } catch (const std::exception& e) {
-        std::cout << RED << "Error: Invalid ratio values. Must be numbers between 0 and 1." << RESET << std::endl;
+        std::cout << RED << "Error: Invalid ratio values. Must be numbers between 0 and 1: " << e.what() << RESET << std::endl;
         return;
     }
 
