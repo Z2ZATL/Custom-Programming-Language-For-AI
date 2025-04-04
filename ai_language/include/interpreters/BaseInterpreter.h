@@ -67,6 +67,13 @@ public:
     std::string getCurrentDateTime();
     std::vector<std::string> tokenizeLine(const std::string& line);
 
+public:
+    // Utility methods that should be accessible from outside
+    virtual void showVersion();
+    virtual void showHelp();
+    virtual void showTime();
+    virtual void listModels();
+
 protected:
     // Common variables
     bool hasStarted;
@@ -83,10 +90,6 @@ protected:
     virtual void predict(const std::map<std::string, std::string>& params);
     virtual void showMetric(const std::string& metric);
     virtual void showModelInfo();
-    virtual void showVersion();
-    virtual void showHelp();
-    virtual void showTime();
-    virtual void listModels();
 
     // Helper methods
 };
