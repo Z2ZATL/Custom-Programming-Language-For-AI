@@ -1,0 +1,114 @@
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/runner/workspace/ai_language/build
+[  6%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/DLInterpreter.cpp.o
+[ 12%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/RLInterp[ 18%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/InterpreterFactory.cpp.o
+In file included from /nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/memory:78,
+                 from /home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/InterpreterFactory.h:6,
+                 from /home/runner/workspace/ai_language/src/interpreters/InterpreterFactory.cpp:2:
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/unique_ptr.h: In instantiation of ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = ai_language::MLInterpreter; _Args = {}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<ai_language::MLInterpreter>]’:
+/home/runner/workspace/ai_language/src/interpreters/InterpreterFactory.cpp:13:47:   required from here
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/unique_ptr.h:1070:30: error: invalid new-expression of abstract class type ‘ai_language::MLInterpreter’
+ 1070 |     { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
+      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/runner/workspace/ai_language/src/interpreters/InterpreterFactory.cpp:3:
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/MLInterpreter.h:11:7: note:   because the following virtual functions are pure within ‘ai_language::MLInterpreter’:
+   11 | class MLInterpreter : public BaseInterpreter {
+      |       ^~~~~~~~~~~~~
+In file included from /home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/InterpreterFactory.h:5:
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:46:18: note:     ‘virtual void ai_language::BaseInterpreter::handlePlotCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+   46 |     virtual void handlePlotCommand(const std::vector<std::string>& parts) = 0;
+      |                  ^~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:47:18: note:     ‘virtual void ai_language::BaseInterpreter::handleInspectCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+   47 |     virtual void handleInspectCommand(const std::vector<std::string>& args) = 0;
+      |                  ^~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:48:18: note:     ‘virtual void ai_language::BaseInterpreter::handleValidateCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+   48 |     virtual void handleValidateCommand(const std::vector<std::string>& args) = 0;
+      |                  ^~~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:49:18: note:     ‘virtual void ai_language::BaseInterpreter::handlePreprocessCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+   49 |     virtual void handlePreprocessCommand(const std::vector<std::string>& args) = 0;
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:50:18: note:     ‘virtual void ai_language::BaseInterpreter::handleSplitDatasetCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+   50 |     virtual void handleSplitDatasetCommand(const std::vector<std::string>& args) = 0;
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:51:18: note:     ‘virtual void ai_language::BaseInterpreter::handlePredictCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+   51 |     virtual void handlePredictCommand(const std::vector<std::string>& args) = 0;
+      |                  ^~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:52:18: note:     ‘virtual void ai_language::BaseInterpreter::handleListModelsCommand()’
+   52 |     virtual void handleListModelsCommand() = 0;
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:53:18: note:     ‘virtual void ai_language::BaseInterpreter::handleDeleteModelCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+   53 |     virtual void handleDeleteModelCommand(const std::vector<std::string>& args) = 0;
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:54:18: note:     ‘virtual void ai_language::BaseInterpreter::handleCompareModelsCommand()’
+   54 |     virtual void handleCompareModelsCommand() = 0;
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:55:18: note:     ‘virtual void ai_language::BaseInterpreter::handleCheckStatusCommand()’
+   55 |     virtual void handleCheckStatusCommand() = 0;
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:56:18: note:     ‘virtual void ai_language::BaseInterpreter::handleDebugCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+   56 |     virtual void handleDebugCommand(const std::vector<std::string>& args) = 0;
+      |                  ^~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:57:18: note:     ‘virtual void ai_language::BaseInterpreter::handleCrossValidateCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+   57 |     virtual void handleCrossValidateCommand(const std::vector<std::string>& args) = 0;
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:58:18: note:     ‘virtual void ai_language::BaseInterpreter::handleExportResultsCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+   58 |     virtual void handleExportResultsCommand(const std::vector<std::string>& args) = 0;
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:59:18: note:     ‘virtual void ai_language::BaseInterpreter::handleScheduleTrainingCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+   59 |     virtual void handleScheduleTrainingCommand(const std::vector<std::string>& args) = 0;
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/unique_ptr.h: In instantiation of ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = ai_language::DLInterpreter; _Args = {}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<ai_language::DLInterpreter>]’:
+/home/runner/workspace/ai_language/src/interpreters/InterpreterFactory.cpp:15:47:   required from here
+/nix/store/14c6s4xzhy14i2b05s00rjns2j93gzz4-gcc-13.2.0/include/c++/13.2.0/bits/unique_ptr.h:1070:30: error: invalid new-expression of abstract class type ‘ai_language::DLInterpreter’
+ 1070 |     { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
+      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /home/runner/workspace/ai_language/src/interpreters/InterpreterFactory.cpp:4:
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/DLInterpreter.h:11:7: note:   because the following virtual functions are pure within ‘ai_language::DLInterpreter’:
+   11 | class DLInterpreter : public BaseInterpreter {
+      |       ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:46:18: note:     ‘virtual void ai_language::BaseInterpreter::handlePlotCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+   46 |     virtual void handlePlotCommand(const std::vector<std::string>& parts) = 0;
+      |                  ^~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:47:18: note:     ‘virtual void ai_language::BaseInterpreter::handleInspectCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+   47 |     virtual void handleInspectCommand(const std::vector<std::string>& args) = 0;
+      |                  ^~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:48:18: note:     ‘virtual void ai_language::BaseInterpreter::handleValidateCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+   48 |     virtual void handleValidateCommand(const std::vector<std::string>& args) = 0;
+      |                  ^~~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:49:18: note:     ‘virtual void ai_language::BaseInterpreter::handlePreprocessCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+   49 |     virtual void handlePreprocessCommand(const std::vector<std::string>& args) = 0;
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:50:18: note:     ‘virtual void ai_language::BaseInterpreter::handleSplitDatasetCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+   50 |     virtual void handleSplitDatasetCommand(const std::vector<std::string>& args) = 0;
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:51:18: note:     ‘virtual void ai_language::BaseInterpreter::handlePredictCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+   51 |     virtual void handlePredictCommand(const std::vector<std::string>& args) = 0;
+      |                  ^~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:52:18: note:     ‘virtual void ai_language::BaseInterpreter::handleListModelsCommand()’
+   52 |     virtual void handleListModelsCommand() = 0;
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:53:18: note:     ‘virtual void ai_language::BaseInterpreter::handleDeleteModelCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+   53 |     virtual void handleDeleteModelCommand(const std::vector<std::string>& args) = 0;
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:54:18: note:     ‘virtual void ai_language::BaseInterpreter::handleCompareModelsCommand()’
+   54 |     virtual void handleCompareModelsCommand() = 0;
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:55:18: note:     ‘virtual void ai_language::BaseInterpreter::handleCheckStatusCommand()’
+   55 |     virtual void handleCheckStatusCommand() = 0;
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:56:18: note:     ‘virtual void ai_language::BaseInterpreter::handleDebugCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+   56 |     virtual void handleDebugCommand(const std::vector<std::string>& args) = 0;
+      |                  ^~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:57:18: note:     ‘virtual void ai_language::BaseInterpreter::handleCrossValidateCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+   57 |     virtual void handleCrossValidateCommand(const std::vector<std::string>& args) = 0;
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:58:18: note:     ‘virtual void ai_language::BaseInterpreter::handleExportResultsCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+   58 |     virtual void handleExportResultsCommand(const std::vector<std::string>& args) = 0;
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/BaseInterpreter.h:59:18: note:     ‘virtual void ai_language::BaseInterpreter::handleScheduleTrainingCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+   59 |     virtual void handleScheduleTrainingCommand(const std::vector<std::string>& args) = 0;
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+make[2]: *** [CMakeFiles/ai_language_lib.dir/build.make:132: CMakeFiles/ai_language_lib.dir/src/interpreters/InterpreterFactory.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:88: CMakeFiles/ai_language_lib.dir/all] Error 2
+make: *** [Makefile:91: all] Error 2
