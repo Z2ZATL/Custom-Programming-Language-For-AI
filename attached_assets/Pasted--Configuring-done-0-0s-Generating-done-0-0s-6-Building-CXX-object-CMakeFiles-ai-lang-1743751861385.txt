@@ -1,0 +1,25 @@
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+[  6%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/DLInterpreter.cpp.o
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: In member function ‘virtual void ai_language::DLInterpreter::handleLoadCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:182:5: error: ‘hasLoadedData’ was not declared in this scope; did you mean ‘hasLoaded’?
+  182 |     hasLoadedData = true;
+      |     ^~~~~~~~~~~~~
+      |     hasLoaded
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: In member function ‘virtual void ai_language::DLInterpreter::handleTrainCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:216:10: error: ‘hasLoadedData’ was not declared in this scope; did you mean ‘hasLoaded’?
+  216 |     if (!hasLoadedData) {
+      |          ^~~~~~~~~~~~~
+      |          hasLoaded
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: In member function ‘virtual void ai_language::DLInterpreter::handleShowCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:382:5: error: ‘hasShowedAccuracy’ was not declared in this scope
+  382 |     hasShowedAccuracy = true;
+      |     ^~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: In member function ‘virtual void ai_language::DLInterpreter::handleSaveCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:457:5: error: ‘hasSavedModel’ was not declared in this scope; did you mean ‘hasModel’?
+  457 |     hasSavedModel = true;
+      |     ^~~~~~~~~~~~~
+      |     hasModel
+make[2]: *** [CMakeFiles/ai_language_lib.dir/build.make:104: CMakeFiles/ai_language_lib.dir/src/interpreters/DLInterpreter.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:88: CMakeFiles/ai_language_lib.dir/all] Error 2
+make: *** [Makefile:91: all] Error 2
