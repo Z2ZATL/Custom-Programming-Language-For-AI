@@ -767,6 +767,7 @@ void MLInterpreter::handleListModelsCommand() {
 }
 
 void MLInterpreter::handleDeleteModelCommand(const std::vector<std::string>& args) {
+    (void) args; // เพื่อป้องกัน warning unused parameter
     std::cout << "Delete model command is not implemented for ML yet" << std::endl;
 }
 
@@ -779,18 +780,22 @@ void MLInterpreter::handleCheckStatusCommand() {
 }
 
 void MLInterpreter::handleDebugCommand(const std::vector<std::string>& args) {
+    (void) args; // เพื่อป้องกัน warning unused parameter
     std::cout << "Debug command is not implemented for ML yet" << std::endl;
 }
 
 void MLInterpreter::handleCrossValidateCommand(const std::vector<std::string>& args) {
+    (void) args; // เพื่อป้องกัน warning unused parameter
     std::cout << "Cross validate command is not implemented for ML yet" << std::endl;
 }
 
 void MLInterpreter::handleExportResultsCommand(const std::vector<std::string>& args) {
+    (void) args; // เพื่อป้องกัน warning unused parameter
     std::cout << "Export results command is not implemented for ML yet" << std::endl;
 }
 
 void MLInterpreter::handleScheduleTrainingCommand(const std::vector<std::string>& args) {
+    (void) args; // เพื่อป้องกัน warning unused parameter
     std::cout << "Schedule training command is not implemented for ML yet" << std::endl;
 }
 
