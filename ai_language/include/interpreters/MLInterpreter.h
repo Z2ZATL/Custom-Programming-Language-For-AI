@@ -31,6 +31,7 @@ public:
     void trainModel();
     void evaluateModel();
     void saveModel(const std::string& modelPath);
+    void createModel(const std::string& modelType);
 
     // Function to handle commands
     void handleStartCommand() override;

@@ -112,9 +112,7 @@ private:
     void handleDebugCommand(const std::vector<std::string>& args);
     void handleCrossValidateCommand(const std::vector<std::string>& args);
     void handleExportResultsCommand(const std::vector<std::string>& args);
-    void handleScheduleTrainingCommand(const std::vector<std::string>& args);
-    void handleCreateEnvironmentCommand(const std::vector<std::string>& args);
-    void handleSetEnvironmentParameterCommand(const std::vector<std::string>& args);
+    void handleScheduleTrainingCommand(const std::vector<std::string>& args) override;
 
     // ฟังก์ชันช่วย
     void cleanModelFileName(std::string& modelPath);
