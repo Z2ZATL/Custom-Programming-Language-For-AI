@@ -551,8 +551,19 @@ void BaseInterpreter::listModels() {
 bool BaseInterpreter::isExitCommand(const std::string& command) {
     std::string trimmedCmd = command;
     // ตัดช่องว่างที่อาจมีอยู่
-    trimmedCmd.erase(0, trimmedCmd.find_first_not_of(" \t\n\r\f\v"));
-    trimmedCmd.erase(trimmedCmd.find_last_not_of(" \t\n\r\f\v") + 1);
+    if (trimmedCmd.empty()) {
+        return false;
+    }
+    
+    size_t start = trimmedCmd.find_first_not_of(" \t\n\r\f\v");
+    if (start != std::string::npos) {
+        trimmedCmd.erase(0, start);
+    }
+    
+    size_t end = trimmedCmd.find_last_not_of(" \t\n\r\f\v");
+    if (end != std::string::npos) {
+        trimmedCmd.erase(end + 1);
+    }
 
     return trimmedCmd == "exit" || trimmedCmd == "quit";
 }

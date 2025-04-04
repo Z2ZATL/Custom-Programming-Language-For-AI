@@ -92,6 +92,7 @@ protected:
     virtual void showModelInfo();
 
     // Helper methods
+    bool isExitCommand(const std::string& command);
 };
 
 } // namespace ai_language
