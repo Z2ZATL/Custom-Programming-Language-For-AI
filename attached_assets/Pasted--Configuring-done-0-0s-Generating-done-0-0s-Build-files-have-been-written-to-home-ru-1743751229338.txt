@@ -1,0 +1,78 @@
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/runner/workspace/ai_language/build
+[  6%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/BaseInterpreter.cpp.o
+[ 12%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/MLInterp[ 18%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/DLInterpreter.cpp.o
+In file included from /home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:2:
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/DLInterpreter.h:22:10: error: ‘void ai_language::DLInterpreter::setDefaultParameters()’ marked ‘override’, but does not override
+   22 |     void setDefaultParameters() override;
+      |          ^~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: In member function ‘virtual void ai_language::DLInterpreter::handleCreateCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:64:5: error: ‘hasCreatedModel’ was not declared in this scope; did you mean ‘hasCreated’?
+   64 |     hasCreatedModel = true;
+      |     ^~~~~~~~~~~~~~~
+      |     hasCreated
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: In member function ‘virtual void ai_language::DLInterpreter::handleAddCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:70:10: error: ‘hasCreatedModel’ was not declared in this scope; did you mean ‘hasCreated’?
+   70 |     if (!hasCreatedModel) {
+      |          ^~~~~~~~~~~~~~~
+      |          hasCreated
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: In member function ‘virtual void ai_language::DLInterpreter::handleLoadCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:173:5: error: ‘datasetPath’ was not declared in this scope
+  173 |     datasetPath = args[0];
+      |     ^~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:181:5: error: ‘hasLoadedData’ was not declared in this scope; did you mean ‘hasLoaded’?
+  181 |     hasLoadedData = true;
+      |     ^~~~~~~~~~~~~
+      |     hasLoaded
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: In member function ‘virtual void ai_language::DLInterpreter::handleSetCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:185:10: error: ‘hasCreatedModel’ was not declared in this scope; did you mean ‘hasCreated’?
+  185 |     if (!hasCreatedModel) {
+      |          ^~~~~~~~~~~~~~~
+      |          hasCreated
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: In member function ‘virtual void ai_language::DLInterpreter::handleTrainCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:210:10: error: ‘hasCreatedModel’ was not declared in this scope; did you mean ‘hasCreated’?
+  210 |     if (!hasCreatedModel) {
+      |          ^~~~~~~~~~~~~~~
+      |          hasCreated
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:215:10: error: ‘hasLoadedData’ was not declared in this scope; did you mean ‘hasLoaded’?
+  215 |     if (!hasLoadedData) {
+      |          ^~~~~~~~~~~~~
+      |          hasLoaded
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:231:5: error: ‘hasTrainedModel’ was not declared in this scope; did you mean ‘hasTrained’?
+  231 |     hasTrainedModel = true;
+      |     ^~~~~~~~~~~~~~~
+      |     hasTrained
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: In member function ‘virtual void ai_language::DLInterpreter::handleEvaluateCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:235:10: error: ‘hasTrainedModel’ was not declared in this scope; did you mean ‘hasTrained’?
+  235 |     if (!hasTrainedModel) {
+      |          ^~~~~~~~~~~~~~~
+      |          hasTrained
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: In member function ‘virtual void ai_language::DLInterpreter::handleShowCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:250:10: error: ‘hasTrainedModel’ was not declared in this scope; did you mean ‘hasTrained’?
+  250 |     if (!hasTrainedModel) {
+      |          ^~~~~~~~~~~~~~~
+      |          hasTrained
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:288:59: error: ‘exp’ is not a member of ‘std’; did you mean ‘exa’?
+  288 |                 float accuracy = 0.65f + 0.3f * (1 - std::exp(-(i)/25.0));
+      |                                                           ^~~
+      |                                                           exa
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:289:56: error: ‘exp’ is not a member of ‘std’; did you mean ‘exa’?
+  289 |                 float loss = 0.82f - 0.77f * (1 - std::exp(-(i)/30.0));
+      |                                                        ^~~
+      |                                                        exa
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:381:5: error: ‘hasShowedAccuracy’ was not declared in this scope
+  381 |     hasShowedAccuracy = true;
+      |     ^~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: In member function ‘virtual void ai_language::DLInterpreter::handleSaveCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:385:10: error: ‘hasTrainedModel’ was not declared in this scope; did you mean ‘hasTrained’?
+  385 |     if (!hasTrainedModel) {
+      |          ^~~~~~~~~~~~~~~
+      |          hasTrained
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:456:5: error: ‘hasSavedModel’ was not declared in this scope; did you mean ‘hasModel’?
+  456 |     hasSavedModel = true;
+      |     ^~~~~~~~~~~~~
+      |     hasModel
+make[2]: *** [CMakeFiles/ai_language_lib.dir/build.make:104: CMakeFiles/ai_language_lib.dir/src/interpreters/DLInterpreter.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:88: CMakeFiles/ai_language_lib.dir/all] Error 2
+make: *** [Makefile:91: all] Error 2
