@@ -1,6 +1,7 @@
 #include "../../include/interpreters/BaseInterpreter.h"
 #include <algorithm>
 #include <cctype>
+#include <unistd.h> // สำหรับฟังก์ชัน getcwd
 
 namespace ai_language {
 
