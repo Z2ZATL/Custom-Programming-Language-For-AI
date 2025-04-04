@@ -88,7 +88,7 @@ public:
     std::string getCurrentDateTime();
 
 protected:
-    std::string modelType;
+    // modelType is already declared above
 };
 
 } // namespace ai_language
