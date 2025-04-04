@@ -4,6 +4,7 @@
 #include <sys/stat.h>
 #include <chrono>
 #include <cstdlib> // Added for setenv
+#include <cmath> // Added for std::exp
 
 namespace ai_language {
 
@@ -61,13 +62,13 @@ void DLInterpreter::handleCreateCommand(const std::vector<std::string>& args) {
     // เคลียร์ Layer เก่าเมื่อสร้างโมเดลใหม่
     layers.clear();
 
-    hasCreatedModel = true;
+    hasCreated = true;
     this->modelType = modelType;
 }
 
 // เพิ่มฟังก์ชันใหม่เพื่อรองรับคำสั่ง add layer
 void DLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
-    if (!hasCreatedModel) {
+    if (!hasCreated) {
         std::cout << RED << "กรุณาสร้างโมเดลก่อนด้วยคำสั่ง 'create'" << RESET << std::endl;
         return;
     }
@@ -182,7 +183,7 @@ void DLInterpreter::handleLoadCommand(const std::vector<std::string>& args) {
 }
 
 void DLInterpreter::handleSetCommand(const std::vector<std::string>& args) {
-    if (!hasCreatedModel) {
+    if (!hasCreated) {
         std::cout << RED << "กรุณาสร้างโมเดลก่อนด้วยคำสั่ง 'create'" << RESET << std::endl;
         return;
     }
@@ -207,7 +208,7 @@ void DLInterpreter::handleSetCommand(const std::vector<std::string>& args) {
 }
 
 void DLInterpreter::handleTrainCommand(const std::vector<std::string>& args) {
-    if (!hasCreatedModel) {
+    if (!hasCreated) {
         std::cout << RED << "กรุณาสร้างโมเดลก่อนด้วยคำสั่ง 'create'" << RESET << std::endl;
         return;
     }
@@ -228,11 +229,11 @@ void DLInterpreter::handleTrainCommand(const std::vector<std::string>& args) {
         std::cout << "Loss: " << 0.5 / epoch << " - Accuracy: " << 0.7 + epoch * 0.1 << RESET << std::endl;
     }
 
-    hasTrainedModel = true;
+    hasTrained = true;
 }
 
 void DLInterpreter::handleEvaluateCommand(const std::vector<std::string>& args) {
-    if (!hasTrainedModel) {
+    if (!hasTrained) {
         std::cout << RED << "กรุณาเทรนโมเดลก่อนด้วยคำสั่ง 'train'" << RESET << std::endl;
         return;
     }
@@ -247,7 +248,7 @@ void DLInterpreter::handleEvaluateCommand(const std::vector<std::string>& args) 
 }
 
 void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
-    if (!hasTrainedModel) {
+    if (!hasTrained) {
         std::cout << RED << "กรุณาเทรนโมเดลก่อนด้วยคำสั่ง 'train'" << RESET << std::endl;
         return;
     }
@@ -268,7 +269,7 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
 
         // กำหนดเส้นทางสำหรับเก็บไฟล์กราฟ
         std::string dataDir = "Program test/Data";
-        
+
         // ตรวจสอบและสร้างโฟลเดอร์หากไม่มีอยู่
         std::string mkdir_cmd = "mkdir -p '" + dataDir + "'";
         int mkdir_result = system(mkdir_cmd.c_str());
@@ -276,7 +277,7 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
             std::cout << RED << "ไม่สามารถสร้างโฟลเดอร์สำหรับบันทึกข้อมูล" << RESET << std::endl;
             return;
         }
-        
+
         // จำลองข้อมูลการเทรนสำหรับสร้างกราฟ - เพิ่มข้อมูลเฉพาะ DL
         std::string csvPath = dataDir + "/learning_curves_data.csv";
         std::ofstream csvFile(csvPath);
@@ -287,11 +288,11 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
                 float progress = i / float(parameters["epochs"]);
                 float accuracy = 0.65f + 0.3f * (1 - std::exp(-(i)/25.0));
                 float loss = 0.82f - 0.77f * (1 - std::exp(-(i)/30.0));
-                
+
                 // สร้างข้อมูล validation จำลองที่มีความแตกต่างเล็กน้อยกับข้อมูลเทรน
                 float validation_accuracy = accuracy - 0.05f * (1 - progress) * (float)rand() / RAND_MAX;
                 float validation_loss = loss + 0.08f * (1 - progress) * (float)rand() / RAND_MAX;
-                
+
                 csvFile << i << "," << accuracy << "," << loss << "," 
                        << validation_accuracy << "," << validation_loss << "\n";
             }
@@ -304,11 +305,11 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
 
         // สร้างกราฟด้วย plot_generator.py
         std::cout << "กำลังสร้างไฟล์กราฟข้อมูลทั้งในรูปแบบ HTML และ PNG (ไม่สามารถแสดงในเทอร์มินัลได้)..." << std::endl;
-        
+
         // ใช้ Python script เพื่อสร้างกราฟ
         std::string command = "python3 src/utils/plot_generator.py \"" + csvPath + "\" \"" + dataDir + "\" \"Learning Curves for " + modelType + " Model\"";
         int result = system(command.c_str());
-        
+
         if (result == 0) {
             std::cout << "Graph saved successfully to " << dataDir << std::endl;
             std::cout << "ข้อมูลได้รับการบันทึกเป็นไฟล์ CSV: ai_language/" << csvPath << std::endl;
@@ -318,7 +319,7 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
             std::cout << RED << "เกิดข้อผิดพลาดในการสร้างกราฟ" << RESET << std::endl;
             return;
         }
-        
+
     } else if (showType == "performance" || showType == "metrics") {
         std::cout << GREEN << "ผลการวัดประสิทธิภาพของโมเดล " << modelType << ":" << RESET << std::endl;
         std::cout << BLUE << "ความแม่นยำ (Accuracy): 0.89" << RESET << std::endl;
@@ -382,7 +383,7 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
 }
 
 void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
-    if (!hasTrainedModel) {
+    if (!hasTrained) {
         std::cout << RED << "กรุณาเทรนโมเดลก่อนด้วยคำสั่ง 'train'" << RESET << std::endl;
         return;
     }
@@ -396,7 +397,7 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
         } else {
             savePath = fileName;
         }
-        
+
         // เพิ่มนามสกุลไฟล์ .dlmodel ถ้าไม่มีการระบุนามสกุล
         if (savePath.find('.') == std::string::npos) {
             savePath += ".dlmodel";

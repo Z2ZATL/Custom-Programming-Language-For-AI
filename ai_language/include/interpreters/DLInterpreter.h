@@ -4,6 +4,7 @@
 
 #include "BaseInterpreter.h"
 #include <map>
+#include <cmath>
 
 namespace ai_language {
 
@@ -11,7 +12,8 @@ class DLInterpreter : public BaseInterpreter {
 private:
     std::vector<std::string> layers; // Store neural network layers
     std::map<std::string, double> parameters;
-
+    std::string datasetPath;
+    
 public:
     DLInterpreter() = default;
     ~DLInterpreter() override = default;

@@ -224,6 +224,10 @@ void BaseInterpreter::handleHelpCommand() {
     std::cout << "  end - End the program" << std::endl;
 }
 
+void BaseInterpreter::setDefaultParameters() {
+    // Base implementation does nothing
+}
+
 void BaseInterpreter::handleAddCommand(const std::vector<std::string>& args) {
     std::cout << RED << "Error: add command is only available for Deep Learning" << RESET << std::endl;
 }

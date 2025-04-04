@@ -32,6 +32,7 @@ public:
     void interpretLine(const std::string& line);
 
     // Common methods for all interpreters
+    virtual void setDefaultParameters() = 0;
     virtual void handleStartCommand() = 0;
     virtual void handleCreateCommand(const std::vector<std::string>& args) = 0;
     virtual void handleLoadCommand(const std::vector<std::string>& args) = 0;
