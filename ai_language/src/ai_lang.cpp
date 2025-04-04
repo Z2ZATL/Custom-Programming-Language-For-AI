@@ -219,6 +219,16 @@ void runInteractiveMode() {
                         commandCount++;
                         std::cout << "DEBUG: Interpreting command: '" << command << "'" << std::endl << std::flush;
                         std::cout << YELLOW << "(" << commandCount << ") " << RESET << command << std::endl;
+                        // ตรวจสอบคำสั่ง exit ให้ดีขึ้น
+                        std::string trimmedCmd = command;
+                        // ตัดช่องว่างที่อาจมีอยู่
+                        trimmedCmd.erase(0, trimmedCmd.find_first_not_of(" \t\n\r\f\v"));
+                        trimmedCmd.erase(trimmedCmd.find_last_not_of(" \t\n\r\f\v") + 1);
+
+                        if (trimmedCmd == "exit" || trimmedCmd == "quit") {
+                            std::cout << "ออกจากโปรแกรม" << std::endl;
+                            break;
+                        }
                         interpreter->interpretLine(command);
                         std::cout << std::endl; // เพิ่มบรรทัดว่างระหว่างผลลัพธ์ของแต่ละคำสั่ง
                     }
@@ -230,6 +240,16 @@ void runInteractiveMode() {
                 // ถ้าไม่มีเครื่องหมาย ;; ในบรรทัดเดียว ให้ประมวลผลทันที
                 if (!multiline.empty() && multiline.front() != '#') {
                     std::cout << "DEBUG: Interpreting single command: '" << multiline << "'" << std::endl << std::flush;
+                    // ตรวจสอบคำสั่ง exit ให้ดีขึ้น
+                    std::string trimmedCmd = multiline;
+                    // ตัดช่องว่างที่อาจมีอยู่
+                    trimmedCmd.erase(0, trimmedCmd.find_first_not_of(" \t\n\r\f\v"));
+                    trimmedCmd.erase(trimmedCmd.find_last_not_of(" \t\n\r\f\v") + 1);
+
+                    if (trimmedCmd == "exit" || trimmedCmd == "quit") {
+                        std::cout << "ออกจากโปรแกรม" << std::endl;
+                        break;
+                    }
                     interpreter->interpretLine(multiline);
                 }
                 multiline = "";

@@ -1,4 +1,3 @@
-
 #include "../../include/interpreters/BaseInterpreter.h"
 #include <algorithm>
 #include <cctype>
@@ -30,7 +29,7 @@ void BaseInterpreter::interpretLine(const std::string& line) {
         if (parts.empty()) {
             return;
         }
-        
+
         if (isDebugging) {
             std::cout << "DEBUG: Interpreting line: '" << line << "'" << std::endl << std::flush;
         }
@@ -150,6 +149,11 @@ void BaseInterpreter::interpretLine(const std::string& line) {
     }
     else if (command == "end") {
         std::cout << "End of program" << std::endl;
+    }
+    else if (isExitCommand(command)) {
+        //Added exit command handling
+        std::cout << "Exiting program..." << std::endl;
+        exit(0); //Added exit(0) to terminate the program.
     }
     else {
         std::cout << RED << "Error: Unknown command '" << command << "'" << RESET << std::endl;
@@ -295,7 +299,7 @@ void BaseInterpreter::handlePlotCommand(const std::vector<std::string>& parts) {
         std::cout << RED << "Error: plot command requires at least one argument" << RESET << std::endl;
         return;
     }
-    
+
     std::string plotType = parts[1];
     std::cout << "Plotting " << plotType << " graph (implemented in derived classes)" << std::endl;
     std::cout << "Create a visualization file in Data/learning_curves.png" << std::endl;
@@ -306,7 +310,7 @@ void BaseInterpreter::handleInspectCommand(const std::vector<std::string>& args)
         std::cout << RED << "Error: inspect command requires an argument" << RESET << std::endl;
         return;
     }
-    
+
     std::string target = args[0];
     std::cout << "Inspecting " << target << "..." << std::endl;
     std::cout << "Data structure looks good" << std::endl;
@@ -317,7 +321,7 @@ void BaseInterpreter::handleValidateCommand(const std::vector<std::string>& args
         std::cout << RED << "Error: validate command requires an argument" << RESET << std::endl;
         return;
     }
-    
+
     std::string target = args[0];
     std::cout << "Validating " << target << "..." << std::endl;
     std::cout << "Validation complete: No issues found" << std::endl;
@@ -328,7 +332,7 @@ void BaseInterpreter::handlePreprocessCommand(const std::vector<std::string>& ar
         std::cout << RED << "Error: preprocess command requires an argument" << RESET << std::endl;
         return;
     }
-    
+
     std::string method = args[0];
     std::cout << "Preprocessing data using " << method << " method" << std::endl;
     std::cout << "Data preprocessing complete" << std::endl;
@@ -339,7 +343,7 @@ void BaseInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& 
         std::cout << RED << "Error: split command requires ratio arguments" << RESET << std::endl;
         return;
     }
-    
+
     std::cout << "Splitting dataset with ratio " << args[0] << ":" << args[1] << std::endl;
     std::cout << "Dataset split successfully" << std::endl;
 }
@@ -349,13 +353,13 @@ void BaseInterpreter::handlePredictCommand(const std::vector<std::string>& args)
         std::cout << RED << "Error: predict command requires input values" << RESET << std::endl;
         return;
     }
-    
+
     std::cout << "Making prediction with input: ";
     for (const auto& arg : args) {
         std::cout << arg << " ";
     }
     std::cout << std::endl;
-    
+
     // สร้างค่าทำนายแบบสุ่มเพื่อการสาธิต
     double randomPrediction = (std::rand() % 1000) / 100.0;
     std::cout << "Prediction result: " << randomPrediction << std::endl;
@@ -390,7 +394,7 @@ void BaseInterpreter::handleCheckStatusCommand() {
     std::cout << "  Model Trained: " << (hasTrained ? "Yes" : "No") << std::endl;
     std::cout << "  Debug Mode: " << (isDebugging ? "On" : "Off") << std::endl;
     std::cout << "  Timezone: UTC" << (timezone >= 0 ? "+" : "") << timezone << std::endl;
-    
+
     std::cout << "  Parameters:" << std::endl;
     for (const auto& param : parameters) {
         std::cout << "    " << param.first << ": " << param.second << std::endl;
@@ -402,7 +406,7 @@ void BaseInterpreter::handleDebugCommand(const std::vector<std::string>& args) {
         std::cout << RED << "Error: debug command requires 'on' or 'off'" << RESET << std::endl;
         return;
     }
-    
+
     std::string mode = args[0];
     if (mode == "on") {
         isDebugging = true;
@@ -430,14 +434,14 @@ void BaseInterpreter::handleScheduleTrainingCommand(const std::vector<std::strin
 std::string BaseInterpreter::getCurrentDateTime() {
     auto now = std::chrono::system_clock::now();
     auto in_time_t = std::chrono::system_clock::to_time_t(now);
-    
+
     // Adjust time according to timezone
     in_time_t += timezone * 3600;
-    
+
     std::stringstream ss;
     ss << std::put_time(std::gmtime(&in_time_t), "%Y-%m-%d %H:%M:%S");
     ss << " (UTC" << (timezone >= 0 ? "+" : "") << timezone << ")";
-    
+
     return ss.str();
 }
 
@@ -445,7 +449,7 @@ std::vector<std::string> BaseInterpreter::tokenizeLine(const std::string& line) 
     std::vector<std::string> tokens;
     std::string token;
     bool inQuotes = false;
-    
+
     for (char c : line) {
         if (c == '"') {
             inQuotes = !inQuotes;
@@ -459,11 +463,11 @@ std::vector<std::string> BaseInterpreter::tokenizeLine(const std::string& line) 
             token += c;
         }
     }
-    
+
     if (!token.empty()) {
         tokens.push_back(token);
     }
-    
+
     return tokens;
 }
 
@@ -533,7 +537,7 @@ void BaseInterpreter::listModels() {
     std::cout << "  ML models: LinearRegression, LogisticRegression, RandomForest, SVM, KNN" << std::endl;
     std::cout << "  DL models: NeuralNetwork, CNN, RNN, LSTM, GRU, Transformer" << std::endl;
     std::cout << "  RL models: QLearning, DQN, PPO, A2C, DDQN" << std::endl;
-    
+
     // แสดงโมเดลที่มีอยู่ในระบบ (ถ้ามี)
     std::cout << std::endl << "Models in your project:" << std::endl;
     if (hasModel) {
@@ -542,6 +546,15 @@ void BaseInterpreter::listModels() {
     } else {
         std::cout << "  No models have been created yet" << std::endl;
     }
+}
+
+bool BaseInterpreter::isExitCommand(const std::string& command) {
+    std::string trimmedCmd = command;
+    // ตัดช่องว่างที่อาจมีอยู่
+    trimmedCmd.erase(0, trimmedCmd.find_first_not_of(" \t\n\r\f\v"));
+    trimmedCmd.erase(trimmedCmd.find_last_not_of(" \t\n\r\f\v") + 1);
+
+    return trimmedCmd == "exit" || trimmedCmd == "quit";
 }
 
 } // namespace ai_language
