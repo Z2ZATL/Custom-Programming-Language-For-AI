@@ -48,6 +48,11 @@ public:
     virtual void handleValidateCommand(const std::vector<std::string>& args) = 0;
     virtual void handlePreprocessCommand(const std::vector<std::string>& args) = 0;
     virtual void handleSplitDatasetCommand(const std::vector<std::string>& args) = 0;
+
+    // Method to interpret a file
+    void interpretFile(const std::string& filename);
+
+
     virtual void handlePredictCommand(const std::vector<std::string>& args) = 0;
     virtual void handleListModelsCommand() = 0;
     virtual void handleDeleteModelCommand(const std::vector<std::string>& args) = 0;
