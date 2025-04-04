@@ -27,13 +27,13 @@ void printUsage() {
 
 void runInteractiveMode() {
     std::cout << "DEBUG: Starting interactive mode" << std::endl << std::flush;
-    std::cout << "=== โหมดโต้ตอบของภาษา AI ===" << std::endl << std::flush;
+    std::cout << "\n\n=== โหมดโต้ตอบของภาษา AI ===" << std::endl << std::flush;
     std::cout << "พิมพ์คำสั่งและกด Enter เพื่อดำเนินการ (พิมพ์ 'exit' เพื่อออก)" << std::endl << std::flush;
     std::cout << "รองรับคำสั่งหลายบรรทัด - พิมพ์ '\\' แล้วกด Enter เพื่อพิมพ์ต่อในบรรทัดถัดไป" << std::endl << std::flush;
     std::cout << "พิมพ์ ';;' เพื่อดำเนินการทั้งหมด" << std::endl << std::endl << std::flush;
 
     // แสดงคำแนะนำหรือตัวอย่างคำสั่ง
-    std::cout << "ตัวอย่างคำสั่ง:" << std::endl;
+    std::cout << CYAN << "ตัวอย่างคำสั่ง:" << RESET << std::endl;
     std::cout << "  start" << std::endl;
     std::cout << "  create ML                        # สร้างโปรเจค Machine Learning" << std::endl;
     std::cout << "  create DL                        # สร้างโปรเจค Deep Learning" << std::endl;
@@ -51,112 +51,150 @@ void runInteractiveMode() {
     std::cout << "  show accuracy                    # แสดงความแม่นยำของโมเดล" << std::endl;
     std::cout << "  save model \"model_name.dat\"      # บันทึกโมเดล" << std::endl << std::endl;
 
-    std::cout << "ตัวอย่างคำสั่งหลายบรรทัด:" << std::endl;
+    std::cout << CYAN << "ตัวอย่างคำสั่งหลายบรรทัด:" << RESET << std::endl;
     std::cout << "  start \\" << std::endl;
     std::cout << "  create ML \\" << std::endl;
     std::cout << "  load dataset \"datasets/linear_data.csv\" \\" << std::endl;
     std::cout << "  create model LinearRegression ;;" << std::endl << std::endl;
 
-    std::cout << "คำแนะนำเพิ่มเติม: ดูไฟล์ docs/guides/USAGE_GUIDE.md สำหรับรายละเอียดเพิ่มเติม" << std::endl;
-    std::cout << "หรือดูตัวอย่างไฟล์ในโฟลเดอร์ examples/" << std::endl << std::endl;
-
-    std::cout << "ข้อมูลตัวอย่างอยู่ในโฟลเดอร์ datasets/" << std::endl;
-    std::cout << "  - linear_data.csv      # สำหรับ Linear Regression" << std::endl;
-    std::cout << "  - classification_data.csv # สำหรับ Classification" << std::endl;
-    std::cout << "  - iris.csv             # สำหรับ Neural Network" << std::endl;
-    std::cout << "  - images/              # สำหรับ CNN" << std::endl;
-    std::cout << "  - environment.json     # สำหรับ Reinforcement Learning" << std::endl;
-    std::cout << "  - config.json          # สำหรับการตั้งค่า RL" << std::endl << std::endl;
+    std::cout << YELLOW << "โปรดลองใช้คำสั่ง 'start' และ 'create ML' เพื่อเริ่มต้นใช้งาน" << RESET << std::endl << std::endl;
 
     // เริ่มต้นด้วย MLInterpreter เป็นค่าเริ่มต้น
-    std::unique_ptr<BaseInterpreter> interpreter = InterpreterFactory::createInterpreter("ML");
+    std::cout << "DEBUG: Creating default ML interpreter" << std::endl << std::flush;
+    std::unique_ptr<BaseInterpreter> interpreter;
+    try {
+        interpreter = InterpreterFactory::createInterpreter("ML");
+        std::cout << "DEBUG: Successfully created interpreter" << std::endl << std::flush;
+    } catch (const std::exception& e) {
+        std::cerr << RED << "ERROR: Failed to create interpreter: " << e.what() << RESET << std::endl << std::flush;
+        return;
+    } catch (...) {
+        std::cerr << RED << "ERROR: Unknown error creating interpreter" << RESET << std::endl << std::flush;
+        return;
+    }
+    
     std::string multiline = "";
     std::string line;
     std::string currentType = "ML";
 
     // รับคำสั่งจากผู้ใช้จนกว่าจะพิมพ์ 'exit'
     while (true) {
-        if (multiline.empty()) {
-            std::cout << "AI> " << std::flush;
-        } else {
-            std::cout << "... " << std::flush;
-        }
-
-        std::getline(std::cin, line);
-
-        if (line == "exit" && multiline.empty()) {
-            break;
-        }
-
-        // ตรวจสอบการป้อนหลายบรรทัด
-        if (!line.empty() && line.back() == '\\') {
-            // ลบเครื่องหมาย \ และเก็บคำสั่งไว้
-            line.pop_back();
-            multiline += line + "\n";
-            continue;
-        }
-
-        // เพิ่มบรรทัดปัจจุบันเข้าไปในคำสั่งหลายบรรทัด
-        multiline += line;
-
-        // ตรวจสอบว่ามีการเปลี่ยนประเภท AI หรือไม่
-        if (multiline.find("create ML") != std::string::npos && currentType != "ML") {
-            interpreter = InterpreterFactory::createInterpreter("ML");
-            currentType = "ML";
-        } else if (multiline.find("create DL") != std::string::npos && currentType != "DL") {
-            interpreter = InterpreterFactory::createInterpreter("DL");
-            currentType = "DL";
-        } else if (multiline.find("create RL") != std::string::npos && currentType != "RL") {
-            interpreter = InterpreterFactory::createInterpreter("RL");
-            currentType = "RL";
-        }
-
-        // ตรวจสอบคำสั่งพิเศษ
-        if (line == "list models" || line == "list") {
-            interpreter->listModels();
-            continue;
-        } else if (line == "show version") {
-            interpreter->showVersion();
-            continue;
-        } else if (line == "show help" || line == "help") {
-            interpreter->showHelp();
-            continue;
-        } else if (line == "show time" || line == "time") {
-            interpreter->showTime();
-            continue;
-        } else if (line == "exit" || line == "quit") {
-            std::cout << "ออกจากโปรแกรม" << std::endl;
-            break;
-        } else if (line == "clear" || line == "cls") {
-            std::cout << "\033[2J\033[1;1H"; // คำสั่งล้างหน้าจอใน terminal
-            continue;
-        }
-        
-        // ตรวจสอบว่าเป็นการสิ้นสุดคำสั่งหลายบรรทัดหรือไม่
-        if (multiline.find(";;") != std::string::npos || line.find(";;") != std::string::npos) {
-            // ลบเครื่องหมาย ;; ออก
-            size_t pos = multiline.find(";;");
-            if (pos != std::string::npos) {
-                multiline.erase(pos, 2);
+        try {
+            if (multiline.empty()) {
+                std::cout << GREEN << "AI> " << RESET << std::flush;
+            } else {
+                std::cout << YELLOW << "... " << RESET << std::flush;
             }
 
-            // แยกคำสั่งและประมวลผลทีละคำสั่ง
-            std::istringstream stream(multiline);
-            std::string command;
+            if (!std::getline(std::cin, line)) {
+                std::cout << RED << "ERROR: Input stream closed" << RESET << std::endl << std::flush;
+                break;
+            }
 
-            while (std::getline(stream, command)) {
-                if (!command.empty() && command.front() != '#') {
-                    interpreter->interpretLine(command);
+            std::cout << "DEBUG: Got input: '" << line << "'" << std::endl << std::flush;
+
+            if (line == "exit" && multiline.empty()) {
+                std::cout << "ออกจากโปรแกรม" << std::endl;
+                break;
+            }
+
+            // ตรวจสอบคำสั่งพิเศษที่ต้องประมวลผลทันที
+            if (multiline.empty()) {
+                if (line == "list models" || line == "list") {
+                    interpreter->listModels();
+                    continue;
+                } else if (line == "show version") {
+                    interpreter->showVersion();
+                    continue;
+                } else if (line == "show help" || line == "help") {
+                    interpreter->showHelp();
+                    continue;
+                } else if (line == "show time" || line == "time") {
+                    interpreter->showTime();
+                    continue;
+                } else if (line == "exit" || line == "quit") {
+                    std::cout << "ออกจากโปรแกรม" << std::endl;
+                    break;
+                } else if (line == "clear" || line == "cls") {
+                    std::cout << "\033[2J\033[1;1H"; // คำสั่งล้างหน้าจอใน terminal
+                    continue;
                 }
             }
 
-            multiline = "";
-        } else if (multiline.find(";;") == std::string::npos && line.find(";;") == std::string::npos) {
-            // ถ้าไม่มีเครื่องหมาย ;; ในบรรทัดเดียว ให้ประมวลผลทันที
-            if (!multiline.empty() && multiline.front() != '#') {
-                interpreter->interpretLine(multiline);
+            // ตรวจสอบการป้อนหลายบรรทัด
+            if (!line.empty() && line.back() == '\\') {
+                // ลบเครื่องหมาย \ และเก็บคำสั่งไว้
+                line.pop_back();
+                multiline += line + "\n";
+                continue;
             }
-            multiline = "";
+
+            // เพิ่มบรรทัดปัจจุบันเข้าไปในคำสั่งหลายบรรทัด
+            multiline += line;
+
+            // ตรวจสอบว่ามีการเปลี่ยนประเภท AI หรือไม่
+            if (multiline.find("create ML") != std::string::npos && currentType != "ML") {
+                std::cout << "DEBUG: Switching to ML interpreter" << std::endl << std::flush;
+                try {
+                    interpreter = InterpreterFactory::createInterpreter("ML");
+                    currentType = "ML";
+                } catch (const std::exception& e) {
+                    std::cerr << RED << "ERROR: Failed to create ML interpreter: " << e.what() << RESET << std::endl << std::flush;
+                }
+            } else if (multiline.find("create DL") != std::string::npos && currentType != "DL") {
+                std::cout << "DEBUG: Switching to DL interpreter" << std::endl << std::flush;
+                try {
+                    interpreter = InterpreterFactory::createInterpreter("DL");
+                    currentType = "DL";
+                } catch (const std::exception& e) {
+                    std::cerr << RED << "ERROR: Failed to create DL interpreter: " << e.what() << RESET << std::endl << std::flush;
+                }
+            } else if (multiline.find("create RL") != std::string::npos && currentType != "RL") {
+                std::cout << "DEBUG: Switching to RL interpreter" << std::endl << std::flush;
+                try {
+                    interpreter = InterpreterFactory::createInterpreter("RL");
+                    currentType = "RL";
+                } catch (const std::exception& e) {
+                    std::cerr << RED << "ERROR: Failed to create RL interpreter: " << e.what() << RESET << std::endl << std::flush;
+                }
+            }
+            
+            // ตรวจสอบว่าเป็นการสิ้นสุดคำสั่งหลายบรรทัดหรือไม่
+            if (multiline.find(";;") != std::string::npos) {
+                std::cout << "DEBUG: Processing multi-line command" << std::endl << std::flush;
+                
+                // ลบเครื่องหมาย ;; ออก
+                size_t pos = multiline.find(";;");
+                if (pos != std::string::npos) {
+                    multiline.erase(pos, 2);
+                }
+
+                // แยกคำสั่งและประมวลผลทีละคำสั่ง
+                std::istringstream stream(multiline);
+                std::string command;
+
+                while (std::getline(stream, command)) {
+                    if (!command.empty() && command.front() != '#') {
+                        std::cout << "DEBUG: Interpreting command: '" << command << "'" << std::endl << std::flush;
+                        interpreter->interpretLine(command);
+                    }
+                }
+
+                multiline = "";
+            } else {
+                // ถ้าไม่มีเครื่องหมาย ;; ในบรรทัดเดียว ให้ประมวลผลทันที
+                if (!multiline.empty() && multiline.front() != '#') {
+                    std::cout << "DEBUG: Interpreting single command: '" << multiline << "'" << std::endl << std::flush;
+                    interpreter->interpretLine(multiline);
+                }
+                multiline = "";
+            }
+        } catch (const std::exception& e) {
+            std::cerr << RED << "ERROR in interactive loop: " << e.what() << RESET << std::endl << std::flush;
+            multiline = ""; // รีเซ็ตคำสั่งหลายบรรทัดเพื่อป้องกันปัญหา
+        } catch (...) {
+            std::cerr << RED << "UNKNOWN ERROR in interactive loop" << RESET << std::endl << std::flush;
+            multiline = ""; // รีเซ็ตคำสั่งหลายบรรทัดเพื่อป้องกันปัญหา
         }
     }
 }
