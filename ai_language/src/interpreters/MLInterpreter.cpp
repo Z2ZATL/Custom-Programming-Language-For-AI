@@ -582,17 +582,49 @@ void MLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& ar
         return;
     }
 
-    if (args.size() < 2) {
+    // แปลงรูปแบบคำสั่งใหม่ เช่น "split data into train, test with ratio 0.8, 0.2"
+    std::vector<std::string> ratioValues;
+    
+    // ตรวจหาคำว่า "ratio" ในอาร์กิวเมนต์
+    bool foundRatio = false;
+    size_t ratioIndex = 0;
+    
+    for (size_t i = 0; i < args.size(); i++) {
+        if (args[i] == "ratio") {
+            foundRatio = true;
+            ratioIndex = i + 1;
+            break;
+        }
+    }
+    
+    // ถ้าเจอคำว่า "ratio" ให้ดึงค่าต่อจากนั้นมาเป็น ratio values
+    if (foundRatio && ratioIndex < args.size()) {
+        for (size_t i = ratioIndex; i < args.size(); i++) {
+            std::string value = args[i];
+            // ลบเครื่องหมาย , ออกถ้ามี
+            if (!value.empty() && value.back() == ',') {
+                value.pop_back();
+            }
+            if (!value.empty()) {
+                ratioValues.push_back(value);
+            }
+        }
+    } else {
+        // รูปแบบเดิม โดยเอาค่าทั้งหมดมาเป็น ratio values
+        ratioValues = args;
+    }
+    
+    if (ratioValues.size() < 2) {
         std::cout << RED << "Error: Missing split ratios. Usage: split dataset <train_ratio> <test_ratio> [validation_ratio]" << RESET << std::endl;
         return;
     }
 
-    double trainRatio, testRatio, validationRatio = 0.0;
+    double trainRatio = 0.0, testRatio = 0.0, validationRatio = 0.0;
     
     try {
         // ตรวจสอบรูปแบบข้อมูลเพื่อปรับแก้ให้สามารถรับค่าได้หลากหลายรูปแบบ
-        std::string trainStr = args[0];
-        std::string testStr = args[1];
+        std::string trainStr = ratioValues[0];
+        std::string testStr = ratioValues[1];
         
         // ตัดเครื่องหมาย % ออกถ้ามี
         if (!trainStr.empty() && trainStr.back() == '%') {
@@ -610,8 +642,8 @@ void MLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& ar
         }
         
         // ตรวจสอบข้อมูลตัวที่ 3 ถ้ามี
-        if (args.size() > 2) {
-            std::string validStr = args[2];
+        if (ratioValues.size() > 2) {
+            std::string validStr = ratioValues[2];
             if (!validStr.empty() && validStr.back() == '%') {
                 validStr.pop_back();
                 validationRatio = std::stod(validStr) / 100.0;
