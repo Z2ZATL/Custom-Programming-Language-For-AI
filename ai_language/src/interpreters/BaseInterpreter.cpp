@@ -352,9 +352,6 @@ std::vector<std::string> BaseInterpreter::tokenizeLine(const std::string& line) 
     }
     
     return tokens;
-}
-
-} // namespace ai_language
 void BaseInterpreter::interpretFile(const std::string& filename) {
     std::ifstream file(filename);
     if (!file.is_open()) {
@@ -371,3 +368,5 @@ void BaseInterpreter::interpretFile(const std::string& filename) {
         interpretLine(line);
     }
 }
+
+} // namespace ai_language
