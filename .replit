@@ -8,7 +8,7 @@ channel = "stable-24_05"
 run = ["sh", "-c", "cd ai_language && mkdir -p build && cd build && cmake .. && make && cd .. && ./ai_lang -i"]
 
 [workflows]
-runButton = "Debug Interactive Mode with Verbose Output"
+runButton = "Run with Input Debugging"
 
 [[workflows.workflow]]
 name = "Build and Run C++"
@@ -162,3 +162,12 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "cd ai_language && mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && cd .. && ./ai_lang -i"
+
+[[workflows.workflow]]
+name = "Run with Input Debugging"
+author = 41148250
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = 'cd ai_language && mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug .. && make && cd .. && echo -e "start\ncreate ML\nhelp\nexit" | ./ai_lang -i'
