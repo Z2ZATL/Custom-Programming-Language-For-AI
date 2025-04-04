@@ -31,7 +31,7 @@ public:
     /**
      * @brief ฟังก์ชันหลักสำหรับแปลและทำงานตามคำสั่ง
      */
-    void interpret() override;
+    void interpret();
 
     /**
      * @brief โหลดโมเดล RL จากไฟล์
@@ -113,6 +113,8 @@ private:
     void handleCrossValidateCommand(const std::vector<std::string>& args) override;
     void handleExportResultsCommand(const std::vector<std::string>& args) override;
     void handleScheduleTrainingCommand(const std::vector<std::string>& args) override;
+    void handleCreateEnvironmentCommand(const std::vector<std::string>& args);
+    void handleSetEnvironmentParameterCommand(const std::vector<std::string>& args);
 
     // ฟังก์ชันช่วย
     void cleanModelFileName(std::string& modelPath);
