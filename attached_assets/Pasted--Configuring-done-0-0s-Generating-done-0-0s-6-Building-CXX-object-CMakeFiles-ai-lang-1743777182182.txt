@@ -1,0 +1,98 @@
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+[  6%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/MLInterpreter.cpp.o
+[ 12%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/DLInterpreter.cpp.o
+In file included from /home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:2:
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/DLInterpreter.h:18:10: error: ‘void ai_language::DLInterpreter::interpret()’ marked ‘override’, but does not override
+   18 |     void interpret() override;
+      |          ^~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/DLInterpreter.h:21:10: error: ‘void ai_language::DLInterpreter::createModel(const std::string&)’ marked ‘override’, but does not override
+   21 |     void createModel(const std::string& modelType) override;
+      |          ^~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:62:6: error: redefinition of ‘void ai_language::DLInterpreter::handleStartCommand()’
+   62 | void DLInterpreter::handleStartCommand() {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/DLInterpreter.h:48:10: note: ‘virtual void ai_language::DLInterpreter::handleStartCommand()’ previously defined here
+   48 |     void handleStartCommand() override {std::cerr << "Not implemented yet" << std::endl;};
+      |          ^~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:505:6: error: redefinition of ‘void ai_language::DLInterpreter::handlePlotCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+  505 | void DLInterpreter::handlePlotCommand(const std::vector<std::string>& parts) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/DLInterpreter.h:33:10: note: ‘virtual void ai_language::DLInterpreter::handlePlotCommand(const std::vector<std::__cxx11::basic_string<char> >&)’ previously defined here
+   33 |     void handlePlotCommand(const std::vector<std::string>& parts) override { std::cerr << "Not implemented yet" << std::endl; }
+      |          ^~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:509:6: error: redefinition of ‘void ai_language::DLInterpreter::handleInspectCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+  509 | void DLInterpreter::handleInspectCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/DLInterpreter.h:34:10: note: ‘virtual void ai_language::DLInterpreter::handleInspectCommand(const std::vector<std::__cxx11::basic_string<char> >&)’ previously defined here
+   34 |     void handleInspectCommand(const std::vector<std::string>& args) override { std::cerr << "Not implemented yet" << std::endl; }
+      |          ^~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:513:6: error: redefinition of ‘void ai_language::DLInterpreter::handleValidateCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+  513 | void DLInterpreter::handleValidateCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/DLInterpreter.h:35:10: note: ‘virtual void ai_language::DLInterpreter::handleValidateCommand(const std::vector<std::__cxx11::basic_string<char> >&)’ previously defined here
+   35 |     void handleValidateCommand(const std::vector<std::string>& args) override { std::cerr << "Not implemented yet" << std::endl; }
+      |          ^~~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:517:6: error: redefinition of ‘void ai_language::DLInterpreter::handlePreprocessCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+  517 | void DLInterpreter::handlePreprocessCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/DLInterpreter.h:36:10: note: ‘virtual void ai_language::DLInterpreter::handlePreprocessCommand(const std::vector<std::__cxx11::basic_string<char> >&)’ previously defined here
+   36 |     void handlePreprocessCommand(const std::vector<std::string>& args) override { std::cerr << "Not implemented yet" << std::endl; }
+      |          ^~~~~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:521:6: error: redefinition of ‘void ai_language::DLInterpreter::handleSplitDatasetCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+  521 | void DLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/DLInterpreter.h:37:10: note: ‘virtual void ai_language::DLInterpreter::handleSplitDatasetCommand(const std::vector<std::__cxx11::basic_string<char> >&)’ previously defined here
+   37 |     void handleSplitDatasetCommand(const std::vector<std::string>& args) override { std::cerr << "Not implemented yet" << std::endl; }
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:525:6: error: redefinition of ‘void ai_language::DLInterpreter::handlePredictCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+  525 | void DLInterpreter::handlePredictCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/DLInterpreter.h:38:10: note: ‘virtual void ai_language::DLInterpreter::handlePredictCommand(const std::vector<std::__cxx11::basic_string<char> >&)’ previously defined here
+   38 |     void handlePredictCommand(const std::vector<std::string>& args) override { std::cerr << "Not implemented yet" << std::endl; }
+      |          ^~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:529:6: error: redefinition of ‘void ai_language::DLInterpreter::handleListModelsCommand()’
+  529 | void DLInterpreter::handleListModelsCommand() {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/DLInterpreter.h:39:10: note: ‘virtual void ai_language::DLInterpreter::handleListModelsCommand()’ previously defined here
+   39 |     void handleListModelsCommand() override { std::cerr << "Not implemented yet" << std::endl; }
+      |          ^~~~~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:533:6: error: redefinition of ‘void ai_language::DLInterpreter::handleDeleteModelCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+  533 | void DLInterpreter::handleDeleteModelCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/DLInterpreter.h:40:10: note: ‘virtual void ai_language::DLInterpreter::handleDeleteModelCommand(const std::vector<std::__cxx11::basic_string<char> >&)’ previously defined here
+   40 |     void handleDeleteModelCommand(const std::vector<std::string>& args) override { std::cerr << "Not implemented yet" << std::endl; }
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:537:6: error: redefinition of ‘void ai_language::DLInterpreter::handleCompareModelsCommand()’
+  537 | void DLInterpreter::handleCompareModelsCommand() {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/DLInterpreter.h:41:10: note: ‘virtual void ai_language::DLInterpreter::handleCompareModelsCommand()’ previously defined here
+   41 |     void handleCompareModelsCommand() override { std::cerr << "Not implemented yet" << std::endl; }
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:541:6: error: redefinition of ‘void ai_language::DLInterpreter::handleCheckStatusCommand()’
+  541 | void DLInterpreter::handleCheckStatusCommand() {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/DLInterpreter.h:42:10: note: ‘virtual void ai_language::DLInterpreter::handleCheckStatusCommand()’ previously defined here
+   42 |     void handleCheckStatusCommand() override { std::cerr << "Not implemented yet" << std::endl; }
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:545:6: error: redefinition of ‘void ai_language::DLInterpreter::handleDebugCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+  545 | void DLInterpreter::handleDebugCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/DLInterpreter.h:43:10: note: ‘virtual void ai_language::DLInterpreter::handleDebugCommand(const std::vector<std::__cxx11::basic_string<char> >&)’ previously defined here
+   43 |     void handleDebugCommand(const std::vector<std::string>& args) override { std::cerr << "Not implemented yet" << std::endl; }
+      |          ^~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:549:6: error: redefinition of ‘void ai_language::DLInterpreter::handleCrossValidateCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+  549 | void DLInterpreter::handleCrossValidateCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/DLInterpreter.h:44:10: note: ‘virtual void ai_language::DLInterpreter::handleCrossValidateCommand(const std::vector<std::__cxx11::basic_string<char> >&)’ previously defined here
+   44 |     void handleCrossValidateCommand(const std::vector<std::string>& args) override { std::cerr << "Not implemented yet" << std::endl; }
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:553:6: error: redefinition of ‘void ai_language::DLInterpreter::handleExportResultsCommand(const std::vector<std::__cxx11::basic_string<char> >&)’
+  553 | void DLInterpreter::handleExportResultsCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/DLInterpreter.h:45:10: note: ‘virtual void ai_language::DLInterpreter::handleExportResultsCommand(const std::vector<std::__cxx11::basic_string<char> >&)’ previously defined here
+   45 |     void handleExportResultsCommand(const std::vector<std::string>& args) override { std::cerr << "Not implemented yet" << std::endl; }
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+make[2]: *** [CMakeFiles/ai_language_lib.dir/build.make:104: CMakeFiles/ai_language_lib.dir/src/interpreters/DLInterpreter.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:88: CMakeFiles/ai_language_lib.dir/all] Error 2
+make: *** [Makefile:91: all] Error 2
