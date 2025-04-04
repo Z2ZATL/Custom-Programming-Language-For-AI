@@ -6,5 +6,5 @@ CXX_DEFINES =
 
 CXX_INCLUDES = -I/home/runner/workspace/ai_language -I/usr/include/python3.10 -I/home/runner/workspace/ai_language/include
 
-CXX_FLAGS = -std=gnu++17
+CXX_FLAGS = -g -Wall -Wextra -g -std=gnu++17
 

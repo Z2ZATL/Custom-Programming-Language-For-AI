@@ -1,1 +1,1 @@
-/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ CMakeFiles/show_time.dir/src/utils/show_time.cpp.o -o /home/runner/workspace/ai_language/show_time
+/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ -g -Wall -Wextra -g CMakeFiles/show_time.dir/src/utils/show_time.cpp.o -o /home/runner/workspace/ai_language/show_time
