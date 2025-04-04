@@ -57,7 +57,6 @@ void runInteractiveMode() {
     std::cout << "  load dataset \"datasets/linear_data.csv\" \\" << std::endl;
     std::cout << "  create model LinearRegression ;;" << std::endl << std::endl;
 
-    std::cout << YELLOW << "โปรดลองใช้คำสั่ง 'start' และ 'create ML' เพื่อเริ่มต้นใช้งาน" << RESET << std::endl << std::endl;
 
     // เริ่มต้นด้วย MLInterpreter เป็นค่าเริ่มต้น
     std::cout << "DEBUG: Creating default ML interpreter" << std::endl << std::flush;
@@ -72,7 +71,7 @@ void runInteractiveMode() {
         std::cerr << RED << "ERROR: Unknown error creating interpreter" << RESET << std::endl << std::flush;
         return;
     }
-    
+
     std::string multiline = "";
     std::string line;
     std::string currentType = "ML";
@@ -181,12 +180,12 @@ void runInteractiveMode() {
                     std::cerr << RED << "ERROR: Failed to create RL interpreter: " << e.what() << RESET << std::endl << std::flush;
                 }
             }
-            
+
             // ตรวจสอบว่าเป็นการสิ้นสุดคำสั่งหลายบรรทัดหรือไม่
             if (multiline.find(";;") != std::string::npos) {
                 std::cout << "DEBUG: Processing multi-line command" << std::endl << std::flush;
                 std::cout << CYAN << "กำลังประมวลผลคำสั่งหลายบรรทัด..." << RESET << std::endl;
-                
+
                 // ลบเครื่องหมาย ;; ออก
                 size_t pos = multiline.find(";;");
                 if (pos != std::string::npos) {
@@ -232,7 +231,7 @@ void runInteractiveMode() {
 
 int main(int argc, char* argv[]) {
     std::cout << "DEBUG: Starting ai_lang with " << argc << " arguments" << std::endl << std::flush;
-    
+
     // ตรวจสอบ arguments
     if (argc == 1) {
         std::cout << "No arguments provided, entering interactive mode..." << std::endl << std::flush;
@@ -242,7 +241,7 @@ int main(int argc, char* argv[]) {
 
     std::string arg = argv[1];
     std::cout << "DEBUG: First argument is " << arg << std::endl << std::flush;
-    
+
     if (arg == "-h" || arg == "--help") {
         ai_language::printUsage();
         return 0;
