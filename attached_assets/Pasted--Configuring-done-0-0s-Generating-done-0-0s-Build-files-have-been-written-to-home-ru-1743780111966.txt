@@ -1,0 +1,70 @@
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/runner/workspace/ai_language/build
+[  6%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/BaseI/home/runner/workspace/ai_language/src/interpreters/BaseInterpreter.cpp: In member function ‘virtual void ai_language::BaseInterpreter::handleCreateCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/BaseInterpreter.cpp:173:75: warning: unused parameter ‘args’ [-Wunused-parameter]
+  173 | nterpreter::handleCreateCommand(const std::vector<std::string>& args) {
+      |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+
+/home/runner/workspace/ai_language/src/interpreters/BaseInterpreter.cpp: In member function ‘virtual void ai_language::BaseInterpreter::handleLoadCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/BaseInterpreter.cpp:177:73: warning: unused parameter ‘args’ [-Wunused-parameter]
+  177 | eInterpreter::handleLoadCommand(const std::vector<std::string>& args) {
+      |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+
+/home/runner/workspace/ai_language/src/interpreters/BaseInterpreter.cpp: In member function ‘virtual void ai_language::BaseInterpreter::handleTrainCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/BaseInterpreter.cpp:259:74: warning: unused parameter ‘args’ [-Wunused-parameter]
+  259 | Interpreter::handleTrainCommand(const std::vector<std::string>& args) {
+      |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+
+/home/runner/workspace/ai_language/src/interpreters/BaseInterpreter.cpp: In member function ‘virtual void ai_language::BaseInterpreter::handleEvaluateCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/BaseInterpreter.cpp:263:77: warning: unused parameter ‘args’ [-Wunused-parameter]
+  263 | erpreter::handleEvaluateCommand(const std::vector<std::string>& args) {
+      |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+
+/home/runner/workspace/ai_language/src/interpreters/BaseInterpreter.cpp: In member function ‘virtual void ai_language::BaseInterpreter::handleSaveCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/BaseInterpreter.cpp:297:73: warning: unused parameter ‘args’ [-Wunused-parameter]
+  297 | eInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
+      |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+
+/home/runner/workspace/ai_language/src/interpreters/BaseInterpreter.cpp: In member function ‘virtual void ai_language::BaseInterpreter::handleAddCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/BaseInterpreter.cpp:319:72: warning: unused parameter ‘args’ [-Wunused-parameter]
+  319 | seInterpreter::handleAddCommand(const std::vector<std::string>& args) {
+      |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+
+/home/runner/workspace/ai_language/src/interpreters/BaseInterpreter.cpp: In member function ‘virtual void ai_language::BaseInterpreter::predict(const std::map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/BaseInterpreter.cpp:398:73: warning: unused parameter ‘params’ [-Wunused-parameter]
+  398 | nterpreter::predict(const std::map<std::string, std::string>& params) {
+      |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+
+/home/runner/workspace/ai_language/src/interpreters/BaseInterpreter.cpp: In member function ‘virtual void ai_language::BaseInterpreter::showMetric(const std::string&)’:
+/home/runner/workspace/ai_language/src/interpreters/BaseInterpreter.cpp:402:53: warning: unused parameter ‘metric’ [-Wunused-parameter]
+  402 | void BaseInterpreter::showMetric(const std::string& metric) {
+      |                                  ~~~~~~~~~~~~~~~~~~~^~~~~~
+/home/runner/workspace/ai_language/src/interpreters/BaseInterpreter.cpp: In member function ‘virtual void ai_language::BaseInterpreter::handleDeleteModelCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/BaseInterpreter.cpp:406:80: warning: unused parameter ‘args’ [-Wunused-parameter]
+  406 | reter::handleDeleteModelCommand(const std::vector<std::string>& args) {
+      |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+
+/home/runner/workspace/ai_language/src/interpreters/BaseInterpreter.cpp: In member function ‘virtual void ai_language::BaseInterpreter::handleCrossValidateCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/BaseInterpreter.cpp:448:82: warning: unused parameter ‘args’ [-Wunused-parameter]
+  448 | ter::handleCrossValidateCommand(const std::vector<std::string>& args) {
+      |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+
+/home/runner/workspace/ai_language/src/interpreters/BaseInterpreter.cpp: In member function ‘virtual void ai_language::BaseInterpreter::handleExportResultsCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/BaseInterpreter.cpp:452:82: warning: unused parameter ‘args’ [-Wunused-parameter]
+  452 | ter::handleExportResultsCommand(const std::vector<std::string>& args) {
+      |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+
+/home/runner/workspace/ai_language/src/interpreters/BaseInterpreter.cpp: In member function ‘virtual void ai_language::BaseInterpreter::handleScheduleTrainingCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/BaseInterpreter.cpp:456:85: warning: unused parameter ‘args’ [-Wunused-parameter]
+  456 | ::handleScheduleTrainingCommand(const std::vector<std::string>& args) {
+      |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+
+/home/runner/workspace/ai_language/src/interpreters/BaseInterpreter.cpp: In member function ‘virtual void ai_language::BaseInterpreter::showVersion()’:
+/home/runner/workspace/ai_language/src/interpreters/BaseInterpreter.cpp:632:9: error: ‘getcwd’ was not declared in this scope; did you mean ‘getwc’?
+  632 |     if (getcwd(cwd, sizeof(cwd)) != nullptr) {
+      |         ^~~~~~
+      |         getwc
+make[2]: *** [CMakeFiles/ai_language_lib.dir/build.make:76: CMakeFiles/ai_language_lib.dir/src/interpreters/BaseInterpreter.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:88: CMakeFiles/ai_language_lib.dir/all] Error 2
+make: *** [Makefile:91: all] Error 2
