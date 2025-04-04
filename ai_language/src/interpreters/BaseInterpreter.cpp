@@ -24,11 +24,16 @@ void BaseInterpreter::interpretLine(const std::string& line) {
         return;
     }
 
-    // Tokenize the line
-    std::vector<std::string> parts = tokenizeLine(line);
-    if (parts.empty()) {
-        return;
-    }
+    try {
+        // Tokenize the line
+        std::vector<std::string> parts = tokenizeLine(line);
+        if (parts.empty()) {
+            return;
+        }
+        
+        if (isDebugging) {
+            std::cout << "DEBUG: Interpreting line: '" << line << "'" << std::endl << std::flush;
+        }
 
     // Extract command and arguments
     std::string command = parts[0];
@@ -148,6 +153,11 @@ void BaseInterpreter::interpretLine(const std::string& line) {
     }
     else {
         std::cout << RED << "Error: Unknown command '" << command << "'" << RESET << std::endl;
+    }
+    } catch (const std::exception& e) {
+        std::cerr << RED << "Error interpreting line '" << line << "': " << e.what() << RESET << std::endl << std::flush;
+    } catch (...) {
+        std::cerr << RED << "Unknown error interpreting line '" << line << "'" << RESET << std::endl << std::flush;
     }
 }
 

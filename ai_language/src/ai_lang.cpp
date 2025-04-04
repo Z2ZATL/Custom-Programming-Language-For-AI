@@ -164,30 +164,47 @@ void runInteractiveMode() {
 } // end namespace ai_language
 
 int main(int argc, char* argv[]) {
-    std::cout << "DEBUG: Starting ai_lang with " << argc << " arguments" << std::endl;
+    std::cout << "DEBUG: Starting ai_lang with " << argc << " arguments" << std::endl << std::flush;
     
     // ตรวจสอบ arguments
     if (argc == 1) {
-        ai_language::printUsage();
+        std::cout << "No arguments provided, entering interactive mode..." << std::endl << std::flush;
+        ai_language::runInteractiveMode();
         return 0;
     }
 
     std::string arg = argv[1];
-    std::cout << "DEBUG: First argument is " << arg << std::endl;
+    std::cout << "DEBUG: First argument is " << arg << std::endl << std::flush;
     
     if (arg == "-h" || arg == "--help") {
         ai_language::printUsage();
         return 0;
     } else if (arg == "-i" || arg == "--interactive") {
         std::cout << "DEBUG: About to enter interactive mode" << std::endl << std::flush;
-        ai_language::runInteractiveMode();
-        std::cout << "DEBUG: Interactive mode completed" << std::endl;
+        try {
+            ai_language::runInteractiveMode();
+            std::cout << "DEBUG: Interactive mode completed normally" << std::endl << std::flush;
+        } catch (const std::exception& e) {
+            std::cerr << "ERROR in interactive mode: " << e.what() << std::endl << std::flush;
+            return 1;
+        } catch (...) {
+            std::cerr << "UNKNOWN ERROR in interactive mode" << std::endl << std::flush;
+            return 1;
+        }
         return 0;
     } else {
         // ประมวลผลไฟล์
-        // สร้าง interpreter ตามประเภทที่พบในไฟล์
-        std::unique_ptr<ai_language::BaseInterpreter> interpreter = ai_language::InterpreterFactory::createInterpreterFromFile(arg);
-        interpreter->interpretFile(arg);
+        try {
+            // สร้าง interpreter ตามประเภทที่พบในไฟล์
+            std::unique_ptr<ai_language::BaseInterpreter> interpreter = ai_language::InterpreterFactory::createInterpreterFromFile(arg);
+            interpreter->interpretFile(arg);
+        } catch (const std::exception& e) {
+            std::cerr << "ERROR processing file: " << e.what() << std::endl << std::flush;
+            return 1;
+        } catch (...) {
+            std::cerr << "UNKNOWN ERROR processing file" << std::endl << std::flush;
+            return 1;
+        }
     }
 
     return 0;
