@@ -110,8 +110,13 @@ void BaseInterpreter::interpretLine(const std::string& line) {
         std::vector<std::string> predictArgs = args;
         handlePredictCommand(predictArgs);
     }
-    else if (command == "list" && parts.size() > 1 && parts[1] == "models") {
-        handleListModelsCommand();
+    else if (command == "list") {
+        if (parts.size() > 1 && parts[1] == "models") {
+            handleListModelsCommand();
+        } else {
+            // เมื่อใช้คำสั่ง list โดยไม่มี models ต่อท้าย
+            handleListModelsCommand();
+        }
     }
     else if (command == "delete") {
         std::vector<std::string> deleteArgs;
@@ -150,6 +155,11 @@ void BaseInterpreter::interpretLine(const std::string& line) {
     }
     else if (command == "end") {
         std::cout << "End of program" << std::endl;
+    }
+    else if (command == "clear") {
+        // รองรับคำสั่ง clear หน้าจอ
+        std::cout << "\033[2J\033[1;1H"; // ANSI escape code สำหรับล้างหน้าจอและย้ายเคอร์เซอร์ไปที่ (1,1)
+        std::cout << "Screen cleared" << std::endl;
     }
     else if (isExitCommand(command)) {
         //Added exit command handling
@@ -289,6 +299,10 @@ void BaseInterpreter::handleShowCommand(const std::vector<std::string>& args) {
     else if (showType == "time") {
         // แสดงเวลาปัจจุบันโดยใช้ฟังก์ชัน showTime ที่พัฒนาแล้ว
         showTime();
+    }
+    else if (showType == "model_info") {
+        // แสดงข้อมูลโมเดล
+        showModelInfo();
     }
     else {
         std::cout << YELLOW << "Note: Command 'show " << showType << "' should be handled by a specific interpreter." << RESET << std::endl;
