@@ -626,6 +626,12 @@ void MLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& ar
         std::string trainStr = ratioValues[0];
         std::string testStr = ratioValues[1];
         
+        // ลบช่องว่างหน้าและหลังของสตริง
+        trainStr.erase(0, trainStr.find_first_not_of(" \t"));
+        trainStr.erase(trainStr.find_last_not_of(" \t") + 1);
+        testStr.erase(0, testStr.find_first_not_of(" \t"));
+        testStr.erase(testStr.find_last_not_of(" \t") + 1);
+        
         // ตัดเครื่องหมาย % ออกถ้ามี
         if (!trainStr.empty() && trainStr.back() == '%') {
             trainStr.pop_back();
@@ -644,6 +650,11 @@ void MLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& ar
         // ตรวจสอบข้อมูลตัวที่ 3 ถ้ามี
         if (ratioValues.size() > 2) {
             std::string validStr = ratioValues[2];
+            
+            // ลบช่องว่างหน้าและหลังของสตริง
+            validStr.erase(0, validStr.find_first_not_of(" \t"));
+            validStr.erase(validStr.find_last_not_of(" \t") + 1);
+            
             if (!validStr.empty() && validStr.back() == '%') {
                 validStr.pop_back();
                 validationRatio = std::stod(validStr) / 100.0;
@@ -652,7 +663,22 @@ void MLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& ar
             }
         }
         
-        // ตรวจสอบว่าอัตราส่วนอยู่ระหว่าง 0 และ 1
+        // ตรวจสอบว่าอัตราส่วนอยู่ระหว่าง 0 และ 1 และแปลงค่าหากจำเป็น
+        // บางครั้งอาจมีการระบุเป็นเปอร์เซ็นต์ เช่น 0.8 หรือ 80 (80%)
+        if (trainRatio > 1) {
+            // สันนิษฐานว่าเป็นเปอร์เซ็นต์
+            trainRatio /= 100.0;
+        }
+        
+        if (testRatio > 1) {
+            testRatio /= 100.0;
+        }
+        
+        if (validationRatio > 1) {
+            validationRatio /= 100.0;
+        }
+        
+        // ตรวจสอบอีกครั้งหลังจากปรับค่าแล้ว
         if (trainRatio < 0 || trainRatio > 1 || testRatio < 0 || testRatio > 1 || validationRatio < 0 || validationRatio > 1) {
             std::cout << RED << "Error: Ratio values must be between 0 and 1." << RESET << std::endl;
             return;
