@@ -171,11 +171,11 @@ void BaseInterpreter::handleStartCommand() {
     std::cout << GREEN << "AI Language program started" << RESET << std::endl;
 }
 
-void BaseInterpreter::handleCreateCommand(const std::vector<std::string>& args) {
+void BaseInterpreter::handleCreateCommand(const std::vector<std::string>& /* args */) {
     std::cout << "Base create command - override in derived classes" << std::endl;
 }
 
-void BaseInterpreter::handleLoadCommand(const std::vector<std::string>& args) {
+void BaseInterpreter::handleLoadCommand(const std::vector<std::string>& /* args */) {
     std::cout << "Base load command - override in derived classes" << std::endl;
 }
 
@@ -257,11 +257,11 @@ void BaseInterpreter::handleSetCommand(const std::vector<std::string>& args) {
     }
 }
 
-void BaseInterpreter::handleTrainCommand(const std::vector<std::string>& args) {
+void BaseInterpreter::handleTrainCommand(const std::vector<std::string>& /* args */) {
     std::cout << "Base train command - override in derived classes" << std::endl;
 }
 
-void BaseInterpreter::handleEvaluateCommand(const std::vector<std::string>& args) {
+void BaseInterpreter::handleEvaluateCommand(const std::vector<std::string>& /* args */) {
     std::cout << "Base evaluate command - override in derived classes" << std::endl;
 }
 
@@ -295,7 +295,7 @@ void BaseInterpreter::handleShowCommand(const std::vector<std::string>& args) {
     }
 }
 
-void BaseInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
+void BaseInterpreter::handleSaveCommand(const std::vector<std::string>& /* args */) {
     std::cout << "Base save command - override in derived classes" << std::endl;
 }
 
@@ -317,7 +317,7 @@ void BaseInterpreter::setDefaultParameters() {
     // Base implementation does nothing
 }
 
-void BaseInterpreter::handleAddCommand(const std::vector<std::string>& args) {
+void BaseInterpreter::handleAddCommand(const std::vector<std::string>& /* args */) {
     std::cout << RED << "Error: add command is only available for Deep Learning" << RESET << std::endl;
 }
 
@@ -396,15 +396,15 @@ void BaseInterpreter::handleListModelsCommand() {
     listModels();
 }
 
-void BaseInterpreter::predict(const std::map<std::string, std::string>& params) {
+void BaseInterpreter::predict(const std::map<std::string, std::string>& /* params */) {
     std::cout << "Base predict method - override in derived classes" << std::endl;
 }
 
-void BaseInterpreter::showMetric(const std::string& metric) {
+void BaseInterpreter::showMetric(const std::string& /* metric */) {
     std::cout << "Base showMetric method - override in derived classes" << std::endl;
 }
 
-void BaseInterpreter::handleDeleteModelCommand(const std::vector<std::string>& args) {
+void BaseInterpreter::handleDeleteModelCommand(const std::vector<std::string>& /* args */) {
     std::cout << "Base delete model command - override in derived classes" << std::endl;
 }
 
@@ -446,15 +446,15 @@ void BaseInterpreter::handleDebugCommand(const std::vector<std::string>& args) {
     }
 }
 
-void BaseInterpreter::handleCrossValidateCommand(const std::vector<std::string>& args) {
+void BaseInterpreter::handleCrossValidateCommand(const std::vector<std::string>& /* args */) {
     std::cout << "Base cross validate command - override in derived classes" << std::endl;
 }
 
-void BaseInterpreter::handleExportResultsCommand(const std::vector<std::string>& args) {
+void BaseInterpreter::handleExportResultsCommand(const std::vector<std::string>& /* args */) {
     std::cout << "Base export results command - override in derived classes" << std::endl;
 }
 
-void BaseInterpreter::handleScheduleTrainingCommand(const std::vector<std::string>& args) {
+void BaseInterpreter::handleScheduleTrainingCommand(const std::vector<std::string>& /* args */) {
     std::cout << "Base schedule training command - override in derived classes" << std::endl;
 }
 

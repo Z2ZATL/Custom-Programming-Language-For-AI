@@ -239,7 +239,7 @@ void DLInterpreter::handleSetCommand(const std::vector<std::string>& args) {
     std::cout << GREEN << "ตั้งค่า " << paramName << " = " << paramValue << RESET << std::endl;
 }
 
-void DLInterpreter::handleTrainCommand(const std::vector<std::string>& args) {
+void DLInterpreter::handleTrainCommand(const std::vector<std::string>& /* args */) {
     if (!hasCreated) {
         std::cout << RED << "กรุณาสร้างโมเดลก่อนด้วยคำสั่ง 'create'" << RESET << std::endl;
         return;

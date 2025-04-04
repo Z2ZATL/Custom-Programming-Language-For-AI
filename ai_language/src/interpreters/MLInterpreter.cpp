@@ -162,7 +162,7 @@ void MLInterpreter::handleSetCommand(const std::vector<std::string>& args) {
     }
 }
 
-void MLInterpreter::handleTrainCommand(const std::vector<std::string>& args) {
+void MLInterpreter::handleTrainCommand(const std::vector<std::string>& /* args */) {
     if (!hasCreatedModel) {
         std::cout << "Error: No model created. Use 'create model' command first." << std::endl;
         return;
@@ -380,7 +380,7 @@ void MLInterpreter::handlePlotCommand(const std::vector<std::string>& parts) {
     std::cout << "To view the plot, open the file in a suitable image viewer" << std::endl;
 }
 
-void MLInterpreter::handleInspectCommand(const std::vector<std::string>& args) {
+void MLInterpreter::handleInspectCommand(const std::vector<std::string>& /* args */) {
     std::cout << "Inspect command is not implemented for ML yet" << std::endl;
 }
 
