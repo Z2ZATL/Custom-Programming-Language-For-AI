@@ -1,0 +1,50 @@
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/runner/workspace/ai_language/build
+[  6%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/MLInterpreter.cpp.o
+[ 12%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/DLInterpreter.cpp.o
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:476:6: error: ‘DLInterpreter’ has not been declared
+  476 | void DLInterpreter::handlePlotCommand(const std::vector<std::string>& parts) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:480:6: error: ‘DLInterpreter’ has not been declared
+  480 | void DLInterpreter::handleInspectCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:484:6: error: ‘DLInterpreter’ has not been declared
+  484 | void DLInterpreter::handleValidateCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:488:6: error: ‘DLInterpreter’ has not been declared
+  488 | void DLInterpreter::handlePreprocessCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:492:6: error: ‘DLInterpreter’ has not been declared
+  492 | void DLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:496:6: error: ‘DLInterpreter’ has not been declared
+  496 | void DLInterpreter::handlePredictCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:500:6: error: ‘DLInterpreter’ has not been declared
+  500 | void DLInterpreter::handleListModelsCommand() {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:504:6: error: ‘DLInterpreter’ has not been declared
+  504 | void DLInterpreter::handleDeleteModelCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:508:6: error: ‘DLInterpreter’ has not been declared
+  508 | void DLInterpreter::handleCompareModelsCommand() {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:512:6: error: ‘DLInterpreter’ has not been declared
+  512 | void DLInterpreter::handleCheckStatusCommand() {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:516:6: error: ‘DLInterpreter’ has not been declared
+  516 | void DLInterpreter::handleDebugCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:520:6: error: ‘DLInterpreter’ has not been declared
+  520 | void DLInterpreter::handleCrossValidateCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:524:6: error: ‘DLInterpreter’ has not been declared
+  524 | void DLInterpreter::handleExportResultsCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:528:6: error: ‘DLInterpreter’ has not been declared
+  528 | void DLInterpreter::handleScheduleTrainingCommand(const std::vector<std::string>& args) {
+      |      ^~~~~~~~~~~~~
+make[2]: *** [CMakeFiles/ai_language_lib.dir/build.make:104: CMakeFiles/ai_language_lib.dir/src/interpreters/DLInterpreter.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:88: CMakeFiles/ai_language_lib.dir/all] Error 2
+make: *** [Makefile:91: all] Error 2
