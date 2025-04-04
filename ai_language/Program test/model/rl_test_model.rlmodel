@@ -1,6 +1,6 @@
 # ML Model saved from AI Language
-model_type: LinearRegression
-learning_rate: 0.01
-epochs: 100
+model_type: QLearning
+learning_rate: 0.1
+epochs: 50
 accuracy: 0.95
 create_time: 2025-04-04 14:25:58 (UTC+0)
