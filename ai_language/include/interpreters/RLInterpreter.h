@@ -74,6 +74,27 @@ private:
     bool hasCreatedModel;
     bool hasTrained;
     bool hasEvaluated;
+    
+    // เพิ่มฟังก์ชันสำหรับจัดการคำสั่งใหม่
+    void handleInspectCommand(const std::vector<std::string>& args);
+    void handleValidateCommand(const std::vector<std::string>& args);
+    void handlePlotCommand(const std::vector<std::string>& args);
+    void handlePreprocessCommand(const std::vector<std::string>& args);
+    void handleSplitDatasetCommand(const std::vector<std::string>& args);
+    void handlePredictCommand(const std::vector<std::string>& args);
+    void handleListModelsCommand();
+    void handleDeleteModelCommand(const std::vector<std::string>& args);
+    void handleCompareModelsCommand();
+    void handleCheckStatusCommand();
+    void handleDebugCommand(const std::vector<std::string>& args);
+    void handleCrossValidateCommand(const std::vector<std::string>& args);
+    void handleExportResultsCommand(const std::vector<std::string>& args);
+    void handleScheduleTrainingCommand(const std::vector<std::string>& args);
+    void handleCreateEnvironmentCommand(const std::vector<std::string>& args);
+    void handleSetEnvironmentParameterCommand(const std::vector<std::string>& args);
+    
+    // ฟังก์ชันช่วย
+    void cleanModelFileName(std::string& modelPath);
 };
 
 } // namespace ai_language

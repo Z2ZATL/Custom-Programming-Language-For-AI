@@ -88,3 +88,84 @@ void BaseInterpreter::interpretLine(const std::string& line) {
 }
 
 } // namespace ai_language
+
+    else if (command == "plot") {
+        handlePlotCommand(parts);
+    }
+    else if (command == "inspect") {
+        if (parts.size() > 1 && parts[1] == "model") {
+            std::vector<std::string> args(parts.begin() + 2, parts.end());
+            handleInspectCommand(args);
+        } else {
+            std::cout << "Error: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'inspect model <model_name> <option>'" << std::endl;
+        }
+    }
+    else if (command == "validate") {
+        if (parts.size() > 1 && parts[1] == "model") {
+            std::vector<std::string> args(parts.begin() + 2, parts.end());
+            handleValidateCommand(args);
+        } else {
+            std::cout << "Error: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'validate model <dataset_path>'" << std::endl;
+        }
+    }
+    else if (command == "preprocess") {
+        if (parts.size() > 1 && parts[1] == "data") {
+            std::vector<std::string> args(parts.begin() + 2, parts.end());
+            handlePreprocessCommand(args);
+        } else {
+            std::cout << "Error: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'preprocess data <operation>'" << std::endl;
+        }
+    }
+    else if (command == "split") {
+        if (parts.size() > 1 && parts[1] == "dataset") {
+            std::vector<std::string> args(parts.begin() + 2, parts.end());
+            handleSplitDatasetCommand(args);
+        } else {
+            std::cout << "Error: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'split dataset <train_ratio> <test_ratio>'" << std::endl;
+        }
+    }
+    else if (command == "predict") {
+        std::vector<std::string> args(parts.begin() + 1, parts.end());
+        handlePredictCommand(args);
+    }
+    else if (command == "list" && parts.size() > 1 && parts[1] == "models") {
+        handleListModelsCommand();
+    }
+    else if (command == "delete") {
+        if (parts.size() > 1 && parts[1] == "model") {
+            std::vector<std::string> args(parts.begin() + 2, parts.end());
+            handleDeleteModelCommand(args);
+        } else {
+            std::cout << "Error: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'delete model <model_name>'" << std::endl;
+        }
+    }
+    else if (command == "compare" && parts.size() > 1 && parts[1] == "models") {
+        handleCompareModelsCommand();
+    }
+    else if (command == "check" && parts.size() > 1 && parts[1] == "status") {
+        handleCheckStatusCommand();
+    }
+    else if (command == "debug") {
+        std::vector<std::string> args(parts.begin() + 1, parts.end());
+        handleDebugCommand(args);
+    }
+    else if (command == "cross_validate") {
+        std::vector<std::string> args(parts.begin() + 1, parts.end());
+        handleCrossValidateCommand(args);
+    }
+    else if (command == "export") {
+        if (parts.size() > 1 && parts[1] == "results") {
+            std::vector<std::string> args(parts.begin() + 2, parts.end());
+            handleExportResultsCommand(args);
+        } else {
+            std::cout << "Error: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'export results \"<filename>\"'" << std::endl;
+        }
+    }
+    else if (command == "schedule") {
+        if (parts.size() > 1 && parts[1] == "training") {
+            std::vector<std::string> args(parts.begin() + 2, parts.end());
+            handleScheduleTrainingCommand(args);
+        } else {
+            std::cout << "Error: รูปแบบคำสั่งไม่ถูกต้อง ต้องเป็น 'schedule training \"<time>\"'" << std::endl;
+        }
+    }

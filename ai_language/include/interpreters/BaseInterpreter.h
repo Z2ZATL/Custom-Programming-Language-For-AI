@@ -68,9 +68,27 @@ public:
     virtual void handleSaveCommand(const std::vector<std::string>& args) = 0;
     virtual void handleHelpCommand() = 0;
 
-    // ฟังก์ชันสำหรับการตรวจสอบสถานะปัจจุบัน
-    virtual bool isProjectStarted() const { return hasStarted; }
-    virtual bool isProjectCreated() const { return hasCreatedProject; }
+    // เพิ่มฟังก์ชันเสมือนสำหรับคำสั่งใหม่
+    virtual void handlePlotCommand(const std::vector<std::string>& args) = 0;
+    virtual void handleInspectCommand(const std::vector<std::string>& args) = 0;
+    virtual void handleValidateCommand(const std::vector<std::string>& args) = 0;
+    virtual void handlePreprocessCommand(const std::vector<std::string>& args) = 0;
+    virtual void handleSplitDatasetCommand(const std::vector<std::string>& args) = 0;
+    virtual void handlePredictCommand(const std::vector<std::string>& args) = 0;
+    virtual void handleListModelsCommand() = 0;
+    virtual void handleDeleteModelCommand(const std::vector<std::string>& args) = 0;
+    virtual void handleCompareModelsCommand() = 0;
+    virtual void handleCheckStatusCommand() = 0;
+    virtual void handleDebugCommand(const std::vector<std::string>& args) = 0;
+    virtual void handleCrossValidateCommand(const std::vector<std::string>& args) = 0;
+    virtual void handleExportResultsCommand(const std::vector<std::string>& args) = 0;
+    virtual void handleScheduleTrainingCommand(const std::vector<std::string>& args) = 0;
+
+    // Helper method to get current date and time as formatted string
+    std::string getCurrentDateTime();
+
+protected:
+    std::string modelType;
 };
 
 } // namespace ai_language

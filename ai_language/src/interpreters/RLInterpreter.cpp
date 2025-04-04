@@ -3,6 +3,9 @@
 #include <iostream>
 #include <cstdlib> // for setenv
 #include <ctime>   // for tzset
+#include <fstream> //for ofstream
+#include <sys/stat.h> //for stat
+
 
 namespace ai_language {
 
@@ -283,19 +286,153 @@ void RLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
     }
 }
 
+// สตับฟังก์ชันสำหรับคำสั่งใหม่
+void RLInterpreter::handleInspectCommand(const std::vector<std::string>& args) {
+    if (args.size() < 2) {
+        std::cout << "Error: รูปแบบที่ถูกต้อง: inspect model <model_name> <option>" << std::endl;
+        return;
+    }
+    std::cout << "ยังไม่ได้ดำเนินการคำสั่ง inspect model" << std::endl;
+}
+
+void RLInterpreter::handleValidateCommand(const std::vector<std::string>& args) {
+    if (args.size() < 2) {
+        std::cout << "Error: รูปแบบที่ถูกต้อง: validate model \"<dataset_path>\"" << std::endl;
+        return;
+    }
+    std::cout << "ยังไม่ได้ดำเนินการคำสั่ง validate model" << std::endl;
+}
+
+void RLInterpreter::handlePreprocessCommand(const std::vector<std::string>& args) {
+    if (args.size() < 2) {
+        std::cout << "Error: รูปแบบที่ถูกต้อง: preprocess data <operation>" << std::endl;
+        return;
+    }
+    std::cout << "ยังไม่ได้ดำเนินการคำสั่ง preprocess data" << std::endl;
+}
+
+void RLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& args) {
+    if (args.size() < 2) {
+        std::cout << "Error: รูปแบบที่ถูกต้อง: split dataset <train_ratio> <test_ratio>" << std::endl;
+        return;
+    }
+    std::cout << "ยังไม่ได้ดำเนินการคำสั่ง split dataset" << std::endl;
+}
+
+void RLInterpreter::handlePredictCommand(const std::vector<std::string>& args) {
+    if (args.empty()) {
+        std::cout << "Error: รูปแบบที่ถูกต้อง: predict \"<input_data>\" หรือ predict dataset \"<filename>\"" << std::endl;
+        return;
+    }
+    std::cout << "ยังไม่ได้ดำเนินการคำสั่ง predict" << std::endl;
+}
+
+void RLInterpreter::handleListModelsCommand() {
+    std::cout << "รายการโมเดลที่มีอยู่:" << std::endl;
+    std::cout << "- " << modelType << std::endl;
+}
+
+void RLInterpreter::handleDeleteModelCommand(const std::vector<std::string>& args) {
+    if (args.empty()) {
+        std::cout << "Error: รูปแบบที่ถูกต้อง: delete model <model_name>" << std::endl;
+        return;
+    }
+    std::cout << "ยังไม่ได้ดำเนินการคำสั่ง delete model" << std::endl;
+}
+
+void RLInterpreter::handleCompareModelsCommand() {
+    std::cout << "ยังไม่ได้ดำเนินการคำสั่ง compare models" << std::endl;
+}
+
+void RLInterpreter::handleCheckStatusCommand() {
+    std::cout << "สถานะโปรเจกต์:" << std::endl;
+    std::cout << "- ประเภท AI: RL" << std::endl;
+    std::cout << "- โมเดล: " << (hasCreatedModel ? modelType : "ยังไม่ได้สร้าง") << std::endl;
+    std::cout << "- สถานะการโหลดข้อมูล: " << (hasLoadedData ? "โหลดแล้ว" : "ยังไม่ได้โหลด") << std::endl;
+    std::cout << "- สถานะการฝึก: " << (hasTrained ? "ฝึกแล้ว" : "ยังไม่ได้ฝึก") << std::endl;
+    std::cout << "- สถานะการประเมิน: " << (hasEvaluated ? "ประเมินแล้ว" : "ยังไม่ได้ประเมิน") << std::endl;
+}
+
+void RLInterpreter::handleDebugCommand(const std::vector<std::string>& args) {
+    if (args.empty()) {
+        std::cout << "Error: รูปแบบที่ถูกต้อง: debug on หรือ debug off" << std::endl;
+        return;
+    }
+    std::string mode = args[0];
+    if (mode == "on") {
+        std::cout << "เปิดโหมดดีบัก" << std::endl;
+    } else if (mode == "off") {
+        std::cout << "ปิดโหมดดีบัก" << std::endl;
+    } else {
+        std::cout << "Error: ต้องเป็น on หรือ off เท่านั้น" << std::endl;
+    }
+}
+
+void RLInterpreter::handleCrossValidateCommand(const std::vector<std::string>& args) {
+    if (args.empty()) {
+        std::cout << "Error: รูปแบบที่ถูกต้อง: cross_validate <folds>" << std::endl;
+        return;
+    }
+    std::cout << "ยังไม่ได้ดำเนินการคำสั่ง cross_validate" << std::endl;
+}
+
+void RLInterpreter::handleExportResultsCommand(const std::vector<std::string>& args) {
+    if (args.empty()) {
+        std::cout << "Error: รูปแบบที่ถูกต้อง: export results \"<filename>\"" << std::endl;
+        return;
+    }
+    std::cout << "ยังไม่ได้ดำเนินการคำสั่ง export results" << std::endl;
+}
+
+void RLInterpreter::handleScheduleTrainingCommand(const std::vector<std::string>& args) {
+    if (args.empty()) {
+        std::cout << "Error: รูปแบบที่ถูกต้อง: schedule training \"<time>\"" << std::endl;
+        return;
+    }
+    std::cout << "ยังไม่ได้ดำเนินการคำสั่ง schedule training" << std::endl;
+}
+
+void RLInterpreter::handleCreateEnvironmentCommand(const std::vector<std::string>& args) {
+    if (args.empty()) {
+        std::cout << "Error: รูปแบบที่ถูกต้อง: create environment \"<env_name>\"" << std::endl;
+        return;
+    }
+    std::cout << "ยังไม่ได้ดำเนินการคำสั่ง create environment" << std::endl;
+}
+
+void RLInterpreter::handleSetEnvironmentParameterCommand(const std::vector<std::string>& args) {
+    if (args.size() < 3) {
+        std::cout << "Error: รูปแบบที่ถูกต้อง: set environment parameter <param> <value>" << std::endl;
+        return;
+    }
+    std::cout << "ยังไม่ได้ดำเนินการคำสั่ง set environment parameter" << std::endl;
+}
+
+
+void RLInterpreter::handlePlotCommand(const std::vector<std::string>& args) {
+    //Implementation for plot command.  This is a stub.
+    std::cout << "Plot command not yet implemented." << std::endl;
+}
+
 void RLInterpreter::handleHelpCommand() {
     std::cout << "Reinforcement Learning Interpreter Help:" << std::endl;
-    std::cout << "  start                        # Start the interpreter" << std::endl;
-    std::cout << "  create model <model_type>    # Create an RL model (e.g., DQN, Q-Learning)" << std::endl;
-    std::cout << "  load dataset <path>          # Load environment/dataset" << std::endl;
-    std::cout << "  load model <path>            # Load a saved model" << std::endl;
-    std::cout << "  set <param> <value>          # Set parameter value" << std::endl;
-    std::cout << "  train model                  # Train the model" << std::endl;
-    std::cout << "  show parameters              # Show current parameters" << std::endl;
-    std::cout << "  show performance             # Show model performance" << std::endl;
-    std::cout << "  save model <path>            # Save model to file" << std::endl;
-    std::cout << "  help                         # Show this help message" << std::endl;
-    std::cout << "  evaluate model               # Evaluate the trained model" << std::endl;
+    std::cout << "  start                             # เริ่มต้นโปรเจกต์" << std::endl;
+    std::cout << "  create model <model_type>         # สร้างโมเดล RL (เช่น QLearning, DQN)" << std::endl;
+    std::cout << "  load dataset <path>               # โหลดข้อมูลสภาพแวดล้อม" << std::endl;
+    std::cout << "  load model <path>                 # โหลดโมเดลที่บันทึกไว้" << std::endl;
+    std::cout << "  set <param> <value>               # ตั้งค่าพารามิเตอร์" << std::endl;
+    std::cout << "  train model                       # ฝึกโมเดล" << std::endl;
+    std::cout << "  evaluate model                    # ประเมินประสิทธิภาพโมเดล" << std::endl;
+    std::cout << "  show parameters                   # แสดงพารามิเตอร์ปัจจุบัน" << std::endl;
+    std::cout << "  show performance                  # แสดงประสิทธิภาพโมเดล" << std::endl;
+    std::cout << "  inspect model <model> <option>    # ตรวจสอบรายละเอียดของโมเดล" << std::endl;
+    std::cout << "  validate model <dataset_path>     # ตรวจสอบโมเดลด้วยชุดข้อมูลใหม่" << std::endl;
+    std::cout << "  plot model <type> <output_path>   # สร้างกราฟจากโมเดล" << std::endl;
+    std::cout << "  save model <path>                 # บันทึกโมเดลลงไฟล์" << std::endl;
+    std::cout << "  predict <input_data>              # ทำนายผลลัพธ์จากข้อมูลใหม่" << std::endl;
+    std::cout << "  list models                       # แสดงรายการโมเดลที่มีอยู่" << std::endl;
+    std::cout << "  check status                      # ตรวจสอบสถานะปัจจุบัน" << std::endl;
+    std::cout << "  help                              # แสดงข้อความช่วยเหลือ" << std::endl;
 }
 
 } // namespace ai_language

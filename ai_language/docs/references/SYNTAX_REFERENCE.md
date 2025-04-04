@@ -66,6 +66,7 @@ set <ชื่อพารามิเตอร์> <ค่า>
 - `episodes` - จำนวนเกมส์ (สำหรับ RL)
 - `discount_factor` - ค่าส่วนลดในอนาคต (สำหรับ RL)
 - `exploration_rate` - อัตราการสำรวจ (สำหรับ RL)
+- `timezone` - กำหนดเขตเวลา (เช่น 7 สำหรับไทย, 9 สำหรับญี่ปุ่น)
 
 สำหรับ Deep Learning เพิ่มเติม:
 ```
@@ -73,45 +74,151 @@ add layer <ประเภท> <พารามิเตอร์>
 ```
 ประเภท layer: `input`, `hidden`, `output`, `dropout`, `conv`, `pool`, `flatten`
 
-### 6. ฝึกโมเดล
+### 6. จัดการข้อมูล (Data Preprocessing)
+```
+preprocess data <operation>
+```
+การดำเนินการที่รองรับ:
+- `normalize` - ปรับสเกลข้อมูลให้อยู่ในช่วง 0-1
+- `standardize` - ปรับให้ข้อมูลมีค่าเฉลี่ย 0 และความแปรปรวน 1
+- `fill_missing "mean"` - เติมข้อมูลที่ขาดหายด้วยค่าเฉลี่ย
+
+```
+split dataset <train_ratio> <test_ratio>
+```
+แบ่งข้อมูลเป็นชุดฝึกและชุดทดสอบ
+
+### 7. ฝึกโมเดล
 ```
 train model
 ```
 
-### 7. แสดงผลลัพธ์
+```
+cross_validate <folds>
+```
+ทำ cross-validation เพื่อประเมินโมเดล
+
+### 8. ประเมินและตรวจสอบโมเดล
+```
+evaluate model
+```
+
+```
+validate model "<ที่อยู่ไฟล์>"
+```
+ตรวจสอบโมเดลด้วยชุดข้อมูลใหม่ (validation set)
+
+```
+inspect model <model_name> <option>
+```
+ตรวจสอบรายละเอียดของโมเดล โดย option ที่รองรับ:
+- `structure` - ดูโครงสร้างของโมเดล
+- `parameters` - ดูพารามิเตอร์ที่ตั้งค่าไว้
+- `performance` - ดูผลลัพธ์ เช่น accuracy, loss
+
+### 9. แสดงผลลัพธ์
 ```
 show <ประเภทผลลัพธ์>
 ```
 ประเภทผลลัพธ์ที่รองรับ:
 - `accuracy` - ความแม่นยำ
 - `loss` - ค่าความสูญเสีย
-- `graph` - กราฟแสดงผลการเทรน
 - `performance` - ประสิทธิภาพ (สำหรับ RL)
 
-### 8. ทำนายด้วยโมเดล
+### 10. ทำนายด้วยโมเดล
 ```
-predict data [พารามิเตอร์เพิ่มเติม]
+predict "<input_data>"
 ```
-ใช้สำหรับการทำนายผลลัพธ์จากโมเดลที่ผ่านการฝึกอบรมแล้ว สามารถใช้ได้หลังจาก `train model`
+ใช้โมเดลที่ฝึกแล้วเพื่อทำนายผลลัพธ์จากข้อมูลใหม่
 
-### 9. บันทึกและโหลดโมเดล
 ```
-save model "<ที่อยู่ไฟล์>"
-load model "<ที่อยู่ไฟล์>"
+predict dataset "<filename>"
 ```
+ทำนายผลลัพธ์จากชุดข้อมูลใหม่
 
-### 10. แสดงผลข้อมูลและโมเดล
+### 11. สร้างกราฟและการแสดงผล
+```
+plot model <plot_type> "<output_path>"
+```
+สร้างกราฟจากโมเดลและบันทึกเป็นไฟล์
+
+ตัวเลือก plot_type:
+- `learning_curve` - กราฟแสดงการเปลี่ยนแปลงของ accuracy/loss
+- `structure` - กราฟแสดงโครงสร้างของโมเดล
+- `prediction` - กราฟเปรียบเทียบค่าจริงและค่าที่ทำนาย
+
+```
+plot custom <x_axis> <y_axis> "<output_path>"
+```
+สร้างกราฟที่กำหนดเองโดยระบุแกน x และ y
+
 ```
 visualize data
-plot model
 ```
+แสดงข้อมูลในรูปแบบที่เข้าใจง่าย
 
-### 11. ประเมินโมเดล
+### 12. บันทึกและโหลดโมเดล
 ```
-evaluate model
+save model "<ชื่อไฟล์>"
 ```
+บันทึกโมเดลลงไฟล์ โปรแกรมจะเพิ่มนามสกุลที่เหมาะสมตามประเภท AI อัตโนมัติ (ML: .mlmodel, DL: .dlmodel, RL: .rlmodel)
 
-### 12. สิ้นสุดการทำงาน
+```
+load model "<ชื่อไฟล์>"
+```
+โหลดโมเดลจากไฟล์ โปรแกรมจะเพิ่มนามสกุลที่เหมาะสมตามประเภท AI อัตโนมัติถ้าไม่ได้ระบุ
+
+### 13. จัดการโมเดล
+```
+list models
+```
+แสดงรายการโมเดลที่สร้างหรือโหลด
+
+```
+delete model <model_name>
+```
+ลบโมเดลออกจากโปรเจกต์
+
+```
+compare models
+```
+เปรียบเทียบประสิทธิภาพของโมเดลหลายตัว
+
+### 14. การจัดการสภาพแวดล้อม (สำหรับ RL)
+```
+create environment "<env_name>"
+```
+สร้างสภาพแวดล้อมใหม่สำหรับ RL
+
+```
+set environment parameter <param> <value>
+```
+ปรับแต่งพารามิเตอร์ของสภาพแวดล้อม
+
+### 15. การจัดการข้อผิดพลาดและการดีบัก
+```
+check status
+```
+ตรวจสอบสถานะปัจจุบันของโปรเจกต์
+
+```
+debug on
+debug off
+```
+เปิด/ปิดโหมดดีบัก
+
+### 16. การทำงานขั้นสูง
+```
+export results "<filename>"
+```
+ส่งออกผลลัพธ์เป็นไฟล์
+
+```
+schedule training "<time>"
+```
+กำหนดเวลาการฝึกโมเดล (รูปแบบ: "YYYY-MM-DD HH:MM:SS")
+
+### 17. สิ้นสุดการทำงาน
 ```
 end
 ```
@@ -125,15 +232,6 @@ end
 | ML | 0.01 | 50 | 32 | - |
 | DL | 0.001 | 100 | 32 | - |
 | RL | 0.1 | - | - | episodes: 1000, discount_factor: 0.9 |
-
-## ตัวอย่างแบบสมบูรณ์
-
-ตัวอย่างเพิ่มเติมอยู่ในโฟลเดอร์ `examples/`
-- `examples/syntax_guide.ai`
-- `examples/auto_parameter_guide.ai`
-- `examples/ml_examples/linear_regression.ai`
-- `examples/dl_examples/neural_network.ai`
-- `examples/rl_examples/q_learning.ai`
 
 ## การตั้งค่าเขตเวลา (Timezone)
 
@@ -149,3 +247,64 @@ set timezone <ค่า>
 - นิวยอร์ก: `set timezone -5`
 
 ค่านี้จะมีผลในการบันทึกเวลาลงในไฟล์โมเดลเมื่อใช้คำสั่ง `save model`
+
+## ตัวอย่างแบบสมบูรณ์
+
+ตัวอย่างเพิ่มเติมอยู่ในโฟลเดอร์ `examples/`
+- `examples/syntax_guide.ai`
+- `examples/auto_parameter_guide.ai`
+- `examples/ml_examples/linear_regression.ai`
+- `examples/dl_examples/neural_network.ai`
+- `examples/rl_examples/q_learning.ai`
+
+### ตัวอย่างการใช้งาน ML
+```
+start
+create ML
+load dataset "datasets/iris.csv"
+preprocess data normalize
+split dataset 0.8 0.2
+create model LogisticRegression
+set learning_rate 0.01
+set epochs 100
+train model
+evaluate model
+plot model learning_curve "graphs/learning_curve.png"
+save model "logistic_model"
+predict "5.1,3.5,1.4,0.2"
+end
+```
+
+### ตัวอย่างการใช้งาน DL
+```
+start
+create DL
+load dataset "datasets/iris.csv"
+create model NeuralNetwork
+add layer input 4
+add layer hidden 8 activation "relu" 
+add layer output 3 activation "softmax"
+set learning_rate 0.001
+set epochs 200
+train model
+evaluate model
+plot model structure "graphs/network_structure.png"
+save model "nn_model"
+end
+```
+
+### ตัวอย่างการใช้งาน RL
+```
+start
+create RL
+load dataset "datasets/environment.json"
+create model QLearning
+set discount_factor 0.9
+set episodes 1000
+set exploration_rate 0.3
+train model
+evaluate model
+plot model learning_curve "graphs/rl_learning_curve.png"
+save model "rl_model"
+end
+```

@@ -1,0 +1,69 @@
+
+# ตัวอย่างการใช้งาน Syntax ใหม่ของ AI Language
+
+# เริ่มต้นโปรเจกต์
+start
+
+# สร้างโปรเจกต์ ML
+create ML
+
+# โหลดข้อมูล
+load dataset "datasets/iris.csv"
+
+# ประมวลผลข้อมูลก่อนฝึก
+preprocess data normalize
+
+# แบ่งข้อมูลเป็นชุดฝึกและชุดทดสอบ
+split dataset 0.8 0.2
+
+# สร้างโมเดล
+create model LogisticRegression
+
+# ปรับแต่งพารามิเตอร์
+set learning_rate 0.01
+set epochs 100
+
+# ฝึกโมเดล
+train model
+
+# ประเมินโมเดล
+evaluate model
+
+# ตรวจสอบรายละเอียดของโมเดล
+inspect model LogisticRegression structure
+
+# แสดงผลลัพธ์
+show accuracy
+show loss
+
+# สร้างกราฟการเรียนรู้
+plot model learning_curve "graphs/learning_curve.png"
+
+# บันทึกโมเดล
+save model "logistic_model"
+
+# ทำนายผลลัพธ์
+predict "5.1,3.5,1.4,0.2"
+
+# ทำ cross-validation
+cross_validate 5
+
+# เปรียบเทียบกับโมเดลอื่น
+create model RandomForest
+train model
+compare models
+
+# ส่งออกผลลัพธ์
+export results "results.txt"
+
+# ตรวจสอบสถานะ
+check status
+
+# ลบโมเดล
+delete model RandomForest
+
+# แสดงรายการโมเดล
+list models
+
+# สิ้นสุดการทำงาน
+end
