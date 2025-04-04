@@ -260,6 +260,18 @@ void BaseInterpreter::handleListModelsCommand() {
     std::cout << "Base list models command - override in derived classes" << std::endl;
 }
 
+void BaseInterpreter::predict(const std::map<std::string, std::string>& params) {
+    std::cout << "Base predict method - override in derived classes" << std::endl;
+}
+
+void BaseInterpreter::showMetric(const std::string& metric) {
+    std::cout << "Base showMetric method - override in derived classes" << std::endl;
+}
+
+void BaseInterpreter::showModelInfo() {
+    std::cout << "Base showModelInfo method - override in derived classes" << std::endl;
+}
+
 void BaseInterpreter::handleDeleteModelCommand(const std::vector<std::string>& args) {
     std::cout << "Base delete model command - override in derived classes" << std::endl;
 }
