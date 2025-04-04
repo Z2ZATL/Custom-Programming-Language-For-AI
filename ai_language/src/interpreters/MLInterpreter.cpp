@@ -730,29 +730,7 @@ void MLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& ar
         return;
     }
 
-    std::cout << CYAN << "Splitting dataset with ratio - ";
-    std::cout << "Train: " << (trainRatio * 100) << "%, ";
-    std::cout << "Test: " << (testRatio * 100) << "%";
     
-    if (validationRatio > 0) {
-        std::cout << ", Validation: " << (validationRatio * 100) << "%";
-    }
-    
-    std::cout << RESET << std::endl;
-
-    // จำลองการแบ่งชุดข้อมูล
-    int totalSamples = 1000; // สมมติว่ามี 1000 ตัวอย่าง
-    int trainSamples = static_cast<int>(totalSamples * trainRatio);
-    int testSamples = static_cast<int>(totalSamples * testRatio);
-    int validationSamples = static_cast<int>(totalSamples * validationRatio);
-
-    std::cout << GREEN << "Dataset split complete:" << RESET << std::endl;
-    std::cout << "- Training set: " << trainSamples << " samples" << std::endl;
-    std::cout << "- Testing set: " << testSamples << " samples" << std::endl;
-    
-    if (validationRatio > 0) {
-        std::cout << "- Validation set: " << validationSamples << " samples" << std::endl;
-    }
 }
 
 void MLInterpreter::handlePredictCommand(const std::vector<std::string>& args) {
