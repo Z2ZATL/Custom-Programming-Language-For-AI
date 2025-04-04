@@ -105,16 +105,33 @@ void runInteractiveMode() {
             // ตรวจสอบคำสั่งพิเศษที่ต้องประมวลผลทันที
             if (multiline.empty()) {
                 if (line == "list models" || line == "list") {
-                    interpreter->listModels();
+                    std::cout << "Available models:" << std::endl;
+                    std::cout << "  ML models: LinearRegression, LogisticRegression, RandomForest, SVM, KNN" << std::endl;
+                    std::cout << "  DL models: NeuralNetwork, CNN, RNN, LSTM, GRU, Transformer" << std::endl;
+                    std::cout << "  RL models: QLearning, DQN, PPO, A2C, DDQN" << std::endl;
                     continue;
                 } else if (line == "show version") {
-                    interpreter->showVersion();
+                    std::cout << "AI Language Version: 1.0.0" << std::endl;
+                    std::cout << "Build Date: " << __DATE__ << " " << __TIME__ << std::endl;
                     continue;
                 } else if (line == "show help" || line == "help") {
-                    interpreter->showHelp();
+                    std::cout << "=== AI Language Help ===" << std::endl;
+                    std::cout << "Available commands:" << std::endl;
+                    std::cout << "  start                           # Start a new AI project" << std::endl;
+                    std::cout << "  create <type>                   # Create ML, DL, or RL project" << std::endl;
+                    std::cout << "  load dataset <path> [type]      # Load dataset from file" << std::endl;
+                    std::cout << "  create model <model_type>       # Create a specific model" << std::endl;
+                    std::cout << "  set <param> <value>             # Set parameter value" << std::endl;
+                    std::cout << "  train model                     # Train the model" << std::endl;
+                    std::cout << "  evaluate model                  # Evaluate model performance" << std::endl;
+                    std::cout << "  save model <path>               # Save model to file" << std::endl;
+                    std::cout << "  show <metric|info>              # Show metrics or model info" << std::endl;
+                    std::cout << "  predict <input>                 # Make predictions" << std::endl;
+                    std::cout << "For more details, see docs/guides/USAGE_GUIDE.md" << std::endl;
                     continue;
                 } else if (line == "show time" || line == "time") {
-                    interpreter->showTime();
+                    std::time_t now = std::time(nullptr);
+                    std::cout << "Current time: " << std::ctime(&now);
                     continue;
                 } else if (line == "exit" || line == "quit") {
                     std::cout << "ออกจากโปรแกรม" << std::endl;
