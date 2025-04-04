@@ -595,14 +595,14 @@ void MLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& ar
         std::string testStr = args[1];
         
         // ตัดเครื่องหมาย % ออกถ้ามี
-        if (trainStr.back() == '%') {
+        if (!trainStr.empty() && trainStr.back() == '%') {
             trainStr.pop_back();
             trainRatio = std::stod(trainStr) / 100.0;
         } else {
             trainRatio = std::stod(trainStr);
         }
         
-        if (testStr.back() == '%') {
+        if (!testStr.empty() && testStr.back() == '%') {
             testStr.pop_back();
             testRatio = std::stod(testStr) / 100.0;
         } else {
@@ -612,7 +612,7 @@ void MLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& ar
         // ตรวจสอบข้อมูลตัวที่ 3 ถ้ามี
         if (args.size() > 2) {
             std::string validStr = args[2];
-            if (validStr.back() == '%') {
+            if (!validStr.empty() && validStr.back() == '%') {
                 validStr.pop_back();
                 validationRatio = std::stod(validStr) / 100.0;
             } else {
@@ -629,11 +629,14 @@ void MLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& ar
         // ตรวจสอบว่าอัตราส่วนรวมกันได้ 1.0
         double totalRatio = trainRatio + testRatio + validationRatio;
         if (std::abs(totalRatio - 1.0) > 0.001) {
+            // ถ้าผลรวมไม่เท่ากับ 1.0 ให้แจ้งเตือนและปรับค่า
             std::cout << YELLOW << "Warning: Split ratios should sum to 1.0. Current sum: " << totalRatio << ". Normalizing values..." << RESET << std::endl;
             // ปรับให้มีผลรวมเป็น 1.0
             trainRatio /= totalRatio;
             testRatio /= totalRatio;
-            validationRatio /= totalRatio;
+            if (validationRatio > 0) {
+                validationRatio /= totalRatio;
+            }
         }
     } catch (const std::exception& e) {
         std::cout << RED << "Error: Invalid ratio values. Must be numbers between 0 and 1." << RESET << std::endl;
@@ -703,109 +706,30 @@ void MLInterpreter::handlePredictCommand(const std::vector<std::string>& args) {
             return;
         }
 
-        // ตรวจสอบว่าเป็นการป้อนอาร์เรย์หรือไม่
-        if (args.size() == 2 && args[1].front() == '[' && args[1].back() == ']') {
-            // แปลงข้อมูลจากรูปแบบอาร์เรย์เป็นตัวเลข
-            std::string arrayStr = args[1].substr(1, args[1].size() - 2); // ลบ [] ออก
-            
-            // แยกค่าด้วยเครื่องหมายคอมม่า
-            std::vector<double> inputValues;
-            std::stringstream ss(arrayStr);
-            std::string item;
-            
-            while (std::getline(ss, item, ',')) {
-                // ลบช่องว่างหน้าและหลัง
-                item.erase(0, item.find_first_not_of(" \t"));
-                item.erase(item.find_last_not_of(" \t") + 1);
-                
-                try {
-                    inputValues.push_back(std::stod(item));
-                } catch (const std::exception& e) {
-                    std::cout << RED << "Error: Invalid input value '" << item << "' in array. Must be numeric." << RESET << std::endl;
-                    return;
-                }
+        // รวมทุกอาร์กิวเมนต์หลังคำว่า "with" ให้เป็นสตริงเดียว
+        // เพื่อรองรับกรณีที่มีช่องว่างระหว่างอาร์เรย์ 2 มิติ
+        std::string combinedArgs;
+        for (size_t i = 1; i < args.size(); i++) {
+            combinedArgs += args[i];
+            if (i < args.size() - 1) {
+                combinedArgs += " ";
             }
-            
-            if (inputValues.empty()) {
-                std::cout << RED << "Error: Empty array for prediction." << RESET << std::endl;
-                return;
-            }
-            
-            std::cout << CYAN << "Making prediction with input array: ";
-            for (const auto& val : inputValues) {
-                std::cout << val << " ";
-            }
-            std::cout << RESET << std::endl;
-            
-            // จำลองการคำนวณการทำนาย
-            double predictionResult = 0.0;
-            if (modelType == "LinearRegression") {
-                // ตัวอย่างการคำนวณสำหรับ Linear Regression
-                predictionResult = 3.5 + 2.7 * inputValues[0];
-                if (inputValues.size() > 1) {
-                    predictionResult += 1.2 * inputValues[1];
-                }
-            } else {
-                // ค่าเริ่มต้นสำหรับโมเดลประเภทอื่นๆ
-                predictionResult = 42.0 + 0.5 * inputValues[0];
-            }
-            
-            std::cout << GREEN << "Prediction result: " << predictionResult << RESET << std::endl;
+        }
+
+        // ตรวจสอบว่าเป็นอาร์เรย์ 2D หรือไม่
+        if (combinedArgs.substr(0, 2) == "[[") {
+            // จัดการกับอาร์เรย์ 2D
+            std::cout << CYAN << "Making prediction with 2D array input: " << combinedArgs << RESET << std::endl;
+            std::cout << GREEN << "Prediction results for multiple samples:" << RESET << std::endl;
+            std::cout << "Sample 1: 42.3" << std::endl;
+            std::cout << "Sample 2: 36.7" << std::endl;
+            std::cout << "Sample 3: 51.2" << std::endl;
+            std::cout << "Mean prediction: 43.4" << std::endl;
             return;
         } 
-        // กรณีอาร์เรย์ 2D [[x1, x2, ..], [y1, y2, ..]]
-        else if (args.size() == 2 && args[1].substr(0, 2) == "[[") {
-            std::cout << CYAN << "Making prediction with 2D array input" << RESET << std::endl;
-            std::cout << GREEN << "Prediction results for multiple samples:" << RESET << std::endl;
-            std::cout << "Sample 1: 42.3" << std::endl;
-            std::cout << "Sample 2: 36.7" << std::endl;
-            std::cout << "Sample 3: 51.2" << std::endl;
-            std::cout << "Mean prediction: 43.4" << std::endl;
-            return;
-        }
-        
-        // กรณีปกติที่มีค่าหลังคำว่า "with"
-        std::vector<double> inputValues;
-        for (size_t i = 1; i < args.size(); i++) {
-            try {
-                inputValues.push_back(std::stod(args[i]));
-            } catch (const std::exception& e) {
-                std::cout << RED << "Error: Invalid input value '" << args[i] << "'. Must be numeric." << RESET << std::endl;
-                return;
-            }
-        }
-
-        std::cout << CYAN << "Making prediction with input: ";
-        for (const auto& val : inputValues) {
-            std::cout << val << " ";
-        }
-        std::cout << RESET << std::endl;
-
-        // จำลองการคำนวณการทำนาย
-        double predictionResult = 0.0;
-        if (modelType == "LinearRegression") {
-            // ตัวอย่างการคำนวณสำหรับ Linear Regression
-            predictionResult = 3.5 + 2.7 * inputValues[0];
-            if (inputValues.size() > 1) {
-                predictionResult += 1.2 * inputValues[1];
-            }
-        } else if (modelType == "RandomForest" || modelType == "GradientBoosting") {
-            // ตัวอย่างการคำนวณสำหรับโมเดลอื่นๆ
-            predictionResult = 15.0 + 0.8 * inputValues[0];
-            if (inputValues.size() > 1) {
-                predictionResult *= 1.05 * inputValues[1];
-            }
-        } else {
-            // ค่าเริ่มต้นสำหรับโมเดลประเภทอื่นๆ
-            predictionResult = 42.0 + 0.5 * inputValues[0];
-        }
-
-        std::cout << GREEN << "Prediction result: " << predictionResult << RESET << std::endl;
-    } else {
-        // กรณีข้อมูลอาร์เรย์ถูกส่งโดยตรงในรูปแบบ "[value1, value2, ...]"
-        if (args.size() == 1 && args[0].front() == '[' && args[0].back() == ']') {
-            // แปลงข้อมูลจากรูปแบบอาร์เรย์เป็นตัวเลข
-            std::string arrayStr = args[0].substr(1, args[0].size() - 2); // ลบ [] ออก
+        // ตรวจสอบว่าเป็นอาร์เรย์ 1D หรือไม่
+        else if (combinedArgs.front() == '[' && combinedArgs.back() == ']') {
+            std::string arrayStr = combinedArgs.substr(1, combinedArgs.size() - 2); // ลบ [] ออก
             
             // แยกค่าด้วยเครื่องหมายคอมม่า
             std::vector<double> inputValues;
@@ -851,55 +775,154 @@ void MLInterpreter::handlePredictCommand(const std::vector<std::string>& args) {
             
             std::cout << GREEN << "Prediction result: " << predictionResult << RESET << std::endl;
             return;
+        } else {
+            // กรณีปกติที่มีค่าหลังคำว่า "with"
+            std::vector<double> inputValues;
+            for (size_t i = 1; i < args.size(); i++) {
+                try {
+                    inputValues.push_back(std::stod(args[i]));
+                } catch (const std::exception& e) {
+                    std::cout << RED << "Error: Invalid input value '" << args[i] << "'. Must be numeric." << RESET << std::endl;
+                    return;
+                }
+            }
+
+            std::cout << CYAN << "Making prediction with input: ";
+            for (const auto& val : inputValues) {
+                std::cout << val << " ";
+            }
+            std::cout << RESET << std::endl;
+
+            // จำลองการคำนวณการทำนาย
+            double predictionResult = 0.0;
+            if (modelType == "LinearRegression") {
+                // ตัวอย่างการคำนวณสำหรับ Linear Regression
+                predictionResult = 3.5 + 2.7 * inputValues[0];
+                if (inputValues.size() > 1) {
+                    predictionResult += 1.2 * inputValues[1];
+                }
+            } else if (modelType == "RandomForest" || modelType == "GradientBoosting") {
+                // ตัวอย่างการคำนวณสำหรับโมเดลอื่นๆ
+                predictionResult = 15.0 + 0.8 * inputValues[0];
+                if (inputValues.size() > 1) {
+                    predictionResult *= 1.05 * inputValues[1];
+                }
+            } else {
+                // ค่าเริ่มต้นสำหรับโมเดลประเภทอื่นๆ
+                predictionResult = 42.0 + 0.5 * inputValues[0];
+            }
+
+            std::cout << GREEN << "Prediction result: " << predictionResult << RESET << std::endl;
         }
-        // กรณีอาร์เรย์ 2D [[x1, x2, ..], [y1, y2, ..]]
-        else if (args.size() == 1 && args[0].substr(0, 2) == "[[") {
-            std::cout << CYAN << "Making prediction with 2D array input" << RESET << std::endl;
+    } else {
+        // รวมทุกอาร์กิวเมนต์ให้เป็นสตริงเดียว
+        // เพื่อรองรับกรณีที่มีช่องว่างระหว่างอาร์เรย์ 2 มิติ
+        std::string combinedArgs;
+        for (size_t i = 0; i < args.size(); i++) {
+            combinedArgs += args[i];
+            if (i < args.size() - 1) {
+                combinedArgs += " ";
+            }
+        }
+
+        // ตรวจสอบว่าเป็นอาร์เรย์ 2D หรือไม่
+        if (combinedArgs.substr(0, 2) == "[[") {
+            // จัดการกับอาร์เรย์ 2D
+            std::cout << CYAN << "Making prediction with 2D array input: " << combinedArgs << RESET << std::endl;
             std::cout << GREEN << "Prediction results for multiple samples:" << RESET << std::endl;
             std::cout << "Sample 1: 42.3" << std::endl;
             std::cout << "Sample 2: 36.7" << std::endl;
             std::cout << "Sample 3: 51.2" << std::endl;
             std::cout << "Mean prediction: 43.4" << std::endl;
             return;
-        }
-        
-        // กรณีทำนายด้วยข้อมูลแบบปกติ
-        std::vector<double> inputValues;
-        for (const auto& arg : args) {
-            try {
-                inputValues.push_back(std::stod(arg));
-            } catch (const std::exception& e) {
-                std::cout << RED << "Error: Invalid input value '" << arg << "'. Must be numeric." << RESET << std::endl;
+        } 
+        // ตรวจสอบว่าเป็นอาร์เรย์ 1D หรือไม่
+        else if (combinedArgs.front() == '[' && combinedArgs.back() == ']') {
+            std::string arrayStr = combinedArgs.substr(1, combinedArgs.size() - 2); // ลบ [] ออก
+            
+            // แยกค่าด้วยเครื่องหมายคอมม่า
+            std::vector<double> inputValues;
+            std::stringstream ss(arrayStr);
+            std::string item;
+            
+            while (std::getline(ss, item, ',')) {
+                // ลบช่องว่างหน้าและหลัง
+                item.erase(0, item.find_first_not_of(" \t"));
+                item.erase(item.find_last_not_of(" \t") + 1);
+                
+                try {
+                    inputValues.push_back(std::stod(item));
+                } catch (const std::exception& e) {
+                    std::cout << RED << "Error: Invalid input value '" << item << "' in array. Must be numeric." << RESET << std::endl;
+                    return;
+                }
+            }
+            
+            if (inputValues.empty()) {
+                std::cout << RED << "Error: Empty array for prediction." << RESET << std::endl;
                 return;
             }
-        }
-
-        std::cout << CYAN << "Making prediction with input: ";
-        for (const auto& val : inputValues) {
-            std::cout << val << " ";
-        }
-        std::cout << RESET << std::endl;
-
-        // จำลองการคำนวณการทำนาย
-        double predictionResult = 0.0;
-        if (modelType == "LinearRegression") {
-            // ตัวอย่างการคำนวณสำหรับ Linear Regression
-            predictionResult = 3.5 + 2.7 * inputValues[0];
-            if (inputValues.size() > 1) {
-                predictionResult += 1.2 * inputValues[1];
+            
+            std::cout << CYAN << "Making prediction with input array: ";
+            for (const auto& val : inputValues) {
+                std::cout << val << " ";
             }
-        } else if (modelType == "RandomForest" || modelType == "GradientBoosting") {
-            // ตัวอย่างการคำนวณสำหรับโมเดลอื่นๆ
-            predictionResult = 15.0 + 0.8 * inputValues[0];
-            if (inputValues.size() > 1) {
-                predictionResult *= 1.05 * inputValues[1];
+            std::cout << RESET << std::endl;
+            
+            // จำลองการคำนวณการทำนาย
+            double predictionResult = 0.0;
+            if (modelType == "LinearRegression") {
+                // ตัวอย่างการคำนวณสำหรับ Linear Regression
+                predictionResult = 3.5 + 2.7 * inputValues[0];
+                if (inputValues.size() > 1) {
+                    predictionResult += 1.2 * inputValues[1];
+                }
+            } else {
+                // ค่าเริ่มต้นสำหรับโมเดลประเภทอื่นๆ
+                predictionResult = 42.0 + 0.5 * inputValues[0];
             }
+            
+            std::cout << GREEN << "Prediction result: " << predictionResult << RESET << std::endl;
+            return;
         } else {
-            // ค่าเริ่มต้นสำหรับโมเดลประเภทอื่นๆ
-            predictionResult = 42.0 + 0.5 * inputValues[0];
-        }
+            // กรณีทำนายด้วยข้อมูลแบบปกติ
+            std::vector<double> inputValues;
+            for (const auto& arg : args) {
+                try {
+                    inputValues.push_back(std::stod(arg));
+                } catch (const std::exception& e) {
+                    std::cout << RED << "Error: Invalid input value '" << arg << "'. Must be numeric." << RESET << std::endl;
+                    return;
+                }
+            }
 
-        std::cout << GREEN << "Prediction result: " << predictionResult << RESET << std::endl;
+            std::cout << CYAN << "Making prediction with input: ";
+            for (const auto& val : inputValues) {
+                std::cout << val << " ";
+            }
+            std::cout << RESET << std::endl;
+
+            // จำลองการคำนวณการทำนาย
+            double predictionResult = 0.0;
+            if (modelType == "LinearRegression") {
+                // ตัวอย่างการคำนวณสำหรับ Linear Regression
+                predictionResult = 3.5 + 2.7 * inputValues[0];
+                if (inputValues.size() > 1) {
+                    predictionResult += 1.2 * inputValues[1];
+                }
+            } else if (modelType == "RandomForest" || modelType == "GradientBoosting") {
+                // ตัวอย่างการคำนวณสำหรับโมเดลอื่นๆ
+                predictionResult = 15.0 + 0.8 * inputValues[0];
+                if (inputValues.size() > 1) {
+                    predictionResult *= 1.05 * inputValues[1];
+                }
+            } else {
+                // ค่าเริ่มต้นสำหรับโมเดลประเภทอื่นๆ
+                predictionResult = 42.0 + 0.5 * inputValues[0];
+            }
+
+            std::cout << GREEN << "Prediction result: " << predictionResult << RESET << std::endl;
+        }
     }
 }
 
