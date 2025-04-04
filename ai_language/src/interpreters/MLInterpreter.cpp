@@ -304,3 +304,60 @@ void MLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
 }
 
 } // namespace ai_language
+
+// Implementation of remaining pure virtual functions
+void MLInterpreter::handlePlotCommand(const std::vector<std::string>& parts) {
+    std::cout << "Plot command is not implemented for ML yet" << std::endl;
+}
+
+void MLInterpreter::handleInspectCommand(const std::vector<std::string>& args) {
+    std::cout << "Inspect command is not implemented for ML yet" << std::endl;
+}
+
+void MLInterpreter::handleValidateCommand(const std::vector<std::string>& args) {
+    std::cout << "Validate command is not implemented for ML yet" << std::endl;
+}
+
+void MLInterpreter::handlePreprocessCommand(const std::vector<std::string>& args) {
+    std::cout << "Preprocess command is not implemented for ML yet" << std::endl;
+}
+
+void MLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& args) {
+    std::cout << "Split dataset command is not implemented for ML yet" << std::endl;
+}
+
+void MLInterpreter::handlePredictCommand(const std::vector<std::string>& args) {
+    std::cout << "Predict command is not implemented for ML yet" << std::endl;
+}
+
+void MLInterpreter::handleListModelsCommand() {
+    std::cout << "List models command is not implemented for ML yet" << std::endl;
+}
+
+void MLInterpreter::handleDeleteModelCommand(const std::vector<std::string>& args) {
+    std::cout << "Delete model command is not implemented for ML yet" << std::endl;
+}
+
+void MLInterpreter::handleCompareModelsCommand() {
+    std::cout << "Compare models command is not implemented for ML yet" << std::endl;
+}
+
+void MLInterpreter::handleCheckStatusCommand() {
+    std::cout << "Check status command is not implemented for ML yet" << std::endl;
+}
+
+void MLInterpreter::handleDebugCommand(const std::vector<std::string>& args) {
+    std::cout << "Debug command is not implemented for ML yet" << std::endl;
+}
+
+void MLInterpreter::handleCrossValidateCommand(const std::vector<std::string>& args) {
+    std::cout << "Cross validate command is not implemented for ML yet" << std::endl;
+}
+
+void MLInterpreter::handleExportResultsCommand(const std::vector<std::string>& args) {
+    std::cout << "Export results command is not implemented for ML yet" << std::endl;
+}
+
+void MLInterpreter::handleScheduleTrainingCommand(const std::vector<std::string>& args) {
+    std::cout << "Schedule training command is not implemented for ML yet" << std::endl;
+}

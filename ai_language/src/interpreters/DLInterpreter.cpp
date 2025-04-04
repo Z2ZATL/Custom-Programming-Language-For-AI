@@ -471,3 +471,60 @@ void DLInterpreter::handleHelpCommand() {
 }
 
 } // namespace ai_language
+
+// Implementation of remaining pure virtual functions
+void DLInterpreter::handlePlotCommand(const std::vector<std::string>& parts) {
+    std::cout << "Plot command is not implemented for DL yet" << std::endl;
+}
+
+void DLInterpreter::handleInspectCommand(const std::vector<std::string>& args) {
+    std::cout << "Inspect command is not implemented for DL yet" << std::endl;
+}
+
+void DLInterpreter::handleValidateCommand(const std::vector<std::string>& args) {
+    std::cout << "Validate command is not implemented for DL yet" << std::endl;
+}
+
+void DLInterpreter::handlePreprocessCommand(const std::vector<std::string>& args) {
+    std::cout << "Preprocess command is not implemented for DL yet" << std::endl;
+}
+
+void DLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& args) {
+    std::cout << "Split dataset command is not implemented for DL yet" << std::endl;
+}
+
+void DLInterpreter::handlePredictCommand(const std::vector<std::string>& args) {
+    std::cout << "Predict command is not implemented for DL yet" << std::endl;
+}
+
+void DLInterpreter::handleListModelsCommand() {
+    std::cout << "List models command is not implemented for DL yet" << std::endl;
+}
+
+void DLInterpreter::handleDeleteModelCommand(const std::vector<std::string>& args) {
+    std::cout << "Delete model command is not implemented for DL yet" << std::endl;
+}
+
+void DLInterpreter::handleCompareModelsCommand() {
+    std::cout << "Compare models command is not implemented for DL yet" << std::endl;
+}
+
+void DLInterpreter::handleCheckStatusCommand() {
+    std::cout << "Check status command is not implemented for DL yet" << std::endl;
+}
+
+void DLInterpreter::handleDebugCommand(const std::vector<std::string>& args) {
+    std::cout << "Debug command is not implemented for DL yet" << std::endl;
+}
+
+void DLInterpreter::handleCrossValidateCommand(const std::vector<std::string>& args) {
+    std::cout << "Cross validate command is not implemented for DL yet" << std::endl;
+}
+
+void DLInterpreter::handleExportResultsCommand(const std::vector<std::string>& args) {
+    std::cout << "Export results command is not implemented for DL yet" << std::endl;
+}
+
+void DLInterpreter::handleScheduleTrainingCommand(const std::vector<std::string>& args) {
+    std::cout << "Schedule training command is not implemented for DL yet" << std::endl;
+}
