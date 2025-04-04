@@ -179,7 +179,7 @@ void DLInterpreter::handleLoadCommand(const std::vector<std::string>& args) {
     std::cout << BLUE << "กำลังทำ Data Preprocessing..." << RESET << std::endl;
     std::cout << BLUE << "กำลังทำ Data Augmentation..." << RESET << std::endl;
 
-    hasLoadedData = true;
+    hasLoaded = true;
 }
 
 void DLInterpreter::handleSetCommand(const std::vector<std::string>& args) {
@@ -213,7 +213,7 @@ void DLInterpreter::handleTrainCommand(const std::vector<std::string>& args) {
         return;
     }
 
-    if (!hasLoadedData) {
+    if (!hasLoaded) {
         std::cout << RED << "กรุณาโหลดข้อมูลก่อนด้วยคำสั่ง 'load'" << RESET << std::endl;
         return;
     }
@@ -379,7 +379,7 @@ void DLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
         std::cout << RED << "ไม่รู้จักคำสั่ง show ประเภท: " << showType << RESET << std::endl;
     }
 
-    hasShowedAccuracy = true;
+    // State already tracked by BaseInterpreter
 }
 
 void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
@@ -454,7 +454,7 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
         std::cout << RED << "เกิดข้อผิดพลาดในการบันทึกโมเดล: ไม่สามารถเปิดไฟล์ " << savePath << " ได้" << RESET << std::endl;
     }
 
-    hasSavedModel = true;
+    hasModel = true;
 }
 
 void DLInterpreter::handleHelpCommand() {
