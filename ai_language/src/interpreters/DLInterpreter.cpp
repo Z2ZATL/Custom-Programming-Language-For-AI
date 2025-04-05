@@ -1213,54 +1213,70 @@ void DLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& ar
         return;
     }
 
-    // ตรวจสอบรูปแบบคำสั่ง split dataset into train, test [, validation] with ratio x, y [, z]
-    if (args.size() < 7 || args[0] != "dataset" || args[1] != "into" || args[args.size() - 2] != "with" || args[args.size() - 1] != "ratio") {
+    // ดึงชื่อชุดข้อมูลและอัตราส่วน
+    std::vector<std::string> datasets;
+    std::vector<double> ratios;
+    
+    // หา index ของคำสำคัญ
+    size_t intoIndex = 0;
+    size_t withIndex = 0;
+    size_t ratioIndex = 0;
+    
+    for (size_t i = 0; i < args.size(); i++) {
+        if (args[i] == "into") {
+            intoIndex = i;
+        } else if (args[i] == "with") {
+            withIndex = i;
+        } else if (args[i] == "ratio") {
+            ratioIndex = i;
+        }
+    }
+    
+    // ตรวจสอบรูปแบบคำสั่ง
+    if (args.size() < 7 || args[0] != "dataset" || intoIndex == 0 || withIndex == 0 || ratioIndex == 0 || 
+        withIndex >= args.size() - 2 || ratioIndex != withIndex + 1) {
         std::cout << RED << "รูปแบบคำสั่งไม่ถูกต้อง" << RESET << std::endl;
         std::cout << "ตัวอย่าง: split dataset into train, test with ratio 0.8, 0.2" << std::endl;
         std::cout << "หรือ: split dataset into train, test, validation with ratio 0.7, 0.2, 0.1" << std::endl;
         return;
     }
 
-    // ดึงชื่อชุดข้อมูลและอัตราส่วน
-    std::vector<std::string> datasets;
-    std::vector<double> ratios;
-    
-    // เริ่มที่ index 2 (หลังจาก "dataset" และ "into")
-    size_t i = 2;
-    // เก็บชุดข้อมูลจนกว่าจะเจอคำว่า "with"
-    while (i < args.size() && args[i] != "with") {
+    // เก็บชื่อชุดข้อมูล ระหว่าง 'into' และ 'with'
+    for (size_t i = intoIndex + 1; i < withIndex; i++) {
         std::string dataset = args[i];
         // ลบเครื่องหมาย ',' ถ้ามี
-        if (dataset.back() == ',') {
+        if (!dataset.empty() && dataset.back() == ',') {
             dataset.pop_back();
         }
-        datasets.push_back(dataset);
-        i++;
+        // เพิ่มชื่อชุดข้อมูลถ้าไม่ใช่สตริงว่าง
+        if (!dataset.empty()) {
+            datasets.push_back(dataset);
+        }
     }
     
-    // ข้ามคำว่า "with" และ "ratio"
-    i += 2;
-    
-    // เก็บอัตราส่วน
-    while (i < args.size()) {
+    // เก็บอัตราส่วน หลังจาก 'ratio'
+    for (size_t i = ratioIndex + 1; i < args.size(); i++) {
         std::string ratio = args[i];
         // ลบเครื่องหมาย ',' ถ้ามี
-        if (ratio.back() == ',') {
+        if (!ratio.empty() && ratio.back() == ',') {
             ratio.pop_back();
         }
-        try {
-            double r = std::stod(ratio);
-            ratios.push_back(r);
-        } catch (const std::exception& e) {
-            std::cout << RED << "อัตราส่วนไม่ถูกต้อง: " << ratio << RESET << std::endl;
-            return;
+        // แปลงเป็นตัวเลข
+        if (!ratio.empty()) {
+            try {
+                double r = std::stod(ratio);
+                ratios.push_back(r);
+            } catch (const std::exception& e) {
+                std::cout << RED << "อัตราส่วนไม่ถูกต้อง: " << ratio << RESET << std::endl;
+                return;
+            }
         }
-        i++;
     }
     
     // ตรวจสอบว่าจำนวนชุดข้อมูลและอัตราส่วนตรงกัน
     if (datasets.size() != ratios.size()) {
         std::cout << RED << "จำนวนชุดข้อมูลและอัตราส่วนไม่ตรงกัน" << RESET << std::endl;
+        std::cout << "ชุดข้อมูล: " << datasets.size() << " รายการ, อัตราส่วน: " << ratios.size() << " รายการ" << std::endl;
         return;
     }
     
