@@ -318,10 +318,6 @@ def main():
 
         # สร้างไฟล์ HTML แบบโต้ตอบ
         create_interactive_html(fig, output_png_path, title)
-            
-        # สร้างไฟล์ high-dpi สำหรับการพิมพ์
-        plt.savefig(f"{output_png_path}/learning_curves_print.png", dpi=600, bbox_inches='tight')
-        print(f"High-DPI graph saved to: {output_png_path}/learning_curves_print.png")
         
         # บันทึกเป็น SVG สำหรับการปรับแต่งเพิ่มเติม
         plt.savefig(f"{output_png_path}/learning_curves.svg", format='svg', bbox_inches='tight')
