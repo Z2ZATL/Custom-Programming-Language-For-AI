@@ -63,7 +63,8 @@ void RLInterpreter::loadEnvironment(const std::string& environmentPath) {
         "datasets/" + cleanPath,            // In datasets folder
         "ai_language/datasets/" + cleanPath, // ai_language/datasets path
         "./datasets/" + cleanPath,          // Relative datasets path
-        "../datasets/" + cleanPath,         // Parent/datasets path
+        "/home/runner/workspace/datasets/" + cleanPath, // Absolute workspace path
+        "/home/runner/workspace/" + cleanPath,          // Absolute workspace roots/" + cleanPath,         // Parent/datasets path
         "examples/rl_examples/" + cleanPath, // Examples path
         "/home/runner/workspace/ai_language/datasets/environment.json", // Absolute path for environment.json
         "/home/runner/workspace/ai_language/datasets/" + cleanPath      // Absolute path with filename
