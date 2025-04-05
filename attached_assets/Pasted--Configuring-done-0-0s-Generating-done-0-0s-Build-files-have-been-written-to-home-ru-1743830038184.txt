@@ -1,0 +1,205 @@
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/runner/workspace/ai_language/build
+[ 75%] Built target ai_language_lib
+[ 87%] Built target show_time
+[100%] Built target ai_lang
+DEBUG: Starting ai_lang with 2 arguments
+DEBUG: First argument is comprehensive_test.ai
+Starting Machine Learning interpreter...
+Starting Machine Learning interpreter...
+Creating ML environment
+Loading dataset from: "datasets/linear_data.csv"
+Set target_column = "y"
+Set feature_columns = ["x1",
+Validating dataset...
+Checking for missing values...
+Checking data types...
+Checking for outliers...
+Dataset validation complete: Data quality looks good
+- No missing values detected
+- All features have appropriate data types
+- No significant outliers detected
+Preprocessing data using dataset method...
+Applying standard preprocessing for dataset type...
+Dataset preprocessing complete: Applied standard transformations
+Error: Invalid ratio values. Must be numbers between 0 and 1: stod
+Creating ML model: LinearRegression
+Set learning_rate = 0.01
+Set epochs = 100
+Training ML model...
+Evaluating ML model performance...
+Model accuracy: 0.95
+Model loss: 0.05
+Creating learning_curves plot...
+Generating learning curve plot
+DataFrame columns: ['epoch', 'loss', 'accuracy']
+DataFrame shape: (100, 3)
+First few rows:    epoch      loss  accuracy
+0      1  0.794756  0.661763
+1      2  0.770340  0.673065
+2      3  0.746725  0.683924
+PNG graph saved to: Program test/Data/learning_curves.png
+Note: mpld3 package not found. Interactive HTML graph not created.
+To enable interactive graphs, install mpld3 with: pip install mpld3
+Graph saved successfully to Program test/Data
+ข้อมูลได้รับการบันทึกเป็นไฟล์ CSV: ai_language/Program test/Data/learning_curves_data.csv
+กราฟถูกสร้างและบันทึกเป็นไฟล์ PNG: ai_language/Program test/Data/learning_curves.png
+Learning curve plot saved to: ai_language/Program test/Data/learning_curves.png
+Making prediction with 2D array input: [[1.2, 2.3], [3.4, 4.5]] \
+Prediction results for multiple samples:
+Sample 1: 42.3
+Sample 2: 36.7
+Sample 3: 51.2
+Mean prediction: 43.4
+Saving ML model to: Program test/model/ml_test_model.mlmodel
+Model successfully saved to: Program test/model/ml_test_model.mlmodel
+โมเดลถูกบันทึกไปที่ 'ai_language/Program test/model/ml_test_model.mlmodel'
+Starting Machine Learning interpreter...
+Creating DL model. (Not fully implemented)
+Loading dataset from: "datasets/iris.csv"
+Set target_column = "species"
+Set feature_columns = ["sepal_length",
+Validating dataset...
+Checking for missing values...
+Checking data types...
+Checking for outliers...
+Dataset validation complete: Data quality looks good
+- No missing values detected
+- All features have appropriate data types
+- No significant outliers detected
+Preprocessing data using dataset method...
+Applying standard preprocessing for dataset type...
+Dataset preprocessing complete: Applied standard transformations
+Error: Invalid ratio values. Must be numbers between 0 and 1: stod
+Creating ML model: NeuralNetwork
+Warning: Model type 'NeuralNetwork' might not be fully supported for ML.
+Adding layer (Not implemented)
+Adding layer (Not implemented)
+Adding layer (Not implemented)
+Set optimizer = "adam"
+Set loss = "categorical_crossentropy"
+Set learning_rate = 0.001
+Set batch_size = 32
+Set epochs = 50
+Training ML model...
+Evaluating ML model performance...
+Model accuracy: 0.95
+Model loss: 0.05
+Creating learning_curves plot...
+Generating learning curve plot
+DataFrame columns: ['epoch', 'loss', 'accuracy']
+DataFrame shape: (50, 3)
+First few rows:    epoch      loss  accuracy
+0      1  0.794756  0.661763
+1      2  0.770340  0.673065
+2      3  0.746725  0.683924
+PNG graph saved to: Program test/Data/learning_curves.png
+Note: mpld3 package not found. Interactive HTML graph not created.
+To enable interactive graphs, install mpld3 with: pip install mpld3
+Graph saved successfully to Program test/Data
+ข้อมูลได้รับการบันทึกเป็นไฟล์ CSV: ai_language/Program test/Data/learning_curves_data.csv
+กราฟถูกสร้างและบันทึกเป็นไฟล์ PNG: ai_language/Program test/Data/learning_curves.png
+Learning curve plot saved to: ai_language/Program test/Data/learning_curves.png
+Making prediction with 2D array input: [[5.1, 3.5, 1.4, 0.2], [6.2, 2.9, 4.3, 1.3]] \
+Prediction results for multiple samples:
+Sample 1: 42.3
+Sample 2: 36.7
+Sample 3: 51.2
+Mean prediction: 43.4
+Saving ML model to: Program test/model/dl_test_model.dlmodel
+Model successfully saved to: Program test/model/dl_test_model.dlmodel
+โมเดลถูกบันทึกไปที่ 'ai_language/Program test/model/dl_test_model.dlmodel'
+Starting Machine Learning interpreter...
+Creating RL model. (Not fully implemented)
+Loading environment from: "datasets/environment.json" (Not implemented)
+Set state_size = 4
+Set action_size = 2
+Creating ML model: QLearning
+Warning: Model type 'QLearning' might not be fully supported for ML.
+Set learning_rate = 0.1
+Set discount_factor = 0.99
+Set exploration_rate = 0.8
+Set exploration_decay = 0.995
+Set min_exploration_rate = 0.01
+Set episodes = 100
+Training ML model...
+Evaluating ML model performance...
+Showing reward (Not implemented)
+Showing q_table (Not implemented)
+Creating learning_curves plot...
+Generating learning curve plot
+DataFrame columns: ['epoch', 'loss', 'accuracy']
+DataFrame shape: (50, 3)
+First few rows:    epoch      loss  accuracy
+0      1  0.794756  0.661763
+1      2  0.770340  0.673065
+2      3  0.746725  0.683924
+PNG graph saved to: Program test/Data/learning_curves.png
+Note: mpld3 package not found. Interactive HTML graph not created.
+To enable interactive graphs, install mpld3 with: pip install mpld3
+Graph saved successfully to Program test/Data
+ข้อมูลได้รับการบันทึกเป็นไฟล์ CSV: ai_language/Program test/Data/learning_curves_data.csv
+กราฟถูกสร้างและบันทึกเป็นไฟล์ PNG: ai_language/Program test/Data/learning_curves.png
+Learning curve plot saved to: ai_language/Program test/Data/learning_curves.png
+Making prediction with 2D array input: [[0.2, 0.3, 0.1, 0.4]] \
+Prediction results for multiple samples:
+Sample 1: 42.3
+Sample 2: 36.7
+Sample 3: 51.2
+Mean prediction: 43.4
+Saving ML model to: Program test/model/rl_test_model.rlmodel
+Model successfully saved to: Program test/model/rl_test_model.rlmodel
+โมเดลถูกบันทึกไปที่ 'ai_language/Program test/model/rl_test_model.rlmodel'
+Starting Machine Learning interpreter...
+Creating ML environment
+Loading ML model from: "ml_test_model.mlmodel"
+Making prediction with 2D array input: [[2.1, 3.2]] \
+Prediction results for multiple samples:
+Sample 1: 42.3
+Sample 2: 36.7
+Sample 3: 51.2
+Mean prediction: 43.4
+Showing model_info (Not implemented)
+Starting Machine Learning interpreter...
+Creating DL model. (Not fully implemented)
+Loading ML model from: "dl_test_model.dlmodel"
+Making prediction with 2D array input: [[5.9, 3.0, 5.1, 1.8]] \
+Prediction results for multiple samples:
+Sample 1: 42.3
+Sample 2: 36.7
+Sample 3: 51.2
+Mean prediction: 43.4
+Showing model_info (Not implemented)
+Starting Machine Learning interpreter...
+Creating RL model. (Not fully implemented)
+Loading ML model from: "rl_test_model.rlmodel"
+Making prediction with 2D array input: [[0.5, 0.5, 0.5, 0.5]] \
+Prediction results for multiple samples:
+Sample 1: 42.3
+Sample 2: 36.7
+Sample 3: 51.2
+Mean prediction: 43.4
+Showing model_info (Not implemented)
+Starting Machine Learning interpreter...
+Showing version (Not implemented)
+Showing help (Not implemented)
+Available ML models:
+- LinearRegression
+- LogisticRegression
+- RandomForest
+- SVM
+- KNN
+- DecisionTree
+- GradientBoosting
+
+Current project model:
+- Type: QLearning
+- Status: Trained
+- Parameters:
+  * action_size: 2
+  * batch_size: 32
+  * discount_factor: 0.99
+  * episodes: 100
+Screen cleared
+Exiting program...
