@@ -9,6 +9,7 @@
 #include <cmath> // for std::exp
 #include <limits> // for numeric_limits
 #include <algorithm> // for std::max_element and std::min_element
+#include <algorithm> // for std::max_element and std::min_element
 
 
 namespace ai_language {
