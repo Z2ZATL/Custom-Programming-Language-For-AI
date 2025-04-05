@@ -6,8 +6,8 @@
 namespace ai_language {
 
 BaseInterpreter::BaseInterpreter() : hasStarted(false), hasCreated(false), hasLoaded(false), 
-                                     hasModel(false), hasTrained(false), isDebugging(false), 
-                                     safeMode(false), timezone(0) {
+                                     hasModel(false), hasTrained(false), safeMode(false),
+                                     isDebugging(false), timezone(0) {
     // Default parameters
     parameters["learning_rate"] = 0.01;
     parameters["epochs"] = 100;
