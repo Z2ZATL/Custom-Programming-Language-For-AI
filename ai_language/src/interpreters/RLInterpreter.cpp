@@ -80,6 +80,9 @@ void RLInterpreter::loadEnvironment(const std::string& environmentPath) {
         command = "ls -la";
         result = system(command.c_str());
         
+        // Check if this is the environment.json file specifically
+        bool isEnvironmentJson = (cleanPath.find("environment.json") != std::string::npos);
+        
         // As a last resort, create the environment.json file in all possible locations
         if (isEnvironmentJson) {
             std::cout << "Creating environment.json file in multiple locations as a fallback..." << std::endl;
