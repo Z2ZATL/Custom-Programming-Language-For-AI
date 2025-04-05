@@ -8,6 +8,7 @@
 #include <map>
 #include <string>
 #include <fstream> // Added for file operations
+#include <algorithm> // Added for std::transform
 
 namespace ai_language {
 
@@ -1225,7 +1226,7 @@ void DLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& ar
     std::vector<double> ratios;
     
     // เริ่มที่ index 2 (หลังจาก "dataset" และ "into")
-    int i = 2;
+    size_t i = 2;
     // เก็บชุดข้อมูลจนกว่าจะเจอคำว่า "with"
     while (i < args.size() && args[i] != "with") {
         std::string dataset = args[i];
