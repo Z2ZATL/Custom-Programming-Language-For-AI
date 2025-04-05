@@ -793,12 +793,16 @@ void MLInterpreter::handlePredictCommand(const std::vector<std::string>& args) {
 
     // กรองคำที่ไม่ใช่ค่าตัวเลข
     std::vector<double> inputValues;
-    bool hasSkippedWords = false;
-    bool hasSkippedCommonWords = false;
-    bool hasSkippedUnknownWords = false;
+    bool hasNonNumericInput = false;
     
     // คำสั่งทั่วไปที่ควรข้ามโดยไม่ต้องแจ้งเตือน
-    std::vector<std::string> commonWords = {"with", "using", "and", "or", "as", "for", "the", "values", "value", "predict", "of", "on", "in"};
+    std::vector<std::string> commonWords = {
+        "with", "using", "and", "or", "as", "for", "the", "values", "value", "predict", 
+        "of", "on", "in", "by", "to", "from", "input", "inputs", "data", "model"
+    };
+    
+    // จำนวนค่าที่ไม่ใช่ตัวเลขที่พบ (ไม่รวมคำทั่วไป)
+    int nonNumericCount = 0;
     
     for (const auto& arg : args) {
         // ตรวจสอบว่าเป็นคำทั่วไปหรือไม่
@@ -806,7 +810,6 @@ void MLInterpreter::handlePredictCommand(const std::vector<std::string>& args) {
         for (const auto& word : commonWords) {
             if (arg == word) {
                 isCommonWord = true;
-                hasSkippedCommonWords = true;
                 break;
             }
         }
@@ -817,10 +820,10 @@ void MLInterpreter::handlePredictCommand(const std::vector<std::string>& args) {
         
         try {
             inputValues.push_back(std::stod(arg));
-        } catch (const std::exception& e) {
-            // กรณีที่ไม่ใช่คำทั่วไปและไม่ใช่ตัวเลข
-            hasSkippedUnknownWords = true;
-            hasSkippedWords = true;
+        } catch (const std::exception&) {
+            // เก็บค่าสำหรับการตรวจสอบว่ามีค่าที่ไม่ใช่ตัวเลขที่ไม่ใช่คำทั่วไปหรือไม่
+            hasNonNumericInput = true;
+            nonNumericCount++;
         }
     }
 
@@ -830,9 +833,10 @@ void MLInterpreter::handlePredictCommand(const std::vector<std::string>& args) {
         return;
     }
 
-    // แสดงเตือนเฉพาะเมื่อข้ามคำที่ไม่รู้จัก
-    if (hasSkippedUnknownWords) {
-        std::cout << YELLOW << "Notice: Some non-numeric values were filtered out from the prediction input." << RESET << std::endl;
+    // แสดงเตือนเฉพาะเมื่อมีการข้ามค่าที่ไม่ใช่ตัวเลขจำนวนมาก (มากกว่า 1 ค่า) 
+    // ซึ่งอาจบ่งชี้ว่าผู้ใช้อาจกำลังใส่ข้อมูลผิดรูปแบบ
+    if (hasNonNumericInput && nonNumericCount > 1) {
+        std::cout << YELLOW << "Notice: " << nonNumericCount << " non-numeric values were filtered out from the prediction input." << RESET << std::endl;
     }
 
     std::cout << CYAN << "Making prediction with " << modelType << " model on input data: ";
