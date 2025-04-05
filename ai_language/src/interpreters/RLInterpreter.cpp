@@ -51,6 +51,9 @@ void RLInterpreter::loadEnvironment(const std::string& environmentPath) {
     }
     
     // Try different possible paths
+    // Check if this is the environment.json file specifically
+    bool isEnvironmentJson = (cleanPath.find("environment.json") != std::string::npos);
+    
     std::vector<std::string> possiblePaths = {
         cleanPath,                          // Original path
         "ai_language/" + cleanPath,         // With ai_language prefix
@@ -60,8 +63,16 @@ void RLInterpreter::loadEnvironment(const std::string& environmentPath) {
         "ai_language/datasets/" + cleanPath, // ai_language/datasets path
         "./datasets/" + cleanPath,          // Relative datasets path
         "../datasets/" + cleanPath,         // Parent/datasets path
-        "examples/rl_examples/" + cleanPath  // Examples path
+        "examples/rl_examples/" + cleanPath, // Examples path
+        "/home/runner/workspace/ai_language/datasets/environment.json", // Absolute path for environment.json
+        "/home/runner/workspace/ai_language/datasets/" + cleanPath      // Absolute path with filename
     };
+    
+    // For environment.json specifically, add the known exact path as the first option
+    if (isEnvironmentJson) {
+        std::cout << "Looking for environment.json file specifically..." << std::endl;
+        possiblePaths.insert(possiblePaths.begin(), "ai_language/datasets/environment.json");
+    }
     
     bool fileOpened = false;
     std::ifstream envFile;
