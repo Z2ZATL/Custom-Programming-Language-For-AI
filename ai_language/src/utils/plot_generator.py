@@ -311,10 +311,10 @@ def main():
         # สร้างโฟลเดอร์ถ้ายังไม่มี
         os.makedirs(output_png_path, exist_ok=True)
         
-        # บันทึกกราฟเป็นไฟล์ PNG ที่มีคุณภาพสูง
+        # บันทึกกราฟเป็นไฟล์ PNG ที่มีคุณภาพสูงมาก (high-resolution)
         output_file_png = f"{output_png_path}/learning_curves.png"
-        plt.savefig(output_file_png, bbox_inches='tight')
-        print(f"PNG graph saved to: {output_file_png}")
+        plt.savefig(output_file_png, dpi=600, bbox_inches='tight', quality=100)
+        print(f"High-resolution PNG graph saved to: {output_file_png}")
 
         # สร้างไฟล์ HTML แบบโต้ตอบ
         create_interactive_html(fig, output_png_path, title)
