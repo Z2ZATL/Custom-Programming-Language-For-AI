@@ -1,4 +1,4 @@
-modules = ["cpp-clang14", "web", "c-clang14"]
+modules = ["c-clang14", "cpp-clang14", "python-3.11", "web"]
 run = "cd ai_language && mkdir -p build && cd build && cmake .. && make && cd .. && ./ai_lang comprehensive_test.ai"
 
 [nix]
