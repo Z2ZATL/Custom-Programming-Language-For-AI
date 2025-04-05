@@ -655,7 +655,7 @@ void MLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& ar
 
     // กรณีที่เป็นรูปแบบ split dataset into ... with ratio ...
     if (hasRatioKeyword && ratioPos + 1 < args.size()) {
-        for (sizet i = ratioPos + 1; i < args.size(); i++) {
+        for (size_t i = ratioPos + 1; i < args.size(); i++) {
             std::string value = args[i];
             // ลบเครื่องหมาย , ออกถ้ามี
             if (!value.empty() && value.back() == ',') {
