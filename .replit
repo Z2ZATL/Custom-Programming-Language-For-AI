@@ -269,4 +269,4 @@ mode = "sequential"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd ai_language && mkdir -p build datasets && cp ./datasets/environment.json ./datasets/environment.json && cd build && cmake .. && make && cd .. && ./ai_lang -i"
+args = "cd ai_language && mkdir -p build datasets && test -f ./datasets/environment.json || echo \"Warning: environment.json not found\" && cd build && cmake .. && make && cd .. && ./ai_lang -i"
