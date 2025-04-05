@@ -3,4 +3,4 @@ model_type: NeuralNetwork
 learning_rate: 0.001
 epochs: 50
 accuracy: 0.95
-create_time: 2025-04-05 07:24:24
+create_time: 2025-04-05 07:30:32
