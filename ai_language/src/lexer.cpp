@@ -209,7 +209,7 @@ char Lexer::peek() const {
 }
 
 char Lexer::peekNext() const {
-    if (_current + 1 >= _source.length()) return '\0';
+    if (_current + 1 >= static_cast<int>(_source.length())) return '\0';
     return _source[_current + 1];
 }
 
@@ -227,7 +227,7 @@ void Lexer::addToken(TokenType type, const std::string& value) {
 }
 
 bool Lexer::isAtEnd() const {
-    return _current >= _source.length();
+    return _current >= static_cast<int>(_source.length());
 }
 
 void Lexer::error(const std::string& message) {
