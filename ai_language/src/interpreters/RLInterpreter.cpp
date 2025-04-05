@@ -44,18 +44,31 @@ void RLInterpreter::loadEnvironment(const std::string& environmentPath) {
         cleanPath = cleanPath.substr(1, cleanPath.size() - 2);
     }
     
+    // If path contains only filename, try to prepend common directories
+    if (cleanPath.find('/') == std::string::npos && cleanPath.find('\\') == std::string::npos) {
+        // This is just a filename, like "environment.json"
+        std::cout << "Path contains only filename, will search in common directories" << std::endl;
+    }
+    
     // Try different possible paths
     std::vector<std::string> possiblePaths = {
-        cleanPath,                       // Original path
-        "ai_language/" + cleanPath,      // With ai_language prefix
-        "../" + cleanPath,               // One directory up
-        "../../" + cleanPath             // Two directories up
+        cleanPath,                          // Original path
+        "ai_language/" + cleanPath,         // With ai_language prefix
+        "../" + cleanPath,                  // One directory up
+        "../../" + cleanPath,               // Two directories up
+        "datasets/" + cleanPath,            // In datasets folder
+        "ai_language/datasets/" + cleanPath, // ai_language/datasets path
+        "./datasets/" + cleanPath,          // Relative datasets path
+        "../datasets/" + cleanPath,         // Parent/datasets path
+        "examples/rl_examples/" + cleanPath  // Examples path
     };
     
     bool fileOpened = false;
     std::ifstream envFile;
     
+    std::cout << "Searching for environment file in multiple locations..." << std::endl;
     for (const auto& path : possiblePaths) {
+        std::cout << "Trying path: " << path << std::endl;
         envFile.open(path);
         if (envFile.is_open()) {
             std::cout << GREEN << "Found environment file at: " << path << RESET << std::endl;
