@@ -651,7 +651,7 @@ void MLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& ar
 
             // ลบช่องว่างหน้าและหลัง
             size_t start = cleanArg.find_first_not_of(" \t");
-            if (start == std::stringif (start == std::string::npos) {
+            if (start == std::string::npos) {
                 // ถ้าเป็นสตริงว่างหรือมีเพียงช่องว่าง ให้ข้ามไป
                 continue;
             }

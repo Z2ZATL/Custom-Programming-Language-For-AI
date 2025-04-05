@@ -61,6 +61,9 @@ public:
     void handleCrossValidateCommand(const std::vector<std::string>& args) override;
     void handleExportResultsCommand(const std::vector<std::string>& args) override;
     void handleScheduleTrainingCommand(const std::vector<std::string>& args) override;
+    
+    // เพิ่มฟังก์ชันสำหรับรับวันที่และเวลาปัจจุบัน
+    std::string getCurrentDateTime();
 };
 
 } // namespace ai_language
