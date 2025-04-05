@@ -599,8 +599,7 @@ void MLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
             
             std::cout << GREEN << "Added convolutional layer with " << args[2] << " filters, kernel size " 
                      << args[3] << ", and " << layerInfo["activation"] << " activation" << RESET << std::endl;
-        } else {
-            } else if (layerType == "Dense" || layerType == "dense") {
+        } else if (layerType == "Dense" || layerType == "dense") {
             if (args.size() < 3) {
                 std::cout << RED << "Error: Dense layer requires size parameter. Usage: add layer Dense <size> [activation]" << RESET << std::endl;
                 return;
