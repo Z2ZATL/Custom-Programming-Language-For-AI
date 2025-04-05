@@ -1,0 +1,199 @@
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+[ 75%] Built target ai_language_lib: /home/runner/workspace/ai_language/build
+[ 87%] Built target show_time
+[100%] Built target ai_lang
+DEBUG: Starting ai_lang with 2 arguments
+DEBUG: First argument is -i
+DEBUG: About to enter interactive mode
+DEBUG: Starting interactive mode
+
+
+=== โหมดโต้ตอบของภาษา AI ===
+พิมพ์คำสั่งและกด Enter เพื่อดำเนินการ (พิมพ์ 'exit' เพื่อออก)
+รองรับคำสั่งหลายบรรทัด - พิมพ์ '\' แล้วกด Enter เพื่อพิมพ์ต่อในบรรทัดถัดไป
+พิมพ์ ';;' เพื่อดำเนินการทั้งหมด
+คำสั่งพิเศษ: safe on เพื่อเปิดโหมดความปลอดภัย (ต้องยืนยันก่อนทำงานคำสั่ง), safe off เพื่อปิด
+ตัวอย่างคำสั่ง:
+  start
+  create ML                        # สร้างโปรเจค Machine Learning
+  create DL                        # สร้างโปรเจค Deep Learning
+  create RL                        # สร้างโปรเจค Reinforcement Learning
+  load dataset "datasets/linear_data.csv" type "csv"  # โหลดข้อมูลสำหรับ ML
+  load dataset "datasets/iris.csv" type "csv"         # โหลดข้อมูลสำหรับ DL
+  load environment "datasets/environment.json"         # โหลดสภาพแวดล้อมสำหรับ RL
+  create model LinearRegression    # สร้างโมเดล LinearRegression
+  create model NeuralNetwork       # สร้างโมเดล Neural Network
+  create model QLearning           # สร้างโมเดล Q-Learning
+  set learning_rate 0.01           # ตั้งค่า learning rate
+  set epochs 100                   # ตั้งค่าจำนวนรอบการเรียนรู้
+  train model                      # ฝึกโมเดล
+  evaluate model                   # ประเมินประสิทธิภาพโมเดล
+  show accuracy                    # แสดงความแม่นยำของโมเดล
+  save model "model_name.dat"      # บันทึกโมเดล
+
+ตัวอย่างคำสั่งหลายบรรทัด:
+  start \
+  create ML \
+  load dataset "datasets/linear_data.csv" \
+  create model LinearRegression ;;
+
+
+AI> start \
+create DL \
+load dataset "datasets/iris.csv" type "csv" \
+set target_column "species" \
+set feature_columns ["sepal_length", "sepal_width", "petal_length", "petal_width"] \
+validate dataset \
+preprocess dataset normalize scale \
+split dataset into train, test, validation with ratio 0.7, 0.2, 0.1 \
+create model NeuralNetwork \
+add layer Dense units 64 activation "relu" \
+add laDEBUG: Got input: 'start \'
+yer Dense units 32 activation "relu" \
+add layer Dense units 3 activation "softmax" \
+set optimizer "adam" \
+set loss "categorical_crossentropy" \
+set learning_rate 0.001 \
+set batch_size 32 \
+set epochs 50 \
+train model \
+evaluate model \
+... show accuracy \
+show loss \
+plot learning_curves \
+predict with [[5.1, 3.5, 1.4, 0.2], [6.2, 2.9, 4.3, 1.3]] \
+save model "dl_test_model.dlmodel" ;;DEBUG: Got input: 'create DL \'
+... DEBUG: Got input: 'load dataset "datasets/iris.csv" type "csv" \'
+... DEBUG: Got input: 'set target_column "species" \'
+... DEBUG: Got input: 'set feature_columns ["sepal_length", "sepal_width", "petal_length", "petal_width"] \'
+... DEBUG: Got input: 'validate dataset \'
+... DEBUG: Got input: 'preprocess dataset normalize scale \'
+... DEBUG: Got input: 'split dataset into train, test, validation with ratio 0.7, 0.2, 0.1 \'
+... DEBUG: Got input: 'create model NeuralNetwork \'
+... DEBUG: Got input: 'add layer Dense units 64 activation "relu" \'
+... DEBUG: Got input: 'add layer Dense units 32 activation "relu" \'
+... DEBUG: Got input: 'add layer Dense units 3 activation "softmax" \'
+... DEBUG: Got input: 'set optimizer "adam" \'
+... DEBUG: Got input: 'set loss "categorical_crossentropy" \'
+... DEBUG: Got input: 'set learning_rate 0.001 \'
+... DEBUG: Got input: 'set batch_size 32 \'
+... DEBUG: Got input: 'set epochs 50 \'
+... DEBUG: Got input: 'train model \'
+... DEBUG: Got input: 'evaluate model \'
+... DEBUG: Got input: 'show accuracy \'
+... DEBUG: Got input: 'show loss \'
+... DEBUG: Got input: 'plot learning_curves \'
+... DEBUG: Got input: 'predict with [[5.1, 3.5, 1.4, 0.2], [6.2, 2.9, 4.3, 1.3]] \'
+... 
+DEBUG: Got input: 'save model "dl_test_model.dlmodel" ;;'
+DEBUG: Switching to DL interpreter
+Starting Deep Learning interpreter...
+สลับมาใช้ Deep Learning interpreter
+DEBUG: Processing multi-line command
+กำลังประมวลผลคำสั่งหลายบรรทัด...
+DEBUG: Interpreting command: 'start '
+(1) start 
+เริ่มต้นการใช้งาน Deep Learning Interpreter...
+
+DEBUG: Interpreting command: 'create DL '
+(2) create DL 
+กำลังสร้างโมเดล Deep Learning ประเภท: DL
+สร้างโมเดล Neural Network ทั่วไป
+
+DEBUG: Interpreting command: 'load dataset "datasets/iris.csv" type "csv" '
+(3) load dataset "datasets/iris.csv" type "csv" 
+กำลังโหลดข้อมูลจาก: dataset
+กำลังเตรียมข้อมูลสำหรับ Deep Learning...
+กำลังทำ Data Preprocessing...
+กำลังทำ Data Augmentation...
+
+DEBUG: Interpreting command: 'set target_column "species" '
+(4) set target_column "species" 
+ค่าพารามิเตอร์ต้องเป็นตัวเลข
+
+DEBUG: Interpreting command: 'set feature_columns ["sepal_length", "sepal_width", "petal_length", "petal_width"] '
+(5) set feature_columns ["sepal_length", "sepal_width", "petal_length", "petal_width"] 
+ค่าพารามิเตอร์ต้องเป็นตัวเลข
+
+DEBUG: Interpreting command: 'validate dataset '
+(6) validate dataset 
+Validate command is not implemented for DL yet
+
+DEBUG: Interpreting command: 'preprocess dataset normalize scale '
+(7) preprocess dataset normalize scale 
+Preprocess command is not implemented for DL yet
+
+DEBUG: Interpreting command: 'split dataset into train, test, validation with ratio 0.7, 0.2, 0.1 '
+(8) split dataset into train, test, validation with ratio 0.7, 0.2, 0.1 
+Split dataset command is not implemented for DL yet
+
+DEBUG: Interpreting command: 'create model NeuralNetwork '
+(9) create model NeuralNetwork 
+กำลังสร้างโมเดล Deep Learning ประเภท: model
+สร้างโมเดล Neural Network ทั่วไป
+
+DEBUG: Interpreting command: 'add layer Dense units 64 activation "relu" '
+(10) add layer Dense units 64 activation "relu" 
+ไม่รู้จักประเภทของ layer: Dense
+
+DEBUG: Interpreting command: 'add layer Dense units 32 activation "relu" '
+(11) add layer Dense units 32 activation "relu" 
+ไม่รู้จักประเภทของ layer: Dense
+
+DEBUG: Interpreting command: 'add layer Dense units 3 activation "softmax" '
+(12) add layer Dense units 3 activation "softmax" 
+ไม่รู้จักประเภทของ layer: Dense
+
+DEBUG: Interpreting command: 'set optimizer "adam" '
+(13) set optimizer "adam" 
+ค่าพารามิเตอร์ต้องเป็นตัวเลข
+
+DEBUG: Interpreting command: 'set loss "categorical_crossentropy" '
+(14) set loss "categorical_crossentropy" 
+ค่าพารามิเตอร์ต้องเป็นตัวเลข
+
+DEBUG: Interpreting command: 'set learning_rate 0.001 '
+(15) set learning_rate 0.001 
+ตั้งค่า learning_rate = 0.001
+
+DEBUG: Interpreting command: 'set batch_size 32 '
+(16) set batch_size 32 
+ตั้งค่า batch_size = 32
+
+DEBUG: Interpreting command: 'set epochs 50 '
+(17) set epochs 50 
+ตั้งค่า epochs = 50
+
+DEBUG: Interpreting command: 'train model '
+(18) train model 
+กำลังเทรนโมเดล model...
+จำนวน Epochs: 50
+Learning Rate: 0.001
+Batch Size: 32
+Epoch 1/50 - Loss: 0.5 - Accuracy: 0.8
+Epoch 2/50 - Loss: 0.25 - Accuracy: 0.9
+Epoch 3/50 - Loss: 0.166667 - Accuracy: 1
+
+DEBUG: Interpreting command: 'evaluate model '
+(19) evaluate model 
+กำลังประเมินผลโมเดล model...
+ความแม่นยำบนชุดข้อมูลทดสอบ: 0.92
+ค่า Loss บนชุดข้อมูลทดสอบ: 0.08
+
+DEBUG: Interpreting command: 'show accuracy '
+(20) show accuracy 
+ความแม่นยำของโมเดล: 0.89
+
+DEBUG: Interpreting command: 'show loss '
+(21) show loss 
+ค่า Loss: 0.134
+
+DEBUG: Interpreting command: 'plot learning_curves '
+(22) plot learning_curves 
+Creating learning_curves plot for model model...
+Error: Unknown plot type 'learning_curves' for DL models
+
+DEBUG: Interpreting command: 'predict with [[5.1, 3.5, 1.4, 0.2], [6.2, 2.9, 4.3, 1.3]] '
+(23) predict with [[5.1, 3.5, 1.4, 0.2], [6.2, 2.9, 4.3, 1.3]] 
+Making prediction with model on input data: 3.5 1.4 0.2 2.9 4.3 1.3 

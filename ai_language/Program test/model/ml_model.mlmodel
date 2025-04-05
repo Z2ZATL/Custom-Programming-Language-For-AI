@@ -1,6 +1,0 @@
-# ML Model saved from AI Language
-model_type: LinearRegression
-learning_rate: 0.01
-epochs: 100
-accuracy: 0.95
-create_time: Wed Apr 02 23:38:01 2025
