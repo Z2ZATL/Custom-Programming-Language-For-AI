@@ -1,0 +1,30 @@
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/runner/workspace/ai_language/build
+[  6%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/MLInterpreter.cpp.o
+/home/runner/workspace/ai_language/src/interpreters/MLInterpreter.cpp: In member function ‘virtual void ai_language::MLInterpreter::handleSplitDatasetCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/MLInterpreter.cpp:594:10: warning: variable ‘hasIntoKeyword’ set but not used [-Wunused-but-set-variable]
+  594 |     bool hasIntoKeyword = false;
+      |          ^~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/MLInterpreter.cpp:596:12: warning: variable ‘intoPos’ set but not used [-Wunused-but-set-variable]
+  596 |     size_t intoPos = 0;
+      |            ^~~~~~~
+[ 12%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/Inter[ 18%] Linking CXX static library libai_language_lib.a
+[ 75%] Built target ai_language_lib
+[ 87%] Built target show_time
+[ 93%] Linking CXX executable /home/runner/workspace/ai_language/ai_lang
+/nix/store/bgcaxhhxswzvmxjbbgvvaximm5hwghz1-binutils-2.41/bin/ld: libai_language_lib.a(MLInterpreter.cpp.o): in function `ai_language::MLInterpreter::handleCreateCommand(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&)':
+/home/runner/workspace/ai_language/src/interpreters/MLInterpreter.cpp:112:(.text+0x1b20): undefined reference to `ai_language::MLInterpreter::createModel(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)'
+/nix/store/bgcaxhhxswzvmxjbbgvvaximm5hwghz1-binutils-2.41/bin/ld: libai_language_lib.a(MLInterpreter.cpp.o):(.data.rel.ro._ZTVN11ai_language13MLInterpreterE[_ZTVN11ai_language13MLInterpreterE]+0xa0): undefined reference to `ai_language::MLInterpreter::handlePredictCommand(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&)'
+/nix/store/bgcaxhhxswzvmxjbbgvvaximm5hwghz1-binutils-2.41/bin/ld: libai_language_lib.a(MLInterpreter.cpp.o):(.data.rel.ro._ZTVN11ai_language13MLInterpreterE[_ZTVN11ai_language13MLInterpreterE]+0xa8): undefined reference to `ai_language::MLInterpreter::handleListModelsCommand()'
+/nix/store/bgcaxhhxswzvmxjbbgvvaximm5hwghz1-binutils-2.41/bin/ld: libai_language_lib.a(MLInterpreter.cpp.o):(.data.rel.ro._ZTVN11ai_language13MLInterpreterE[_ZTVN11ai_language13MLInterpreterE]+0xb0): undefined reference to `ai_language::MLInterpreter::handleDeleteModelCommand(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&)'
+/nix/store/bgcaxhhxswzvmxjbbgvvaximm5hwghz1-binutils-2.41/bin/ld: libai_language_lib.a(MLInterpreter.cpp.o):(.data.rel.ro._ZTVN11ai_language13MLInterpreterE[_ZTVN11ai_language13MLInterpreterE]+0xb8): undefined reference to `ai_language::MLInterpreter::handleCompareModelsCommand()'
+/nix/store/bgcaxhhxswzvmxjbbgvvaximm5hwghz1-binutils-2.41/bin/ld: libai_language_lib.a(MLInterpreter.cpp.o):(.data.rel.ro._ZTVN11ai_language13MLInterpreterE[_ZTVN11ai_language13MLInterpreterE]+0xc0): undefined reference to `ai_language::MLInterpreter::handleCheckStatusCommand()'
+/nix/store/bgcaxhhxswzvmxjbbgvvaximm5hwghz1-binutils-2.41/bin/ld: libai_language_lib.a(MLInterpreter.cpp.o):(.data.rel.ro._ZTVN11ai_language13MLInterpreterE[_ZTVN11ai_language13MLInterpreterE]+0xc8): undefined reference to `ai_language::MLInterpreter::handleDebugCommand(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&)'
+/nix/store/bgcaxhhxswzvmxjbbgvvaximm5hwghz1-binutils-2.41/bin/ld: libai_language_lib.a(MLInterpreter.cpp.o):(.data.rel.ro._ZTVN11ai_language13MLInterpreterE[_ZTVN11ai_language13MLInterpreterE]+0xd0): undefined reference to `ai_language::MLInterpreter::handleCrossValidateCommand(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&)'
+/nix/store/bgcaxhhxswzvmxjbbgvvaximm5hwghz1-binutils-2.41/bin/ld: libai_language_lib.a(MLInterpreter.cpp.o):(.data.rel.ro._ZTVN11ai_language13MLInterpreterE[_ZTVN11ai_language13MLInterpreterE]+0xd8): undefined reference to `ai_language::MLInterpreter::handleExportResultsCommand(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&)'
+/nix/store/bgcaxhhxswzvmxjbbgvvaximm5hwghz1-binutils-2.41/bin/ld: libai_language_lib.a(MLInterpreter.cpp.o):(.data.rel.ro._ZTVN11ai_language13MLInterpreterE[_ZTVN11ai_language13MLInterpreterE]+0xe0): undefined reference to `ai_language::MLInterpreter::handleScheduleTrainingCommand(std::vector<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&)'
+collect2: error: ld returned 1 exit status
+make[2]: *** [CMakeFiles/ai_lang.dir/build.make:98: /home/runner/workspace/ai_language/ai_lang] Error 1
+make[1]: *** [CMakeFiles/Makefile2:140: CMakeFiles/ai_lang.dir/all] Error 2
+make: *** [Makefile:91: all] Error 2
