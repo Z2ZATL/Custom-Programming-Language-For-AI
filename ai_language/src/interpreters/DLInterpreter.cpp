@@ -753,9 +753,14 @@ void DLInterpreter::handlePredictCommand(const std::vector<std::string>& args) {
             try {
                 inputValues.push_back(std::stod(arg));
             } catch (const std::exception& e) {
-                std::cout << RED << "Error: Invalid input value '" << arg << "'. Must be numeric." << RESET << std::endl;
-                return;
+                // ข้ามค่าที่ไม่ใช่ตัวเลขโดยไม่แสดงข้อความเตือนเพื่อให้เป็นพฤติกรรมเดียวกันกับ MLInterpreter
+                continue;
             }
+        }
+        
+        if (inputValues.empty()) {
+            std::cout << RED << "Error: No valid numeric input values found. Usage: predict <value1> <value2> ..." << RESET << std::endl;
+            return;
         }
 
         std::cout << CYAN << "Making prediction with " << modelType << " on input data: ";

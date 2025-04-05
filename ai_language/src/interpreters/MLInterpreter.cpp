@@ -833,10 +833,11 @@ void MLInterpreter::handlePredictCommand(const std::vector<std::string>& args) {
         return;
     }
 
-    // แสดงเตือนเฉพาะเมื่อมีการข้ามค่าที่ไม่ใช่ตัวเลขจำนวนมาก (มากกว่า 1 ค่า) 
-    // ซึ่งอาจบ่งชี้ว่าผู้ใช้อาจกำลังใส่ข้อมูลผิดรูปแบบ
+    // แสดงเตือนเฉพาะเมื่อมีการข้ามค่าที่ไม่ใช่ตัวเลขที่อาจจะเป็นข้อมูลสำคัญ
+    // ไม่แสดงข้อความถ้าเป็นคำที่ใช้ในโครงสร้างคำสั่งทั่วไป
     if (hasNonNumericInput && nonNumericCount > 1) {
-        std::cout << YELLOW << "Notice: " << nonNumericCount << " non-numeric values were filtered out from the prediction input." << RESET << std::endl;
+        // ไม่แสดงข้อความเตือนเนื่องจากส่วนใหญ่เป็นคำสั่งหรือคำเชื่อมที่ถูกกรอง
+        // std::cout << YELLOW << "Notice: " << nonNumericCount << " non-numeric values were filtered out from the prediction input." << RESET << std::endl;
     }
 
     std::cout << CYAN << "Making prediction with " << modelType << " model on input data: ";
