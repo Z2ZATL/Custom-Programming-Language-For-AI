@@ -791,15 +791,32 @@ void MLInterpreter::handlePredictCommand(const std::vector<std::string>& args) {
         return;
     }
 
-    // ทำนายจากค่าที่ส่งมาโดยตรง
+    // กรองคำที่ไม่ใช่ค่าตัวเลข
     std::vector<double> inputValues;
+    bool hasSkippedWords = false;
     for (const auto& arg : args) {
+        // ข้ามคำสั่งที่ไม่ใช่ตัวเลข เช่น 'with', 'using', 'and' เป็นต้น
+        if (arg == "with" || arg == "using" || arg == "and" || arg == "or" || arg == "as") {
+            hasSkippedWords = true;
+            continue;
+        }
+        
         try {
             inputValues.push_back(std::stod(arg));
         } catch (const std::exception& e) {
-            std::cout << RED << "Error: Invalid input value '" << arg << "'. Must be numeric." << RESET << std::endl;
-            return;
+            // เพียงข้ามค่าที่ไม่ใช่ตัวเลขไป แต่ไม่แสดงข้อผิดพลาด หากไม่มีค่าตัวเลขเลยจะจัดการในขั้นตอนถัดไป
+            hasSkippedWords = true;
         }
+    }
+
+    // ตรวจสอบว่ามีค่าตัวเลขหรือไม่
+    if (inputValues.empty()) {
+        std::cout << RED << "Error: No valid numeric input values found. Usage: predict <value1> <value2> ..." << RESET << std::endl;
+        return;
+    }
+
+    if (hasSkippedWords) {
+        std::cout << YELLOW << "Notice: Some non-numeric values were ignored in the prediction command." << RESET << std::endl;
     }
 
     std::cout << CYAN << "Making prediction with " << modelType << " model on input data: ";
