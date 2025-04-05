@@ -7,7 +7,7 @@ namespace ai_language {
 
 BaseInterpreter::BaseInterpreter() : hasStarted(false), hasCreated(false), hasLoaded(false), 
                                      hasModel(false), hasTrained(false), isDebugging(false), 
-                                     timezone(0), safeMode(false) {
+                                     safeMode(false), timezone(0) {
     // Default parameters
     parameters["learning_rate"] = 0.01;
     parameters["epochs"] = 100;
@@ -797,6 +797,10 @@ bool BaseInterpreter::isExitCommand(const std::string& command) {
 void BaseInterpreter::setSafeMode(bool mode) {
     safeMode = mode;
     std::cout << "Safe mode turned " << (mode ? "on" : "off") << std::endl;
+}
+
+bool BaseInterpreter::getSafeMode() const {
+    return safeMode;
 }
 
 } // namespace ai_language
