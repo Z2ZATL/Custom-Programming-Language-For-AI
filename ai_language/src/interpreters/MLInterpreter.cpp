@@ -794,17 +794,32 @@ void MLInterpreter::handlePredictCommand(const std::vector<std::string>& args) {
     // กรองคำที่ไม่ใช่ค่าตัวเลข
     std::vector<double> inputValues;
     bool hasSkippedWords = false;
+    bool hasSkippedCommonWords = false;
+    bool hasSkippedUnknownWords = false;
+    
+    // คำสั่งทั่วไปที่ควรข้ามโดยไม่ต้องแจ้งเตือน
+    std::vector<std::string> commonWords = {"with", "using", "and", "or", "as", "for", "the", "values", "value", "predict", "of", "on", "in"};
+    
     for (const auto& arg : args) {
-        // ข้ามคำสั่งที่ไม่ใช่ตัวเลข เช่น 'with', 'using', 'and' เป็นต้น
-        if (arg == "with" || arg == "using" || arg == "and" || arg == "or" || arg == "as") {
-            hasSkippedWords = true;
+        // ตรวจสอบว่าเป็นคำทั่วไปหรือไม่
+        bool isCommonWord = false;
+        for (const auto& word : commonWords) {
+            if (arg == word) {
+                isCommonWord = true;
+                hasSkippedCommonWords = true;
+                break;
+            }
+        }
+        
+        if (isCommonWord) {
             continue;
         }
         
         try {
             inputValues.push_back(std::stod(arg));
         } catch (const std::exception& e) {
-            // เพียงข้ามค่าที่ไม่ใช่ตัวเลขไป แต่ไม่แสดงข้อผิดพลาด หากไม่มีค่าตัวเลขเลยจะจัดการในขั้นตอนถัดไป
+            // กรณีที่ไม่ใช่คำทั่วไปและไม่ใช่ตัวเลข
+            hasSkippedUnknownWords = true;
             hasSkippedWords = true;
         }
     }
@@ -815,8 +830,9 @@ void MLInterpreter::handlePredictCommand(const std::vector<std::string>& args) {
         return;
     }
 
-    if (hasSkippedWords) {
-        std::cout << YELLOW << "Notice: Some non-numeric values were ignored in the prediction command." << RESET << std::endl;
+    // แสดงเตือนเฉพาะเมื่อข้ามคำที่ไม่รู้จัก
+    if (hasSkippedUnknownWords) {
+        std::cout << YELLOW << "Notice: Some non-numeric values were filtered out from the prediction input." << RESET << std::endl;
     }
 
     std::cout << CYAN << "Making prediction with " << modelType << " model on input data: ";
