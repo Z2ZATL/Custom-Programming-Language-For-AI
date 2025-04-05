@@ -306,7 +306,7 @@ void BaseInterpreter::handleShowCommand(const std::vector<std::string>& args) {
         // Print basic model information
         std::cout << CYAN << "Model Information:" << RESET << std::endl;
         std::cout << "Model Type: " << modelType << std::endl;
-        std::cout << "Created: " << (hasCreatedModel ? "Yes" : "No") << std::endl;
+        std::cout << "Created: " << (hasCreated ? "Yes" : "No") << std::endl;
         std::cout << "Trained: " << (hasTrained ? "Yes" : "No") << std::endl;
         
         // Show model parameters
