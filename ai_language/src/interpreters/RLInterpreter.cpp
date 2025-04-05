@@ -45,72 +45,17 @@ void RLInterpreter::loadEnvironment(const std::string& environmentPath) {
         cleanPath = cleanPath.substr(1, cleanPath.size() - 2);
     }
     
-    // If path contains only filename, try to prepend common directories
-    if (cleanPath.find('/') == std::string::npos && cleanPath.find('\\') == std::string::npos) {
-        // This is just a filename, like "environment.json"
-        std::cout << "Path contains only filename, will search in common directories" << std::endl;
-    }
-    
-    // Try different possible paths
-    // Check if this is the environment.json file specifically
-    bool isEnvironmentJson = (cleanPath.find("environment.json") != std::string::npos);
-    
-    std::vector<std::string> possiblePaths = {
-        cleanPath,                          // Original path
-        "ai_language/" + cleanPath,         // With ai_language prefix
-        "../" + cleanPath,                  // One directory up
-        "../../" + cleanPath,               // Two directories up
-        "datasets/" + cleanPath,            // In datasets folder
-        "ai_language/datasets/" + cleanPath, // ai_language/datasets path
-        "./datasets/" + cleanPath,          // Relative datasets path
-        "/home/runner/workspace/datasets/" + cleanPath, // Absolute workspace path
-        "/home/runner/workspace/" + cleanPath,          // Absolute workspace roots/" + cleanPath,         // Parent/datasets path
-        "examples/rl_examples/" + cleanPath, // Examples path
-        "/home/runner/workspace/ai_language/datasets/environment.json", // Absolute path for environment.json
-        "/home/runner/workspace/ai_language/datasets/" + cleanPath      // Absolute path with filename
-    };
-    
-    // For environment.json specifically, add the known exact paths as the first options
-    if (isEnvironmentJson) {
-        std::cout << "Looking for environment.json file specifically..." << std::endl;
-        possiblePaths.insert(possiblePaths.begin(), "ai_language/datasets/environment.json");
-        possiblePaths.insert(possiblePaths.begin(), "./datasets/environment.json");
-        possiblePaths.insert(possiblePaths.begin(), "./ai_language/datasets/environment.json");
-        possiblePaths.insert(possiblePaths.begin(), "/home/runner/workspace/ai_language/datasets/environment.json");
-        possiblePaths.insert(possiblePaths.begin(), "datasets/environment.json");
-        
-        // Current working directory
-        char cwd[PATH_MAX];
-        if (getcwd(cwd, sizeof(cwd)) != NULL) {
-            std::string cwdStr(cwd);
-            std::cout << "Current working directory: " << cwdStr << std::endl;
-            possiblePaths.insert(possiblePaths.begin(), cwdStr + "/datasets/environment.json");
-            possiblePaths.insert(possiblePaths.begin(), cwdStr + "/ai_language/datasets/environment.json");
-        }
-    }
-    
+    // Use only the specific path provided
     bool fileOpened = false;
     std::ifstream envFile;
     
-    std::cout << "Searching for environment file in multiple locations..." << std::endl;
-    for (const auto& path : possiblePaths) {
-        std::cout << "Trying path: " << path << std::endl;
-        
-        // Check if file exists before attempting to open
-        std::ifstream checkFile(path);
-        if (checkFile.good()) {
-            std::cout << "File exists at: " << path << std::endl;
-            checkFile.close();
-        }
-        
-        envFile.open(path);
-        if (envFile.is_open()) {
-            std::cout << GREEN << "Found environment file at: " << path << RESET << std::endl;
-            fileOpened = true;
-            break;
-        } else {
-            std::cout << "Failed to open file at: " << path << std::endl;
-        }
+    // Try to open the file directly from the provided path
+    envFile.open(cleanPath);
+    if (envFile.is_open()) {
+        std::cout << GREEN << "Successfully opened environment file at: " << cleanPath << RESET << std::endl;
+        fileOpened = true;
+    } else {
+        std::cout << "Failed to open environment file at: " << cleanPath << std::endl;
     }
     
     // If file wasn't found, try to list files in the datasets directory
