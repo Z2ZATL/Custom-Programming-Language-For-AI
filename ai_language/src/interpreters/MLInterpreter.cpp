@@ -591,9 +591,7 @@ void MLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& ar
 
     // ตรวจสอบว่าเป็นคำสั่งแบบระบุ "ratio" หรือไม่
     bool hasRatioKeyword = false;
-    bool hasIntoKeyword = false;
     size_t ratioPos = 0;
-    size_t intoPos = 0;
 
     // ค้นหาตำแหน่งคำสำคัญ
     for (size_t i = 0; i < args.size(); i++) {
@@ -601,10 +599,7 @@ void MLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& ar
             hasRatioKeyword = true;
             ratioPos = i;
         }
-        else if (args[i] == "into") {
-            hasIntoKeyword = true;
-            intoPos = i;
-        }
+        // ตรวจสอบคำสำคัญอื่นๆ ถ้าจำเป็น
     }
 
     // กรณีที่เป็นรูปแบบ split dataset into ... with ratio ...
