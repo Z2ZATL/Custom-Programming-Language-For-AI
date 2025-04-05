@@ -9,7 +9,8 @@
 #include <cmath> // for std::exp
 #include <limits> // for numeric_limits
 #include <algorithm> // for std::max_element and std::min_element
-#include <algorithm> // for std::max_element and std::min_element
+#include <unistd.h> // for getcwd
+#include <linux/limits.h> // for PATH_MAX
 
 
 namespace ai_language {
@@ -68,10 +69,23 @@ void RLInterpreter::loadEnvironment(const std::string& environmentPath) {
         "/home/runner/workspace/ai_language/datasets/" + cleanPath      // Absolute path with filename
     };
     
-    // For environment.json specifically, add the known exact path as the first option
+    // For environment.json specifically, add the known exact paths as the first options
     if (isEnvironmentJson) {
         std::cout << "Looking for environment.json file specifically..." << std::endl;
         possiblePaths.insert(possiblePaths.begin(), "ai_language/datasets/environment.json");
+        possiblePaths.insert(possiblePaths.begin(), "./datasets/environment.json");
+        possiblePaths.insert(possiblePaths.begin(), "./ai_language/datasets/environment.json");
+        possiblePaths.insert(possiblePaths.begin(), "/home/runner/workspace/ai_language/datasets/environment.json");
+        possiblePaths.insert(possiblePaths.begin(), "datasets/environment.json");
+        
+        // Current working directory
+        char cwd[PATH_MAX];
+        if (getcwd(cwd, sizeof(cwd)) != NULL) {
+            std::string cwdStr(cwd);
+            std::cout << "Current working directory: " << cwdStr << std::endl;
+            possiblePaths.insert(possiblePaths.begin(), cwdStr + "/datasets/environment.json");
+            possiblePaths.insert(possiblePaths.begin(), cwdStr + "/ai_language/datasets/environment.json");
+        }
     }
     
     bool fileOpened = false;
@@ -80,11 +94,31 @@ void RLInterpreter::loadEnvironment(const std::string& environmentPath) {
     std::cout << "Searching for environment file in multiple locations..." << std::endl;
     for (const auto& path : possiblePaths) {
         std::cout << "Trying path: " << path << std::endl;
+        
+        // Check if file exists before attempting to open
+        std::ifstream checkFile(path);
+        if (checkFile.good()) {
+            std::cout << "File exists at: " << path << std::endl;
+            checkFile.close();
+        }
+        
         envFile.open(path);
         if (envFile.is_open()) {
             std::cout << GREEN << "Found environment file at: " << path << RESET << std::endl;
             fileOpened = true;
             break;
+        } else {
+            std::cout << "Failed to open file at: " << path << std::endl;
+        }
+    }
+    
+    // If file wasn't found, try to list files in the datasets directory
+    if (!fileOpened) {
+        std::cout << "Listing files in datasets directory to help debugging:" << std::endl;
+        std::string command = "ls -la ai_language/datasets/";
+        int result = system(command.c_str());
+        if (result != 0) {
+            std::cout << "Failed to list files in datasets directory" << std::endl;
         }
     }
     
