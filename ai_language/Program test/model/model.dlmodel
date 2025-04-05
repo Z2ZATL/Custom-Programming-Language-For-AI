@@ -3,7 +3,7 @@ model_type: model
 learning_rate: 0.001
 epochs: 50
 accuracy: 0.95
-create_time: 2025-04-05 09:56:16 (UTC+0)
+create_time: 2025-04-05 10:57:07 (UTC+0)
 
 # Layers: 3
 layer: dense:64:relu
@@ -17,4 +17,5 @@ feature_columns: -1
 learning_rate: 0.001
 loss: -1
 optimizer: -1
+split_completed: 1
 target_column: -1
