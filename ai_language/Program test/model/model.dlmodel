@@ -1,0 +1,20 @@
+# DL Model saved from AI Language
+model_type: model
+learning_rate: 0.001
+epochs: 50
+accuracy: 0.95
+create_time: 2025-04-05 09:38:24 (UTC+0)
+
+# Layers: 3
+layer: dense:64:relu
+layer: dense:32:relu
+layer: dense:3:softmax
+
+# Parameters:
+batch_size: 32
+epochs: 50
+feature_columns: -1
+learning_rate: 0.001
+loss: -1
+optimizer: -1
+target_column: -1
