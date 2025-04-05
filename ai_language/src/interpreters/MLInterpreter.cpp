@@ -3,6 +3,7 @@
 #include <iostream>
 #include <chrono>
 #include <ctime>
+#include <cmath>
 
 namespace ai_language {
 
