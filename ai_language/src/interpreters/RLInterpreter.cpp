@@ -37,11 +37,35 @@ void RLInterpreter::interpret() {
 
 void RLInterpreter::loadEnvironment(const std::string& environmentPath) {
     std::cout << "Loading RL environment from: " << environmentPath << std::endl;
-
-    // Check if file exists
-    std::ifstream envFile(environmentPath);
-    if (!envFile.is_open()) {
-        std::cout << RED << "Warning: Could not open environment file: " << environmentPath << RESET << std::endl;
+    
+    // Clean up path (remove quotes if present)
+    std::string cleanPath = environmentPath;
+    if (cleanPath.size() >= 2 && cleanPath.front() == '"' && cleanPath.back() == '"') {
+        cleanPath = cleanPath.substr(1, cleanPath.size() - 2);
+    }
+    
+    // Try different possible paths
+    std::vector<std::string> possiblePaths = {
+        cleanPath,                       // Original path
+        "ai_language/" + cleanPath,      // With ai_language prefix
+        "../" + cleanPath,               // One directory up
+        "../../" + cleanPath             // Two directories up
+    };
+    
+    bool fileOpened = false;
+    std::ifstream envFile;
+    
+    for (const auto& path : possiblePaths) {
+        envFile.open(path);
+        if (envFile.is_open()) {
+            std::cout << GREEN << "Found environment file at: " << path << RESET << std::endl;
+            fileOpened = true;
+            break;
+        }
+    }
+    
+    if (!fileOpened) {
+        std::cout << RED << "Error: Could not open environment file: " << environmentPath << RESET << std::endl;
         std::cout << "Using default environment settings instead." << std::endl;
 
         // Set default environment parameters
