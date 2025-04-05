@@ -873,24 +873,24 @@ void DLInterpreter::handleListModelsCommand() {
     }
 }
 
-void DLInterpreter::handleInspectCommand(const std::vector<std::string>& args) {
+void DLInterpreter::handleInspectCommand([[maybe_unused]] const std::vector<std::string>& args) {
     std::cout << "Inspect command is not implemented for DL yet" << std::endl;
 }
 
-void DLInterpreter::handleValidateCommand(const std::vector<std::string>& args) {
+void DLInterpreter::handleValidateCommand([[maybe_unused]] const std::vector<std::string>& args) {
     std::cout << "Validate command is not implemented for DL yet" << std::endl;
 }
 
-void DLInterpreter::handlePreprocessCommand(const std::vector<std::string>& args) {
+void DLInterpreter::handlePreprocessCommand([[maybe_unused]] const std::vector<std::string>& args) {
     std::cout << "Preprocess command is not implemented for DL yet" << std::endl;
 }
 
-void DLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& args) {
+void DLInterpreter::handleSplitDatasetCommand([[maybe_unused]] const std::vector<std::string>& args) {
     std::cout << "Split dataset command is not implemented for DL yet" << std::endl;
 }
 
 
-void DLInterpreter::handleDeleteModelCommand(const std::vector<std::string>& args) {
+void DLInterpreter::handleDeleteModelCommand([[maybe_unused]] const std::vector<std::string>& args) {
     std::cout << "Delete model command is not implemented for DL yet" << std::endl;
 }
 
@@ -902,19 +902,19 @@ void DLInterpreter::handleCheckStatusCommand() {
     std::cout << "Check status command is not implemented for DL yet" << std::endl;
 }
 
-void DLInterpreter::handleDebugCommand(const std::vector<std::string>& args) {
+void DLInterpreter::handleDebugCommand([[maybe_unused]] const std::vector<std::string>& args) {
     std::cout << "Debug command is not implemented for DL yet" << std::endl;
 }
 
-void DLInterpreter::handleCrossValidateCommand(const std::vector<std::string>& args) {
+void DLInterpreter::handleCrossValidateCommand([[maybe_unused]] const std::vector<std::string>& args) {
     std::cout << "Cross validate command is not implemented for DL yet" << std::endl;
 }
 
-void DLInterpreter::handleExportResultsCommand(const std::vector<std::string>& args) {
+void DLInterpreter::handleExportResultsCommand([[maybe_unused]] const std::vector<std::string>& args) {
     std::cout << "Export results command not implemented yet in DL interpreter" << std::endl;
 }
 
-void DLInterpreter::handleScheduleTrainingCommand(const std::vector<std::string>& args) {
+void DLInterpreter::handleScheduleTrainingCommand([[maybe_unused]] const std::vector<std::string>& args) {
     std::cout << "Schedule training command not implemented yet in DL interpreter" << std::endl;
 }
 
