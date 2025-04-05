@@ -10,16 +10,17 @@ namespace ai_language {
 
 class DLInterpreter : public BaseInterpreter {
 private:
-    std::vector<std::string> layers; // Store neural network layers
-    std::map<std::string, double> parameters;
     std::string datasetPath;
+    std::vector<std::string> layers;
+    std::map<std::string, std::string> stringParameters; // เพิ่มแมพสำหรับเก็บค่าพารามิเตอร์ที่เป็นสตริง
+    std::map<std::string, double> parameters;
 
 public:
     void interpret();
     void setDefaultParameters() override;
     void addLayer(const std::string& layerType, const std::map<std::string, std::string>& params);
     void createModel(const std::string& modelType);
-    
+
     // Override virtual functions from BaseInterpreter
     void handleLoadCommand(const std::vector<std::string>& args) override; 
     void handleSetCommand(const std::vector<std::string>& args) override;
@@ -31,7 +32,7 @@ public:
     void handleHelpCommand() override;
     void handleCreateCommand(const std::vector<std::string>& args) override;
     void handleStartCommand() override;
-    
+
     // Implement remaining pure virtual functions
     void handlePlotCommand(const std::vector<std::string>& parts) override;
     void handleInspectCommand(const std::vector<std::string>& args) override;
