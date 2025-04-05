@@ -8,7 +8,7 @@ channel = "stable-24_05"
 run = ["sh", "-c", "cd ai_language && mkdir -p build && cd build && cmake .. && make && cd .. && ./ai_lang comprehensive_test.ai"]
 
 [workflows]
-runButton = "Run with Environment Setup"
+runButton = "Run with Fixed Environment"
 
 [[workflows.workflow]]
 name = "Build and Run C++"
@@ -243,3 +243,12 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "cd ai_language && mkdir -p build datasets && cp ../environment.json ./datasets/environment.json && cd build && cmake .. && make && cd .. && ./ai_lang -i"
+
+[[workflows.workflow]]
+name = "Run with Fixed Environment"
+author = 41167347
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd ai_language && mkdir -p build datasets && cp ../datasets/environment.json ./datasets/ && cd build && cmake .. && make && cd .. && ./ai_lang -i"
