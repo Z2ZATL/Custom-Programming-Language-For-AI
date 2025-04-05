@@ -140,8 +140,11 @@ void RLInterpreter::loadEnvironment(const std::string& environmentPath) {
             std::cout << "Creating environment.json file in multiple locations as a fallback..." << std::endl;
             
             // Create directories if they don't exist
-            system("mkdir -p ai_language/datasets/");
-            system("mkdir -p datasets/");
+            int dir_result1 = system("mkdir -p ai_language/datasets/");
+            int dir_result2 = system("mkdir -p datasets/");
+            if (dir_result1 != 0 || dir_result2 != 0) {
+                std::cout << "Warning: Failed to create one or more directories" << std::endl;
+            }
             
             // Environment file content
             std::string envContent = "{\n"
