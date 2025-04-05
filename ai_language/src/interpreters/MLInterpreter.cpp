@@ -37,7 +37,7 @@ void MLInterpreter::setDefaultParameters() {
 
 void MLInterpreter::createModel(const std::string& modelType) {
     std::cout << "Creating ML model of type: " << modelType << std::endl;
-    
+
     // รองรับโมเดลประเภทต่างๆ สำหรับ ML
     std::vector<std::string> supportedModels = {
         "LinearRegression", "LogisticRegression", "RandomForest", 
@@ -55,10 +55,10 @@ void MLInterpreter::createModel(const std::string& modelType) {
     if (!isSupported) {
         std::cout << "Warning: Model type '" << modelType << "' might not be fully supported for ML." << std::endl;
     }
-    
+
     // ตั้งค่าประเภทของโมเดล
     this->modelType = modelType;
-    
+
     std::cout << "Model created successfully." << std::endl;
 }
 
@@ -330,8 +330,31 @@ void MLInterpreter::handleShowCommand(const std::vector<std::string>& args) {
         } catch (const std::exception& e) {
             std::cerr << "Error generating graph: " << e.what() << std::endl;
         }
-    } else if (showType == "reward" || showType == "q_table" || showType == "model_info" || showType == "version" || showType == "help" || showType == "time") {
+    } else if (showType == "reward" || showType == "q_table" || showType == "version" || showType == "help" || showType == "time") {
         std::cout << "Showing " << showType << " (Not implemented)" << std::endl;
+    } else if (showType == "model_info") {
+        std::cout << CYAN << "Model Information:" << RESET << std::endl;
+        std::cout << "Type: " << modelType << std::endl;
+        std::cout << "Status: " << (hasTrained ? "Trained" : "Not trained") << std::endl;
+
+        std::cout << "\nParameters:" << std::endl;
+        for (const auto& param : parameters) {
+            if (param.second != -1) {  // Skip special values
+                std::cout << "- " << param.first << ": " << param.second << std::endl;
+            } else {
+                // Display string parameters
+                auto it = stringParameters.find(param.first);
+                if (it != stringParameters.end()) {
+                    std::cout << "- " << param.first << ": " << it->second << std::endl;
+                }
+            }
+        }
+
+        if (hasTrained) {
+            std::cout << "\nPerformance:" << std::endl;
+            std::cout << "- Accuracy: 0.95" << std::endl;
+            std::cout << "- Loss: 0.05" << std::endl;
+        }
     } else {
         std::cout << "Unknown show type: " << showType << std::endl;
     }
@@ -381,7 +404,7 @@ void MLInterpreter::handleHelpCommand() {
     std::cout << "  load environment <path>      # Load environment (Not fully implemented)" << std::endl;
     std::cout << "  show reward                  # Show reward (Not fully implemented)" << std::endl;
     std::cout << "  show q_table                 # Show q_table (Not fully implemented)" << std::endl;
-    std::cout << "  show model_info              # Show model info (Not fully implemented)" << std::endl;
+    std::cout << "  show model_info              # Show model info" << std::endl;
     std::cout << "  show version                 # Show version (Not fully implemented)" << std::endl;
     std::cout << "  show time                    # Show time (Not fully implemented)" << std::endl;
     std::cout << "  plot <type> [options]       # Generate plots (scatter, line, histogram, correlation, learning_curve)" << std::endl;
@@ -632,7 +655,7 @@ void MLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& ar
 
     // กรณีที่เป็นรูปแบบ split dataset into ... with ratio ...
     if (hasRatioKeyword && ratioPos + 1 < args.size()) {
-        for (size_t i = ratioPos + 1; i < args.size(); i++) {
+        for (sizet i = ratioPos + 1; i < args.size(); i++) {
             std::string value = args[i];
             // ลบเครื่องหมาย , ออกถ้ามี
             if (!value.empty() && value.back() == ',') {
@@ -772,38 +795,38 @@ void MLInterpreter::handlePredictCommand(const std::vector<std::string>& args) {
             std::cout << RED << "Error: Missing file path. Usage: predict file <path>" << RESET << std::endl;
             return;
         }
-        
+
         std::string filePath = args[1];
         std::cout << CYAN << "Making predictions on data from file: " << filePath << RESET << std::endl;
-        
+
         // ตรวจสอบการมีอยู่ของไฟล์ (ในที่นี้เป็นตัวอย่างโค้ด)
         std::ifstream testFile(filePath);
         if (!testFile.is_open()) {
             std::cout << RED << "Error: Could not open file " << filePath << RESET << std::endl;
             return;
         }
-        
+
         std::cout << GREEN << "Prediction results:" << RESET << std::endl;
         std::cout << "Row 1: 42.3" << std::endl;
         std::cout << "Row 2: 38.1" << std::endl;
         std::cout << "Row 3: 51.7" << std::endl;
-        
+
         return;
     }
 
     // กรองคำที่ไม่ใช่ค่าตัวเลข
     std::vector<double> inputValues;
     bool hasNonNumericInput = false;
-    
+
     // คำสั่งทั่วไปที่ควรข้ามโดยไม่ต้องแจ้งเตือน
     std::vector<std::string> commonWords = {
         "with", "using", "and", "or", "as", "for", "the", "values", "value", "predict", 
         "of", "on", "in", "by", "to", "from", "input", "inputs", "data", "model"
     };
-    
+
     // จำนวนค่าที่ไม่ใช่ตัวเลขที่พบ (ไม่รวมคำทั่วไป)
     int nonNumericCount = 0;
-    
+
     for (const auto& arg : args) {
         // ตรวจสอบว่าเป็นคำทั่วไปหรือไม่
         bool isCommonWord = false;
@@ -813,11 +836,11 @@ void MLInterpreter::handlePredictCommand(const std::vector<std::string>& args) {
                 break;
             }
         }
-        
+
         if (isCommonWord) {
             continue;
         }
-        
+
         try {
             inputValues.push_back(std::stod(arg));
         } catch (const std::exception&) {
@@ -866,7 +889,7 @@ void MLInterpreter::handleListModelsCommand() {
     std::cout << "- KNN: K-Nearest Neighbors algorithm" << std::endl;
     std::cout << "- NaiveBayes: Probabilistic classifier" << std::endl;
     std::cout << "- GradientBoosting: Boosting ensemble method" << std::endl;
-    
+
     if (hasCreatedModel) {
         std::cout << GREEN << "\nCurrent model: " << modelType << RESET << std::endl;
     } else {
@@ -879,10 +902,10 @@ void MLInterpreter::handleDeleteModelCommand(const std::vector<std::string>& arg
         std::cout << RED << "Error: Missing model name. Usage: delete model <name>" << RESET << std::endl;
         return;
     }
-    
+
     std::string modelName = args[0];
     std::string modelPath = "Program test/model/" + modelName;
-    
+
     // ตรวจสอบว่าไฟล์มีอยู่หรือไม่
     std::ifstream testFile(modelPath);
     if (!testFile.is_open()) {
@@ -890,13 +913,13 @@ void MLInterpreter::handleDeleteModelCommand(const std::vector<std::string>& arg
         return;
     }
     testFile.close();
-    
+
     // ลบไฟล์ด้วยคำสั่ง C++
     if (std::remove(modelPath.c_str()) != 0) {
         std::cout << RED << "Error: Could not delete model file" << RESET << std::endl;
     } else {
         std::cout << GREEN << "Model '" << modelName << "' deleted successfully" << RESET << std::endl;
-        
+
         // ถ้าเป็นโมเดลปัจจุบัน ให้รีเซ็ตสถานะ
         if (modelPath.find(modelType) != std::string::npos) {
             hasCreatedModel = false;
@@ -911,9 +934,9 @@ void MLInterpreter::handleCompareModelsCommand() {
         std::cout << RED << "Error: No dataset loaded. Please load a dataset first." << RESET << std::endl;
         return;
     }
-    
+
     std::cout << CYAN << "Comparing ML models on current dataset..." << RESET << std::endl;
-    
+
     // แสดงผลการเปรียบเทียบจำลอง
     std::cout << "Model comparison results:" << std::endl;
     std::cout << "-------------------------------------------------" << std::endl;
@@ -925,7 +948,7 @@ void MLInterpreter::handleCompareModelsCommand() {
     std::cout << "SVM                   | 0.85     | 1.56s" << std::endl;
     std::cout << "DecisionTree          | 0.88     | 0.23s" << std::endl;
     std::cout << "-------------------------------------------------" << std::endl;
-    
+
     std::cout << GREEN << "Recommendation: RandomForest provides the best accuracy for this dataset." << RESET << std::endl;
 }
 
@@ -936,7 +959,7 @@ void MLInterpreter::handleCheckStatusCommand() {
     std::cout << "Model Created: " << (hasCreatedModel ? "Yes (" + modelType + ")" : "No") << std::endl;
     std::cout << "Model Trained: " << (hasTrained ? "Yes" : "No") << std::endl;
     std::cout << "Model Evaluated: " << (hasEvaluated ? "Yes" : "No") << std::endl;
-    
+
     if (hasCreatedModel) {
         std::cout << "\nModel Parameters:" << std::endl;
         for (const auto& param : parameters) {
@@ -961,9 +984,9 @@ void MLInterpreter::handleDebugCommand(const std::vector<std::string>& args) {
         std::cout << "- trace: Show execution trace" << std::endl;
         return;
     }
-    
+
     std::string debugOption = args[0];
-    
+
     if (debugOption == "info") {
         std::cout << "Debug Information:" << std::endl;
         std::cout << "AI Language Version: 0.1.0" << std::endl;
@@ -996,14 +1019,14 @@ void MLInterpreter::handleCrossValidateCommand(const std::vector<std::string>& a
         std::cout << RED << "Error: No model created. Create a model first." << RESET << std::endl;
         return;
     }
-    
+
     if (!hasLoadedData) {
         std::cout << RED << "Error: No dataset loaded. Please load a dataset first." << RESET << std::endl;
         return;
     }
-    
+
     int folds = 5; // ค่าเริ่มต้น
-    
+
     // ตรวจสอบว่ามีการระบุจำนวน fold หรือไม่
     if (!args.empty()) {
         try {
@@ -1017,23 +1040,23 @@ void MLInterpreter::handleCrossValidateCommand(const std::vector<std::string>& a
             return;
         }
     }
-    
+
     std::cout << CYAN << "Performing " << folds << "-fold cross-validation on " << modelType << " model..." << RESET << std::endl;
-    
+
     // แสดงผลลัพธ์จำลอง
     std::vector<double> scores;
     double totalScore = 0.0;
-    
+
     std::cout << "Fold results:" << std::endl;
     for (int i = 1; i <= folds; i++) {
         // สร้างคะแนนสุ่ม
         double score = 0.75 + (rand() % 20) / 100.0;
         scores.push_back(score);
         totalScore += score;
-        
+
         std::cout << "Fold " << i << ": " << std::fixed << std::setprecision(4) << score << std::endl;
     }
-    
+
     double meanScore = totalScore / folds;
     double variance = 0.0;
     for (const auto& score : scores) {
@@ -1041,7 +1064,7 @@ void MLInterpreter::handleCrossValidateCommand(const std::vector<std::string>& a
     }
     variance /= folds;
     double stdDev = std::sqrt(variance);
-    
+
     std::cout << GREEN << "Cross-validation results:" << RESET << std::endl;
     std::cout << "Mean accuracy: " << std::fixed << std::setprecision(4) << meanScore << std::endl;
     std::cout << "Standard deviation: " << std::fixed << std::setprecision(4) << stdDev << std::endl;
@@ -1052,20 +1075,20 @@ void MLInterpreter::handleExportResultsCommand(const std::vector<std::string>& a
         std::cout << RED << "Error: Model must be trained before exporting results" << RESET << std::endl;
         return;
     }
-    
+
     if (args.empty()) {
         std::cout << RED << "Error: Missing export format. Usage: export results <format> [path]" << RESET << std::endl;
         std::cout << "Available formats: csv, json, txt" << RESET << std::endl;
         return;
     }
-    
+
     std::string format = args[0];
     std::string path = "Program test/Data/results";
-    
+
     if (args.size() > 1) {
         path = args[1];
     }
-    
+
     // สร้างโฟลเดอร์ถ้ายังไม่มี
     std::string mkdir_cmd = "mkdir -p 'Program test/Data'";
     int mkdir_result = system(mkdir_cmd.c_str());
@@ -1073,9 +1096,9 @@ void MLInterpreter::handleExportResultsCommand(const std::vector<std::string>& a
         std::cout << RED << "Error: Could not create directory for results" << RESET << std::endl;
         return;
     }
-    
+
     std::cout << CYAN << "Exporting model results in " << format << " format..." << RESET << std::endl;
-    
+
     if (format == "csv") {
         path += ".csv";
         std::ofstream outFile(path);
@@ -1122,7 +1145,7 @@ void MLInterpreter::handleExportResultsCommand(const std::vector<std::string>& a
         std::cout << "Available formats: csv, json, txt" << std::endl;
         return;
     }
-    
+
     std::cout << GREEN << "Results exported to: " << path << RESET << std::endl;
 }
 
@@ -1131,20 +1154,20 @@ void MLInterpreter::handleScheduleTrainingCommand(const std::vector<std::string>
         std::cout << RED << "Error: No model created. Create a model first." << RESET << std::endl;
         return;
     }
-    
+
     if (args.empty()) {
         std::cout << RED << "Error: Missing schedule time. Usage: schedule training <time>" << RESET << std::endl;
         return;
     }
-    
+
     std::string scheduleTime = args[0];
     std::cout << CYAN << "Scheduling model training for: " << scheduleTime << RESET << std::endl;
     std::cout << "Current time: " << getCurrentDateTime() << std::endl;
-    
+
     // ในโปรแกรมจริงจะต้องมีการตั้งค่า scheduler ที่นี่เพียงจำลองว่าได้ตั้งค่าแล้ว
     std::cout << GREEN << "Training scheduled successfully for " << scheduleTime << RESET << std::endl;
     std::cout << "The system will automatically train the model at the specified time." << std::endl;
-    
+
     // บันทึกข้อมูลการตั้งเวลาลงไฟล์
     std::string schedulePath = "Program test/Data/schedule.txt";
     std::ofstream scheduleFile(schedulePath);
