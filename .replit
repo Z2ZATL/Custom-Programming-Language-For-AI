@@ -1,11 +1,11 @@
 modules = ["cpp-clang14", "web", "c-clang14"]
-run = "cd ai_language && mkdir -p build && cd build && cmake .. && make && cd .. && ./ai_lang -i"
+run = "cd ai_language && mkdir -p build && cd build && cmake .. && make && cd .. && ./ai_lang comprehensive_test.ai"
 
 [nix]
 channel = "stable-24_05"
 
 [deployment]
-run = ["sh", "-c", "cd ai_language && mkdir -p build && cd build && cmake .. && make && cd .. && ./ai_lang -i"]
+run = ["sh", "-c", "cd ai_language && mkdir -p build && cd build && cmake .. && make && cd .. && ./ai_lang comprehensive_test.ai"]
 
 [workflows]
 runButton = "Run After Fix"

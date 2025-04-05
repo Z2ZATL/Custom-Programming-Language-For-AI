@@ -1,0 +1,56 @@
+-- Configuring done (0.1s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/runner/workspace/ai_language/build
+[  6%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/BaseInterpreter.cpp.o
+[ 12%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/MLInterpreter.cpp.o
+[ 18%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/DLInterpreter.cpp.o
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: In member function ‘virtual void ai_language::DLInterpreter::handleInspectCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:876:74: warning: unused parameter ‘args’ [-Wunused-parameter]
+  876 | void DLInterpreter::handleInspectCommand(const std::vector<std::string>& args) {
+      |                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: In member function ‘virtual void ai_language::DLInterpreter::handleValidateCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:880:75: warning: unused parameter ‘args’ [-Wunused-parameter]
+  880 | void DLInterpreter::handleValidateCommand(const std::vector<std::string>& args) {
+      |                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: In member function ‘virtual void ai_language::DLInterpreter::handlePreprocessCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:884:77: warning: unused parameter ‘args’ [-Wunused-parameter]
+  884 | void DLInterpreter::handlePreprocessCommand(const std::vector<std::string>& args) {
+      |                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: In member function ‘virtual void ai_language::DLInterpreter::handleSplitDatasetCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:888:79: warning: unused parameter ‘args’ [-Wunused-parameter]
+  888 | void DLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& args) {
+      |                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: In member function ‘virtual void ai_language::DLInterpreter::handleDeleteModelCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:893:78: warning: unused parameter ‘args’ [-Wunused-parameter]
+  893 | void DLInterpreter::handleDeleteModelCommand(const std::vector<std::string>& args) {
+      |                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: In member function ‘virtual void ai_language::DLInterpreter::handleDebugCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:905:72: warning: unused parameter ‘args’ [-Wunused-parameter]
+  905 | void DLInterpreter::handleDebugCommand(const std::vector<std::string>& args) {
+      |                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: In member function ‘virtual void ai_language::DLInterpreter::handleCrossValidateCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:909:80: warning: unused parameter ‘args’ [-Wunused-parameter]
+  909 | void DLInterpreter::handleCrossValidateCommand(const std::vector<std::string>& args) {
+      |                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: In member function ‘virtual void ai_language::DLInterpreter::handleExportResultsCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:913:80: warning: unused parameter ‘args’ [-Wunused-parameter]
+  913 | void DLInterpreter::handleExportResultsCommand(const std::vector<std::string>& args) {
+      |                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp: In member function ‘virtual void ai_language::DLInterpreter::handleScheduleTrainingCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/DLInterpreter.cpp:917:83: warning: unused parameter ‘args’ [-Wunused-parameter]
+  917 | void DLInterpreter::handleScheduleTrainingCommand(const std::vector<std::string>& args) {
+      |                                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+[ 25%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/RLInterpreter.cpp.o
+[ 31%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/InterpreterFactory.cpp.o
+[ 37%] Building CXX object CMakeFiles/ai_language_lib.dir/src/connectors/ScikitLearnConnector.cpp.o
+[ 43%] Building CXX object CMakeFiles/ai_language_lib.dir/src/connectors/Connector.cpp.o
+[ 50%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/interpreter.cpp.o
+[ 56%] Building CXX object CMakeFiles/ai_language_lib.dir/src/lexer.cpp.o
+/home/runner/workspace/ai_language/src/lexer.cpp: In member function ‘char ai_language::Lexer::peekNext() const’:
+/home/runner/workspace/ai_language/src/lexer.cpp:212:22: warning: comparison of integer expressions of different signedness: ‘int’ and ‘std::__cxx11::basic_string<char>::size_type’ {aka ‘long unsigned int’} [-Wsign-compare]
+  212 |     if (_current + 1 >= _source.length()) return '\0';
+      |         ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/lexer.cpp: In member function ‘bool ai_language::Lexer::isAtEnd() const’:
+/home/runner/workspace/ai_language/src/lexer.cpp:230:21: warning: comparison of integer expressions of different signedness: ‘const int’ and ‘std::__cxx11::basic_string<char>::size_type’ {aka ‘long unsigned int’} [-Wsign-compare]
+  230 |     return _current >= _source.length();
+      |            ~~~~~~~~~^~~~~~~~~~~~~~~~~~~
