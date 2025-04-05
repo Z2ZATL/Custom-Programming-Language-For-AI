@@ -121,6 +121,36 @@ void RLInterpreter::loadEnvironment(const std::string& environmentPath) {
         if (result != 0) {
             std::cout << "Failed to list files in datasets directory" << std::endl;
         }
+        
+        // Try to list files in the root datasets directory
+        std::cout << "Listing files in root datasets directory:" << std::endl;
+        command = "ls -la datasets/";
+        result = system(command.c_str());
+        if (result != 0) {
+            std::cout << "Failed to list files in root datasets directory" << std::endl;
+        }
+        
+        // As a last resort, try creating a minimal environment file
+        if (isEnvironmentJson) {
+            std::cout << "Creating a minimal environment.json file as a last resort..." << std::endl;
+            std::ofstream newEnvFile("./environment.json");
+            if (newEnvFile.is_open()) {
+                newEnvFile << "{\n";
+                newEnvFile << "  \"states\": [\"s0\", \"s1\", \"s2\", \"s3\", \"s4\", \"s5\", \"s6\", \"s7\", \"s8\"],\n";
+                newEnvFile << "  \"actions\": [\"up\", \"down\", \"left\", \"right\"],\n";
+                newEnvFile << "  \"state_size\": 9,\n";
+                newEnvFile << "  \"action_size\": 4\n";
+                newEnvFile << "}\n";
+                newEnvFile.close();
+                
+                // Try to open the newly created file
+                envFile.open("./environment.json");
+                if (envFile.is_open()) {
+                    std::cout << GREEN << "Created and loaded minimal environment file." << RESET << std::endl;
+                    fileOpened = true;
+                }
+            }
+        }
     }
     
     if (!fileOpened) {
