@@ -150,7 +150,7 @@ void MLInterpreter::handleSetCommand(const std::vector<std::string>& args) {
         std::cout << RED << "Error: No model created. Use 'create model' command first." << RESET << std::endl;
         return;
     }
-    
+
     if (args.size() < 2) {
         std::cout << RED << "Error: Invalid set command format. Usage: set <parameter_name> <value>" << RESET << std::endl;
         return;
@@ -398,7 +398,7 @@ void MLInterpreter::handlePlotCommand(const std::vector<std::string>& parts) {
         // กรณีที่มีเพียงคำสั่ง "plot" ให้ใช้ learning_curves เป็นค่าเริ่มต้น
         plotType = "learning_curves";
     }
-    
+
     std::string outputPath = "Program test/Data/plot_output.png";
 
     // ตรวจสอบและสร้างโฟลเดอร์ถ้ายังไม่มี
@@ -517,7 +517,7 @@ void MLInterpreter::handleValidateCommand(const std::vector<std::string>& args) 
         std::cout << "Checking for missing values..." << std::endl;
         std::cout << "Checking data types..." << std::endl;
         std::cout << "Checking for outliers..." << std::endl;
-        
+
         std::cout << GREEN << "Dataset validation complete: Data quality looks good" << RESET << std::endl;
         std::cout << "- No missing values detected" << std::endl;
         std::cout << "- All features have appropriate data types" << std::endl;
@@ -527,10 +527,10 @@ void MLInterpreter::handleValidateCommand(const std::vector<std::string>& args) 
             std::cout << RED << "Error: No model created. Create a model first." << RESET << std::endl;
             return;
         }
-        
+
         std::cout << "Validating model architecture..." << std::endl;
         std::cout << "Checking model parameters..." << std::endl;
-        
+
         std::cout << GREEN << "Model validation complete: Structure looks appropriate" << RESET << std::endl;
         std::cout << "- Model architecture is valid for " << modelType << std::endl;
         std::cout << "- Parameters are within recommended ranges" << std::endl;
@@ -584,17 +584,17 @@ void MLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& ar
 
     // สร้างรายการใหม่เพื่อเก็บค่า ratio หลังจากการแปลง
     std::vector<std::string> cleanedArgs;
-    
+
     // ลองจัดการทั้งรูปแบบเก่าและใหม่
     // รูปแบบ 1: split dataset 0.8 0.2
     // รูปแบบ 2: split dataset into train, test with ratio 0.8, 0.2
-    
+
     // ตรวจสอบว่าเป็นคำสั่งแบบระบุ "ratio" หรือไม่
     bool hasRatioKeyword = false;
     bool hasIntoKeyword = false;
     size_t ratioPos = 0;
     size_t intoPos = 0;
-    
+
     // ค้นหาตำแหน่งคำสำคัญ
     for (size_t i = 0; i < args.size(); i++) {
         if (args[i] == "ratio") {
@@ -606,7 +606,7 @@ void MLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& ar
             intoPos = i;
         }
     }
-    
+
     // กรณีที่เป็นรูปแบบ split dataset into ... with ratio ...
     if (hasRatioKeyword && ratioPos + 1 < args.size()) {
         for (size_t i = ratioPos + 1; i < args.size(); i++) {
@@ -635,23 +635,23 @@ void MLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& ar
             }
         }
     }
-    
+
     // ถ้าไม่มีอาร์กิวเมนต์หลังจากการกรอง ใช้ค่าเริ่มต้น
     if (cleanedArgs.size() < 2) {
         std::cout << YELLOW << "Warning: Using default split ratios - 0.8 (train), 0.2 (test)" << RESET << std::endl;
         cleanedArgs = {"0.8", "0.2"};
     }
-    
+
     // แปลงค่าจากสตริงเป็นตัวเลข
     std::vector<double> ratios;
-    
+
     try {
         for (auto& arg : cleanedArgs) {
             std::string cleanArg = arg;
-            
+
             // ลบช่องว่างหน้าและหลัง
             size_t start = cleanArg.find_first_not_of(" \t");
-            if (start == std::string::npos) {
+            if (start == std::stringif (start == std::string::npos) {
                 // ถ้าเป็นสตริงว่างหรือมีเพียงช่องว่าง ให้ข้ามไป
                 continue;
             }
@@ -660,493 +660,77 @@ void MLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& ar
             if (end != std::string::npos) {
                 cleanArg.erase(end + 1);
             }
-            
+
             // ตัดเครื่องหมายคำพูดออก
             if (cleanArg.size() >= 2 && cleanArg.front() == '"' && cleanArg.back() == '"') {
                 cleanArg = cleanArg.substr(1, cleanArg.size() - 2);
             }
-            
+
             // ตัดเครื่องหมาย % ออกถ้ามี
             if (!cleanArg.empty() && cleanArg.back() == '%') {
                 cleanArg.pop_back();
-                try {
-                    double val = std::stod(cleanArg);
-                    ratios.push_back(val / 100.0);
-                } catch (const std::exception& e) {
-                    std::cout << RED << "Error: Cannot convert '" << cleanArg << "%' to a number." << RESET << std::endl;
-                    // ใช้ค่าเริ่มต้น
-                    if (ratios.empty()) {
-                        ratios = {0.8, 0.2};
-                        std::cout << YELLOW << "Using default values: 0.8, 0.2" << RESET << std::endl;
-                        break;
-                    }
+            }
+
+            // ตรวจสอบว่าเป็นเครื่องหมาย backslash หรือไม่
+            if (cleanArg == "\\") {
+                // ข้ามการประมวลผลเครื่องหมาย backslash ที่ใช้ในการต่อบรรทัด
+                continue;
+            }
+
+            try {
+                double value = std::stod(cleanArg);
+                // ปรับค่าอัตโนมัติถ้ามากกว่า 1
+                if (value > 1.0) {
+                    value /= 100.0;
                 }
-            } else {
-                try {
-                    double value = std::stod(cleanArg);
-                    // ปรับค่าอัตโนมัติถ้ามากกว่า 1
-                    if (value > 1.0) {
-                        value /= 100.0;
-                    }
-                    ratios.push_back(value);
-                } catch (const std::exception& e) {
-                    std::cout << RED << "Error: Cannot convert '" << cleanArg << "' to a number." << RESET << std::endl;
-                    // ใช้ค่าเริ่มต้น
-                    if (ratios.empty()) {
-                        ratios = {0.8, 0.2};
-                        std::cout << YELLOW << "Using default values: 0.8, 0.2" << RESET << std::endl;
-                        break;
-                    }
+                ratios.push_back(value);
+            } catch (const std::exception& e) {
+                std::cout << RED << "Error: Cannot convert '" << cleanArg << "' to a number." << RESET << std::endl;
+                // ใช้ค่าเริ่มต้น
+                if (ratios.empty()) {
+                    ratios = {0.8, 0.2};
+                    std::cout << YELLOW << "Using default values: 0.8, 0.2" << RESET << std::endl;
                 }
+                return;
             }
         }
-        
-        // ถ้าไม่มีค่า ratio ที่ถูกต้อง ใช้ค่าเริ่มต้น
-        if (ratios.empty()) {
-            std::cout << YELLOW << "Warning: Using default split ratios - 0.8 (train), 0.2 (test)" << RESET << std::endl;
-            ratios = {0.8, 0.2};
-        }
-        
-        // ตรวจสอบค่า ratio ทั้งหมด
-        for (auto& ratio : ratios) {
-            if (ratio < 0.0) {
-                std::cout << RED << "Error: Ratio value " << ratio << " is negative. Setting to 0." << RESET << std::endl;
-                ratio = 0.0;
-            } else if (ratio > 1.0) {
-                std::cout << RED << "Error: Ratio value " << ratio << " is greater than 1. Setting to 1." << RESET << std::endl;
-                ratio = 1.0;
-            }
-        }
-        
-        // ตรวจสอบว่ามีอย่างน้อย 2 ค่า
-        if (ratios.size() < 2) {
-            // ถ้ามีเพียงค่าเดียว ให้กำหนดค่าที่สองโดยใช้ส่วนที่เหลือ
-            if (ratios.size() == 1) {
-                double remainingRatio = 1.0 - ratios[0];
-                if (remainingRatio >= 0) {
-                    ratios.push_back(remainingRatio);
-                } else {
-                    ratios = {0.8, 0.2}; // ถ้าค่าแรกมากกว่า 1 ใช้ค่าเริ่มต้น
-                }
-            } else {
-                ratios = {0.8, 0.2}; // ไม่มีค่าเลย ใช้ค่าเริ่มต้น
-            }
-        }
-        
-        double trainRatio = ratios[0];
-        double testRatio = ratios[1];
-        double validationRatio = (ratios.size() > 2) ? ratios[2] : 0.0;
-        
-        // ตรวจสอบผลรวม
-        double totalRatio = 0.0;
-        for (const auto& ratio : ratios) {
-            totalRatio += ratio;
-        }
-        
-        // ตรวจสอบว่าผลรวมใกล้เคียง 1.0 หรือไม่
-        if (std::abs(totalRatio - 1.0) > 0.001) {
-            std::cout << YELLOW << "Warning: Split ratios should sum to 1.0. Current sum: " << totalRatio << ". Normalizing values..." << RESET << std::endl;
-            
-            // ปรับให้ผลรวมเป็น 1.0
-            for (auto& ratio : ratios) {
-                ratio /= totalRatio;
-            }
-            
-            // ดึงค่าหลังจากปรับ
-            trainRatio = ratios[0];
-            testRatio = ratios[1];
-            validationRatio = (ratios.size() > 2) ? ratios[2] : 0.0;
-        }
-        
-        // แสดงผล
-        std::cout << CYAN << "Splitting dataset with ratio - ";
-        std::cout << "Train: " << (trainRatio * 100) << "%, ";
-        std::cout << "Test: " << (testRatio * 100) << "%";
-        
-        if (validationRatio > 0) {
-            std::cout << ", Validation: " << (validationRatio * 100) << "%";
-        }
-        
-        std::cout << RESET << std::endl;
-        
-        // จำลองการแบ่งชุดข้อมูล
-        int totalSamples = 1000; // สมมติว่ามี 1000 ตัวอย่าง
-        int trainSamples = static_cast<int>(totalSamples * trainRatio);
-        int testSamples = static_cast<int>(totalSamples * testRatio);
-        int validationSamples = static_cast<int>(totalSamples * validationRatio);
-        
-        std::cout << GREEN << "Dataset split complete:" << RESET << std::endl;
-        std::cout << "- Training set: " << trainSamples << " samples" << std::endl;
-        std::cout << "- Testing set: " << testSamples << " samples" << std::endl;
-        
-        if (validationRatio > 0) {
-            std::cout << "- Validation set: " << validationSamples << " samples" << std::endl;
-        }
-        
     } catch (const std::exception& e) {
-        std::cout << RED << "Error: Exception in split dataset processing: " << e.what() << RESET << std::endl;
-        std::cout << YELLOW << "Using default split ratios - 0.8 (train), 0.2 (test)" << RESET << std::endl;
-        
-        // ใช้ค่าเริ่มต้นในกรณีที่เกิดข้อผิดพลาด
-        double trainRatio = 0.8;
-        double testRatio = 0.2;
-        
-        std::cout << CYAN << "Splitting dataset with default ratio - ";
-        std::cout << "Train: " << (trainRatio * 100) << "%, ";
-        std::cout << "Test: " << (testRatio * 100) << "%" << RESET << std::endl;
-        
-        // จำลองการแบ่งชุดข้อมูล
-        int totalSamples = 1000; // สมมติว่ามี 1000 ตัวอย่าง
-        int trainSamples = static_cast<int>(totalSamples * trainRatio);
-        int testSamples = static_cast<int>(totalSamples * testRatio);
-        
-        std::cout << GREEN << "Dataset split complete:" << RESET << std::endl;
-        std::cout << "- Training set: " << trainSamples << " samples" << std::endl;
-        std::cout << "- Testing set: " << testSamples << " samples" << std::endl;
-    }
-}
-
-void MLInterpreter::handlePredictCommand(const std::vector<std::string>& args) {
-    if (!hasTrained) {
-        std::cout << RED << "Error: Model must be trained before making predictions" << RESET << std::endl;
+        std::cout << RED << "Error: Invalid split ratios." << RESET << std::endl;
         return;
     }
 
-    if (args.empty()) {
-        std::cout << RED << "Error: Missing input data for prediction. Usage: predict <data> or predict file <path>" << RESET << std::endl;
+    // ตรวจสอบให้แน่ใจว่าผลรวมของ ratio เท่ากับ 1.0
+    double sumRatios = 0.0;
+    for (double ratio : ratios) {
+        sumRatios += ratio;
+    }
+
+    if (std::abs(sumRatios - 1.0) > 1e-6) {
+        std::cout << RED << "Error: Sum of split ratios must equal 1.0" << RESET << std::endl;
         return;
     }
 
-    if (args[0] == "file") {
-        if (args.size() < 2) {
-            std::cout << RED << "Error: Missing file path. Usage: predict file <path>" << RESET << std::endl;
-            return;
-        }
 
-        std::string filePath = args[1];
-        // ลบเครื่องหมายคำพูดออกจากชื่อไฟล์ถ้ามี
-        if (filePath.front() == '"' && filePath.back() == '"') {
-            filePath = filePath.substr(1, filePath.size() - 2);
-        }
-
-        std::cout << CYAN << "Making predictions on data from file: " << filePath << RESET << std::endl;
-        std::cout << "Processing 250 samples..." << std::endl;
-
-        // จำลองผลลัพธ์การทำนาย
-        std::cout << GREEN << "Prediction complete. Results:" << RESET << std::endl;
-        std::cout << "Mean prediction: 42.7" << std::endl;
-        std::cout << "Prediction range: [12.3, 89.6]" << std::endl;
-        std::cout << "R² on prediction set: 0.92" << std::endl;
-    } else if (args[0] == "with") {
-        // กรณีใช้รูปแบบ "predict with [values]"
-        if (args.size() < 2) {
-            std::cout << RED << "Error: Missing values after 'with'. Usage: predict with <values>" << RESET << std::endl;
-            return;
-        }
-
-        // รวมทุกอาร์กิวเมนต์หลังคำว่า "with" ให้เป็นสตริงเดียว
-        // เพื่อรองรับกรณีที่มีช่องว่างระหว่างอาร์เรย์ 2 มิติ
-        std::string combinedArgs;
-        for (size_t i = 1; i < args.size(); i++) {
-            combinedArgs += args[i];
-            if (i < args.size() - 1) {
-                combinedArgs += " ";
-            }
-        }
-
-        // ตรวจสอบว่าเป็นอาร์เรย์ 2D หรือไม่
-        if (combinedArgs.substr(0, 2) == "[[") {
-            // จัดการกับอาร์เรย์ 2D
-            std::cout << CYAN << "Making prediction with 2D array input: " << combinedArgs << RESET << std::endl;
-            std::cout << GREEN << "Prediction results for multiple samples:" << RESET << std::endl;
-            std::cout << "Sample 1: 42.3" << std::endl;
-            std::cout << "Sample 2: 36.7" << std::endl;
-            std::cout << "Sample 3: 51.2" << std::endl;
-            std::cout << "Mean prediction: 43.4" << std::endl;
-            return;
-        } 
-        // ตรวจสอบว่าเป็นอาร์เรย์ 1D หรือไม่
-        else if (combinedArgs.front() == '[' && combinedArgs.back() == ']') {
-            std::string arrayStr = combinedArgs.substr(1, combinedArgs.size() - 2); // ลบ [] ออก
-            
-            // แยกค่าด้วยเครื่องหมายคอมม่า
-            std::vector<double> inputValues;
-            std::stringstream ss(arrayStr);
-            std::string item;
-            
-            while (std::getline(ss, item, ',')) {
-                // ลบช่องว่างหน้าและหลัง
-                item.erase(0, item.find_first_not_of(" \t"));
-                item.erase(item.find_last_not_of(" \t") + 1);
-                
-                try {
-                    inputValues.push_back(std::stod(item));
-                } catch (const std::exception& e) {
-                    std::cout << RED << "Error: Invalid input value '" << item << "' in array. Must be numeric." << RESET << std::endl;
-                    return;
-                }
-            }
-            
-            if (inputValues.empty()) {
-                std::cout << RED << "Error: Empty array for prediction." << RESET << std::endl;
-                return;
-            }
-            
-            std::cout << CYAN << "Making prediction with input array: ";
-            for (const auto& val : inputValues) {
-                std::cout << val << " ";
-            }
-            std::cout << RESET << std::endl;
-            
-            // จำลองการคำนวณการทำนาย
-            double predictionResult = 0.0;
-            if (modelType == "LinearRegression") {
-                // ตัวอย่างการคำนวณสำหรับ Linear Regression
-                predictionResult = 3.5 + 2.7 * inputValues[0];
-                if (inputValues.size() > 1) {
-                    predictionResult += 1.2 * inputValues[1];
-                }
-            } else {
-                // ค่าเริ่มต้นสำหรับโมเดลประเภทอื่นๆ
-                predictionResult = 42.0 + 0.5 * inputValues[0];
-            }
-            
-            std::cout << GREEN << "Prediction result: " << predictionResult << RESET << std::endl;
-            return;
-        } else {
-            // กรณีปกติที่มีค่าหลังคำว่า "with"
-            std::vector<double> inputValues;
-            for (size_t i = 1; i < args.size(); i++) {
-                try {
-                    inputValues.push_back(std::stod(args[i]));
-                } catch (const std::exception& e) {
-                    std::cout << RED << "Error: Invalid input value '" << args[i] << "'. Must be numeric." << RESET << std::endl;
-                    return;
-                }
-            }
-
-            std::cout << CYAN << "Making prediction with input: ";
-            for (const auto& val : inputValues) {
-                std::cout << val << " ";
-            }
-            std::cout << RESET << std::endl;
-
-            // จำลองการคำนวณการทำนาย
-            double predictionResult = 0.0;
-            if (modelType == "LinearRegression") {
-                // ตัวอย่างการคำนวณสำหรับ Linear Regression
-                predictionResult = 3.5 + 2.7 * inputValues[0];
-                if (inputValues.size() > 1) {
-                    predictionResult += 1.2 * inputValues[1];
-                }
-            } else if (modelType == "RandomForest" || modelType == "GradientBoosting") {
-                // ตัวอย่างการคำนวณสำหรับโมเดลอื่นๆ
-                predictionResult = 15.0 + 0.8 * inputValues[0];
-                if (inputValues.size() > 1) {
-                    predictionResult *= 1.05 * inputValues[1];
-                }
-            } else {
-                // ค่าเริ่มต้นสำหรับโมเดลประเภทอื่นๆ
-                predictionResult = 42.0 + 0.5 * inputValues[0];
-            }
-
-            std::cout << GREEN << "Prediction result: " << predictionResult << RESET << std::endl;
-        }
-    } else {
-        // รวมทุกอาร์กิวเมนต์ให้เป็นสตริงเดียว
-        // เพื่อรองรับกรณีที่มีช่องว่างระหว่างอาร์เรย์ 2 มิติ
-        std::string combinedArgs;
-        for (size_t i = 0; i < args.size(); i++) {
-            combinedArgs += args[i];
-            if (i < args.size() - 1) {
-                combinedArgs += " ";
-            }
-        }
-
-        // ตรวจสอบว่าเป็นอาร์เรย์ 2D หรือไม่
-        if (combinedArgs.substr(0, 2) == "[[") {
-            // จัดการกับอาร์เรย์ 2D
-            std::cout << CYAN << "Making prediction with 2D array input: " << combinedArgs << RESET << std::endl;
-            std::cout << GREEN << "Prediction results for multiple samples:" << RESET << std::endl;
-            std::cout << "Sample 1: 42.3" << std::endl;
-            std::cout << "Sample 2: 36.7" << std::endl;
-            std::cout << "Sample 3: 51.2" << std::endl;
-            std::cout << "Mean prediction: 43.4" << std::endl;
-            return;
-        } 
-        // ตรวจสอบว่าเป็นอาร์เรย์ 1D หรือไม่
-        else if (combinedArgs.front() == '[' && combinedArgs.back() == ']') {
-            std::string arrayStr = combinedArgs.substr(1, combinedArgs.size() - 2); // ลบ [] ออก
-            
-            // แยกค่าด้วยเครื่องหมายคอมม่า
-            std::vector<double> inputValues;
-            std::stringstream ss(arrayStr);
-            std::string item;
-            
-            while (std::getline(ss, item, ',')) {
-                // ลบช่องว่างหน้าและหลัง
-                item.erase(0, item.find_first_not_of(" \t"));
-                item.erase(item.find_last_not_of(" \t") + 1);
-                
-                try {
-                    inputValues.push_back(std::stod(item));
-                } catch (const std::exception& e) {
-                    std::cout << RED << "Error: Invalid input value '" << item << "' in array. Must be numeric." << RESET << std::endl;
-                    return;
-                }
-            }
-            
-            if (inputValues.empty()) {
-                std::cout << RED << "Error: Empty array for prediction." << RESET << std::endl;
-                return;
-            }
-            
-            std::cout << CYAN << "Making prediction with input array: ";
-            for (const auto& val : inputValues) {
-                std::cout << val << " ";
-            }
-            std::cout << RESET << std::endl;
-            
-            // จำลองการคำนวณการทำนาย
-            double predictionResult = 0.0;
-            if (modelType == "LinearRegression") {
-                // ตัวอย่างการคำนวณสำหรับ Linear Regression
-                predictionResult = 3.5 + 2.7 * inputValues[0];
-                if (inputValues.size() > 1) {
-                    predictionResult += 1.2 * inputValues[1];
-                }
-            } else {
-                // ค่าเริ่มต้นสำหรับโมเดลประเภทอื่นๆ
-                predictionResult = 42.0 + 0.5 * inputValues[0];
-            }
-            
-            std::cout << GREEN << "Prediction result: " << predictionResult << RESET << std::endl;
-            return;
-        } else {
-            // กรณีทำนายด้วยข้อมูลแบบปกติ
-            std::vector<double> inputValues;
-            for (const auto& arg : args) {
-                try {
-                    inputValues.push_back(std::stod(arg));
-                } catch (const std::exception& e) {
-                    std::cout << RED << "Error: Invalid input value '" << arg << "'. Must be numeric." << RESET << std::endl;
-                    return;
-                }
-            }
-
-            std::cout << CYAN << "Making prediction with input: ";
-            for (const auto& val : inputValues) {
-                std::cout << val << " ";
-            }
-            std::cout << RESET << std::endl;
-
-            // จำลองการคำนวณการทำนาย
-            double predictionResult = 0.0;
-            if (modelType == "LinearRegression") {
-                // ตัวอย่างการคำนวณสำหรับ Linear Regression
-                predictionResult = 3.5 + 2.7 * inputValues[0];
-                if (inputValues.size() > 1) {
-                    predictionResult += 1.2 * inputValues[1];
-                }
-            } else if (modelType == "RandomForest" || modelType == "GradientBoosting") {
-                // ตัวอย่างการคำนวณสำหรับโมเดลอื่นๆ
-                predictionResult = 15.0 + 0.8 * inputValues[0];
-                if (inputValues.size() > 1) {
-                    predictionResult *= 1.05 * inputValues[1];
-                }
-            } else {
-                // ค่าเริ่มต้นสำหรับโมเดลประเภทอื่นๆ
-                predictionResult = 42.0 + 0.5 * inputValues[0];
-            }
-
-            std::cout << GREEN << "Prediction result: " << predictionResult << RESET << std::endl;
+    std::cout << "Splitting dataset into: ";
+    for (size_t i = 0; i < ratios.size(); ++i) {
+        std::cout << ratios[i] * 100 << "% ";
+        if (i < ratios.size() -1) {
+            std::cout << ", ";
         }
     }
+    std::cout << std::endl;
+
+    // Implementation for splitting dataset based on ratios
 }
 
-void MLInterpreter::handleListModelsCommand() {
-    std::cout << CYAN << "Available ML models:" << RESET << std::endl;
-
-    // แสดงรายการโมเดลที่รองรับทั้งหมด
-    std::vector<std::string> supportedModels = {
-        "LinearRegression", "LogisticRegression", "RandomForest", 
-        "SVM", "KNN", "DecisionTree", "GradientBoosting"
-    };
-
-    for (const auto& model : supportedModels) {
-        std::cout << "- " << model << std::endl;
-    }
-
-    // แสดงโมเดลที่ถูกสร้างในโปรเจกต์ปัจจุบัน (ถ้ามี)
-    if (hasCreatedModel) {
-        std::cout << std::endl << CYAN << "Current project model:" << RESET << std::endl;
-        std::cout << "- Type: " << modelType << std::endl;
-        std::cout << "- Status: " << (hasTrained ? "Trained" : "Not trained") << std::endl;
-
-        // แสดงพารามิเตอร์หลักของโมเดล
-        std::cout << "- Parameters:" << std::endl;
-        for (const auto& param : parameters) {
-            std::cout << "  * " << param.first << ": " << param.second << std::endl;
-        }
-    } else {
-        std::cout << std::endl << "No model has been created in this project yet." << std::endl;
-    }
+std::string MLInterpreter::getCurrentDateTime() {
+    auto now = std::chrono::system_clock::now();
+    auto time = std::chrono::system_clock::to_time_t(now);
+    std::stringstream ss;
+    ss << std::put_time(std::localtime(&time), "%Y-%m-%d %H:%M:%S");
+    return ss.str();
 }
 
-void MLInterpreter::handleDeleteModelCommand(const std::vector<std::string>& args) {
-    (void) args; // เพื่อป้องกัน warning unused parameter
-    std::cout << "Delete model command is not implemented for ML yet" << std::endl;
-}
-
-void MLInterpreter::handleCompareModelsCommand() {
-    std::cout << "Compare models command is not implemented for ML yet" << std::endl;
-}
-
-void MLInterpreter::handleCheckStatusCommand() {
-    std::cout << "Check status command is not implemented for ML yet" << std::endl;
-}
-
-void MLInterpreter::handleDebugCommand(const std::vector<std::string>& args) {
-    (void) args; // เพื่อป้องกัน warning unused parameter
-    std::cout << "Debug command is not implemented for ML yet" << std::endl;
-}
-
-void MLInterpreter::handleCrossValidateCommand(const std::vector<std::string>& args) {
-    (void) args; // เพื่อป้องกัน warning unused parameter
-    std::cout << "Cross validate command is not implemented for ML yet" << std::endl;
-}
-
-void MLInterpreter::handleExportResultsCommand(const std::vector<std::string>& args) {
-    (void) args; // เพื่อป้องกัน warning unused parameter
-    std::cout << "Export results command is not implemented for ML yet" << std::endl;
-}
-
-void MLInterpreter::handleScheduleTrainingCommand(const std::vector<std::string>& args) {
-    (void) args; // เพื่อป้องกัน warning unused parameter
-    std::cout << "Schedule training command is not implemented for ML yet" << std::endl;
-}
-
-void MLInterpreter::createModel(const std::string& modelType) {
-    std::cout << "Creating ML model: " << modelType << std::endl;
-
-    // รองรับโมเดลประเภทต่างๆ สำหรับ ML
-    std::vector<std::string> supportedModels = {
-        "LinearRegression", "LogisticRegression", "RandomForest", 
-        "SVM", "KNN", "DecisionTree", "GradientBoosting"
-    };
-
-    bool isSupported = false;
-    for (const auto& model : supportedModels) {
-        if (model == modelType) {
-            isSupported = true;
-            break;
-        }
-    }
-
-    if (!isSupported) {
-        std::cerr << "Warning: Model type '" << modelType << "' might not be fully supported for ML." << std::endl;
-    }
-}
 
 
 } // namespace ai_language
