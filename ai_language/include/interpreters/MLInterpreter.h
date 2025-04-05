@@ -5,20 +5,22 @@
 #include "../connectors/ScikitLearnConnector.h"
 #include <map>
 #include <string>
+#include <vector>
 
 namespace ai_language {
 
 class MLInterpreter : public BaseInterpreter {
 private:
-    std::string modelType;
     bool hasStarted;
     bool hasLoadedData;
     bool hasCreatedModel;
     bool hasTrained;
     bool hasShowedAccuracy;
-    bool hasEvaluated;
+    bool hasEvaluated; // Added to track evaluation status
     std::map<std::string, double> parameters;
-    std::map<std::string, std::string> stringParameters; // เพิ่มแมปสำหรับเก็บพารามิเตอร์ที่เป็นสตริง
+    std::map<std::string, std::string> stringParameters;
+    std::string modelType;
+    std::vector<std::map<std::string, std::string>> layers; // Store neural network layers
 
 public:
     MLInterpreter();
@@ -61,7 +63,7 @@ public:
     void handleCrossValidateCommand(const std::vector<std::string>& args) override;
     void handleExportResultsCommand(const std::vector<std::string>& args) override;
     void handleScheduleTrainingCommand(const std::vector<std::string>& args) override;
-    
+
     // เพิ่มฟังก์ชันสำหรับรับวันที่และเวลาปัจจุบัน
     std::string getCurrentDateTime();
 };

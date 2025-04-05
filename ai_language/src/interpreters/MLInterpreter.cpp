@@ -502,7 +502,110 @@ void MLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
         std::cout << "Adding feature: " << args[1] << " to the model" << std::endl;
         // Implementation for adding features
     } else if (args[0] == "layer") {
-        std::cout << "Adding layer (Not implemented)" << std::endl;
+        if (!hasCreatedModel) {
+            std::cout << RED << "Error: No model created. Create a model first." << RESET << std::endl;
+            return;
+        }
+        
+        if (args.size() < 2) {
+            std::cout << RED << "Error: Missing layer type. Usage: add layer <layer_type> [parameters]" << RESET << std::endl;
+            return;
+        }
+        
+        std::string layerType = args[1];
+        
+        // Create a map to store layer information
+        std::map<std::string, std::string> layerInfo;
+        layerInfo["type"] = layerType;
+        
+        if (layerType == "input") {
+            if (args.size() < 3) {
+                std::cout << RED << "Error: Input layer requires size parameter. Usage: add layer input <size>" << RESET << std::endl;
+                return;
+            }
+            layerInfo["size"] = args[2];
+            std::cout << GREEN << "Added input layer with " << args[2] << " neurons" << RESET << std::endl;
+        } else if (layerType == "hidden" || layerType == "dense") {
+            if (args.size() < 3) {
+                std::cout << RED << "Error: Hidden layer requires size parameter. Usage: add layer hidden <size> [activation]" << RESET << std::endl;
+                return;
+            }
+            layerInfo["size"] = args[2];
+            
+            // Add activation function if specified
+            if (args.size() > 3) {
+                if (args[3] == "activation" && args.size() > 4) {
+                    layerInfo["activation"] = args[4];
+                } else {
+                    layerInfo["activation"] = args[3];
+                }
+            } else {
+                layerInfo["activation"] = "relu"; // Default activation
+            }
+            
+            std::cout << GREEN << "Added hidden layer with " << args[2] << " neurons and " 
+                     << layerInfo["activation"] << " activation" << RESET << std::endl;
+        } else if (layerType == "output") {
+            if (args.size() < 3) {
+                std::cout << RED << "Error: Output layer requires size parameter. Usage: add layer output <size> [activation]" << RESET << std::endl;
+                return;
+            }
+            layerInfo["size"] = args[2];
+            
+            // Add activation function if specified
+            if (args.size() > 3) {
+                if (args[3] == "activation" && args.size() > 4) {
+                    layerInfo["activation"] = args[4];
+                } else {
+                    layerInfo["activation"] = args[3];
+                }
+            } else {
+                // Default activation depends on model type
+                if (modelType.find("Regression") != std::string::npos) {
+                    layerInfo["activation"] = "linear";
+                } else {
+                    layerInfo["activation"] = "softmax";
+                }
+            }
+            
+            std::cout << GREEN << "Added output layer with " << args[2] << " neurons and " 
+                     << layerInfo["activation"] << " activation" << RESET << std::endl;
+        } else if (layerType == "dropout") {
+            if (args.size() < 3) {
+                std::cout << RED << "Error: Dropout layer requires rate parameter. Usage: add layer dropout <rate>" << RESET << std::endl;
+                return;
+            }
+            layerInfo["rate"] = args[2];
+            std::cout << GREEN << "Added dropout layer with rate " << args[2] << RESET << std::endl;
+        } else if (layerType == "conv" || layerType == "convolutional") {
+            if (args.size() < 4) {
+                std::cout << RED << "Error: Convolutional layer requires filters and kernel_size parameters." << RESET << std::endl;
+                std::cout << "Usage: add layer conv <filters> <kernel_size> [activation]" << RESET << std::endl;
+                return;
+            }
+            layerInfo["filters"] = args[2];
+            layerInfo["kernel_size"] = args[3];
+            
+            // Add activation function if specified
+            if (args.size() > 4) {
+                if (args[4] == "activation" && args.size() > 5) {
+                    layerInfo["activation"] = args[5];
+                } else {
+                    layerInfo["activation"] = args[4];
+                }
+            } else {
+                layerInfo["activation"] = "relu"; // Default activation
+            }
+            
+            std::cout << GREEN << "Added convolutional layer with " << args[2] << " filters, kernel size " 
+                     << args[3] << ", and " << layerInfo["activation"] << " activation" << RESET << std::endl;
+        } else {
+            std::cout << YELLOW << "Warning: Layer type '" << layerType << "' may not be fully supported." << RESET << std::endl;
+            std::cout << GREEN << "Added " << layerType << " layer" << RESET << std::endl;
+        }
+        
+        // Store the layer in the model's layer list
+        layers.push_back(layerInfo);
     } else {
         std::cout << "Unknown add type: " << args[0] << std::endl;
     }
