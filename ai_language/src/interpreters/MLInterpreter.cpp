@@ -600,6 +600,27 @@ void MLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
             std::cout << GREEN << "Added convolutional layer with " << args[2] << " filters, kernel size " 
                      << args[3] << ", and " << layerInfo["activation"] << " activation" << RESET << std::endl;
         } else {
+            } else if (layerType == "Dense" || layerType == "dense") {
+            if (args.size() < 3) {
+                std::cout << RED << "Error: Dense layer requires size parameter. Usage: add layer Dense <size> [activation]" << RESET << std::endl;
+                return;
+            }
+            layerInfo["size"] = args[2];
+            
+            // Add activation function if specified
+            if (args.size() > 3) {
+                if (args[3] == "activation" && args.size() > 4) {
+                    layerInfo["activation"] = args[4];
+                } else {
+                    layerInfo["activation"] = args[3];
+                }
+            } else {
+                layerInfo["activation"] = "relu"; // Default activation
+            }
+            
+            std::cout << GREEN << "Added Dense layer with " << args[2] << " neurons and " 
+                     << layerInfo["activation"] << " activation" << RESET << std::endl;
+        } else {
             std::cout << YELLOW << "Warning: Layer type '" << layerType << "' may not be fully supported." << RESET << std::endl;
             std::cout << GREEN << "Added " << layerType << " layer" << RESET << std::endl;
         }
