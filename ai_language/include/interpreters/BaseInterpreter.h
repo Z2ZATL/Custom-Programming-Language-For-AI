@@ -38,6 +38,9 @@ public:
     virtual void handleCreateCommand(const std::vector<std::string>& args) = 0;
     virtual void handleLoadCommand(const std::vector<std::string>& args) = 0;
     virtual void handleSetCommand(const std::vector<std::string>& args) = 0;
+
+    bool safeMode; // ถ้าเป็น true จะรอการยืนยันก่อนทำงานคำสั่ง
+
     virtual void handleTrainCommand(const std::vector<std::string>& args) = 0;
     virtual void handleEvaluateCommand(const std::vector<std::string>& args) = 0;
     virtual void handleShowCommand(const std::vector<std::string>& args) = 0;
@@ -80,6 +83,13 @@ protected:
     bool hasCreated;
     bool hasLoaded;
     bool hasModel;
+
+    // ตั้งค่าโหมดความปลอดภัย
+    void setSafeMode(bool enabled);
+    
+    // ตรวจสอบโหมดความปลอดภัย
+    bool isSafeMode() const;
+
     bool hasTrained;
     bool isDebugging;
     std::string modelType = "";

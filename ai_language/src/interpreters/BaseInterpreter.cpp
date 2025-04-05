@@ -7,7 +7,7 @@ namespace ai_language {
 
 BaseInterpreter::BaseInterpreter() : hasStarted(false), hasCreated(false), hasLoaded(false), 
                                      hasModel(false), hasTrained(false), isDebugging(false), 
-                                     timezone(0) {
+                                     timezone(0), safeMode(false) {
     // Default parameters
     parameters["learning_rate"] = 0.01;
     parameters["epochs"] = 100;
@@ -19,12 +19,21 @@ BaseInterpreter::~BaseInterpreter() {
 }
 
 void BaseInterpreter::interpretLine(const std::string& line) {
-    // Skip empty lines and comments
-    if (line.empty() || line[0] == '#') {
-        return;
-    }
-
     try {
+        // ตรวจสอบคำสั่งพิเศษสำหรับโหมดความปลอดภัย
+        if (line == "safe on" || line == "safe_mode on") {
+            setSafeMode(true);
+            return;
+        } else if (line == "safe off" || line == "safe_mode off") {
+            setSafeMode(false);
+            return;
+        }
+
+        // Skip empty lines and comments
+        if (line.empty() || line[0] == '#') {
+            return;
+        }
+
         // Tokenize the line
         std::vector<std::string> parts = tokenizeLine(line);
         if (parts.empty()) {
@@ -35,140 +44,125 @@ void BaseInterpreter::interpretLine(const std::string& line) {
             std::cout << "DEBUG: Interpreting line: '" << line << "'" << std::endl << std::flush;
         }
 
-    // Extract command and arguments
-    std::string command = parts[0];
-    std::transform(command.begin(), command.end(), command.begin(), ::tolower);
+        // Extract command and arguments
+        std::string command = parts[0];
+        std::transform(command.begin(), command.end(), command.begin(), ::tolower);
 
-    std::vector<std::string> args;
-    for (size_t i = 1; i < parts.size(); i++) {
-        args.push_back(parts[i]);
-    }
+        std::vector<std::string> args;
+        for (size_t i = 1; i < parts.size(); i++) {
+            args.push_back(parts[i]);
+        }
 
-    // Process commands
-    if (command == "start") {
-        handleStartCommand();
-    }
-    else if (command == "create") {
-        handleCreateCommand(args);
-    }
-    else if (command == "load") {
-        handleLoadCommand(args);
-    }
-    else if (command == "set") {
-        handleSetCommand(args);
-    }
-    else if (command == "train") {
-        handleTrainCommand(args);
-    }
-    else if (command == "evaluate") {
-        handleEvaluateCommand(args);
-    }
-    else if (command == "show") {
-        handleShowCommand(args);
-    }
-    else if (command == "save") {
-        handleSaveCommand(args);
-    }
-    else if (command == "help") {
-        handleHelpCommand();
-    }
-    else if (command == "add") {
-        handleAddCommand(args);
-    }
-    else if (command == "plot") {
-        handlePlotCommand(parts);
-    }
-    else if (command == "inspect") {
-        std::vector<std::string> inspectArgs;
-        for (size_t i = 1; i < parts.size(); i++) {
-            inspectArgs.push_back(parts[i]);
+        // ถ้าเปิดโหมดความปลอดภัย ให้ขอการยืนยันก่อนทำงาน
+        if (safeMode && !line.empty() && line != "help" && line != "exit" && 
+            line.find("safe") != 0 && line.find("safe_mode") != 0) {
+            std::cout << YELLOW << "ต้องการทำงานคำสั่ง: " << line << " หรือไม่? (y/n): " << RESET;
+            std::string confirmation;
+            std::getline(std::cin, confirmation);
+            if (confirmation != "y" && confirmation != "Y") {
+                std::cout << "ยกเลิกคำสั่ง" << std::endl;
+                return;
+            }
         }
-        handleInspectCommand(inspectArgs);
-    }
-    else if (command == "validate") {
-        std::vector<std::string> validateArgs;
-        for (size_t i = 1; i < parts.size(); i++) {
-            validateArgs.push_back(parts[i]);
-        }
-        handleValidateCommand(validateArgs);
-    }
-    else if (command == "preprocess") {
-        std::vector<std::string> preprocessArgs;
-        for (size_t i = 1; i < parts.size(); i++) {
-            preprocessArgs.push_back(parts[i]);
-        }
-        handlePreprocessCommand(preprocessArgs);
-    }
-    else if (command == "split") {
-        std::vector<std::string> splitArgs;
-        for (size_t i = 1; i < parts.size(); i++) {
-            splitArgs.push_back(parts[i]);
-        }
-        handleSplitDatasetCommand(splitArgs);
-    }
-    else if (command == "predict") {
-        std::vector<std::string> predictArgs = args;
-        handlePredictCommand(predictArgs);
-    }
-    else if (command == "list") {
-        if (parts.size() > 1 && parts[1] == "models") {
-            handleListModelsCommand();
+
+        // Process commands
+        if (command == "start") {
+            handleStartCommand();
+        } else if (command == "create") {
+            handleCreateCommand(args);
+        } else if (command == "load") {
+            handleLoadCommand(args);
+        } else if (command == "set") {
+            handleSetCommand(args);
+        } else if (command == "train") {
+            handleTrainCommand(args);
+        } else if (command == "evaluate") {
+            handleEvaluateCommand(args);
+        } else if (command == "show") {
+            handleShowCommand(args);
+        } else if (command == "save") {
+            handleSaveCommand(args);
+        } else if (command == "help") {
+            handleHelpCommand();
+        } else if (command == "add") {
+            handleAddCommand(args);
+        } else if (command == "plot") {
+            handlePlotCommand(parts);
+        } else if (command == "inspect") {
+            std::vector<std::string> inspectArgs;
+            for (size_t i = 1; i < parts.size(); i++) {
+                inspectArgs.push_back(parts[i]);
+            }
+            handleInspectCommand(inspectArgs);
+        } else if (command == "validate") {
+            std::vector<std::string> validateArgs;
+            for (size_t i = 1; i < parts.size(); i++) {
+                validateArgs.push_back(parts[i]);
+            }
+            handleValidateCommand(validateArgs);
+        } else if (command == "preprocess") {
+            std::vector<std::string> preprocessArgs;
+            for (size_t i = 1; i < parts.size(); i++) {
+                preprocessArgs.push_back(parts[i]);
+            }
+            handlePreprocessCommand(preprocessArgs);
+        } else if (command == "split") {
+            std::vector<std::string> splitArgs;
+            for (size_t i = 1; i < parts.size(); i++) {
+                splitArgs.push_back(parts[i]);
+            }
+            handleSplitDatasetCommand(splitArgs);
+        } else if (command == "predict") {
+            std::vector<std::string> predictArgs = args;
+            handlePredictCommand(predictArgs);
+        } else if (command == "list") {
+            if (parts.size() > 1 && parts[1] == "models") {
+                handleListModelsCommand();
+            } else {
+                // เมื่อใช้คำสั่ง list โดยไม่มี models ต่อท้าย
+                handleListModelsCommand();
+            }
+        } else if (command == "delete") {
+            std::vector<std::string> deleteArgs;
+            for (size_t i = 1; i < parts.size(); i++) {
+                deleteArgs.push_back(parts[i]);
+            }
+            handleDeleteModelCommand(deleteArgs);
+        } else if (command == "compare" && parts.size() > 1 && parts[1] == "models") {
+            handleCompareModelsCommand();
+        } else if (command == "check" && parts.size() > 1 && parts[1] == "status") {
+            handleCheckStatusCommand();
+        } else if (command == "debug") {
+            std::vector<std::string> debugArgs = args;
+            handleDebugCommand(debugArgs);
+        } else if (command == "cross_validate") {
+            std::vector<std::string> crossValidateArgs = args;
+            handleCrossValidateCommand(crossValidateArgs);
+        } else if (command == "export") {
+            std::vector<std::string> exportArgs;
+            for (size_t i = 1; i < parts.size(); i++) {
+                exportArgs.push_back(parts[i]);
+            }
+            handleExportResultsCommand(exportArgs);
+        } else if (command == "schedule") {
+            std::vector<std::string> scheduleArgs;
+            for (size_t i = 1; i < parts.size(); i++) {
+                scheduleArgs.push_back(parts[i]);
+            }
+            handleScheduleTrainingCommand(scheduleArgs);
+        } else if (command == "end") {
+            std::cout << "End of program" << std::endl;
+        } else if (command == "clear") {
+            // รองรับคำสั่ง clear หน้าจอ
+            std::cout << "\033[2J\033[1;1H"; // ANSI escape code สำหรับล้างหน้าจอและย้ายเคอร์เซอร์ไปที่ (1,1)
+            std::cout << "Screen cleared" << std::endl;
+        } else if (isExitCommand(command)) {
+            //Added exit command handling
+            std::cout << "Exiting program..." << std::endl;
+            exit(0); //Added exit(0) to terminate the program.
         } else {
-            // เมื่อใช้คำสั่ง list โดยไม่มี models ต่อท้าย
-            handleListModelsCommand();
+            std::cout << RED << "Error: Unknown command '" << command << "'" << RESET << std::endl;
         }
-    }
-    else if (command == "delete") {
-        std::vector<std::string> deleteArgs;
-        for (size_t i = 1; i < parts.size(); i++) {
-            deleteArgs.push_back(parts[i]);
-        }
-        handleDeleteModelCommand(deleteArgs);
-    }
-    else if (command == "compare" && parts.size() > 1 && parts[1] == "models") {
-        handleCompareModelsCommand();
-    }
-    else if (command == "check" && parts.size() > 1 && parts[1] == "status") {
-        handleCheckStatusCommand();
-    }
-    else if (command == "debug") {
-        std::vector<std::string> debugArgs = args;
-        handleDebugCommand(debugArgs);
-    }
-    else if (command == "cross_validate") {
-        std::vector<std::string> crossValidateArgs = args;
-        handleCrossValidateCommand(crossValidateArgs);
-    }
-    else if (command == "export") {
-        std::vector<std::string> exportArgs;
-        for (size_t i = 1; i < parts.size(); i++) {
-            exportArgs.push_back(parts[i]);
-        }
-        handleExportResultsCommand(exportArgs);
-    }
-    else if (command == "schedule") {
-        std::vector<std::string> scheduleArgs;
-        for (size_t i = 1; i < parts.size(); i++) {
-            scheduleArgs.push_back(parts[i]);
-        }
-        handleScheduleTrainingCommand(scheduleArgs);
-    }
-    else if (command == "end") {
-        std::cout << "End of program" << std::endl;
-    }
-    else if (command == "clear") {
-        // รองรับคำสั่ง clear หน้าจอ
-        std::cout << "\033[2J\033[1;1H"; // ANSI escape code สำหรับล้างหน้าจอและย้ายเคอร์เซอร์ไปที่ (1,1)
-        std::cout << "Screen cleared" << std::endl;
-    }
-    else if (isExitCommand(command)) {
-        //Added exit command handling
-        std::cout << "Exiting program..." << std::endl;
-        exit(0); //Added exit(0) to terminate the program.
-    }
-    else {
-        std::cout << RED << "Error: Unknown command '" << command << "'" << RESET << std::endl;
-    }
     } catch (const std::exception& e) {
         std::cerr << RED << "Error interpreting line '" << line << "': " << e.what() << RESET << std::endl << std::flush;
     } catch (...) {
@@ -281,9 +275,9 @@ void BaseInterpreter::handleShowCommand(const std::vector<std::string>& args) {
         std::cout << "Available options: accuracy, loss, parameters, model, model_info, version, help, time" << std::endl;
         return;
     }
-    
+
     std::string showType = args[0];
-    
+
     if (showType == "model_info") {
         // แสดงข้อมูลโมเดลโดยใช้ฟังก์ชัน showModelInfo ที่พัฒนาแล้ว
         showModelInfo();
@@ -308,13 +302,13 @@ void BaseInterpreter::handleShowCommand(const std::vector<std::string>& args) {
         std::cout << "Model Type: " << modelType << std::endl;
         std::cout << "Created: " << (hasCreated ? "Yes" : "No") << std::endl;
         std::cout << "Trained: " << (hasTrained ? "Yes" : "No") << std::endl;
-        
+
         // Show model parameters
         std::cout << "\nParameters:" << std::endl;
         for (const auto& param : parameters) {
             std::cout << "- " << param.first << ": " << param.second << std::endl;
         }
-        
+
         // Show model performance if trained
         if (hasTrained) {
             std::cout << "\nPerformance Metrics:" << std::endl;
@@ -343,6 +337,7 @@ void BaseInterpreter::handleHelpCommand() {
     std::cout << "  evaluate model - Evaluate the model" << std::endl;
     std::cout << "  save model \"<file>\" - Save the model" << std::endl;
     std::cout << "  end - End the program" << std::endl;
+    std::cout << "  safe on/off - Toggle safe mode" << std::endl;
 }
 
 void BaseInterpreter::setDefaultParameters() {
@@ -453,6 +448,7 @@ void BaseInterpreter::handleCheckStatusCommand() {
     std::cout << "  Model Trained: " << (hasTrained ? "Yes" : "No") << std::endl;
     std::cout << "  Debug Mode: " << (isDebugging ? "On" : "Off") << std::endl;
     std::cout << "  Timezone: UTC" << (timezone >= 0 ? "+" : "") << timezone << std::endl;
+    std::cout << "  Safe Mode: " << (safeMode ? "On" : "Off") << std::endl;
 
     std::cout << "  Parameters:" << std::endl;
     for (const auto& param : parameters) {
@@ -552,21 +548,21 @@ void BaseInterpreter::showModelInfo() {
         std::cout << RED << "Error: No model has been created yet. Use 'create model <type>' first." << RESET << std::endl;
         return;
     }
-    
+
     std::cout << CYAN << "=== Model Information ===" << RESET << std::endl;
     std::cout << "Model Type: " << modelType << std::endl;
     std::cout << "Training Status: " << (hasTrained ? "Trained" : "Not trained") << std::endl;
-    
+
     // แสดงพารามิเตอร์ที่สำคัญของโมเดล
     std::cout << std::endl << GREEN << "Parameters:" << RESET << std::endl;
     for (const auto& param : parameters) {
         std::cout << "  - " << param.first << ": " << param.second << std::endl;
     }
-    
+
     // แสดงข้อมูลเพิ่มเติมถ้าโมเดลได้รับการฝึกแล้ว
     if (hasTrained) {
         std::cout << std::endl << GREEN << "Performance Metrics:" << RESET << std::endl;
-        
+
         if (modelType == "LinearRegression" || modelType == "RandomForest" || 
             modelType == "SVM" || modelType == "GradientBoosting") {
             // Metrics สำหรับโมเดล regression
@@ -589,10 +585,10 @@ void BaseInterpreter::showModelInfo() {
             std::cout << "  - Average Episode Length: 35.2 steps" << std::endl;
         }
     }
-    
+
     // แสดงข้อมูลเกี่ยวกับการใช้งาน
     std::cout << std::endl << GREEN << "Usage Information:" << RESET << std::endl;
-    
+
     if (!hasTrained) {
         std::cout << "  - Model needs to be trained using 'train model'" << std::endl;
     } else {
@@ -600,10 +596,10 @@ void BaseInterpreter::showModelInfo() {
         std::cout << "  - Save the model using 'save model <filename>'" << std::endl;
         std::cout << "  - Evaluate performance with 'evaluate model'" << std::endl;
     }
-    
+
     // สรุปขนาดและความซับซ้อนของโมเดล
     std::cout << std::endl << GREEN << "Model Complexity:" << RESET << std::endl;
-    
+
     if (modelType == "RandomForest") {
         std::cout << "  - Number of Trees: 100" << std::endl;
         std::cout << "  - Max Depth: 10" << std::endl;
@@ -629,26 +625,26 @@ void BaseInterpreter::showVersion() {
             "Release"
         #endif
         << std::endl;
-    
+
     std::cout << std::endl << GREEN << "Supported AI Types:" << RESET << std::endl;
     std::cout << "  - Machine Learning (ML)" << std::endl;
     std::cout << "  - Deep Learning (DL)" << std::endl;
     std::cout << "  - Reinforcement Learning (RL)" << std::endl;
-    
+
     std::cout << std::endl << GREEN << "Machine Learning Models:" << RESET << std::endl;
     std::cout << "  - LinearRegression, LogisticRegression, RandomForest" << std::endl;
     std::cout << "  - SVM, KNN, DecisionTree, GradientBoosting" << std::endl;
-    
+
     std::cout << std::endl << GREEN << "Deep Learning Models:" << RESET << std::endl;
     std::cout << "  - NeuralNetwork, CNN, RNN, LSTM, GRU, Transformer" << std::endl;
-    
+
     std::cout << std::endl << GREEN << "Reinforcement Learning Models:" << RESET << std::endl;
     std::cout << "  - QLearning, DQN, PPO, A2C, DDQN" << std::endl;
-    
+
     std::cout << std::endl << GREEN << "Developed by:" << RESET << std::endl;
     std::cout << "  - AI Language Development Team" << std::endl;
     std::cout << "  - License: MIT" << std::endl;
-    
+
     std::cout << std::endl << GREEN << "System Information:" << RESET << std::endl;
     std::cout << "  - Operating System: Linux" << std::endl;
     std::cout << "  - Compiler: GCC " << __GNUC__ << "." << __GNUC_MINOR__ << "." << __GNUC_PATCHLEVEL__ << std::endl;
@@ -659,7 +655,7 @@ void BaseInterpreter::showVersion() {
             "11"
         #endif
         << std::endl;
-    
+
     std::cout << "  - Current working directory: ";
     char cwd[1024];
     if (getcwd(cwd, sizeof(cwd)) != nullptr) {
@@ -671,27 +667,28 @@ void BaseInterpreter::showVersion() {
 
 void BaseInterpreter::showHelp() {
     std::cout << CYAN << "===== AI Language Help =====" << RESET << std::endl;
-    
+
     std::cout << std::endl << YELLOW << "I. Main Commands:" << RESET << std::endl;
     std::cout << "  start                                # เริ่มต้นโปรเจกต์" << std::endl;
     std::cout << "  create ML                            # สร้างโปรเจกต์ Machine Learning" << std::endl;
     std::cout << "  create DL                            # สร้างโปรเจกต์ Deep Learning" << std::endl;
     std::cout << "  create RL                            # สร้างโปรเจกต์ Reinforcement Learning" << std::endl;
     std::cout << "  exit, quit                           # ออกจากโปรแกรม" << std::endl;
-    
-    std::cout << std::endl << YELLOW << "II. Data Management:" << RESET << std::endl;
+    std::cout << "  safe on/off                          # เปิด/ปิด โหมดความปลอดภัย" << std::endl;
+
+    std::cout << std::endl << YELLOW << "II.Data Management:" << RESET << std::endl;
     std::cout << "  load dataset \"<path>\" [type]         # โหลดข้อมูล" << std::endl;
     std::cout << "  validate dataset                     # ตรวจสอบคุณภาพข้อมูล" << std::endl;
     std::cout << "  preprocess <method>                  # ประมวลผลข้อมูลเบื้องต้น" << std::endl;
     std::cout << "  split dataset <train> <test> [val]   # แบ่งข้อมูลสำหรับเทรนและทดสอบ" << std::endl;
-    
+
     std::cout << std::endl << YELLOW << "III. Model Creation and Training:" << RESET << std::endl;
     std::cout << "  create model <model_type>            # สร้างโมเดล AI" << std::endl;
     std::cout << "  add layer <type> <params>            # เพิ่มเลเยอร์ในโมเดล DL" << std::endl;
     std::cout << "  set <param> <value>                  # ตั้งค่าพารามิเตอร์" << std::endl;
     std::cout << "  train model                          # ฝึกโมเดล" << std::endl;
     std::cout << "  evaluate model                       # ประเมินประสิทธิภาพโมเดล" << std::endl;
-    
+
     std::cout << std::endl << YELLOW << "IV. Analysis and Visualization:" << RESET << std::endl;
     std::cout << "  show accuracy                        # แสดงความแม่นยำของโมเดล" << std::endl;
     std::cout << "  show loss                            # แสดงค่า loss ของโมเดล" << std::endl;
@@ -699,19 +696,19 @@ void BaseInterpreter::showHelp() {
     std::cout << "  show reward                          # แสดงรางวัลของโมเดล RL" << std::endl;
     std::cout << "  show q_table                         # แสดงตาราง Q ของโมเดล RL" << std::endl;
     std::cout << "  plot <type>                          # สร้างกราฟแสดงผล" << std::endl;
-    
+
     std::cout << std::endl << YELLOW << "V. Model Utilization:" << RESET << std::endl;
     std::cout << "  predict <input>                      # ทำนายผลลัพธ์จากข้อมูลใหม่" << std::endl;
     std::cout << "  save model \"<path>\"                  # บันทึกโมเดลลงไฟล์" << std::endl;
     std::cout << "  load model \"<path>\"                  # โหลดโมเดลจากไฟล์" << std::endl;
-    
+
     std::cout << std::endl << YELLOW << "VI. Utility Commands:" << RESET << std::endl;
     std::cout << "  list models                          # แสดงรายการโมเดลที่รองรับ" << std::endl;
     std::cout << "  show version                         # แสดงข้อมูลเวอร์ชันของโปรแกรม" << std::endl;
     std::cout << "  show time                            # แสดงเวลาปัจจุบัน" << std::endl;
     std::cout << "  clear                                # ล้างหน้าจอ" << std::endl;
     std::cout << "  help                                 # แสดงคำสั่งที่รองรับ" << std::endl;
-    
+
     std::cout << std::endl << YELLOW << "VII. Multi-line Commands:" << RESET << std::endl;
     std::cout << "  End a line with \\ to continue on the next line" << std::endl;
     std::cout << "  Example:" << std::endl;
@@ -719,35 +716,35 @@ void BaseInterpreter::showHelp() {
     std::cout << "    create ML \\" << std::endl;
     std::cout << "    load dataset \"datasets/linear_data.csv\" \\" << std::endl;
     std::cout << "    create model LinearRegression" << std::endl;
-    
+
     std::cout << std::endl << "สำหรับข้อมูลเพิ่มเติม โปรดดูที่ docs/guides/USAGE_GUIDE.md" << std::endl;
 }
 
 void BaseInterpreter::showTime() {
     // ตั้งค่า timezone ตามที่ผู้ใช้กำหนด
     std::time_t now = std::time(nullptr) + (timezone * 3600);
-    
+
     // แสดงวันที่และเวลาในรูปแบบที่อ่านง่าย
     char buffer[80];
     std::tm* timeinfo = std::gmtime(&now);
     strftime(buffer, sizeof(buffer), "%A, %d %B %Y %H:%M:%S", timeinfo);
-    
+
     std::cout << CYAN << "===== Current Date and Time =====" << RESET << std::endl;
     std::cout << "Local time: " << buffer << " (UTC";
     if (timezone >= 0) {
         std::cout << "+";
     }
     std::cout << timezone << ")" << std::endl;
-    
+
     // แสดงเวลา UTC พื้นฐาน
     std::time_t utc_now = std::time(nullptr);
     std::tm* utc_timeinfo = std::gmtime(&utc_now);
     strftime(buffer, sizeof(buffer), "%A, %d %B %Y %H:%M:%S", utc_timeinfo);
     std::cout << "UTC time: " << buffer << std::endl;
-    
+
     // แสดงเวลาแบบ Unix timestamp
     std::cout << "Unix timestamp: " << utc_now << std::endl;
-    
+
     // แสดงข้อมูลเกี่ยวกับ timezone
     std::cout << std::endl << GREEN << "Timezone Information:" << RESET << std::endl;
     std::cout << "Current timezone setting: UTC";
@@ -755,7 +752,7 @@ void BaseInterpreter::showTime() {
         std::cout << "+";
     }
     std::cout << timezone << std::endl;
-    
+
     // คำแนะนำในการเปลี่ยน timezone
     std::cout << std::endl << "To change timezone, use: set timezone <hours>" << std::endl;
     std::cout << "Example: set timezone 7  # for UTC+7" << std::endl;
@@ -783,18 +780,23 @@ bool BaseInterpreter::isExitCommand(const std::string& command) {
     if (trimmedCmd.empty()) {
         return false;
     }
-    
+
     size_t start = trimmedCmd.find_first_not_of(" \t\n\r\f\v");
     if (start != std::string::npos) {
         trimmedCmd.erase(0, start);
     }
-    
+
     size_t end = trimmedCmd.find_last_not_of(" \t\n\r\f\v");
     if (end != std::string::npos) {
         trimmedCmd.erase(end + 1);
     }
 
     return trimmedCmd == "exit" || trimmedCmd == "quit";
+}
+
+void BaseInterpreter::setSafeMode(bool mode) {
+    safeMode = mode;
+    std::cout << "Safe mode turned " << (mode ? "on" : "off") << std::endl;
 }
 
 } // namespace ai_language

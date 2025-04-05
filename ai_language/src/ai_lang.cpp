@@ -29,8 +29,9 @@ void runInteractiveMode() {
     std::cout << "DEBUG: Starting interactive mode" << std::endl << std::flush;
     std::cout << "\n\n=== โหมดโต้ตอบของภาษา AI ===" << std::endl << std::flush;
     std::cout << "พิมพ์คำสั่งและกด Enter เพื่อดำเนินการ (พิมพ์ 'exit' เพื่อออก)" << std::endl << std::flush;
-    std::cout << "รองรับคำสั่งหลายบรรทัด - พิมพ์ '\\' แล้วกด Enter เพื่อพิมพ์ต่อในบรรทัดถัดไป" << std::endl << std::flush;
-    std::cout << "พิมพ์ ';;' เพื่อดำเนินการทั้งหมด" << std::endl << std::endl << std::flush;
+    std::cout << "รองรับคำสั่งหลายบรรทัด - พิมพ์ '\\' แล้วกด Enter เพื่อพิมพ์ต่อในบรรทัดถัดไป" << std::endl;
+    std::cout << "พิมพ์ ';;' เพื่อดำเนินการทั้งหมด" << std::endl;
+    std::cout << "คำสั่งพิเศษ: safe on เพื่อเปิดโหมดความปลอดภัย (ต้องยืนยันก่อนทำงานคำสั่ง), safe off เพื่อปิด" << std::endl;
 
     // แสดงคำแนะนำหรือตัวอย่างคำสั่ง
     std::cout << CYAN << "ตัวอย่างคำสั่ง:" << RESET << std::endl;
@@ -127,6 +128,8 @@ void runInteractiveMode() {
                     std::cout << "  save model <path>               # Save model to file" << std::endl;
                     std::cout << "  show <metric|info>              # Show metrics or model info" << std::endl;
                     std::cout << "  predict <input>                 # Make predictions" << std::endl;
+                    std::cout << "  safe on                         # Enable safe mode (requires confirmation before executing commands)" << std::endl;
+                    std::cout << "  safe off                        # Disable safe mode" << std::endl;
                     std::cout << "For more details, see docs/guides/USAGE_GUIDE.md" << std::endl;
                     continue;
                 } else if (line == "show time" || line == "time") {
@@ -138,6 +141,14 @@ void runInteractiveMode() {
                     break;
                 } else if (line == "clear" || line == "cls") {
                     std::cout << "\033[2J\033[1;1H"; // คำสั่งล้างหน้าจอใน terminal
+                    continue;
+                } else if (line == "safe on") {
+                    interpreter->setSafeMode(true);
+                    std::cout << "Safe mode enabled." << std::endl;
+                    continue;
+                } else if (line == "safe off") {
+                    interpreter->setSafeMode(false);
+                    std::cout << "Safe mode disabled." << std::endl;
                     continue;
                 }
             }
@@ -229,6 +240,15 @@ void runInteractiveMode() {
                             std::cout << "ออกจากโปรแกรม" << std::endl;
                             break;
                         }
+                        if (interpreter->getSafeMode()) {
+                            std::string confirmation;
+                            std::cout << "ยืนยันการทำงานคำสั่ง (y/n): ";
+                            std::cin >> confirmation;
+                            if (confirmation != "y") {
+                                std::cout << "คำสั่งถูกยกเลิก" << std::endl;
+                                continue;
+                            }
+                        }
                         interpreter->interpretLine(command);
                         std::cout << std::endl; // เพิ่มบรรทัดว่างระหว่างผลลัพธ์ของแต่ละคำสั่ง
                     }
@@ -249,6 +269,15 @@ void runInteractiveMode() {
                     if (trimmedCmd == "exit" || trimmedCmd == "quit") {
                         std::cout << "ออกจากโปรแกรม" << std::endl;
                         break;
+                    }
+                    if (interpreter->getSafeMode()) {
+                        std::string confirmation;
+                        std::cout << "ยืนยันการทำงานคำสั่ง (y/n): ";
+                        std::cin >> confirmation;
+                        if (confirmation != "y") {
+                            std::cout << "คำสั่งถูกยกเลิก" << std::endl;
+                            continue;
+                        }
                     }
                     interpreter->interpretLine(multiline);
                 }
