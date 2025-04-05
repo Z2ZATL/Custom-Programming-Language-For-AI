@@ -1,0 +1,36 @@
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/runner/workspace/ai_language/build
+[  6%] Building CXX object CMakeFiles/ai_language_lib.dir/src/interpreters/MLInterpreter.cpp.o
+/home/runner/workspace/ai_language/src/interpreters/MLInterpreter.cpp: In member function ‘virtual void ai_language::MLInterpreter::handleSplitDatasetCommand(const std::vector<std::__cxx11::basic_string<char> >&)’:
+/home/runner/workspace/ai_language/src/interpreters/MLInterpreter.cpp:654:31: error: ‘stringif’ is not a member of ‘std’; did you mean ‘stringbuf’?
+  654 |             if (start == std::stringif (start == std::string::npos) {
+      |                               ^~~~~~~~
+      |                               stringbuf
+/home/runner/workspace/ai_language/src/interpreters/MLInterpreter.cpp:658:37: error: expected ‘)’ before ‘;’ token
+  658 |             cleanArg.erase(0, start);
+      |                                     ^
+      |                                     )
+/home/runner/workspace/ai_language/src/interpreters/MLInterpreter.cpp:654:16: note: to match this ‘(’
+  654 |             if (start == std::stringif (start == std::string::npos) {
+      |                ^
+/home/runner/workspace/ai_language/src/interpreters/MLInterpreter.cpp:658:27: error: could not convert ‘cleanArg.std::__cxx11::basic_string<char>::erase(0, start)’ from ‘std::__cxx11::basic_string<char>’ to ‘bool’
+  658 |             cleanArg.erase(0, start);
+      |             ~~~~~~~~~~~~~~^~~~~~~~~~
+      |                           |
+      |                           std::__cxx11::basic_string<char>
+/home/runner/workspace/ai_language/src/interpreters/MLInterpreter.cpp:658:37: warning: suggest braces around empty body in an ‘if’ statement [-Wempty-body]
+  658 |             cleanArg.erase(0, start);
+      |                                     ^
+/home/runner/workspace/ai_language/src/interpreters/MLInterpreter.cpp: At global scope:
+/home/runner/workspace/ai_language/src/interpreters/MLInterpreter.cpp:726:13: error: no declaration matches ‘std::string ai_language::MLInterpreter::getCurrentDateTime()’
+  726 | std::string MLInterpreter::getCurrentDateTime() {
+      |             ^~~~~~~~~~~~~
+/home/runner/workspace/ai_language/src/interpreters/MLInterpreter.cpp:726:13: note: no functions named ‘std::string ai_language::MLInterpreter::getCurrentDateTime()’
+In file included from /home/runner/workspace/ai_language/src/interpreters/MLInterpreter.cpp:1:
+/home/runner/workspace/ai_language/src/interpreters/../../include/interpreters/MLInterpreter.h:11:7: note: ‘class ai_language::MLInterpreter’ defined here
+   11 | class MLInterpreter : public BaseInterpreter {
+      |       ^~~~~~~~~~~~~
+make[2]: *** [CMakeFiles/ai_language_lib.dir/build.make:90: CMakeFiles/ai_language_lib.dir/src/interpreters/MLInterpreter.cpp.o] Error 1
+make[1]: *** [CMakeFiles/Makefile2:88: CMakeFiles/ai_language_lib.dir/all] Error 2
+make: *** [Makefile:91: all] Error 2
