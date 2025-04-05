@@ -24,6 +24,11 @@ def optimize_figure_size(df):
 def set_plot_style():
     """กำหนดสไตล์กราฟที่สวยงามและมีประสิทธิภาพ"""
     plt.style.use('ggplot')
+    
+    # ใช้ฟอนต์ที่เป็นสากลและรองรับภาษาต่างๆ รวมถึงภาษาไทย
+    # เลือกฟอนต์ที่สามารถใช้ได้ในระบบ Linux และรองรับภาษาไทย
+    font_candidates = ['DejaVu Sans', 'Noto Sans', 'Liberation Sans', 'FreeSans', 'Arial Unicode MS', 'sans-serif']
+    
     matplotlib.rcParams.update({
         'font.size': 11,
         'axes.titlesize': 16,
@@ -40,8 +45,20 @@ def set_plot_style():
         'axes.grid': True,
         'grid.alpha': 0.3,
         'lines.linewidth': 2.5,
-        'lines.markersize': 6
+        'lines.markersize': 6,
+        'font.family': font_candidates,
+        'text.usetex': False  # ไม่ใช้ LaTeX เพื่อหลีกเลี่ยงปัญหาการแสดงผลภาษาไทย
     })
+    
+    # ตั้งค่าการแสดงผลตัวอักษรพิเศษทั่วโลก (รวมถึงภาษาไทย)
+    import locale
+    try:
+        locale.setlocale(locale.LC_ALL, 'th_TH.UTF-8')
+    except locale.Error:
+        try:
+            locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')  # ถ้าไม่มี Thai locale ให้ใช้ UTF-8 locale อื่น
+        except locale.Error:
+            pass  # หากไม่สามารถตั้งค่า locale ได้ ให้ใช้ค่าเริ่มต้น
 
 def create_interactive_html(fig, output_path, title="Learning Curves"):
     """สร้างกราฟ HTML แบบโต้ตอบได้"""
@@ -283,12 +300,12 @@ def main():
         # จัดระยะห่างให้เหมาะสม
         plt.tight_layout()
         
-        # เพิ่มข้อความบน/ล่างกราฟ
+        # เพิ่มข้อความบน/ล่างกราฟ (ใช้ข้อความภาษาอังกฤษเพื่อหลีกเลี่ยงปัญหาการแสดงผลภาษาไทย)
         if is_dl_data:
-            plt.figtext(0.5, 0.01, f"โมเดล Deep Learning - จำนวน Epochs: {len(df)}", 
+            plt.figtext(0.5, 0.01, f"Deep Learning Model - Total Epochs: {len(df)}", 
                        ha='center', fontsize=9, style='italic')
         else:
-            plt.figtext(0.5, 0.01, f"โมเดล AI - จำนวน Epochs: {len(df)}", 
+            plt.figtext(0.5, 0.01, f"AI Model - Total Epochs: {len(df)}", 
                        ha='center', fontsize=9, style='italic')
 
         # สร้างโฟลเดอร์ถ้ายังไม่มี
