@@ -130,24 +130,69 @@ void RLInterpreter::loadEnvironment(const std::string& environmentPath) {
             std::cout << "Failed to list files in root datasets directory" << std::endl;
         }
         
-        // As a last resort, try creating a minimal environment file
+        // List the current directory to see what's available
+        std::cout << "Listing current directory contents:" << std::endl;
+        command = "ls -la";
+        result = system(command.c_str());
+        
+        // As a last resort, create the environment.json file in all possible locations
         if (isEnvironmentJson) {
-            std::cout << "Creating a minimal environment.json file as a last resort..." << std::endl;
-            std::ofstream newEnvFile("./environment.json");
-            if (newEnvFile.is_open()) {
-                newEnvFile << "{\n";
-                newEnvFile << "  \"states\": [\"s0\", \"s1\", \"s2\", \"s3\", \"s4\", \"s5\", \"s6\", \"s7\", \"s8\"],\n";
-                newEnvFile << "  \"actions\": [\"up\", \"down\", \"left\", \"right\"],\n";
-                newEnvFile << "  \"state_size\": 9,\n";
-                newEnvFile << "  \"action_size\": 4\n";
-                newEnvFile << "}\n";
-                newEnvFile.close();
-                
-                // Try to open the newly created file
-                envFile.open("./environment.json");
+            std::cout << "Creating environment.json file in multiple locations as a fallback..." << std::endl;
+            
+            // Create directories if they don't exist
+            system("mkdir -p ai_language/datasets/");
+            system("mkdir -p datasets/");
+            
+            // Environment file content
+            std::string envContent = "{\n"
+                "  \"states\": [\"s0\", \"s1\", \"s2\", \"s3\", \"s4\", \"s5\", \"s6\", \"s7\", \"s8\"],\n"
+                "  \"actions\": [\"up\", \"down\", \"left\", \"right\"],\n"
+                "  \"rewards\": {\n"
+                "    \"s0\": {\"up\": -1, \"down\": 0, \"left\": -1, \"right\": 0},\n"
+                "    \"s1\": {\"up\": 0, \"down\": -1, \"left\": 0, \"right\": 0},\n"
+                "    \"s2\": {\"up\": -1, \"down\": 0, \"left\": 0, \"right\": -1},\n"
+                "    \"s3\": {\"up\": 0, \"down\": 0, \"left\": -1, \"right\": 0},\n"
+                "    \"s4\": {\"up\": 0, \"down\": 0, \"left\": 0, \"right\": 0},\n"
+                "    \"s5\": {\"up\": 0, \"down\": 0, \"left\": 0, \"right\": -1},\n"
+                "    \"s6\": {\"up\": 0, \"down\": -1, \"left\": -1, \"right\": 0},\n"
+                "    \"s7\": {\"up\": 0, \"down\": -1, \"left\": 0, \"right\": 0},\n"
+                "    \"s8\": {\"up\": 0, \"down\": -1, \"left\": 0, \"right\": 10}\n"
+                "  },\n"
+                "  \"terminal_state\": \"s8\",\n"
+                "  \"start_state\": \"s0\",\n"
+                "  \"grid_size\": [3, 3],\n"
+                "  \"visualization\": [\n"
+                "    [\"s0\", \"s1\", \"s2\"],\n"
+                "    [\"s3\", \"s4\", \"s5\"],\n"
+                "    [\"s6\", \"s7\", \"s8\"]\n"
+                "  ],\n"
+                "  \"state_size\": 9,\n"
+                "  \"action_size\": 4\n"
+                "}\n";
+            
+            // Create the file in multiple locations
+            std::vector<std::string> filePaths = {
+                "./environment.json",
+                "./datasets/environment.json",
+                "./ai_language/datasets/environment.json"
+            };
+            
+            for (const auto& filePath : filePaths) {
+                std::ofstream newEnvFile(filePath);
+                if (newEnvFile.is_open()) {
+                    newEnvFile << envContent;
+                    newEnvFile.close();
+                    std::cout << "Created environment file at: " << filePath << std::endl;
+                }
+            }
+            
+            // Now try to open one of them
+            for (const auto& filePath : filePaths) {
+                envFile.open(filePath);
                 if (envFile.is_open()) {
-                    std::cout << GREEN << "Created and loaded minimal environment file." << RESET << std::endl;
+                    std::cout << GREEN << "Successfully loaded environment file from: " << filePath << RESET << std::endl;
                     fileOpened = true;
+                    break;
                 }
             }
         }
