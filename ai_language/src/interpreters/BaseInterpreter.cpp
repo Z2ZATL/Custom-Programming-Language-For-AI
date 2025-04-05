@@ -6,7 +6,7 @@
 namespace ai_language {
 
 BaseInterpreter::BaseInterpreter() : hasStarted(false), hasCreated(false), hasLoaded(false), 
-                                     hasModel(false), hasTrained(false), safeMode(false),
+                                     hasModel(false), safeMode(false), hasTrained(false),
                                      isDebugging(false), timezone(0) {
     // Default parameters
     parameters["learning_rate"] = 0.01;

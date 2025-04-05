@@ -9,7 +9,7 @@
 namespace ai_language {
 
 MLInterpreter::MLInterpreter() {
-    // Constructor implementation
+    // Constructor implementation without debug output
     hasStarted = false;
     hasLoadedData = false;
     hasCreatedModel = false;
