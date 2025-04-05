@@ -190,6 +190,17 @@ void DLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
 
     layers.push_back(layerInfo);
     std::cout << GREEN << "เพิ่ม " << layerType << " layer สำเร็จ" << RESET << std::endl;
+    
+    // Update model architecture
+    if (modelType == "CNN" && (layerType == "conv" || layerType == "convolutional")) {
+        std::cout << "Added convolutional layer to CNN model" << std::endl;
+    } else if (modelType == "LSTM" && layerType == "lstm") {
+        std::cout << "Added LSTM layer to recurrent model" << std::endl;
+    } else if (modelType == "Transformer" && layerType == "attention") {
+        std::cout << "Added attention layer to transformer model" << std::endl;
+    } else {
+        std::cout << "Added " << layerType << " layer to " << modelType << " model" << std::endl;
+    }
 }
 
 void DLInterpreter::handleLoadCommand(const std::vector<std::string>& args) {

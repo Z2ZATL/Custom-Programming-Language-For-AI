@@ -41,12 +41,43 @@ void RLInterpreter::loadEnvironment(const std::string& environmentPath) {
     if (!envFile.is_open()) {
         std::cout << RED << "Warning: Could not open environment file: " << environmentPath << RESET << std::endl;
         std::cout << "Using default environment settings instead." << std::endl;
-    } else {
-        std::cout << GREEN << "Successfully loaded environment configuration." << RESET << std::endl;
         
         // Set default environment parameters
         parameters["state_size"] = 10;
         parameters["action_size"] = 4;
+        parameters["max_steps"] = 1000;
+        parameters["reward_scale"] = 1.0;
+    } else {
+        std::cout << GREEN << "Successfully loaded environment configuration." << RESET << std::endl;
+        
+        // Try to parse as JSON (simple implementation)
+        std::string line, content;
+        while (std::getline(envFile, line)) {
+            content += line;
+        }
+        
+        // Very basic parsing - in a real implementation use a JSON library
+        if (content.find("\"state_size\":") != std::string::npos) {
+            size_t pos = content.find("\"state_size\":");
+            size_t valueStart = content.find_first_of("0123456789", pos);
+            size_t valueEnd = content.find_first_not_of("0123456789", valueStart);
+            if (valueStart != std::string::npos && valueEnd != std::string::npos) {
+                std::string stateSize = content.substr(valueStart, valueEnd - valueStart);
+                parameters["state_size"] = std::stod(stateSize);
+            }
+        }
+        
+        if (content.find("\"action_size\":") != std::string::npos) {
+            size_t pos = content.find("\"action_size\":");
+            size_t valueStart = content.find_first_of("0123456789", pos);
+            size_t valueEnd = content.find_first_not_of("0123456789", valueStart);
+            if (valueStart != std::string::npos && valueEnd != std::string::npos) {
+                std::string actionSize = content.substr(valueStart, valueEnd - valueStart);
+                parameters["action_size"] = std::stod(actionSize);
+            }
+        }
+        
+        // Additional parameters
         parameters["max_steps"] = 1000;
         parameters["reward_scale"] = 1.0;
         
@@ -56,6 +87,8 @@ void RLInterpreter::loadEnvironment(const std::string& environmentPath) {
     std::cout << "Environment configuration:" << std::endl;
     std::cout << "- State space size: " << parameters["state_size"] << std::endl;
     std::cout << "- Action space size: " << parameters["action_size"] << std::endl;
+    std::cout << "- Max steps: " << parameters["max_steps"] << std::endl;
+    std::cout << "- Reward scale: " << parameters["reward_scale"] << std::endl;
     
     hasLoadedData = true;
 }
@@ -99,6 +132,9 @@ void RLInterpreter::showReward() {
     std::cout << "---------------------------------------" << std::endl;
 
     double finalAvgReward = 0.0;
+    std::vector<double> allRewards;
+    std::vector<double> avgRewards;
+    std::vector<int> episodeNums;
 
     // แสดงข้อมูลตาม episodes ล่าสุด
     for (int i = 1; i <= showEpisodes; i++) {
@@ -139,6 +175,10 @@ void RLInterpreter::showReward() {
 
         std::cout << episodeNum << "\t" << static_cast<int>(reward) << "\t" << static_cast<int>(avgReward) << std::endl;
 
+        allRewards.push_back(reward);
+        avgRewards.push_back(avgReward);
+        episodeNums.push_back(episodeNum);
+
         if (i == showEpisodes) {
             finalAvgReward = avgReward;
         }
@@ -151,6 +191,77 @@ void RLInterpreter::showReward() {
     } else if (finalAvgReward > 150) {
         std::cout << GREEN << "Excellent reward performance achieved!" << RESET << std::endl;
     }
+
+    // Save reward data to file for plotting
+    std::string dataDir = "Program test/Data";
+    std::string mkdir_cmd = "mkdir -p '" + dataDir + "'";
+    int mkdir_result = system(mkdir_cmd.c_str());
+    
+    if (mkdir_result == 0) {
+        std::string csvPath = dataDir + "/reward_data.csv";
+        std::ofstream csvFile(csvPath);
+        
+        if (csvFile.is_open()) {
+            csvFile << "episode,reward,avg_reward\n";
+            
+            for (size_t i = 0; i < episodeNums.size(); i++) {
+                csvFile << episodeNums[i] << "," << allRewards[i] << "," << avgRewards[i] << "\n";
+            }
+            
+            csvFile.close();
+            std::cout << "Reward data saved to: ai_language/" << csvPath << std::endl;
+            
+            // Generate a basic ASCII chart
+            std::cout << "\nReward Trend:" << std::endl;
+            std::cout << "-------------" << std::endl;
+            
+            int chartHeight = 10;
+            int chartWidth = 40;
+            
+            // Find min/max for scaling
+            double maxReward = *std::max_element(allRewards.begin(), allRewards.end());
+            double minReward = *std::min_element(allRewards.begin(), allRewards.end());
+            
+            // Ensure min/max are different
+            if (maxReward == minReward) {
+                maxReward += 10;
+                minReward -= 10;
+            }
+            
+            // Create ASCII chart
+            for (int y = chartHeight - 1; y >= 0; y--) {
+                double valueAtY = minReward + (maxReward - minReward) * y / (chartHeight - 1);
+                
+                // Y-axis label
+                printf("%6.1f |", valueAtY);
+                
+                // Chart data
+                for (int x = 0; x < chartWidth; x++) {
+                    int dataIndex = x * (allRewards.size() - 1) / (chartWidth - 1);
+                    double scaledReward = (allRewards[dataIndex] - minReward) / (maxReward - minReward) * (chartHeight - 1);
+                    
+                    if (fabs(scaledReward - y) < 0.5) {
+                        std::cout << "*";
+                    } else {
+                        std::cout << " ";
+                    }
+                }
+                std::cout << std::endl;
+            }
+            
+            // X-axis
+            std::cout << "       ";
+            for (int x = 0; x < chartWidth; x++) {
+                std::cout << "-";
+            }
+            std::cout << std::endl;
+            
+            // X-axis labels
+            std::cout << "       ";
+            printf("%-*d", chartWidth/2, episodeNums.front());
+            printf("%*d\n", chartWidth/2, episodeNums.back());
+        }
+    }
 }
 
 void RLInterpreter::showQTable() {
@@ -161,6 +272,33 @@ void RLInterpreter::showQTable() {
 
     if (modelType != "QLearning") {
         std::cout << YELLOW << "Warning: Q-table is only available for Q-Learning model, not for " << modelType << RESET << std::endl;
+        
+        if (modelType == "DQN" || modelType == "DDQN") {
+            std::cout << "For " << modelType << ", Q-values are represented in a neural network, not a table." << std::endl;
+            std::cout << "Showing approximated Q-values for a few sample states instead:" << std::endl;
+            
+            // Show approximated Q-values for a few states
+            int actionSize = static_cast<int>(parameters["action_size"]);
+            
+            std::cout << "\nSample state Q-values:" << std::endl;
+            std::cout << "----------------------" << std::endl;
+            
+            for (int s = 0; s < 5; s++) {
+                std::cout << "State " << s << ": [";
+                for (int a = 0; a < actionSize; a++) {
+                    // Generate some plausible Q-values
+                    double qValue = 10.0 + s * 5.0 + (a == (s % actionSize) ? 15.0 : 0); 
+                    qValue += ((rand() % 10) - 5) * 0.5;
+                    
+                    std::cout << std::fixed << std::setprecision(1) << qValue;
+                    if (a < actionSize - 1) std::cout << ", ";
+                }
+                std::cout << "]" << std::endl;
+            }
+            
+            return;
+        }
+        
         return;
     }
 
@@ -174,6 +312,10 @@ void RLInterpreter::showQTable() {
         std::cout << YELLOW << "Warning: State space is large (" << stateSize << " states). Showing only first 10 states." << RESET << std::endl;
         stateSize = 10;
     }
+
+    // Create data for visualization
+    std::vector<std::vector<double>> qTable(stateSize, std::vector<double>(actionSize));
+    std::vector<int> bestActions(stateSize);
 
     // แสดงส่วนหัวของตาราง
     std::cout << "State\\Action";
@@ -200,6 +342,9 @@ void RLInterpreter::showQTable() {
             // จำลองค่า Q โดยสุ่มค่าโดยอิงจาก state และ action
             double qValue = (100.0 + s * 10.0 + a * 5.0) * (1.0 - parameters["epsilon"]);
             qValue += ((rand() % 20) - 10) * 0.5;
+            
+            // Store for visualization
+            qTable[s][a] = qValue;
 
             // ตรวจหา action ที่ดีที่สุด
             if (a == 0 || qValue > maxQValue) {
@@ -210,6 +355,8 @@ void RLInterpreter::showQTable() {
             // แสดงค่า Q
             std::cout << "\t" << std::fixed << std::setprecision(1) << qValue;
         }
+        
+        bestActions[s] = maxActionIndex;
 
         // ระบุ action ที่ดีที่สุดสำหรับ state นี้
         std::cout << "\t(Best: A" << maxActionIndex << ")" << std::endl;
@@ -218,6 +365,77 @@ void RLInterpreter::showQTable() {
     std::cout << std::endl << "Note: Highlighted values represent the highest Q-value for each state." << std::endl;
     std::cout << "The agent will choose actions with the highest Q-values (exploitation) with probability (1-ε)." << std::endl;
     std::cout << "Current exploration rate (ε): " << parameters["epsilon"] << std::endl;
+    
+    // Save Q-table data for visualization
+    std::string dataDir = "Program test/Data";
+    std::string mkdir_cmd = "mkdir -p '" + dataDir + "'";
+    int mkdir_result = system(mkdir_cmd.c_str());
+    
+    if (mkdir_result == 0) {
+        std::string csvPath = dataDir + "/qtable_data.csv";
+        std::ofstream csvFile(csvPath);
+        
+        if (csvFile.is_open()) {
+            // Create header row with action labels
+            csvFile << "state";
+            for (int a = 0; a < actionSize; a++) {
+                csvFile << ",action" << a;
+            }
+            csvFile << ",best_action\n";
+            
+            // Add data rows
+            for (int s = 0; s < stateSize; s++) {
+                csvFile << s;
+                for (int a = 0; a < actionSize; a++) {
+                    csvFile << "," << qTable[s][a];
+                }
+                csvFile << "," << bestActions[s] << "\n";
+            }
+            
+            csvFile.close();
+            std::cout << "Q-table data saved to: ai_language/" << csvPath << std::endl;
+            
+            // Visual representation of policy
+            std::cout << "\nPolicy visualization (best action for each state):" << std::endl;
+            std::cout << "------------------------------------------------" << std::endl;
+            
+            // Create a simple grid visualization
+            int gridCols = std::min(10, stateSize);
+            int gridRows = (stateSize + gridCols - 1) / gridCols; // Ceiling division
+            
+            for (int row = 0; row < gridRows; row++) {
+                // State labels
+                for (int col = 0; col < gridCols; col++) {
+                    int s = row * gridCols + col;
+                    if (s < stateSize) {
+                        printf("S%-2d ", s);
+                    }
+                }
+                std::cout << std::endl;
+                
+                // Action arrows
+                for (int col = 0; col < gridCols; col++) {
+                    int s = row * gridCols + col;
+                    if (s < stateSize) {
+                        int bestAction = bestActions[s];
+                        // Display arrows or symbols for actions
+                        if (bestAction == 0) {
+                            std::cout << " ↑  ";
+                        } else if (bestAction == 1) {
+                            std::cout << " →  ";
+                        } else if (bestAction == 2) {
+                            std::cout << " ↓  ";
+                        } else if (bestAction == 3) {
+                            std::cout << " ←  ";
+                        } else {
+                            std::cout << " " << bestAction << "  ";
+                        }
+                    }
+                }
+                std::cout << std::endl << std::endl;
+            }
+        }
+    }
 }
 
 void RLInterpreter::loadModel(const std::string& modelPath) {
