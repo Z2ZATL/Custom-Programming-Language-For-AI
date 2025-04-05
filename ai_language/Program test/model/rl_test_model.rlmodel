@@ -3,4 +3,4 @@ model_type: QLearning
 learning_rate: 0.1
 epochs: 50
 accuracy: 0.95
-create_time: 2025-04-05 05:24:41 (UTC+0)
+create_time: 2025-04-05 05:47:21
