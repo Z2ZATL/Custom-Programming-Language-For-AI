@@ -25,6 +25,25 @@ void printUsage() {
     std::cout << "  -h, --help          แสดงวิธีใช้" << std::endl;
 }
 
+void showHelp() {
+    std::cout << "=== AI Language Help ===" << std::endl;
+    std::cout << "Available commands:" << std::endl;
+    std::cout << "  start                           # Start a new AI project" << std::endl;
+    std::cout << "  create <type>                   # Create ML, DL, or RL project" << std::endl;
+    std::cout << "  load dataset <path> [type]      # Load dataset from file" << std::endl;
+    std::cout << "  create model <model_type>       # Create a specific model" << std::endl;
+    std::cout << "  set <param> <value>             # Set parameter value" << std::endl;
+    std::cout << "  train model                     # Train the model" << std::endl;
+    std::cout << "  evaluate model                  # Evaluate model performance" << std::endl;
+    std::cout << "  save model <path>               # Save model to file" << std::endl;
+    std::cout << "  show <metric|info>              # Show metrics or model info" << std::endl;
+    std::cout << "  predict <input>                 # Make predictions" << std::endl;
+    std::cout << "  safe on                         # Enable safe mode (requires confirmation before executing commands)" << std::endl;
+    std::cout << "  safe off                        # Disable safe mode" << std::endl;
+    std::cout << "For more details, see docs/guides/USAGE_GUIDE.md" << std::endl;
+}
+
+
 void runInteractiveMode() {
     std::cout << "DEBUG: Starting interactive mode" << std::endl << std::flush;
     std::cout << "\n\n=== โหมดโต้ตอบของภาษา AI ===" << std::endl << std::flush;
@@ -59,23 +78,14 @@ void runInteractiveMode() {
     std::cout << "  create model LinearRegression ;;" << std::endl << std::endl;
 
 
-    // เริ่มต้นด้วย MLInterpreter เป็นค่าเริ่มต้น
-    std::cout << "DEBUG: Creating default ML interpreter" << std::endl << std::flush;
-    std::unique_ptr<BaseInterpreter> interpreter;
-    try {
-        interpreter = InterpreterFactory::createInterpreter("ML");
-        std::cout << "DEBUG: Successfully created interpreter" << std::endl << std::flush;
-    } catch (const std::exception& e) {
-        std::cerr << RED << "ERROR: Failed to create interpreter: " << e.what() << RESET << std::endl << std::flush;
-        return;
-    } catch (...) {
-        std::cerr << RED << "ERROR: Unknown error creating interpreter" << RESET << std::endl << std::flush;
-        return;
-    }
+    std::cout << std::endl;
+
+    // Create a pointer for interpreter but don't initialize it yet
+    std::unique_ptr<BaseInterpreter> interpreter = nullptr;
+    std::string currentType = "";
 
     std::string multiline = "";
     std::string line;
-    std::string currentType = "ML";
 
     // รับคำสั่งจากผู้ใช้จนกว่าจะพิมพ์ 'exit'
     while (true) {
@@ -116,21 +126,7 @@ void runInteractiveMode() {
                     std::cout << "Build Date: " << __DATE__ << " " << __TIME__ << std::endl;
                     continue;
                 } else if (line == "show help" || line == "help") {
-                    std::cout << "=== AI Language Help ===" << std::endl;
-                    std::cout << "Available commands:" << std::endl;
-                    std::cout << "  start                           # Start a new AI project" << std::endl;
-                    std::cout << "  create <type>                   # Create ML, DL, or RL project" << std::endl;
-                    std::cout << "  load dataset <path> [type]      # Load dataset from file" << std::endl;
-                    std::cout << "  create model <model_type>       # Create a specific model" << std::endl;
-                    std::cout << "  set <param> <value>             # Set parameter value" << std::endl;
-                    std::cout << "  train model                     # Train the model" << std::endl;
-                    std::cout << "  evaluate model                  # Evaluate model performance" << std::endl;
-                    std::cout << "  save model <path>               # Save model to file" << std::endl;
-                    std::cout << "  show <metric|info>              # Show metrics or model info" << std::endl;
-                    std::cout << "  predict <input>                 # Make predictions" << std::endl;
-                    std::cout << "  safe on                         # Enable safe mode (requires confirmation before executing commands)" << std::endl;
-                    std::cout << "  safe off                        # Disable safe mode" << std::endl;
-                    std::cout << "For more details, see docs/guides/USAGE_GUIDE.md" << std::endl;
+                    showHelp();
                     continue;
                 } else if (line == "show time" || line == "time") {
                     std::time_t now = std::time(nullptr);
@@ -143,12 +139,12 @@ void runInteractiveMode() {
                     std::cout << "\033[2J\033[1;1H"; // คำสั่งล้างหน้าจอใน terminal
                     continue;
                 } else if (line == "safe on") {
-                    interpreter->setSafeMode(true);
-                    std::cout << "Safe mode enabled." << std::endl;
+                    if (interpreter) interpreter->setSafeMode(true);
+                    else std::cout << YELLOW << "Please create an interpreter first." << RESET << std::endl;
                     continue;
                 } else if (line == "safe off") {
-                    interpreter->setSafeMode(false);
-                    std::cout << "Safe mode disabled." << std::endl;
+                    if (interpreter) interpreter->setSafeMode(false);
+                    else std::cout << YELLOW << "Please create an interpreter first." << RESET << std::endl;
                     continue;
                 }
             }
@@ -240,7 +236,7 @@ void runInteractiveMode() {
                             std::cout << "ออกจากโปรแกรม" << std::endl;
                             break;
                         }
-                        if (interpreter->getSafeMode()) {
+                        if (interpreter && interpreter->getSafeMode()) {
                             std::string confirmation;
                             std::cout << "ยืนยันการทำงานคำสั่ง (y/n): ";
                             std::cin >> confirmation;
@@ -249,7 +245,7 @@ void runInteractiveMode() {
                                 continue;
                             }
                         }
-                        interpreter->interpretLine(command);
+                        if (interpreter) interpreter->interpretLine(command);
                         std::cout << std::endl; // เพิ่มบรรทัดว่างระหว่างผลลัพธ์ของแต่ละคำสั่ง
                     }
                 }
@@ -270,7 +266,7 @@ void runInteractiveMode() {
                         std::cout << "ออกจากโปรแกรม" << std::endl;
                         break;
                     }
-                    if (interpreter->getSafeMode()) {
+                    if (interpreter && interpreter->getSafeMode()) {
                         std::string confirmation;
                         std::cout << "ยืนยันการทำงานคำสั่ง (y/n): ";
                         std::cin >> confirmation;
@@ -279,7 +275,7 @@ void runInteractiveMode() {
                             continue;
                         }
                     }
-                    interpreter->interpretLine(multiline);
+                    if (interpreter) interpreter->interpretLine(multiline);
                 }
                 multiline = "";
             }
