@@ -597,11 +597,26 @@ void RLInterpreter::handleCreateCommand(const std::vector<std::string>& args) {
         std::cout << "Error: Missing model type for create command" << std::endl;
         return;
     }
-    if (args[0] == "DL" || args[0] == "RL") {
+    
+    if (args[0] == "model") {
+        // Direct model creation with model type as the second argument
+        if (args.size() < 2) {
+            std::cout << "Error: Missing model type. Usage: create model <model_type>" << std::endl;
+            return;
+        }
         createModel(args[1]); // Delegate to the createModel function
+    }
+    else if (args[0] == "RL") {
+        // Handle 'create RL' command for backward compatibility
+        if (args.size() < 2) {
+            std::cout << "Created default RL environment" << std::endl;
+        } else {
+            createModel(args[1]); // Use the second argument as model type
+        }
     }
     else {
         std::cout << "Error: Unknown create type: " << args[0] << std::endl;
+        std::cout << "Valid formats: 'create model <model_type>' or 'create RL <model_type>'" << std::endl;
     }
 }
 
