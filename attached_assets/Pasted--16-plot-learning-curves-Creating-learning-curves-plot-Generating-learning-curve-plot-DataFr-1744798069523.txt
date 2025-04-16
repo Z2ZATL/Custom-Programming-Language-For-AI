@@ -1,0 +1,349 @@
+(16) plot learning_curves 
+Creating learning_curves plot...
+Generating learning curve plot
+DataFrame columns: ['epoch', 'loss', 'accuracy']
+DataFrame shape: (100, 3)
+First few rows:    epoch      loss  accuracy
+0      1  0.794756  0.661763
+1      2  0.770340  0.673065
+2      3  0.746725  0.683924
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+findfont: Font family 'Noto Sans' not found.
+findfont: Font family 'Liberation Sans' not found.
+findfont: Font family 'FreeSans' not found.
+findfont: Font family 'Arial Unicode MS' not found.
+Error: Failed to generate plot: FigureCanvasAgg.print_png() got an unexpected keyword argument 'quality'
+Traceback (most recent call last):
+  File "/home/runner/workspace/ai_language/./src/utils/plot_generator.py", line 316, in main
+    plt.savefig(output_file_png, dpi=600, bbox_inches='tight', quality=100)
+  File "/nix/store/02p23bjzm7h67b08b32gbk4206j7jxw6-python3.11-matplotlib-3.8.4/lib/python3.11/site-packages/matplotlib/pyplot.py", line 1134, in savefig
+    res = fig.savefig(*args, **kwargs)  # type: ignore[func-returns-value]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nix/store/02p23bjzm7h67b08b32gbk4206j7jxw6-python3.11-matplotlib-3.8.4/lib/python3.11/site-packages/matplotlib/figure.py", line 3390, in savefig
+    self.canvas.print_figure(fname, **kwargs)
+  File "/nix/store/02p23bjzm7h67b08b32gbk4206j7jxw6-python3.11-matplotlib-3.8.4/lib/python3.11/site-packages/matplotlib/backend_bases.py", line 2193, in print_figure
+    result = print_method(
+             ^^^^^^^^^^^^^
+  File "/nix/store/02p23bjzm7h67b08b32gbk4206j7jxw6-python3.11-matplotlib-3.8.4/lib/python3.11/site-packages/matplotlib/backend_bases.py", line 2043, in <lambda>
+    print_method = functools.wraps(meth)(lambda *args, **kwargs: meth(
+                                                                 ^^^^^
+TypeError: FigureCanvasAgg.print_png() got an unexpected keyword argument 'quality'
+Error: Failed to generate plot. Make sure matplotlib and pandas are installed.
+ข้อมูลได้รับการบันทึกเป็นไฟล์ CSV: Program test/Data/learning_curves_data.csv
+คำแนะนำ: ติดตั้ง matplotlib และ pandas ด้วยคำสั่ง 'pip install matplotlib pandas'
+Learning curve plot saved to: ai_language/Program test/Data/learning_curves.png
