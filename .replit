@@ -1,11 +1,11 @@
-modules = ["c-clang14", "cpp-clang14", "python-3.11", "web"]
-run = "cd ai_language && mkdir -p build && cd build && cmake .. && make && cd .. && ./ai_lang comprehensive_test.ai"
+modules = ["cpp-clang14", "c-clang14", "python-3.12"]
+run = "node index.js"
 
 [nix]
 channel = "stable-24_05"
 
 [deployment]
-run = ["sh", "-c", "cd ai_language && mkdir -p build && cd build && cmake .. && make && cd .. && ./ai_lang comprehensive_test.ai"]
+run = ["sh", "-c", "node index.js"]
 
 [workflows]
 runButton = "Run with Environment"
