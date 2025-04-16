@@ -313,7 +313,7 @@ def main():
         
         # บันทึกกราฟเป็นไฟล์ PNG ที่มีคุณภาพสูงมาก (high-resolution)
         output_file_png = f"{output_png_path}/learning_curves.png"
-        plt.savefig(output_file_png, dpi=600, bbox_inches='tight', quality=100)
+        plt.savefig(output_file_png, dpi=600, bbox_inches='tight')
         print(f"High-resolution PNG graph saved to: {output_file_png}")
 
         # สร้างไฟล์ HTML แบบโต้ตอบ
