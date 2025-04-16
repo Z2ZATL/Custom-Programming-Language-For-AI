@@ -1,1 +1,1 @@
-/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ -g -Wall -Wextra -g CMakeFiles/ai_lang.dir/src/ai_lang.cpp.o -o /home/runner/workspace/ai_language/ai_lang  libai_language_lib.a
+/nix/store/9bv7dcvmfcjnmg5mnqwqlq2wxfn8d7yi-gcc-wrapper-13.2.0/bin/g++ CMakeFiles/ai_lang.dir/src/ai_lang.cpp.o -o /home/runner/workspace/ai_language/ai_lang  libai_language_lib.a
