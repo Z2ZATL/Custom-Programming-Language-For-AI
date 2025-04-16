@@ -83,50 +83,9 @@ def set_plot_style():
             pass  # หากไม่สามารถตั้งค่า locale ได้ ให้ใช้ค่าเริ่มต้น
 
 def create_interactive_html(fig, output_path, title="Learning Curves"):
-    """สร้างกราฟ HTML แบบโต้ตอบได้"""
-    try:
-        import mpld3
-        html_file = f"{output_path}/learning_curves_interactive.html"
-        
-        # เพิ่ม JavaScript สำหรับเพิ่มความสามารถในการมีปฏิสัมพันธ์
-        html_content = mpld3.fig_to_html(fig)
-        enhanced_html = f"""
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="utf-8">
-            <title>{title}</title>
-            <style>
-                body {{ font-family: Arial, sans-serif; margin: 20px; }}
-                .container {{ max-width: 1200px; margin: 0 auto; }}
-                h1 {{ color: #333366; text-align: center; }}
-                .chart-container {{ box-shadow: 0 0 10px rgba(0,0,0,0.1); padding: 20px; border-radius: 5px; }}
-                .notes {{ margin-top: 20px; font-size: 14px; color: #666; }}
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <h1>{title}</h1>
-                <div class="chart-container">
-                    {html_content}
-                </div>
-                <div class="notes">
-                    <p>หมายเหตุ: คุณสามารถใช้เมาส์เพื่อดูค่าที่จุดต่างๆ ซูมเข้า-ออก และเลื่อนกราฟได้</p>
-                </div>
-            </div>
-        </body>
-        </html>
-        """
-        
-        with open(html_file, 'w', encoding='utf-8') as f:
-            f.write(enhanced_html)
-        
-        print(f"Interactive HTML graph created at: {html_file}")
-        return True
-    except ImportError:
-        print("Note: mpld3 package not found. Interactive HTML graph not created.")
-        print("To enable interactive graphs, install mpld3 with: pip install mpld3")
-        return False
+    """สร้างกราฟ HTML แบบโต้ตอบได้ - ฟังก์ชันนี้ถูกปิดใช้งาน"""
+    # ฟังก์ชันนี้ถูกปิดการใช้งานตามความต้องการของผู้ใช้
+    return False
 
 def main():
     if len(sys.argv) < 3:
@@ -337,9 +296,6 @@ def main():
         output_file_png = f"{output_png_path}/learning_curves.png"
         plt.savefig(output_file_png, dpi=600, bbox_inches='tight')
         print(f"High-resolution PNG graph saved to: {output_file_png}")
-
-        # สร้างไฟล์ HTML แบบโต้ตอบ
-        create_interactive_html(fig, output_png_path, title)
         
         # บันทึกเป็น SVG สำหรับการปรับแต่งเพิ่มเติม
         plt.savefig(f"{output_png_path}/learning_curves.svg", format='svg', bbox_inches='tight')
