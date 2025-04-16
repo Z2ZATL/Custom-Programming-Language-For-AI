@@ -26,8 +26,30 @@ def set_plot_style():
     plt.style.use('ggplot')
     
     # ใช้ฟอนต์ที่เป็นสากลและรองรับภาษาต่างๆ รวมถึงภาษาไทย
-    # เลือกฟอนต์ที่สามารถใช้ได้ในระบบ Linux และรองรับภาษาไทย
-    font_candidates = ['DejaVu Sans', 'Noto Sans', 'Liberation Sans', 'FreeSans', 'Arial Unicode MS', 'sans-serif']
+    # ตรวจสอบและใช้ฟอนต์ที่มีในระบบเท่านั้น
+    from matplotlib.font_manager import fontManager
+
+    # ดึงรายชื่อฟอนต์ที่มีอยู่ในระบบ
+    available_fonts = [f.name for f in fontManager.ttflist]
+    
+    # ตรวจสอบและเลือกฟอนต์ที่มีในระบบ
+    font_candidates = ['DejaVu Sans', 'Noto Sans', 'Liberation Sans', 'FreeSans', 'Arial Unicode MS']
+    
+    # เลือกฟอนต์ที่มีในระบบหรือใช้ฟอนต์เริ่มต้น
+    system_fonts = []
+    for font in font_candidates:
+        if font in available_fonts:
+            system_fonts.append(font)
+            print(f"Found font: {font}")
+    
+    # ถ้าไม่พบฟอนต์ที่ต้องการใช้ฟอนต์เริ่มต้น
+    if not system_fonts:
+        system_fonts = ['sans-serif']
+        print("No specific fonts found, using default sans-serif")
+    
+    # ปิดการแสดง warnings เกี่ยวกับฟอนต์
+    import warnings
+    warnings.filterwarnings("ignore", category=UserWarning, message="findfont: Font family.*not found")
     
     matplotlib.rcParams.update({
         'font.size': 11,
@@ -46,7 +68,7 @@ def set_plot_style():
         'grid.alpha': 0.3,
         'lines.linewidth': 2.5,
         'lines.markersize': 6,
-        'font.family': font_candidates,
+        'font.family': system_fonts,
         'text.usetex': False  # ไม่ใช้ LaTeX เพื่อหลีกเลี่ยงปัญหาการแสดงผลภาษาไทย
     })
     
