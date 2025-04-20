@@ -120,7 +120,10 @@ void MLInterpreter::saveModel(const std::string& modelPath) {
         
         // สร้างโฟลเดอร์ถ้ายังไม่มี
         std::string mkdirCmd = "mkdir -p 'Program test/Data'";
-        system(mkdirCmd.c_str());
+        int mkdir_result = system(mkdirCmd.c_str());
+        if (mkdir_result != 0) {
+            std::cout << "Warning: Could not create directory for data files" << std::endl;
+        }
         
         std::ofstream scriptFile(pythonScript);
         

@@ -113,7 +113,7 @@ void DLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
 
     std::string layerType = args[1];
     std::string layerInfo;
-    
+
     // เพิ่มการสนับสนุนคำสั่ง add layer Dense
 
     if (layerType == "input") {
@@ -166,15 +166,15 @@ void DLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
                 std::cout << RED << "รูปแบบคำสั่งไม่ถูกต้อง สำหรับ Dense layer: add layer Dense units <size> [activation <func>]" << RESET << std::endl;
                 return;
             }
-            
+
             if (args[2] != "units") {
                 std::cout << RED << "รูปแบบคำสั่งไม่ถูกต้อง สำหรับ Dense layer กรุณาระบุ units" << RESET << std::endl;
                 return;
             }
-            
+
             int neurons = std::stoi(args[3]);
             std::string activation = "relu"; // ค่าเริ่มต้น
-            
+
             // ตรวจสอบว่ามีการระบุ activation หรือไม่
             for (size_t i = 4; i < args.size() - 1; i++) {
                 if (args[i] == "activation") {
@@ -182,12 +182,12 @@ void DLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
                     break;
                 }
             }
-            
+
             // ลบเครื่องหมายคำพูดออกถ้ามี
             if (activation.length() >= 2 && activation.front() == '"' && activation.back() == '"') {
                 activation = activation.substr(1, activation.length() - 2);
             }
-            
+
             layerInfo = "dense:" + std::to_string(neurons) + ":" + activation;
         } else {
             // รูปแบบเดิม: add layer hidden/dense neurons [activation]
@@ -225,7 +225,7 @@ void DLInterpreter::handleAddCommand(const std::vector<std::string>& args) {
 
     layers.push_back(layerInfo);
     std::cout << GREEN << "เพิ่ม " << layerType << " layer สำเร็จ" << RESET << std::endl;
-    
+
     // Update model architecture
     if (modelType == "CNN" && (layerType == "conv" || layerType == "convolutional")) {
         std::cout << "Added convolutional layer to CNN model" << std::endl;
@@ -273,7 +273,7 @@ void DLInterpreter::handleSetCommand(const std::vector<std::string>& args) {
 
     std::string paramName = args[0];
     std::string paramValueStr = args[1];
-    
+
     // ถ้าพารามิเตอร์เป็นค่าตัวเลข
     try {
         // ลองแปลงเป็นตัวเลข
@@ -286,13 +286,13 @@ void DLInterpreter::handleSetCommand(const std::vector<std::string>& args) {
         if (paramValueStr.length() >= 2 && paramValueStr.front() == '"' && paramValueStr.back() == '"') {
             paramValueStr = paramValueStr.substr(1, paramValueStr.length() - 2);
         }
-        
+
         // เก็บค่าสตริงในพารามิเตอร์พิเศษ
         stringParameters[paramName] = paramValueStr;
-        
+
         // ใช้ค่าพิเศษในพารามิเตอร์ปกติเพื่อบ่งชี้ว่านี่เป็นข้อมูลสตริง
         parameters[paramName] = -1;
-        
+
         std::cout << GREEN << "ตั้งค่า " << paramName << " = " << paramValueStr << RESET << std::endl;
     }
 }
@@ -493,7 +493,7 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
             (savePath.find(".dlmodel") != std::string::npos) || 
             (savePath.find(".pkl") != std::string::npos) || 
             (savePath.find(".onnx") != std::string::npos);
-            
+
         if (!hasSupportedExtension) {
             // ใช้ .pkl เป็นค่าเริ่มต้นตามข้อเสนอ
             savePath += ".pkl";
@@ -524,18 +524,18 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
 
     // ใช้ฟังก์ชัน getCurrentDateTime จาก BaseInterpreter
     std::string timestamp = getCurrentDateTime();
-    
+
     // ตรวจสอบนามสกุลไฟล์เพื่อเลือกวิธีการบันทึกที่เหมาะสม
     if (savePath.find(".pkl") != std::string::npos) {
         // สำหรับไฟล์ .pkl ใช้ Python และ pickle
         std::string pythonScript = "Program test/Data/save_dl_model.py";
         std::ofstream scriptFile(pythonScript);
-        
+
         if (scriptFile.is_open()) {
             scriptFile << "import pickle\n";
             scriptFile << "import numpy as np\n";
             scriptFile << "import time\n\n";
-            
+
             scriptFile << "# สร้างข้อมูลโมเดลจำลอง\n";
             scriptFile << "model_data = {\n";
             scriptFile << "    'model_type': '" << modelType << "',\n";
@@ -543,14 +543,14 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
             scriptFile << "    'epochs': " << parameters["epochs"] << ",\n";
             scriptFile << "    'accuracy': 0.95,\n";
             scriptFile << "    'create_time': '" << timestamp << "',\n";
-            
+
             // เพิ่มข้อมูล layers
             scriptFile << "    'layers': [\n";
             for (const auto& layer : layers) {
                 scriptFile << "        '" << layer << "',\n";
             }
             scriptFile << "    ],\n";
-            
+
             // เพิ่มพารามิเตอร์อื่นๆ
             scriptFile << "    'parameters': {\n";
             for (const auto& param : parameters) {
@@ -558,17 +558,17 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
             }
             scriptFile << "    },\n";
             scriptFile << "}\n\n";
-            
+
             scriptFile << "# บันทึกโมเดลด้วย pickle\n";
             scriptFile << "with open('" << savePath << "', 'wb') as f:\n";
             scriptFile << "    pickle.dump(model_data, f)\n";
             scriptFile << "\nprint('Model successfully saved to: " << savePath << "')\n";
             scriptFile.close();
-            
+
             // รันสคริปต์ Python
             std::string command = "python3 " + pythonScript;
             int result = system(command.c_str());
-            
+
             if (result == 0) {
                 std::cout << "Model successfully saved to: " << savePath << std::endl;
                 std::cout << GREEN << "โมเดลถูกบันทึกไปที่ 'ai_language/" << savePath << "'" << RESET << std::endl;
@@ -583,18 +583,18 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
         // สำหรับไฟล์ .onnx (ONNX format)
         std::string pythonScript = "Program test/Data/save_dl_onnx.py";
         std::ofstream scriptFile(pythonScript);
-        
+
         if (scriptFile.is_open()) {
             scriptFile << "import numpy as np\n";
             scriptFile << "import onnx\n";
             scriptFile << "from onnx import helper\n";
             scriptFile << "from onnx import TensorProto\n\n";
-            
+
             scriptFile << "# สร้างข้อมูลโมเดลจำลองในรูปแบบ ONNX\n";
             scriptFile << "try:\n";
             scriptFile << "    # สร้าง inputs\n";
             scriptFile << "    inputs = []\n";
-            
+
             // หาขนาด input จาก layers
             scriptFile << "    # อ่านข้อมูล layers เพื่อหาขนาด input\n";
             scriptFile << "    input_size = 784  # ค่าเริ่มต้นทั่วไป\n";
@@ -606,37 +606,36 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
             scriptFile << "                input_size = int(parts[1])\n";
             scriptFile << "            except:\n";
             scriptFile << "                pass\n";
-            
+
             scriptFile << "    inputs.append(helper.make_tensor_value_info('input', TensorProto.FLOAT, [1, input_size]))\n\n";
-            
+
             // สร้าง outputs
             scriptFile << "    # สร้าง outputs\n";
             scriptFile << "    outputs = [helper.make_tensor_value_info('output', TensorProto.FLOAT, [1, 10])]\n\n";
-            
+
             // สร้าง nodes ตาม layers
             scriptFile << "    # สร้าง nodes\n";
             scriptFile << "    nodes = []\n";
             scriptFile << "    nodes.append(helper.make_node('Identity', ['input'], ['output'], 'identity_node'))\n\n";
-            
+
             // สร้างและบันทึกโมเดล ONNX
             scriptFile << "    # สร้างโมเดล ONNX\n";
             scriptFile << "    graph = helper.make_graph(nodes, '" << modelType << "', inputs, outputs)\n";
             scriptFile << "    model = helper.make_model(graph)\n";
             scriptFile << "    model.ir_version = 7  # ONNX version\n";
             scriptFile << "    onnx.save(model, '" << savePath << "')\n";
-            scriptFile << "    print('Model successfully exported to ONNX format at: " << savePath << "')\n";
-            scriptFile << "    print('Note: This is a simplified ONNX model for demonstration purposes.')\n";
+            scriptFile << "    print('Model successfully exported to ONNX format at: " << savePath << "')\n";scriptFile << "    print('Note: This is a simplified ONNX model for demonstration purposes.')\n";
             scriptFile << "except Exception as e:\n";
             scriptFile << "    print('Error exporting to ONNX:', e)\n";
             scriptFile.close();
-            
+
             // รันสคริปต์ Python
             std::string installCommand = "pip install onnx --no-warn-script-location > /dev/null 2>&1";
             system(installCommand.c_str());
-            
+
             std::string command = "python3 " + pythonScript;
             int result = system(command.c_str());
-            
+
             if (result == 0) {
                 std::cout << "Model successfully exported to ONNX format at: " << savePath << std::endl;
                 std::cout << GREEN << "โมเดลถูกบันทึกไปที่ 'ai_language/" << savePath << "'" << RESET << std::endl;
@@ -853,7 +852,7 @@ void DLInterpreter::handlePlotCommand(const std::vector<std::string>& parts) {
             std::cout << RED << "Error: Model must be trained before plotting learning curves" << RESET << std::endl;
             return;
         }
-        
+
         std::cout << "Generating training and validation learning curves" << std::endl;
 
         // สร้างข้อมูลสำหรับกราฟในไฟล์ CSV
@@ -980,7 +979,7 @@ void DLInterpreter::handlePredictCommand(const std::vector<std::string>& args) {
                 continue;
             }
         }
-        
+
         if (inputValues.empty()) {
             std::cout << RED << "Error: No valid numeric input values found. Usage: predict <value1> <value2> ..." << RESET << std::endl;
             return;
@@ -1109,17 +1108,17 @@ void DLInterpreter::handleInspectCommand(const std::vector<std::string>& args) {
     }
 
     std::string target = args[0];
-    
+
     if (target == "model") {
         if (!hasCreated) {
             std::cout << RED << "กรุณาสร้างโมเดลก่อนด้วยคำสั่ง 'create'" << RESET << std::endl;
             return;
         }
-        
+
         std::cout << CYAN << "=== รายละเอียดโมเดล " << modelType << " ===" << RESET << std::endl;
         std::cout << "ประเภท: " << modelType << std::endl;
         std::cout << "สถานะการเทรน: " << (hasTrained ? "เทรนแล้ว" : "ยังไม่ได้เทรน") << std::endl;
-        
+
         if (layers.empty()) {
             std::cout << YELLOW << "ยังไม่มีการกำหนด layer" << RESET << std::endl;
         } else {
@@ -1128,16 +1127,16 @@ void DLInterpreter::handleInspectCommand(const std::vector<std::string>& args) {
                 std::cout << i+1 << ". " << layers[i] << std::endl;
             }
         }
-        
+
         std::cout << GREEN << "\nParameters:" << RESET << std::endl;
         for (const auto& param : parameters) {
             std::cout << "- " << param.first << ": " << param.second << std::endl;
         }
-        
+
         for (const auto& param : stringParameters) {
             std::cout << "- " << param.first << ": " << param.second << std::endl;
         }
-        
+
         if (hasTrained) {
             std::cout << GREEN << "\nPerformance Metrics:" << RESET << std::endl;
             std::cout << "- ความแม่นยำ: 0.92" << std::endl;
@@ -1149,15 +1148,15 @@ void DLInterpreter::handleInspectCommand(const std::vector<std::string>& args) {
             std::cout << RED << "กรุณาโหลดข้อมูลก่อนด้วยคำสั่ง 'load dataset'" << RESET << std::endl;
             return;
         }
-        
+
         std::cout << CYAN << "=== รายละเอียดข้อมูล ===" << RESET << std::endl;
         std::cout << "ที่อยู่: " << datasetPath << std::endl;
         std::cout << "จำนวนตัวอย่าง: 1000" << std::endl;
-        
+
         if (stringParameters.find("target_column") != stringParameters.end()) {
             std::cout << "คอลัมน์เป้าหมาย: " << stringParameters["target_column"] << std::endl;
         }
-        
+
         std::cout << GREEN << "\nตัวอย่างข้อมูล:" << RESET << std::endl;
         std::cout << "sepal_length | sepal_width | petal_length | petal_width | species" << std::endl;
         std::cout << "-------------|------------|--------------|-------------|--------" << std::endl;
@@ -1171,53 +1170,53 @@ void DLInterpreter::handleInspectCommand(const std::vector<std::string>& args) {
             std::cout << RED << "ยังไม่มีการกำหนด layer ในโมเดล" << RESET << std::endl;
             return;
         }
-        
+
         if (args.size() < 2) {
             std::cout << YELLOW << "กรุณาระบุ index ของ layer ที่ต้องการตรวจสอบ" << RESET << std::endl;
             std::cout << "จำนวน layer ทั้งหมด: " << layers.size() << std::endl;
             return;
         }
-        
+
         try {
             int index = std::stoi(args[1]) - 1; // ปรับให้เริ่มจาก 1
-            
+
             if (index < 0 || index >= static_cast<int>(layers.size())) {
                 std::cout << RED << "Layer index ไม่ถูกต้อง" << RESET << std::endl;
                 return;
             }
-            
+
             std::string layerInfo = layers[index];
             std::cout << CYAN << "=== รายละเอียด Layer ที่ " << (index+1) << " ===" << RESET << std::endl;
             std::cout << "ข้อมูล: " << layerInfo << std::endl;
-            
+
             // แยกส่วนประกอบของ layer
             size_t firstColon = layerInfo.find(':');
             if (firstColon != std::string::npos) {
                 std::string layerType = layerInfo.substr(0, firstColon);
                 std::string rest = layerInfo.substr(firstColon + 1);
-                
+
                 std::cout << "ประเภท: " << layerType << std::endl;
-                
+
                 if (layerType == "dense" || layerType == "hidden" || layerType == "output") {
                     size_t secondColon = rest.find(':');
                     if (secondColon != std::string::npos) {
                         std::string units = rest.substr(0, secondColon);
                         std::string activation = rest.substr(secondColon + 1);
-                        
+
                         std::cout << "จำนวน Units: " << units << std::endl;
                         std::cout << "ฟังก์ชัน Activation: " << activation << std::endl;
-                        
+
                         // คำนวณจำนวนพารามิเตอร์
                         if (index > 0) {
                             std::string prevLayerInfo = layers[index-1];
                             size_t prevFirstColon = prevLayerInfo.find(':');
                             size_t prevSecondColon = prevLayerInfo.find(':', prevFirstColon + 1);
-                            
+
                             if (prevFirstColon != std::string::npos && prevSecondColon != std::string::npos) {
                                 try {
                                     int prevUnits = std::stoi(prevLayerInfo.substr(prevFirstColon + 1, prevSecondColon - prevFirstColon - 1));
                                     int currentUnits = std::stoi(units);
-                                    
+
                                     int params = (prevUnits * currentUnits) + currentUnits; // weights + biases
                                     std::cout << "จำนวนพารามิเตอร์: " << params << std::endl;
                                 } catch(...) {
@@ -1235,7 +1234,7 @@ void DLInterpreter::handleInspectCommand(const std::vector<std::string>& args) {
                         pos = nextColon + 1;
                     }
                     parts.push_back(rest.substr(pos));
-                    
+
                     if (parts.size() >= 2) {
                         std::cout << "จำนวน Filters: " << parts[0] << std::endl;
                         std::cout << "Kernel Size: " << parts[1] << std::endl;
@@ -1267,14 +1266,14 @@ void DLInterpreter::handleValidateCommand(const std::vector<std::string>& args) 
     }
 
     std::cout << GREEN << "กำลังตรวจสอบความถูกต้องของข้อมูล..." << RESET << std::endl;
-    
+
     // จำลองการตรวจสอบข้อมูล
     std::cout << BLUE << "ตรวจสอบคอลัมน์และประเภทข้อมูล... " << RESET << std::endl;
     std::cout << GREEN << "✓ ประเภทข้อมูลถูกต้อง" << RESET << std::endl;
-    
+
     std::cout << BLUE << "ตรวจสอบค่า missing values... " << RESET << std::endl;
     std::cout << GREEN << "✓ ไม่พบค่า missing" << RESET << std::endl;
-    
+
     std::cout << BLUE << "ตรวจสอบข้อมูล outliers... " << RESET << std::endl;
     std::cout << GREEN << "✓ ไม่พบค่า outliers ที่มีนัยสำคัญ" << RESET << std::endl;
 
@@ -1283,7 +1282,7 @@ void DLInterpreter::handleValidateCommand(const std::vector<std::string>& args) 
         std::cout << BLUE << "ตรวจสอบการกระจายตัวของคลาส (" << targetColumn << ")... " << RESET << std::endl;
         std::cout << GREEN << "✓ การกระจายตัวของคลาสสมดุล" << RESET << std::endl;
     }
-    
+
     std::cout << GREEN << "การตรวจสอบข้อมูลเสร็จสิ้น: ข้อมูลพร้อมสำหรับการสร้างโมเดล" << RESET << std::endl;
 }
 
@@ -1299,16 +1298,16 @@ void DLInterpreter::handlePreprocessCommand(const std::vector<std::string>& args
     }
 
     std::cout << GREEN << "กำลังประมวลผลข้อมูลเบื้องต้น..." << RESET << std::endl;
-    
+
     // ตรวจสอบวิธีการที่ต้องการใช้
     bool hasNormalize = false;
     bool hasScale = false;
     bool hasOneHot = false;
-    
+
     for (size_t i = 1; i < args.size(); i++) {
         std::string method = args[i];
         std::transform(method.begin(), method.end(), method.begin(), ::tolower);
-        
+
         if (method == "normalize") {
             hasNormalize = true;
             std::cout << BLUE << "กำลังทำ Normalization..." << RESET << std::endl;
@@ -1325,17 +1324,17 @@ void DLInterpreter::handlePreprocessCommand(const std::vector<std::string>& args
             std::cout << YELLOW << "คำเตือน: ไม่รู้จักวิธี preprocessing '" << method << "'" << RESET << std::endl;
         }
     }
-    
+
     if (modelType == "CNN") {
         std::cout << BLUE << "กำลังทำ Image Data Augmentation สำหรับ CNN..." << RESET << std::endl;
         std::cout << "  การหมุนภาพสุ่ม, การพลิกภาพ, การซูม, การปรับความสว่าง" << std::endl;
     }
-    
+
     if (!hasNormalize && !hasScale && !hasOneHot) {
         std::cout << YELLOW << "คำเตือน: ไม่มีการระบุวิธี preprocessing ที่รู้จัก" << RESET << std::endl;
         std::cout << "วิธีที่สนับสนุน: normalize, scale/standardize, onehot/one_hot" << std::endl;
     }
-    
+
     std::cout << GREEN << "การประมวลผลข้อมูลเบื้องต้นเสร็จสิ้น" << RESET << std::endl;
 }
 
@@ -1348,12 +1347,12 @@ void DLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& ar
     // ดึงชื่อชุดข้อมูลและอัตราส่วน
     std::vector<std::string> datasets;
     std::vector<double> ratios;
-    
+
     // หา index ของคำสำคัญ
     size_t intoIndex = 0;
     size_t withIndex = 0;
     size_t ratioIndex = 0;
-    
+
     for (size_t i = 0; i < args.size(); i++) {
         if (args[i] == "into") {
             intoIndex = i;
@@ -1363,7 +1362,7 @@ void DLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& ar
             ratioIndex = i;
         }
     }
-    
+
     // ตรวจสอบรูปแบบคำสั่ง
     if (args.size() < 7 || args[0] != "dataset" || intoIndex == 0 || withIndex == 0 || ratioIndex == 0 || 
         withIndex >= args.size() - 2 || ratioIndex != withIndex + 1) {
@@ -1385,7 +1384,7 @@ void DLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& ar
             datasets.push_back(dataset);
         }
     }
-    
+
     // เก็บอัตราส่วน หลังจาก 'ratio'
     for (size_t i = ratioIndex + 1; i < args.size(); i++) {
         std::string ratio = args[i];
@@ -1404,14 +1403,14 @@ void DLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& ar
             }
         }
     }
-    
+
     // ตรวจสอบว่าจำนวนชุดข้อมูลและอัตราส่วนตรงกัน
     if (datasets.size() != ratios.size()) {
         std::cout << RED << "จำนวนชุดข้อมูลและอัตราส่วนไม่ตรงกัน" << RESET << std::endl;
         std::cout << "ชุดข้อมูล: " << datasets.size() << " รายการ, อัตราส่วน: " << ratios.size() << " รายการ" << std::endl;
         return;
     }
-    
+
     // ตรวจสอบว่าผลรวมของอัตราส่วนเท่ากับ 1.0
     double sum = 0.0;
     for (const auto& r : ratios) {
@@ -1420,16 +1419,16 @@ void DLInterpreter::handleSplitDatasetCommand(const std::vector<std::string>& ar
     if (std::abs(sum - 1.0) > 0.01) {
         std::cout << YELLOW << "คำเตือน: ผลรวมของอัตราส่วนควรเท่ากับ 1.0 (ค่าปัจจุบันคือ " << sum << ")" << RESET << std::endl;
     }
-    
+
     // แสดงข้อมูลการแบ่ง
     std::cout << GREEN << "กำลังแบ่งข้อมูลเป็น:" << RESET << std::endl;
     for (size_t j = 0; j < datasets.size(); j++) {
         int percent = static_cast<int>(ratios[j] * 100);
         std::cout << "- " << datasets[j] << ": " << percent << "% (" << static_cast<int>(ratios[j] * 1000) << " ตัวอย่าง)" << std::endl;
     }
-    
+
     std::cout << GREEN << "การแบ่งข้อมูลเสร็จสิ้น" << RESET << std::endl;
-    
+
     // บันทึกข้อมูลการแบ่งในพารามิเตอร์
     parameters["split_completed"] = 1.0;
 }
