@@ -591,27 +591,90 @@ void RLInterpreter::saveModel(const std::string& modelPath) {
 
     // สร้างเส้นทางเต็มสำหรับไฟล์
     std::string fullPath = directory + cleanModelPath;
-    if (fullPath.find(".rlmodel") == std::string::npos) {
-        fullPath += ".rlmodel";
+    
+    // ตรวจสอบนามสกุลไฟล์และเติมถ้าไม่มี
+    bool hasSupportedExtension = 
+        (fullPath.find(".rlmodel") != std::string::npos) || 
+        (fullPath.find(".pkl") != std::string::npos);
+    
+    if (!hasSupportedExtension) {
+        // ใช้ .pkl เป็นค่าเริ่มต้นตามข้อเสนอ
+        fullPath += ".pkl";
+        std::cout << "ใช้นามสกุล .pkl เป็นค่าเริ่มต้นสำหรับโมเดล RL" << std::endl;
     }
 
     // ใช้ฟังก์ชัน getCurrentDateTime จาก BaseInterpreter
     std::string timestamp = getCurrentDateTime();
 
-    // บันทึกโมเดลลงไฟล์
-    std::ofstream modelFile(fullPath);
-    if (modelFile.is_open()) {
-        modelFile << "# RL Model saved from AI Language\n";
-        modelFile << "model_type: " << modelType << "\n";
-        modelFile << "discount_factor: " << parameters["gamma"] << "\n";
-        modelFile << "episodes: " << parameters["episodes"] << "\n";
-        modelFile << "exploration_rate: " << parameters["epsilon"] << "\n";
-        modelFile << "create_time: " << timestamp << "\n";
-        modelFile.close();
-        std::cout << "Model successfully saved to: " << fullPath << std::endl;
-        std::cout << "โมเดลถูกบันทึกไปที่ '" << "ai_language/" << fullPath << "'" << std::endl;
+    // ตรวจสอบนามสกุลไฟล์เพื่อเลือกวิธีการบันทึกที่เหมาะสม
+    if (fullPath.find(".pkl") != std::string::npos) {
+        // สำหรับไฟล์ .pkl ให้สร้างคำสั่ง Python เพื่อใช้ pickle บันทึกข้อมูล
+        std::string pythonScript = "Program test/Data/save_model.py";
+        std::ofstream scriptFile(pythonScript);
+        
+        if (scriptFile.is_open()) {
+            scriptFile << "import pickle\n";
+            scriptFile << "import numpy as np\n";
+            scriptFile << "import time\n\n";
+            
+            scriptFile << "# สร้างข้อมูลโมเดลจำลอง\n";
+            scriptFile << "model_data = {\n";
+            scriptFile << "    'model_type': '" << modelType << "',\n";
+            scriptFile << "    'discount_factor': " << parameters["gamma"] << ",\n";
+            scriptFile << "    'episodes': " << parameters["episodes"] << ",\n";
+            scriptFile << "    'exploration_rate': " << parameters["epsilon"] << ",\n";
+            scriptFile << "    'create_time': '" << timestamp << "',\n";
+            
+            // เพิ่มพารามิเตอร์อื่นๆ เข้าไป
+            for (const auto& param : parameters) {
+                scriptFile << "    '" << param.first << "': " << param.second << ",\n";
+            }
+            
+            // เพิ่มตัวอย่าง Q-Table สำหรับโมเดล Q-Learning
+            if (modelType == "QLearning") {
+                int stateSize = static_cast<int>(parameters["state_size"]);
+                int actionSize = static_cast<int>(parameters["action_size"]);
+                
+                scriptFile << "    'q_table': np.random.rand(" << stateSize << ", " << actionSize << "),\n";
+            }
+            
+            scriptFile << "}\n\n";
+            scriptFile << "# บันทึกโมเดลด้วย pickle\n";
+            scriptFile << "with open('" << fullPath << "', 'wb') as f:\n";
+            scriptFile << "    pickle.dump(model_data, f)\n";
+            scriptFile << "\nprint('Model successfully saved to: " << fullPath << "')\n";
+            scriptFile.close();
+            
+            // รันสคริปต์ Python เพื่อบันทึกโมเดล
+            std::string command = "python3 " + pythonScript;
+            int result = system(command.c_str());
+            
+            if (result == 0) {
+                std::cout << "Model successfully saved to: " << fullPath << std::endl;
+                std::cout << "โมเดลถูกบันทึกไปที่ '" << "ai_language/" << fullPath << "'" << std::endl;
+                std::cout << "โมเดลถูกบันทึกในรูปแบบ pickle (.pkl) สามารถโหลดได้โดยตรงใน Python" << std::endl;
+            } else {
+                std::cout << "Error: Failed to save model using Python pickle" << std::endl;
+            }
+        } else {
+            std::cout << "Error: Could not create Python script for saving model" << std::endl;
+        }
     } else {
-        std::cout << "Error: Could not create model file at: " << fullPath << std::endl;
+        // กรณีไฟล์ .rlmodel หรือนามสกุลอื่นๆ ใช้วิธีการเดิม
+        std::ofstream modelFile(fullPath);
+        if (modelFile.is_open()) {
+            modelFile << "# RL Model saved from AI Language\n";
+            modelFile << "model_type: " << modelType << "\n";
+            modelFile << "discount_factor: " << parameters["gamma"] << "\n";
+            modelFile << "episodes: " << parameters["episodes"] << "\n";
+            modelFile << "exploration_rate: " << parameters["epsilon"] << "\n";
+            modelFile << "create_time: " << timestamp << "\n";
+            modelFile.close();
+            std::cout << "Model successfully saved to: " << fullPath << std::endl;
+            std::cout << "โมเดลถูกบันทึกไปที่ '" << "ai_language/" << fullPath << "'" << std::endl;
+        } else {
+            std::cout << "Error: Could not create model file at: " << fullPath << std::endl;
+        }
     }
 }
 

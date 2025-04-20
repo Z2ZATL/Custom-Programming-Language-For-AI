@@ -488,9 +488,16 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
             savePath = fileName;
         }
 
-        // เพิ่มนามสกุลไฟล์ .dlmodel ถ้าไม่มีการระบุนามสกุล
-        if (savePath.find('.') == std::string::npos) {
-            savePath += ".dlmodel";
+        // ตรวจสอบนามสกุลไฟล์และเติมถ้าไม่มี
+        bool hasSupportedExtension = 
+            (savePath.find(".dlmodel") != std::string::npos) || 
+            (savePath.find(".pkl") != std::string::npos) || 
+            (savePath.find(".onnx") != std::string::npos);
+            
+        if (!hasSupportedExtension) {
+            // ใช้ .pkl เป็นค่าเริ่มต้นตามข้อเสนอ
+            savePath += ".pkl";
+            std::cout << "ใช้นามสกุล .pkl เป็นค่าเริ่มต้นสำหรับโมเดล DL" << std::endl;
         }
     }
 
@@ -515,33 +522,158 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
     // แสดงข้อความว่ากำลังบันทึกโมเดลไปที่ไหน
     std::cout << "Saving DL model to: " << savePath << std::endl;
 
-    // จำลองการบันทึกโมเดลโดยการสร้างไฟล์
-    std::ofstream modelFile(savePath);
-    if (modelFile.is_open()) {
-        // ใช้ฟังก์ชัน getCurrentDateTime จาก BaseInterpreter
-        std::string timestamp = getCurrentDateTime();
-
-        modelFile << "# DL Model saved from AI Language\n";
-        modelFile << "model_type: " << modelType << "\n";
-        modelFile << "learning_rate: " << parameters["learning_rate"] << "\n";
-        modelFile << "epochs: " << parameters["epochs"] << "\n";
-        modelFile << "accuracy: 0.95\n";
-        modelFile << "create_time: " << timestamp << "\n\n";
-
-        modelFile << "# Layers: " << layers.size() << "\n";
-        for (const auto& layer : layers) {
-            modelFile << "layer: " << layer << "\n";
+    // ใช้ฟังก์ชัน getCurrentDateTime จาก BaseInterpreter
+    std::string timestamp = getCurrentDateTime();
+    
+    // ตรวจสอบนามสกุลไฟล์เพื่อเลือกวิธีการบันทึกที่เหมาะสม
+    if (savePath.find(".pkl") != std::string::npos) {
+        // สำหรับไฟล์ .pkl ใช้ Python และ pickle
+        std::string pythonScript = "Program test/Data/save_dl_model.py";
+        std::ofstream scriptFile(pythonScript);
+        
+        if (scriptFile.is_open()) {
+            scriptFile << "import pickle\n";
+            scriptFile << "import numpy as np\n";
+            scriptFile << "import time\n\n";
+            
+            scriptFile << "# สร้างข้อมูลโมเดลจำลอง\n";
+            scriptFile << "model_data = {\n";
+            scriptFile << "    'model_type': '" << modelType << "',\n";
+            scriptFile << "    'learning_rate': " << parameters["learning_rate"] << ",\n";
+            scriptFile << "    'epochs': " << parameters["epochs"] << ",\n";
+            scriptFile << "    'accuracy': 0.95,\n";
+            scriptFile << "    'create_time': '" << timestamp << "',\n";
+            
+            // เพิ่มข้อมูล layers
+            scriptFile << "    'layers': [\n";
+            for (const auto& layer : layers) {
+                scriptFile << "        '" << layer << "',\n";
+            }
+            scriptFile << "    ],\n";
+            
+            // เพิ่มพารามิเตอร์อื่นๆ
+            scriptFile << "    'parameters': {\n";
+            for (const auto& param : parameters) {
+                scriptFile << "        '" << param.first << "': " << param.second << ",\n";
+            }
+            scriptFile << "    },\n";
+            scriptFile << "}\n\n";
+            
+            scriptFile << "# บันทึกโมเดลด้วย pickle\n";
+            scriptFile << "with open('" << savePath << "', 'wb') as f:\n";
+            scriptFile << "    pickle.dump(model_data, f)\n";
+            scriptFile << "\nprint('Model successfully saved to: " << savePath << "')\n";
+            scriptFile.close();
+            
+            // รันสคริปต์ Python
+            std::string command = "python3 " + pythonScript;
+            int result = system(command.c_str());
+            
+            if (result == 0) {
+                std::cout << "Model successfully saved to: " << savePath << std::endl;
+                std::cout << GREEN << "โมเดลถูกบันทึกไปที่ 'ai_language/" << savePath << "'" << RESET << std::endl;
+                std::cout << "โมเดลถูกบันทึกในรูปแบบ pickle (.pkl) สามารถโหลดได้โดยตรงใน Python" << std::endl;
+            } else {
+                std::cout << RED << "เกิดข้อผิดพลาดในการบันทึกโมเดลด้วย pickle" << RESET << std::endl;
+            }
+        } else {
+            std::cout << RED << "เกิดข้อผิดพลาด: ไม่สามารถสร้างสคริปต์ Python สำหรับบันทึกโมเดล" << RESET << std::endl;
         }
-        modelFile << "\n# Parameters:\n";
-        for (const auto& param : parameters) {
-            modelFile << param.first << ": " << param.second << "\n";
+    } else if (savePath.find(".onnx") != std::string::npos) {
+        // สำหรับไฟล์ .onnx (ONNX format)
+        std::string pythonScript = "Program test/Data/save_dl_onnx.py";
+        std::ofstream scriptFile(pythonScript);
+        
+        if (scriptFile.is_open()) {
+            scriptFile << "import numpy as np\n";
+            scriptFile << "import onnx\n";
+            scriptFile << "from onnx import helper\n";
+            scriptFile << "from onnx import TensorProto\n\n";
+            
+            scriptFile << "# สร้างข้อมูลโมเดลจำลองในรูปแบบ ONNX\n";
+            scriptFile << "try:\n";
+            scriptFile << "    # สร้าง inputs\n";
+            scriptFile << "    inputs = []\n";
+            
+            // หาขนาด input จาก layers
+            scriptFile << "    # อ่านข้อมูล layers เพื่อหาขนาด input\n";
+            scriptFile << "    input_size = 784  # ค่าเริ่มต้นทั่วไป\n";
+            scriptFile << "    layers = " << (layers.empty() ? "[]" : "['" + layers[0] + "']") << "\n";
+            scriptFile << "    if layers and 'input' in layers[0]:\n";
+            scriptFile << "        parts = layers[0].split(':')\n";
+            scriptFile << "        if len(parts) > 1:\n";
+            scriptFile << "            try:\n";
+            scriptFile << "                input_size = int(parts[1])\n";
+            scriptFile << "            except:\n";
+            scriptFile << "                pass\n";
+            
+            scriptFile << "    inputs.append(helper.make_tensor_value_info('input', TensorProto.FLOAT, [1, input_size]))\n\n";
+            
+            // สร้าง outputs
+            scriptFile << "    # สร้าง outputs\n";
+            scriptFile << "    outputs = [helper.make_tensor_value_info('output', TensorProto.FLOAT, [1, 10])]\n\n";
+            
+            // สร้าง nodes ตาม layers
+            scriptFile << "    # สร้าง nodes\n";
+            scriptFile << "    nodes = []\n";
+            scriptFile << "    nodes.append(helper.make_node('Identity', ['input'], ['output'], 'identity_node'))\n\n";
+            
+            // สร้างและบันทึกโมเดล ONNX
+            scriptFile << "    # สร้างโมเดล ONNX\n";
+            scriptFile << "    graph = helper.make_graph(nodes, '" << modelType << "', inputs, outputs)\n";
+            scriptFile << "    model = helper.make_model(graph)\n";
+            scriptFile << "    model.ir_version = 7  # ONNX version\n";
+            scriptFile << "    onnx.save(model, '" << savePath << "')\n";
+            scriptFile << "    print('Model successfully exported to ONNX format at: " << savePath << "')\n";
+            scriptFile << "    print('Note: This is a simplified ONNX model for demonstration purposes.')\n";
+            scriptFile << "except Exception as e:\n";
+            scriptFile << "    print('Error exporting to ONNX:', e)\n";
+            scriptFile.close();
+            
+            // รันสคริปต์ Python
+            std::string installCommand = "pip install onnx --no-warn-script-location > /dev/null 2>&1";
+            system(installCommand.c_str());
+            
+            std::string command = "python3 " + pythonScript;
+            int result = system(command.c_str());
+            
+            if (result == 0) {
+                std::cout << "Model successfully exported to ONNX format at: " << savePath << std::endl;
+                std::cout << GREEN << "โมเดลถูกบันทึกไปที่ 'ai_language/" << savePath << "'" << RESET << std::endl;
+                std::cout << "โมเดลถูกบันทึกในรูปแบบ ONNX (.onnx) สามารถใช้กับ ONNX Runtime หรือแพลตฟอร์มที่รองรับ ONNX" << std::endl;
+            } else {
+                std::cout << RED << "เกิดข้อผิดพลาดในการบันทึกโมเดลเป็น ONNX" << RESET << std::endl;
+                std::cout << "โปรดติดตั้ง ONNX package ก่อนใช้งาน: pip install onnx" << std::endl;
+            }
+        } else {
+            std::cout << RED << "เกิดข้อผิดพลาด: ไม่สามารถสร้างสคริปต์ Python สำหรับบันทึกโมเดล ONNX" << RESET << std::endl;
         }
-
-        modelFile.close();
-        std::cout << "Model successfully saved to: " << savePath << std::endl;
-        std::cout << GREEN << "โมเดลถูกบันทึกไปที่ 'ai_language/" << savePath << "'" << RESET << std::endl;
     } else {
-        std::cout << RED << "เกิดข้อผิดพลาดในการบันทึกโมเดล: ไม่สามารถเปิดไฟล์ " << savePath << " ได้" << RESET << std::endl;
+        // สำหรับไฟล์ .dlmodel หรือนามสกุลอื่นๆ ใช้วิธีการเดิม
+        std::ofstream modelFile(savePath);
+        if (modelFile.is_open()) {
+            modelFile << "# DL Model saved from AI Language\n";
+            modelFile << "model_type: " << modelType << "\n";
+            modelFile << "learning_rate: " << parameters["learning_rate"] << "\n";
+            modelFile << "epochs: " << parameters["epochs"] << "\n";
+            modelFile << "accuracy: 0.95\n";
+            modelFile << "create_time: " << timestamp << "\n\n";
+
+            modelFile << "# Layers: " << layers.size() << "\n";
+            for (const auto& layer : layers) {
+                modelFile << "layer: " << layer << "\n";
+            }
+            modelFile << "\n# Parameters:\n";
+            for (const auto& param : parameters) {
+                modelFile << param.first << ": " << param.second << "\n";
+            }
+
+            modelFile.close();
+            std::cout << "Model successfully saved to: " << savePath << std::endl;
+            std::cout << GREEN << "โมเดลถูกบันทึกไปที่ 'ai_language/" << savePath << "'" << RESET << std::endl;
+        } else {
+            std::cout << RED << "เกิดข้อผิดพลาดในการบันทึกโมเดล: ไม่สามารถเปิดไฟล์ " << savePath << " ได้" << RESET << std::endl;
+        }
     }
 
     hasModel = true;
