@@ -725,7 +725,7 @@ void RLInterpreter::handleSetCommand(const std::vector<std::string>& args) {
     }
 }
 
-void RLInterpreter::handleTrainCommand(const std::vector<std::string>& /* args */) {
+voidRLInterpreter::handleTrainCommand(const std::vector<std::string>& /* args */) {
     if (!hasCreatedModel) {
         std::cout << RED << "Error: No model created. Use 'create model' command first." << std::endl;
         return;
@@ -914,14 +914,14 @@ void RLInterpreter::handlePredictCommand(const std::vector<std::string>& args) {
 
         std::string inputData = args[1];
         std::cout << CYAN << "Predicting action for input: " << inputData << RESET << std::endl;
-        
+
         // จำลองการทำนายสำหรับข้อมูลอาร์เรย์
         int actionSize = static_cast<int>(parameters["action_size"]);
         int bestAction = rand() % actionSize;
-        
+
         std::cout << GREEN << "Prediction result:" << RESET << std::endl;
         std::cout << "Best action: A" << bestAction << std::endl;
-        
+
         // แสดงค่าความน่าจะเป็นหรือ Q-value สำหรับแต่ละ action
         std::cout << "Action values:" << std::endl;
         for (int a = 0; a < actionSize; a++) {
@@ -932,10 +932,10 @@ void RLInterpreter::handlePredictCommand(const std::vector<std::string>& args) {
             }
             std::cout << std::endl;
         }
-        
+
         return;
     }
-    
+
     if (args[0] == "state") {
         if (args.size() < 2) {
             std::cout << RED << "Error: Missing state ID. Usage: predict state <state_id>" << RESET << std::endl;
