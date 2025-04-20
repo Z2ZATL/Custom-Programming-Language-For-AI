@@ -725,7 +725,7 @@ void RLInterpreter::handleSetCommand(const std::vector<std::string>& args) {
     }
 }
 
-voidRLInterpreter::handleTrainCommand(const std::vector<std::string>& /* args */) {
+void RLInterpreter::handleTrainCommand(const std::vector<std::string>& /* args */) {
     if (!hasCreatedModel) {
         std::cout << RED << "Error: No model created. Use 'create model' command first." << std::endl;
         return;
