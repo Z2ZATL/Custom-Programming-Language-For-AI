@@ -119,13 +119,23 @@ def main():
             df.rename(columns={'Loss': 'loss'}, inplace=True)
         if 'Accuracy' in df.columns:
             df.rename(columns={'Accuracy': 'accuracy'}, inplace=True)
+            
+        # ตรวจสอบคอลัมน์ reward สำหรับ RL
+        if 'reward' in df.columns:
+            print("Found reward column for RL data")
+        if 'avg_reward' in df.columns:
+            print("Found avg_reward column for RL data")
 
         # สร้างคอลัมน์จำลองหากไม่มีข้อมูล
         epochs = len(df)
-        if 'loss' not in df.columns:
+        if 'loss' not in df.columns and 'reward' not in df.columns:
             df['loss'] = [0.82 - 0.77 * (1 - math.exp(-(i+1)/30.0)) for i in range(epochs)]
-        if 'accuracy' not in df.columns:
+        if 'accuracy' not in df.columns and 'reward' not in df.columns:
             df['accuracy'] = [0.65 + 0.3 * (1 - math.exp(-(i+1)/25.0)) for i in range(epochs)]
+            
+        # ถ้าเป็นข้อมูล RL และไม่มีคอลัมน์ที่จำเป็น ให้สร้างขึ้นมา
+        if 'reward' in df.columns and 'episode' in df.columns and 'avg_reward' not in df.columns:
+            df['avg_reward'] = df['reward'].rolling(window=min(10, len(df)), min_periods=1).mean()
 
         # แสดงข้อมูลในคอนโซลเพื่อการตรวจสอบ
         print(f"DataFrame columns: {df.columns.tolist()}")
@@ -169,8 +179,11 @@ def main():
         # วาดกราฟตามข้อมูลที่มี
         plot_data = []
         
+        # ตรวจสอบว่าเป็นข้อมูล RL หรือไม่
+        is_rl_data = 'reward' in df.columns or 'avg_reward' in df.columns
+        
         # สำหรับข้อมูล DL ที่มีการแยก train/validation
-        if is_dl_data:
+        if is_dl_data and not is_rl_data:
             # รองรับทั้งชื่อคอลัมน์แบบเต็มและแบบย่อ
             acc_column = 'train_accuracy' if 'train_accuracy' in df.columns else 'accuracy'
             val_acc_column = 'validation_accuracy' if 'validation_accuracy' in df.columns else 'val_accuracy' if 'val_accuracy' in df.columns else None
@@ -203,6 +216,36 @@ def main():
                 line4, = ax.plot(df['epoch'], df[val_loss_column], color=colors['val_loss'], 
                                  label='Validation Loss', **styles['val_loss'])
                 plot_data.append((line4, df['epoch'], df[val_loss_column], 'Validation Loss'))
+                has_plots = True
+        
+        # สำหรับข้อมูล RL
+        elif is_rl_data:
+            # กำหนดสีและรูปแบบเส้นสำหรับข้อมูล RL
+            rl_colors = {
+                'reward': '#2ca02c',      # สีเขียว
+                'avg_reward': '#ff7f0e'   # สีส้ม
+            }
+            
+            rl_styles = {
+                'reward': {'linestyle': '-', 'marker': 'o', 'alpha': 0.7, 'markersize': 4},
+                'avg_reward': {'linestyle': '-', 'marker': 's', 'alpha': 1.0, 'markersize': 5}
+            }
+            
+            # ใช้คอลัมน์ episode หรือ epoch
+            x_column = 'episode' if 'episode' in df.columns else 'epoch'
+            
+            # วาดกราฟ reward
+            if 'reward' in df.columns:
+                line1, = ax.plot(df[x_column], df['reward'], color=rl_colors['reward'], 
+                                label='Reward per Episode', **rl_styles['reward'])
+                plot_data.append((line1, df[x_column], df['reward'], 'Reward'))
+                has_plots = True
+            
+            # วาดกราฟ average reward
+            if 'avg_reward' in df.columns:
+                line2, = ax.plot(df[x_column], df['avg_reward'], color=rl_colors['avg_reward'], 
+                                label='Average Reward', **rl_styles['avg_reward'])
+                plot_data.append((line2, df[x_column], df['avg_reward'], 'Average Reward'))
                 has_plots = True
         
         # สำหรับข้อมูลทั่วไป
@@ -245,33 +288,36 @@ def main():
         
         # เพิ่มค่า min/max ในกราฟพร้อมเส้นประ
         for line, x_data, y_data, label in plot_data:
-            if 'Loss' in label:
-                min_val = y_data.min()
-                min_idx = y_data.idxmin()
-                min_epoch = x_data[min_idx]
-                
-                ax.annotate(f'Min: {min_val:.3f}', 
-                            xy=(min_epoch, min_val),
-                            xytext=(min_epoch+len(df)/20, min_val+0.03),
-                            arrowprops=dict(facecolor=line.get_color(), shrink=0.05, width=1.5, alpha=0.7),
-                            fontsize=9)
-                
-                # เส้นประแนวตั้งที่ค่าต่ำสุด
-                ax.axvline(x=min_epoch, color=line.get_color(), linestyle=':', alpha=0.3)
-                
-            elif 'Accuracy' in label:
-                max_val = y_data.max()
-                max_idx = y_data.idxmax()
-                max_epoch = x_data[max_idx]
-                
-                ax.annotate(f'Max: {max_val:.3f}', 
-                            xy=(max_epoch, max_val),
-                            xytext=(max_epoch+len(df)/20, max_val-0.03),
-                            arrowprops=dict(facecolor=line.get_color(), shrink=0.05, width=1.5, alpha=0.7),
-                            fontsize=9)
-                
-                # เส้นประแนวตั้งที่ค่าสูงสุด
-                ax.axvline(x=max_epoch, color=line.get_color(), linestyle=':', alpha=0.3)
+            try:
+                if 'Loss' in label:
+                    min_val = y_data.min()
+                    min_idx = y_data.idxmin()
+                    min_epoch = x_data[min_idx]
+                    
+                    ax.annotate(f'Min: {min_val:.3f}', 
+                                xy=(min_epoch, min_val),
+                                xytext=(min_epoch+len(df)/20, min_val+0.03),
+                                arrowprops=dict(facecolor=line.get_color(), shrink=0.05, width=1.5, alpha=0.7),
+                                fontsize=9)
+                    
+                    # เส้นประแนวตั้งที่ค่าต่ำสุด
+                    ax.axvline(x=min_epoch, color=line.get_color(), linestyle=':', alpha=0.3)
+                    
+                elif 'Accuracy' in label or 'Reward' in label or 'reward' in label:
+                    max_val = y_data.max()
+                    max_idx = y_data.idxmax()
+                    max_epoch = x_data[max_idx]
+                    
+                    ax.annotate(f'Max: {max_val:.3f}', 
+                                xy=(max_epoch, max_val),
+                                xytext=(max_epoch+len(df)/20, max_val-0.03),
+                                arrowprops=dict(facecolor=line.get_color(), shrink=0.05, width=1.5, alpha=0.7),
+                                fontsize=9)
+                    
+                    # เส้นประแนวตั้งที่ค่าสูงสุด
+                    ax.axvline(x=max_epoch, color=line.get_color(), linestyle=':', alpha=0.3)
+            except Exception as e:
+                print(f"Warning: Could not add annotations for {label}: {e}")
 
         # แสดง legend ในตำแหน่งที่เหมาะสม
         legend = ax.legend(loc='best', frameon=True, facecolor='white', edgecolor='gray', 
@@ -284,6 +330,10 @@ def main():
         # เพิ่มข้อความบน/ล่างกราฟ (ใช้ข้อความภาษาอังกฤษเพื่อหลีกเลี่ยงปัญหาการแสดงผลภาษาไทย)
         if is_dl_data:
             plt.figtext(0.5, 0.01, f"Deep Learning Model - Total Epochs: {len(df)}", 
+                       ha='center', fontsize=9, style='italic')
+        elif is_rl_data:
+            x_column = 'episode' if 'episode' in df.columns else 'epoch'
+            plt.figtext(0.5, 0.01, f"Reinforcement Learning Model - Total Episodes: {len(df)}", 
                        ha='center', fontsize=9, style='italic')
         else:
             plt.figtext(0.5, 0.01, f"AI Model - Total Epochs: {len(df)}", 

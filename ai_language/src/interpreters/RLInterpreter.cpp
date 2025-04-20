@@ -38,17 +38,17 @@ void RLInterpreter::interpret() {
 
 void RLInterpreter::loadEnvironment(const std::string& environmentPath) {
     std::cout << "Loading RL environment from: " << environmentPath << std::endl;
-    
+
     // Clean up path (remove quotes if present)
     std::string cleanPath = environmentPath;
     if (cleanPath.size() >= 2 && cleanPath.front() == '"' && cleanPath.back() == '"') {
         cleanPath = cleanPath.substr(1, cleanPath.size() - 2);
     }
-    
+
     // Use only the specific path provided
     bool fileOpened = false;
     std::ifstream envFile;
-    
+
     // Try to open the file directly from the provided path
     envFile.open(cleanPath);
     if (envFile.is_open()) {
@@ -57,7 +57,7 @@ void RLInterpreter::loadEnvironment(const std::string& environmentPath) {
     } else {
         std::cout << "Failed to open environment file at: " << cleanPath << std::endl;
     }
-    
+
     // If file wasn't found, try to list files in the datasets directory
     if (!fileOpened) {
         std::cout << "Listing files in datasets directory to help debugging:" << std::endl;
@@ -66,7 +66,7 @@ void RLInterpreter::loadEnvironment(const std::string& environmentPath) {
         if (result != 0) {
             std::cout << "Failed to list files in datasets directory" << std::endl;
         }
-        
+
         // Try to list files in the root datasets directory
         std::cout << "Listing files in root datasets directory:" << std::endl;
         command = "ls -la datasets/";
@@ -74,26 +74,26 @@ void RLInterpreter::loadEnvironment(const std::string& environmentPath) {
         if (result != 0) {
             std::cout << "Failed to list files in root datasets directory" << std::endl;
         }
-        
+
         // List the current directory to see what's available
         std::cout << "Listing current directory contents:" << std::endl;
         command = "ls -la";
         result = system(command.c_str());
-        
+
         // Check if this is the environment.json file specifically
         bool isEnvironmentJson = (cleanPath.find("environment.json") != std::string::npos);
-        
+
         // As a last resort, create the environment.json file in all possible locations
         if (isEnvironmentJson) {
             std::cout << "Creating environment.json file in multiple locations as a fallback..." << std::endl;
-            
+
             // Create directories if they don't exist
             int dir_result1 = system("mkdir -p ai_language/datasets/");
             int dir_result2 = system("mkdir -p datasets/");
             if (dir_result1 != 0 || dir_result2 != 0) {
                 std::cout << "Warning: Failed to create one or more directories" << std::endl;
             }
-            
+
             // Environment file content
             std::string envContent = "{\n"
                 "  \"states\": [\"s0\", \"s1\", \"s2\", \"s3\", \"s4\", \"s5\", \"s6\", \"s7\", \"s8\"],\n"
@@ -120,14 +120,14 @@ void RLInterpreter::loadEnvironment(const std::string& environmentPath) {
                 "  \"state_size\": 9,\n"
                 "  \"action_size\": 4\n"
                 "}\n";
-            
+
             // Create the file in multiple locations
             std::vector<std::string> filePaths = {
                 "./environment.json",
                 "./datasets/environment.json",
                 "./ai_language/datasets/environment.json"
             };
-            
+
             for (const auto& filePath : filePaths) {
                 std::ofstream newEnvFile(filePath);
                 if (newEnvFile.is_open()) {
@@ -136,7 +136,7 @@ void RLInterpreter::loadEnvironment(const std::string& environmentPath) {
                     std::cout << "Created environment file at: " << filePath << std::endl;
                 }
             }
-            
+
             // Now try to open one of them
             for (const auto& filePath : filePaths) {
                 envFile.open(filePath);
@@ -148,7 +148,7 @@ void RLInterpreter::loadEnvironment(const std::string& environmentPath) {
             }
         }
     }
-    
+
     if (!fileOpened) {
         std::cout << RED << "Error: Could not open environment file: " << environmentPath << RESET << std::endl;
         std::cout << "Using default environment settings instead." << std::endl;
@@ -658,7 +658,7 @@ void RLInterpreter::handleCreateCommand(const std::vector<std::string>& args) {
         std::cout << "Error: Missing model type for create command" << std::endl;
         return;
     }
-    
+
     if (args[0] == "model") {
         // Direct model creation with model type as the second argument
         if (args.size() < 2) {
@@ -702,70 +702,24 @@ void RLInterpreter::handleLoadCommand(const std::vector<std::string>& args) {
     }
 }
 
-void RLInterpreter::handleSetCommand(const std::vector<std::string>& parts) {
-    if (parts.size() < 3) {
+void RLInterpreter::handleSetCommand(const std::vector<std::string>& args) {
+    if (args.size() < 2) {
         std::cout << "Error: Invalid set command. Expected: set <parameter> <value>" << std::endl;
         return;
     }
 
-    std::string parameter = parts[1];
-    std::string valueStr = parts[2];
+    std::string param = args[0];
+    std::string value = args[1];
 
-    // Handle timezone separately since it might be an integer
-    if (parameter == "timezone") {
-        int timezone_value = std::stoi(valueStr);
-        parameters["timezone"] = static_cast<double>(timezone_value);
-        std::cout << "Set timezone = UTC" << (timezone_value >= 0 ? "+" : "") << timezone_value << std::endl;
-
-        // ตั้งค่า timezone ในระบบ (สำหรับ Linux)
-        std::string tz_env;
-        if (timezone_value >= 0) {
-            tz_env = "Etc/GMT-" + std::to_string(timezone_value); // เครื่องหมายกลับกันใน POSIX
-        } else {
-            tz_env = "Etc/GMT+" + std::to_string(-timezone_value); // เครื่องหมายกลับกันใน POSIX
-        }
-        setenv("TZ", tz_env.c_str(), 1);
-        tzset();
-        return;
-    }
-
-    // สำหรับพารามิเตอร์อื่นๆ
-    double value = std::stod(valueStr);
-
-    if (parameter == "learning_rate") {
-        parameters["learning_rate"] = value;
-        std::cout << "Set learning_rate = " << value << std::endl;
-    } 
-    else if (parameter == "episodes") {
-        parameters["episodes"] = value;
-        std::cout << "Set episodes = " << value << std::endl;
-    }
-    else if (parameter == "discount_factor") {
-        parameters["gamma"] = value;
-        std::cout << "Set discount_factor = " << value << std::endl;
-    }
-    else if (parameter == "exploration_rate") {
-        parameters["epsilon"] = value;
-        std::cout << "Set exploration_rate = " << value << std::endl;
-    }
-    else if (parameter == "exploration_decay") {
-        parameters["exploration_decay"] = value;
-        std::cout << "Set exploration_decay = " << value << std::endl;
-    }
-    else if (parameter == "min_exploration_rate") {
-        parameters["min_exploration_rate"] = value;
-        std::cout << "Set min_exploration_rate = " << value << std::endl;
-    }
-    else if (parameter == "state_size") {
-        parameters["state_size"] = value;
-        std::cout << "Set state_size = " << value << std::endl;
-    }
-    else if (parameter == "action_size") {
-        parameters["action_size"] = value;
-        std::cout << "Set action_size = " << value << std::endl;
-    }
-    else {
-        std::cout << "Warning: Unknown parameter: " << parameter << std::endl;
+    // แปลงค่าเป็นตัวเลขถ้าเป็นพารามิเตอร์เชิงตัวเลข
+    try {
+        float numericValue = std::stof(value);
+        parameters[param] = numericValue;
+        std::cout << "Set parameter " << param << " to " << numericValue << std::endl;
+    } catch (const std::exception& e) {
+        // ถ้าไม่สามารถแปลงเป็นตัวเลขได้ ให้เก็บเป็นข้อความ
+        parameters[param] = value;
+        std::cout << "Set parameter " << param << " to " << value << std::endl;
     }
 }
 
@@ -773,8 +727,7 @@ void RLInterpreter::handleTrainCommand(const std::vector<std::string>& /* args *
     if (!hasCreatedModel) {
         std::cout << RED << "Error: No model created. Use 'create model' command first." << std::endl;
         return;
-    }
-
+    }```cpp
     if (!hasLoadedData) {
         std::cout << YELLOW << "Warning: No data loaded. Training with default environment." << std::endl;
     }
