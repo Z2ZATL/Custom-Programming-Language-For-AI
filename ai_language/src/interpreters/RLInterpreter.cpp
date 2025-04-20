@@ -1225,7 +1225,7 @@ void RLInterpreter::handleSetEnvironmentParameterCommand(const std::vector<std::
 void RLInterpreter::handlePlotCommand(const std::vector<std::string>& args) {
     if (args.size() < 1) {
         std::cout << RED << "Error: Missing plot type. Usage: plot <type> [options]" << RESET << std::endl;
-        std::cout << "Available RL plot types: rewards, learning, states, policy, qvalues, environment" << std::endl;
+        std::cout << "Available RL plot types: rewards, learning_curves, learning, states, policy, qvalues, environment" << std::endl;
         return;
     }
 
@@ -1235,6 +1235,10 @@ void RLInterpreter::handlePlotCommand(const std::vector<std::string>& args) {
     }
 
     std::string plotType = args[0];
+    // สนับสนุนคำสั่ง "plot learning_curves" โดยเฉพาะ
+    if (plotType == "learning_curves") {
+        plotType = "learning";  // แปลงเป็น "learning" สำหรับการประมวลผลภายใน
+    }
     std::string outputPath = "Program test/Data/rl_" + plotType + "_plot.png";
 
     // ตรวจสอบและสร้างโฟลเดอร์ถ้ายังไม่มี
