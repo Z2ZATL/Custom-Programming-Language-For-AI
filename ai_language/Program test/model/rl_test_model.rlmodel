@@ -3,4 +3,4 @@ model_type: QLearning
 discount_factor: 0
 episodes: 100
 exploration_rate: 0
-create_time: 2025-04-20 11:17:08 (UTC+0)
+create_time: 2025-04-20 11:22:04 (UTC+0)
