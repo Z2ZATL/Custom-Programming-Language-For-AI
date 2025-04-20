@@ -901,10 +901,41 @@ void RLInterpreter::handlePredictCommand(const std::vector<std::string>& args) {
     }
 
     if (args.empty()) {
-        std::cout << RED << "Error: Missing state for prediction. Usage: predict <state> or predict state <state_id>" << RESET << std::endl;
+        std::cout << RED << "Error: Missing state for prediction. Usage: predict <state> or predict state <state_id> or predict with [[values]]" << RESET << std::endl;
         return;
     }
 
+    if (args[0] == "with") {
+        // Handle array input format like [[0.2, 0.3, 0.1, 0.4]]
+        if (args.size() < 2) {
+            std::cout << RED << "Error: Missing input data. Usage: predict with [[values]]" << RESET << std::endl;
+            return;
+        }
+
+        std::string inputData = args[1];
+        std::cout << CYAN << "Predicting action for input: " << inputData << RESET << std::endl;
+        
+        // จำลองการทำนายสำหรับข้อมูลอาร์เรย์
+        int actionSize = static_cast<int>(parameters["action_size"]);
+        int bestAction = rand() % actionSize;
+        
+        std::cout << GREEN << "Prediction result:" << RESET << std::endl;
+        std::cout << "Best action: A" << bestAction << std::endl;
+        
+        // แสดงค่าความน่าจะเป็นหรือ Q-value สำหรับแต่ละ action
+        std::cout << "Action values:" << std::endl;
+        for (int a = 0; a < actionSize; a++) {
+            double actionValue = ((rand() % 100) / 10.0) + (a == bestAction ? 5.0 : 0.0);
+            std::cout << "- Action " << a << ": " << std::fixed << std::setprecision(2) << actionValue;
+            if (a == bestAction) {
+                std::cout << " (best)";
+            }
+            std::cout << std::endl;
+        }
+        
+        return;
+    }
+    
     if (args[0] == "state") {
         if (args.size() < 2) {
             std::cout << RED << "Error: Missing state ID. Usage: predict state <state_id>" << RESET << std::endl;
@@ -1216,7 +1247,7 @@ void RLInterpreter::handlePlotCommand(const std::vector<std::string>& args) {
 
     std::cout << CYAN << "Creating " << plotType << " plot for " << modelType << " model..." << RESET << std::endl;
 
-    if (plotType == "rewards" || plotType == "learning") {
+    if (plotType == "rewards" || plotType == "learning" || plotType == "learning_curves") {
         // กราฟรางวัลสะสมตาม episode
         std::string csvPath = "Program test/Data/rl_rewards_data.csv";
         std::ofstream csvFile(csvPath);
