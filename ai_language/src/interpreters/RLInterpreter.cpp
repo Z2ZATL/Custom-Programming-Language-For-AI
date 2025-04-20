@@ -1234,10 +1234,16 @@ void RLInterpreter::handlePlotCommand(const std::vector<std::string>& args) {
         return;
     }
 
-    std::string plotType = args[0];
-    // สนับสนุนคำสั่ง "plot learning_curves" โดยเฉพาะ
-    if (plotType == "learning_curves") {
+    // กรณีพิเศษสำหรับคำสั่ง "plot learning_curves"
+    std::string plotType;
+    if (args.size() >= 2 && args[0] == "learning_curves") {
         plotType = "learning";  // แปลงเป็น "learning" สำหรับการประมวลผลภายใน
+    } else {
+        plotType = args[0];
+        // สนับสนุนคำสั่ง "plot learning_curves" โดยเฉพาะ
+        if (plotType == "learning_curves") {
+            plotType = "learning";  // แปลงเป็น "learning" สำหรับการประมวลผลภายใน
+        }
     }
     std::string outputPath = "Program test/Data/rl_" + plotType + "_plot.png";
 
