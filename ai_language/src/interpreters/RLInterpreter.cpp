@@ -1234,17 +1234,28 @@ void RLInterpreter::handlePlotCommand(const std::vector<std::string>& args) {
         return;
     }
 
-    // กรณีพิเศษสำหรับคำสั่ง "plot learning_curves"
+    // จัดการกับคำสั่ง "plot learning_curves" โดยเฉพาะ
     std::string plotType;
-    if (args.size() >= 2 && args[0] == "learning_curves") {
+    std::string fullCommand = "";
+    
+    // สร้าง full command string เพื่อตรวจสอบคำสั่ง
+    for (const auto& arg : args) {
+        fullCommand += arg + " ";
+    }
+    
+    // ตรวจสอบว่าเป็นคำสั่ง "learning_curves" หรือไม่
+    if (fullCommand.find("learning_curves") != std::string::npos || args[0] == "learning_curves") {
         plotType = "learning";  // แปลงเป็น "learning" สำหรับการประมวลผลภายใน
+        std::cout << CYAN << "Creating learning curves plot for " << modelType << " model..." << RESET << std::endl;
     } else {
         plotType = args[0];
-        // สนับสนุนคำสั่ง "plot learning_curves" โดยเฉพาะ
+        // รองรับกรณีที่พิมพ์ learning_curves ติดกันด้วย
         if (plotType == "learning_curves") {
-            plotType = "learning";  // แปลงเป็น "learning" สำหรับการประมวลผลภายใน
+            plotType = "learning";
         }
+        std::cout << CYAN << "Creating " << plotType << " plot for " << modelType << " model..." << RESET << std::endl;
     }
+    
     std::string outputPath = "Program test/Data/rl_" + plotType + "_plot.png";
 
     // ตรวจสอบและสร้างโฟลเดอร์ถ้ายังไม่มี
