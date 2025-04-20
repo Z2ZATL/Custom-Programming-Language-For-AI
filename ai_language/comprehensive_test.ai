@@ -66,7 +66,7 @@ show reward \
 show q_table \
 plot learning_curves \
 predict with [[0.2, 0.3, 0.1, 0.4]] \
-save model "rl_test_model.rlmodel" ;;
+save model;;
 
 # ============= ส่วนทดสอบการโหลดและใช้โมเดลที่บันทึกไว้ =============
 start \
