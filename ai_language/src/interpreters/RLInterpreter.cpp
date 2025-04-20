@@ -717,9 +717,11 @@ void RLInterpreter::handleSetCommand(const std::vector<std::string>& args) {
         parameters[param] = numericValue;
         std::cout << "Set parameter " << param << " to " << numericValue << std::endl;
     } catch (const std::exception& e) {
-        // ถ้าไม่สามารถแปลงเป็นตัวเลขได้ ให้เก็บเป็นข้อความ
-        parameters[param] = value;
-        std::cout << "Set parameter " << param << " to " << value << std::endl;
+        // ถ้าไม่สามารถแปลงเป็นตัวเลขได้ ให้เก็บค่าเป็นอีกรูปแบบ
+        // เนื่องจาก parameters เป็น map<string, double> เราจำเป็นต้องแปลงเป็นตัวเลขเท่านั้น
+        // ลองแปลงค่าเป็น 0 หรือกำหนดค่า flag อื่นแทน
+        parameters[param] = 0.0;  // ค่าเริ่มต้นถ้าไม่สามารถแปลงเป็นตัวเลขได้
+        std::cout << "Set parameter " << param << " to string value: " << value << " (stored as 0.0)" << std::endl;
     }
 }
 
@@ -727,7 +729,7 @@ void RLInterpreter::handleTrainCommand(const std::vector<std::string>& /* args *
     if (!hasCreatedModel) {
         std::cout << RED << "Error: No model created. Use 'create model' command first." << std::endl;
         return;
-    }```cpp
+    }
     if (!hasLoadedData) {
         std::cout << YELLOW << "Warning: No data loaded. Training with default environment." << std::endl;
     }
@@ -1373,7 +1375,7 @@ void RLInterpreter::handleHelpCommand() {
     std::cout << "  create model <model_type>         # สร้างโมเดล RL (เช่น QLearning, DQN)" << std::endl;
     std::cout << "  load dataset <path>               # โหลดข้อมูลสภาพแวดล้อม" << std::endl;
     std::cout << "  load model <path>                 # โหลดโมเดลที่บันทึกไว้" << std::endl;
-    std::cout << "  load environment <path>           # โหลดสภาพแวดล้อม" << std::endl;
+    std::cout << "  loadenvironment <path>           # โหลดสภาพแวดล้อม" << std::endl;
     std::cout << "  set <param> <value>               # ตั้งค่าพารามิเตอร์" << std::endl;
     std::cout << "  train model                       # ฝึกโมเดล" << std::endl;
     std::cout << "  evaluate model                    # ประเมินประสิทธิภาพโมเดล" << std::endl;
