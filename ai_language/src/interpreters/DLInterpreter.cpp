@@ -541,9 +541,9 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
         std::string pythonScript = modelDir + "/save_dl_model.py";
         
         // สร้างโฟลเดอร์ถ้ายังไม่มี
-        std::string mkdirCmd = "mkdir -p '" + modelDir + "'";
-        int mkdirResult = system(mkdirCmd.c_str());
-        if (mkdirResult != 0) {
+        std::string modelDirCmd = "mkdir -p '" + modelDir + "'";
+        int modelDirResult = system(modelDirCmd.c_str());
+        if (modelDirResult != 0) {
             std::cout << RED << "ไม่สามารถสร้างโฟลเดอร์สำหรับบันทึกข้อมูล" << RESET << std::endl;
             return;
         }
