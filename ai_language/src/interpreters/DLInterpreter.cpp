@@ -643,7 +643,12 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
             int install_result = system(installCommand.c_str());
             if (install_result != 0) {
                 std::cout << YELLOW << "Warning: Package installation may have issues" << RESET << std::endl;
-                std::cout << RED << "Warning: Package installation may have failed." << RESET << std::endl;
+            }
+            
+            // Create required directories
+            std::string mkdir_cmd = "mkdir -p '" + std::string(savePath.substr(0, savePath.find_last_of('/'))) + "'";
+            if (system(mkdir_cmd.c_str()) != 0) {
+                std::cout << RED << "Warning: Unable to create model directory." << RESET << std::endl;
             }
 
             std::string command = "python3 " + pythonScript;
