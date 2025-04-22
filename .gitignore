@@ -1,0 +1,37 @@
+
+# C++ build files
+*.o
+*.a
+*.so
+*.out
+ai_language/build/
+ai_language/ai_lang
+ai_language/show_time
+
+# Editor cache
+.ccls-cache/
+
+# Generated test data
+ai_language/Program test/
+
+# Log files and output
+attached_assets/
+
+# Python packages
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+ENV/
+
+# Node.js packages
+node_modules/
+package-lock.json
+npm-debug.log
+
+# Various package files that aren't needed for C++ project
+package.json
+pyproject.toml
+uv.lock
