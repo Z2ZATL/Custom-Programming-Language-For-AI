@@ -478,12 +478,12 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
         return;
     }
 
-    std::string savePath = "./Program test/model/dl_model.dlmodel";
+    std::string savePath = "Program test/model/dl_model.dlmodel";
     if (args.size() >= 1) {
         std::string fileName = args[0];
         // ถ้ามีการระบุเส้นทางที่ไม่ได้ขึ้นต้นด้วย / หรือ ./ ให้เพิ่มเส้นทาง default
         if (fileName[0] != '/' && (fileName.size() < 2 || fileName.substr(0, 2) != "./")) {
-            savePath = "./Program test/model/" + fileName;
+            savePath = "Program test/model/" + fileName;
         } else {
             savePath = fileName;
         }
@@ -529,23 +529,27 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
     if (savePath.find(".pkl") != std::string::npos) {
         // สำหรับไฟล์ .pkl ใช้ Python และ pickle
         // Ensure the directory exists
-        std::string dataDir = "./Program test/Data";
+        std::string dataDir = "Program test/Data";
         std::string mkdirCmd = "mkdir -p '" + dataDir + "'";
         int mkdirResult = system(mkdirCmd.c_str());
         if (mkdirResult != 0) {
             std::cout << RED << "ไม่สามารถสร้างโฟลเดอร์สำหรับบันทึกข้อมูล" << RESET << std::endl;
             return;
         }
-        
+
         std::string pythonScript = dataDir + "/save_dl_model.py";
         std::ofstream scriptFile(pythonScript);
 
         if (scriptFile.is_open()) {
             scriptFile << "import pickle\n";
             scriptFile << "import numpy as np\n";
-            scriptFile << "import time\n\n";
+            scriptFile << "import os\n";
+            scriptFile << "from datetime import datetime\n\n";
 
-            scriptFile << "# สร้างข้อมูลโมเดลจำลอง\n";
+            scriptFile << "# สร้างโฟลเดอร์ถ้ายังไม่มี\n";
+            scriptFile << "os.makedirs(os.path.dirname('" << "Program test/model/" << "'), exist_ok=True)\n\n";
+
+            scriptFile << "# ข้อมูลโมเดล\n";
             scriptFile << "model_data = {\n";
             scriptFile << "    'model_type': '" << modelType << "',\n";
             scriptFile << "    'learning_rate': " << parameters["learning_rate"] << ",\n";
@@ -568,10 +572,17 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
             scriptFile << "    },\n";
             scriptFile << "}\n\n";
 
+            // กำหนด save path โดยไม่มี ./ ที่เริ่มต้น
+            std::string cleanPath = savePath;
+            if (cleanPath.substr(0, 2) == "./") {
+                cleanPath = cleanPath.substr(2);
+            }
+
             scriptFile << "# บันทึกโมเดลด้วย pickle\n";
-            scriptFile << "with open('" << savePath << "', 'wb') as f:\n";
+            scriptFile << "model_path = '" << cleanPath << "'\n";
+            scriptFile << "with open(model_path, 'wb') as f:\n";
             scriptFile << "    pickle.dump(model_data, f)\n";
-            scriptFile << "\nprint('Model successfully saved to: " << savePath << "')\n";
+            scriptFile << "\nprint('Model successfully saved to: ' + model_path)\n";
             scriptFile.close();
 
             // รันสคริปต์ Python
@@ -645,7 +656,7 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
             if (install_result != 0) {
                 std::cout << YELLOW << "Warning: Package installation may have issues" << RESET << std::endl;
             }
-            
+
             // Create required directories
             std::string dirname = savePath.substr(0, savePath.find_last_of('/'));
             std::string mkdir_cmd = "mkdir -p '" + dirname + "'";
