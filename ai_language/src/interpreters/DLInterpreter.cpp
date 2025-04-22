@@ -646,9 +646,13 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
             }
             
             // Create required directories
-            std::string mkdir_cmd = "mkdir -p '" + std::string(savePath.substr(0, savePath.find_last_of('/'))) + "'";
-            if (system(mkdir_cmd.c_str()) != 0) {
-                std::cout << RED << "Warning: Unable to create model directory." << RESET << std::endl;
+            std::string dirname = savePath.substr(0, savePath.find_last_of('/'));
+            std::string mkdir_cmd = "mkdir -p '" + dirname + "'";
+            int dir_result = system(mkdir_cmd.c_str());
+            if (dir_result != 0) {
+                std::cout << RED << "Warning: Unable to create model directory: " << dirname << RESET << std::endl;
+            } else {
+                std::cout << GREEN << "Created directory: " << dirname << RESET << std::endl;
             }
 
             std::string command = "python3 " + pythonScript;
