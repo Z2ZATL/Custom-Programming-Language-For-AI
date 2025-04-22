@@ -528,7 +528,16 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
     // ตรวจสอบนามสกุลไฟล์เพื่อเลือกวิธีการบันทึกที่เหมาะสม
     if (savePath.find(".pkl") != std::string::npos) {
         // สำหรับไฟล์ .pkl ใช้ Python และ pickle
-        std::string pythonScript = "Program test/Data/save_dl_model.py";
+        // Ensure the directory exists
+        std::string dataDir = "Program test/Data";
+        std::string mkdirCmd = "mkdir -p '" + dataDir + "'";
+        int mkdirResult = system(mkdirCmd.c_str());
+        if (mkdirResult != 0) {
+            std::cout << RED << "ไม่สามารถสร้างโฟลเดอร์สำหรับบันทึกข้อมูล" << RESET << std::endl;
+            return;
+        }
+        
+        std::string pythonScript = dataDir + "/save_dl_model.py";
         std::ofstream scriptFile(pythonScript);
 
         if (scriptFile.is_open()) {
@@ -631,7 +640,9 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
 
             // รันสคริปต์ Python
             std::string installCommand = "pip install onnx --no-warn-script-location > /dev/null 2>&1";
-            int install_result = system(installCommand.c_str());
+            int install_result = if (system(installCommand.c_str()) != 0) {
+                std::cout << YELLOW << "Warning: Package installation may have issues" << RESET << std::endl;
+            }
             if (install_result != 0) {
                 std::cout << RED << "Warning: Package installation may have failed." << RESET << std::endl;
             }
