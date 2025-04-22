@@ -546,8 +546,22 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
             scriptFile << "import os\n";
             scriptFile << "from datetime import datetime\n\n";
 
+            // แยกชื่อไฟล์และไดเรกทอรี
+            std::string dirPath = savePath.substr(0, savePath.find_last_of('/'));
+            std::string fileName = savePath.substr(savePath.find_last_of('/') + 1);
+            
+            // ถ้าไม่มี / ใน path ให้ใช้ค่าเริ่มต้น
+            if (dirPath == savePath) {
+                dirPath = "Program test/model";
+                fileName = savePath;
+            }
+
+            scriptFile << "# กำหนดชื่อไฟล์ที่ต้องการบันทึก\n";
+            scriptFile << "MODEL_FILENAME = \"" << fileName << "\"\n";
+            scriptFile << "MODEL_DIR = \"./" << dirPath << "\"\n\n";
+
             scriptFile << "# สร้างโฟลเดอร์ถ้ายังไม่มี\n";
-            scriptFile << "os.makedirs('./" << savePath.substr(0, savePath.find_last_of('/')) << "', exist_ok=True)\n\n";
+            scriptFile << "os.makedirs(MODEL_DIR, exist_ok=True)\n\n";
 
             scriptFile << "# ข้อมูลโมเดล\n";
             scriptFile << "model_data = {\n";
@@ -573,7 +587,7 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
             scriptFile << "}\n\n";
 
             scriptFile << "# บันทึกโมเดลด้วย pickle\n";
-            scriptFile << "model_path = './" << savePath << "'\n";
+            scriptFile << "model_path = os.path.join(MODEL_DIR, MODEL_FILENAME)\n";
             scriptFile << "with open(model_path, 'wb') as f:\n";
             scriptFile << "    pickle.dump(model_data, f)\n";
             scriptFile << "\nprint('Model successfully saved to: ' + model_path)\n";
