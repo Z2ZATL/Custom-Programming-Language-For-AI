@@ -547,7 +547,7 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
             scriptFile << "from datetime import datetime\n\n";
 
             scriptFile << "# สร้างโฟลเดอร์ถ้ายังไม่มี\n";
-            scriptFile << "os.makedirs('ai_language/Program test/model/', exist_ok=True)\n\n";
+            scriptFile << "os.makedirs('./" << savePath.substr(0, savePath.find_last_of('/')) << "', exist_ok=True)\n\n";
 
             scriptFile << "# ข้อมูลโมเดล\n";
             scriptFile << "model_data = {\n";
@@ -572,14 +572,8 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
             scriptFile << "    },\n";
             scriptFile << "}\n\n";
 
-            // กำหนด save path โดยไม่มี ./ ที่เริ่มต้น
-            std::string cleanPath = savePath;
-            if (cleanPath.substr(0, 2) == "./") {
-                cleanPath = cleanPath.substr(2);
-            }
-
             scriptFile << "# บันทึกโมเดลด้วย pickle\n";
-            scriptFile << "model_path = 'ai_language/" << cleanPath << "'\n";
+            scriptFile << "model_path = './" << savePath << "'\n";
             scriptFile << "with open(model_path, 'wb') as f:\n";
             scriptFile << "    pickle.dump(model_data, f)\n";
             scriptFile << "\nprint('Model successfully saved to: ' + model_path)\n";
