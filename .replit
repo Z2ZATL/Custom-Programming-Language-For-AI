@@ -8,7 +8,7 @@ channel = "stable-24_05"
 run = ["sh", "-c", "node index.js"]
 
 [workflows]
-runButton = "Run with Environment"
+runButton = "Build After Fix"
 
 [[workflows.workflow]]
 name = "Build and Run C++"
@@ -279,3 +279,12 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "cd ai_language && mkdir -p build && cd build && export VERBOSE=1 && cmake -DCMAKE_CXX_FLAGS=\"-Wall -Wextra -Wpedantic\" .. && make"
+
+[[workflows.workflow]]
+name = "Build After Fix"
+author = 41791738
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd ai_language && mkdir -p build && cd build && cmake .. && make && cd .. && ./ai_lang comprehensive_test.ai"

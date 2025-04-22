@@ -640,10 +640,9 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
 
             // รันสคริปต์ Python
             std::string installCommand = "pip install onnx --no-warn-script-location > /dev/null 2>&1";
-            int install_result = if (system(installCommand.c_str()) != 0) {
-                std::cout << YELLOW << "Warning: Package installation may have issues" << RESET << std::endl;
-            }
+            int install_result = system(installCommand.c_str());
             if (install_result != 0) {
+                std::cout << YELLOW << "Warning: Package installation may have issues" << RESET << std::endl;
                 std::cout << RED << "Warning: Package installation may have failed." << RESET << std::endl;
             }
 
