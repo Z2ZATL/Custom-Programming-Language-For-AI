@@ -547,7 +547,7 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
             scriptFile << "from datetime import datetime\n\n";
 
             scriptFile << "# สร้างโฟลเดอร์ถ้ายังไม่มี\n";
-            scriptFile << "os.makedirs(os.path.dirname('" << "Program test/model/" << "'), exist_ok=True)\n\n";
+            scriptFile << "os.makedirs('ai_language/Program test/model/', exist_ok=True)\n\n";
 
             scriptFile << "# ข้อมูลโมเดล\n";
             scriptFile << "model_data = {\n";
@@ -579,7 +579,7 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
             }
 
             scriptFile << "# บันทึกโมเดลด้วย pickle\n";
-            scriptFile << "model_path = '" << cleanPath << "'\n";
+            scriptFile << "model_path = 'ai_language/" << cleanPath << "'\n";
             scriptFile << "with open(model_path, 'wb') as f:\n";
             scriptFile << "    pickle.dump(model_data, f)\n";
             scriptFile << "\nprint('Model successfully saved to: ' + model_path)\n";
