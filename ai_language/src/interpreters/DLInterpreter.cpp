@@ -631,7 +631,10 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
 
             // รันสคริปต์ Python
             std::string installCommand = "pip install onnx --no-warn-script-location > /dev/null 2>&1";
-            system(installCommand.c_str());
+            int install_result = system(installCommand.c_str());
+            if (install_result != 0) {
+                std::cout << RED << "Warning: Package installation may have failed." << RESET << std::endl;
+            }
 
             std::string command = "python3 " + pythonScript;
             int result = system(command.c_str());
