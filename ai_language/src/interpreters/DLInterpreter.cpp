@@ -478,12 +478,12 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
         return;
     }
 
-    std::string savePath = "Program test/model/dl_model.dlmodel";
+    std::string savePath = "./Program test/model/dl_model.dlmodel";
     if (args.size() >= 1) {
         std::string fileName = args[0];
         // ถ้ามีการระบุเส้นทางที่ไม่ได้ขึ้นต้นด้วย / หรือ ./ ให้เพิ่มเส้นทาง default
         if (fileName[0] != '/' && (fileName.size() < 2 || fileName.substr(0, 2) != "./")) {
-            savePath = "Program test/model/" + fileName;
+            savePath = "./Program test/model/" + fileName;
         } else {
             savePath = fileName;
         }
@@ -529,7 +529,7 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
     if (savePath.find(".pkl") != std::string::npos) {
         // สำหรับไฟล์ .pkl ใช้ Python และ pickle
         // Ensure the directory exists
-        std::string dataDir = "Program test/Data";
+        std::string dataDir = "./Program test/Data";
         std::string mkdirCmd = "mkdir -p '" + dataDir + "'";
         int mkdirResult = system(mkdirCmd.c_str());
         if (mkdirResult != 0) {
@@ -575,7 +575,7 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
             scriptFile.close();
 
             // รันสคริปต์ Python
-            std::string command = "python3 " + pythonScript;
+            std::string command = "python3 \"" + pythonScript + "\"";
             int result = system(command.c_str());
 
             if (result == 0) {
@@ -584,6 +584,7 @@ void DLInterpreter::handleSaveCommand(const std::vector<std::string>& args) {
                 std::cout << "โมเดลถูกบันทึกในรูปแบบ pickle (.pkl) สามารถโหลดได้โดยตรงใน Python" << std::endl;
             } else {
                 std::cout << RED << "เกิดข้อผิดพลาดในการบันทึกโมเดลด้วย pickle" << RESET << std::endl;
+                std::cout << "Command that failed: " << command << std::endl;
             }
         } else {
             std::cout << RED << "เกิดข้อผิดพลาด: ไม่สามารถสร้างสคริปต์ Python สำหรับบันทึกโมเดล" << RESET << std::endl;
